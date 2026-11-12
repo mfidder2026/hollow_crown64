@@ -32,9 +32,9 @@ VOORWERP fontein "fontein" VAK 62,74 39,26 LOOP 80,100 RUG     # alleen de bak: 
   GEBRUIK:
     ZEG eldric "Ik heb geen dorst. Niet naar zwart water, in elk geval."
 
-VOORWERP smidse "smidse" VAK 0,56 26,44 LOOP 30,94 LINKS
+VOORWERP smid "smid" VAK 0,56 26,44 LOOP 30,94 LINKS
   BEKIJK:
-    ZEG eldric "De smidse van Bram. Het vuur is uit. Bram ook, zo te zien."
+    ZEG eldric "Hier werkt Bram de smid. Het vuur is uit. Bram ook, zo te zien."
   OPEN:
     ZEG eldric "Bram zit binnen te mokken. Dat laat ik nog even zo."
 
