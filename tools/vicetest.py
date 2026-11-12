@@ -18,6 +18,7 @@ Een band (tests/<naam>.band) is tekst, één stap per regel ('#' is commentaar):
   Lopen en tussendoor controleren:
     wacht_tot_stil             wacht tot Eldric stilstaat
     verwacht act_x.w = 120     controle op dit moment (zelfde vorm als in .verwacht); de C64 wacht zolang
+    verwacht_tekst 18 "Bekijk fontein"   wat er op tekenrij 18 staat (schermgeheugen, zonder spaties achteraan)
 
 Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwacht:
     st_versie = 1         byte op label st_versie
@@ -108,6 +109,14 @@ def lees_band(pad):
                 data += bytes([OP_RUW, 0, 0, 0, 0, 0, sum(knoppen), n])
             elif cmd == "wacht_tot_stil" and not arg:
                 data += bytes([OP_WACHT_STIL])
+            elif cmd == "verwacht_tekst":
+                m = re.fullmatch(r'(\d+)\s+"(.*)"', arg)
+                if not m or not 0 <= int(m.group(1)) < 25:
+                    raise ValueError
+                namen.append(("TEKST", int(m.group(1)), m.group(2)))
+                if len(namen) > 255:
+                    raise Fout("%s:%d: te veel markeringen" % (pad, nr))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd == "verwacht":
                 r = verwacht_regel(arg)
                 if not r:
@@ -393,7 +402,19 @@ def vergelijk(op, a, b):
     return {"=": a == b, "!=": a != b, "<": a < b, "<=": a <= b, ">": a > b, ">=": a >= b}[op]
 
 
+def scherm_tekst(vice, rij):
+    """Tekenrij <rij> uit het schermgeheugen, terugvertaald met het eigen lettertype (tools/lettertype.py)."""
+    sys.path.insert(0, os.path.join(ROOT, "tools"))
+    import lettertype
+    terug = {lettertype.code_van(t): t for t in lettertype.TEKENS}
+    return "".join(terug.get(c, "?") for c in vice.lees(0xC000 + rij * 40, 40)).rstrip()
+
+
 def controleer(vice, sym, regel):
+    if regel[0] == "TEKST":
+        _, rij, verwacht = regel
+        echt = scherm_tekst(vice, rij)
+        return echt == verwacht, 'rij %d = "%s"%s' % (rij, verwacht, "" if echt == verwacht else '  (is "%s")' % echt)
     tekst, label, plus, woord, op, waarde = regel
     b = vice.lees(sym[label] + plus, 2 if woord else 1)
     echt = b[0] | (b[1] << 8) if woord else b[0]
@@ -413,7 +434,7 @@ def draai(bandpad, args):
             raise Fout("label %s niet in hollowcrown.vs: is dit een AUTOTEST-build?" % nodig)
     scherm_ideaal = any(r[1] == "scherm" for r in verwacht)
     verwacht = [r for r in verwacht if r[1] != "scherm"]
-    for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple)]:
+    for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] != "TEKST"]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
     controles = [m for m in shots if isinstance(m, tuple)]

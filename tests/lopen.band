@@ -57,18 +57,18 @@ verwacht act_maat = 4
 verwacht act_achter = 0
 screenshot bovenaan
 
-# 4. klik op de voorkant van de fontein: daar kun je niet staan, hij gaat naar het dichtste punt ervoor
+# 4. klik op de fontein: dat is een voorwerp (hoofdstuk 3), dus "Ga naar fontein": naar zijn LOOP-punt, ernaar kijkend
 cursor 160,110
 vuur
 wacht_tot_stil
 verwacht act_x.w = 160
 verwacht act_y = 100
-verwacht act_richting = 3
+verwacht act_richting = 1
 verwacht act_maat = 1
 verwacht act_achter = 0            # vóór de fontein: het torentje mag niet over hem heen
 screenshot voor_fontein
 
-# 5. klik op een dak: naar het dichtste punt op het pad rechts; onderweg kijken of hij pasjes zet
+# 5. klik op de huizen achteraan (een voorwerp): naar hun LOOP-punt bovenaan; onderweg kijken of hij pasjes zet
 cursor 220,36
 vuur
 wacht 40
@@ -77,17 +77,17 @@ verwacht stap_index >= 4           # ... met een pas elke 8 beelden,
 verwacht stap_index <= 5           # dus na 40 beelden 4 of 5
 screenshot onderweg
 wacht_tot_stil
-verwacht act_x.w = 220
-verwacht act_y = 72
-verwacht act_richting = 2
-verwacht act_maat = 3
-screenshot dak
+verwacht act_x.w = 176
+verwacht act_y = 66
+verwacht act_richting = 1
+verwacht act_maat = 4
+screenshot huizen
 
-# 6. naar voren
-cursor 220,140
+# 6. naar voren (recht naar beneden vanaf de deur tussen pad en gras)
+cursor 192,140
 vuur
 wacht_tot_stil
-verwacht act_x.w = 220
+verwacht act_x.w = 192
 verwacht act_y = 124
 verwacht act_richting = 0
 verwacht act_maat = 0

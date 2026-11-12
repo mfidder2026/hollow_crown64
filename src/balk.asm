@@ -1,10 +1,10 @@
-// balk.asm — de balk onder de kamer (§4): zinregel, werkwoorden, inventaris, hoofdstuknaam,
-// en de berichtregels bovenaan (rij 0-1).
+// balk.asm — de balk onder de kamer (§4): zinregel, werkwoorden, inventaris, hoofdstuknaam.
 //
 //   rij 18     zinregel ("Ga naar")
 //   rij 19-21  werkwoorden: 3 rijen x 4 kolommen (kolom 0, 10, 20, 30)
 //   rij 22-23  inventaris: 2 x 2 namen (kolom 0-17 en 22-39), pijlen in kolom 18-21
 //   rij 24     naam van het hoofdstuk
+// De zinregel en de kleur van het gekozen werkwoord houdt zin.asm bij.
 
 .const KLEUR_ZIN        = 3             // cyaan
 .const KLEUR_WERKWOORD  = 5             // groen
@@ -12,7 +12,6 @@
 .const KLEUR_PIJL_UIT   = 11            // donkergrijs: niets om te schuiven
 .const KLEUR_PIJL_AAN   = 1
 .const KLEUR_HOOFDSTUK  = 12            // grijs
-.const KLEUR_ELDRIC     = 7             // geel: de spreekkleur van Eldric (kleur 0-7, zie irq.asm)
 .const KOLOM_PIJL       = 19
 
 .segment Code
@@ -85,22 +84,3 @@ ww:     stx teller
 kolommen: .byte 0, 10, 20, 30
 teller:   .byte 0
 }
-
-// bericht_proef: de proeftekst op rij 0-1 (hoofdstuk 1; in hoofdstuk 3 komt ZEG)
-bericht_proef:
-        lda #<tekst_proef1
-        sta zp_ptr
-        lda #>tekst_proef1
-        sta zp_ptr + 1
-        ldx #0
-        ldy #RIJ_BERICHT
-        lda #KLEUR_ELDRIC
-        jsr tekst_schrijf
-        lda #<tekst_proef2
-        sta zp_ptr
-        lda #>tekst_proef2
-        sta zp_ptr + 1
-        ldx #0
-        ldy #RIJ_BERICHT + 1
-        lda #KLEUR_ELDRIC
-        jmp tekst_schrijf

@@ -249,3 +249,35 @@ passen (cursor 1 + Eldric 2 + 2 NPC's 4 = 7: één voorgrond tegelijk).
 
 **Getest:** `tests/lopen.band` loopt naar 176,65 (via 3 → 4 → 6), kijkt rechts, maat 4; screenshot pixel voor
 pixel gelijk, met sprites. 4 van 4 tests geslaagd.
+
+## 2026-11-12 — Hoofdstuk 3: voorwerpen en zinregel ✅
+
+**Klaar als:** "Bekijk fontein": de juiste tekst staat op rij 0-1 (schermgeheugen lezen). **Gehaald.**
+
+**Wat er is:**
+- `tools/scriptc.py`: `VOORWERP naam "naam" VAK x,y b,h LOOP x,y richting` met werkwoordblokken (`BEKIJK:` ...),
+  `STANDAARD werkwoord:`, `SPREKER naam kleur`, `ZEG spreker "tekst"`. Teksten naar het eigen lettertype
+  (é ë enz.), afgebroken over 2 regels van 40, met de duur erbij (1 s + 1 s per 20 tekens). Controles: te lange
+  tekst, teken dat niet in het lettertype zit, onbekende spreker, LOOP-punt buiten een loopvak, naam te lang
+  voor de zinregel. Bytecode: `ZEG` en `STOP`.
+- `scripts/plein.hcs`: fontein, smidse, herberg, huizen (met teksten); `scripts/spel.hcs`: 10 standaardantwoorden.
+- `src/vm.asm` (ZEG, STOP), `src/bericht.asm` (rij 0-1 in de kleur van de spreker, tijd of vuur),
+  `src/zin.asm` (voorwerp onder de cursor, zinregel, werkwoord kiezen in geel, klik → loop naar het LOOP-punt →
+  kijk → script of standaardantwoord → werkwoord terug naar Ga naar).
+- `tools/vicetest.py`: `verwacht_tekst <rij> "..."` leest een tekenrij terug met het eigen lettertype.
+
+**Getest (`tests/bekijk.band`, 24 tussencontroles):** zinregel "Ga naar" / "Ga naar fontein" / "Bekijk" /
+"Bekijk fontein"; tijdens de actie blijft de zin staan; Eldric staat op 160,100 met zijn rug naar ons; rij 0-1 =
+"Het water is zwart sinds de zon weg is." / "Er glinstert iets op de bodem."; vuur haalt de tekst weg; Duw
+fontein → standaardantwoord, dat na 98 beelden vanzelf verdwijnt; Pak fontein (met é); Bekijk herberg loopt naar
+de herberg en kijkt rechts. Screenshots pixel voor pixel gelijk. 5 van 5 tests geslaagd.
+
+**Opgemerkt en opgelost:** het klikvak van de fontein besloeg eerst ook het gras erachter: dan werd elke klik
+daar "Ga naar fontein" en kon Eldric er niet meer achter. Klikvak = alleen de bak.
+
+**Afspraken van de gebruiker:**
+- "Pak fontein" geeft een gouden muntje in de inventaris. Nu alleen de tekst; `GEEF munt` + een vlag (één
+  keer) komt met hoofdstuk 4, de inventaris in beeld met hoofdstuk 5. Staat als opmerking in `scripts/plein.hcs`.
+- Talen: eerst de Nederlandse versie afmaken; Engels en Frans later als eigen D64 uit dezelfde motor.
+
+**Open:** een vaste letter per werkwoord (§4) is er nog niet; "Wat is" doet bij klikken nog niets extra.

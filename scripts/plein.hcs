@@ -18,3 +18,32 @@ KAMER plein
   LOOPVAK 96,72 125,101      # 5 rechts: het pad omhoog
   LOOPVAK 73,65 94,69        # 6 helemaal bovenaan: het gras tussen de fontein en de huizen achteraan
   LOOPVAK 84,64 94,71        # 7 bovenaan rechts
+
+# ---- voorwerpen (hoofdstuk 3) -----------------------------------------------------------------------------
+# VOORWERP naam "naam op het scherm" VAK x,y breedte,hoogte LOOP x,y richting   (kamercoördinaten)
+# Het eerste voorwerp waarvan het VAK onder de cursor ligt, telt: zet kleine dingen vóór grote.
+
+VOORWERP fontein "fontein" VAK 62,74 39,26 LOOP 80,100 RUG     # alleen de bak: het gras erachter blijft vloer
+  BEKIJK:
+    ZEG eldric "Het water is zwart sinds de zon weg is. Er glinstert iets op de bodem."
+  PAK:
+    ZEG eldric "Muntjes! Mensen wensen hier van alles. Ik neem er één, voor het geluk."
+    # GEEF munt           (hoofdstuk 4: in de inventaris; met een vlag zodat het maar één keer kan)
+  GEBRUIK:
+    ZEG eldric "Ik heb geen dorst. Niet naar zwart water, in elk geval."
+
+VOORWERP smidse "smidse" VAK 0,56 26,44 LOOP 30,94 LINKS
+  BEKIJK:
+    ZEG eldric "De smidse van Bram. Het vuur is uit. Bram ook, zo te zien."
+  OPEN:
+    ZEG eldric "Bram zit binnen te mokken. Dat laat ik nog even zo."
+
+VOORWERP herberg "herberg" VAK 126,26 34,70 LOOP 122,90 RECHTS
+  BEKIJK:
+    ZEG eldric "De herberg 'De Laatste Straal'. Daar brandt tenminste nog licht."
+
+VOORWERP huizen "huizen" VAK 30,20 96,42 LOOP 88,66 RUG
+  BEKIJK:
+    ZEG eldric "Iedereen zit binnen. Sinds de schemering komt niemand meer buiten."
+  OPEN:
+    ZEG eldric "Op slot. Ik zou ook niet opendoen voor mezelf."

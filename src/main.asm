@@ -5,6 +5,7 @@
 // werkwoorden en een lege inventaris getekend; de cursor beweegt met joystick, muis of toetsen.
 // Hoofdstuk 2 (Eldric loopt): klik op de vloer en Eldric loopt erheen, via de loopvakken (BFS).
 // Voorgrond (uit hoofdstuk 8, vervroegd): achter de fontein staat het torentje vóór hem.
+// Hoofdstuk 3 (voorwerpen en zinregel): "Bekijk fontein" -> Eldric loopt erheen en zegt iets (VM: ZEG).
 
 #import "geheugen.asm"
 #import "../build/gen/lettertype_info.asm"     // cursor-midden en pijltekens (tools/lettertype.py)
@@ -34,7 +35,6 @@ start:
         sta zp_ptr + 1
         jsr kamer_tonen
         jsr balk_tekenen
-        jsr bericht_proef
         lda #<begin_loopvakken
         sta zp_ptr
         lda #>begin_loopvakken
@@ -51,6 +51,11 @@ start:
         lda #>begin_achter
         sta zp_ptr + 1
         jsr voorgrond_start
+        lda #<begin_voorwerpen
+        sta zp_ptr
+        lda #>begin_voorwerpen
+        sta zp_ptr + 1
+        jsr voorwerpen_laden
         jsr cursor_start
         jsr irq_start                   // zet ook het scherm aan
 #if AUTOTEST
@@ -73,7 +78,11 @@ hoofdlus:
 #if AUTOTEST
         jsr band_na_beweging
 #endif
-        jsr klik
+        jsr klik                        // zin.asm
+        jsr actie_beeld
+        jsr vm_stap
+        jsr bericht_beeld
+        jsr zin_beeld
         jsr actor_beweeg
         jsr actor_plaatsen
         jsr voorgrond_bij
@@ -84,23 +93,7 @@ hoofdlus:
 #endif
         jmp hoofdlus
 
-// klik: vuur in de kamer = "Ga naar" die plek (voorwerpen en werkwoorden: hoofdstuk 3)
-klik:   lda invoer_vuur
-        beq !+
-        lda cursor_y
-        cmp #RIJ_KAMER * 8
-        bcc !+
-        cmp #(RIJ_KAMER + KAMER_RIJEN) * 8
-        bcs !+
-        sec
-        sbc #RIJ_KAMER * 8
-        sta p_y
-        lda cursor_x
-        sta p_x
-        lda cursor_x + 1
-        sta p_x + 1
-        jmp actor_loop_naar
-!:      rts
+
 
 // ---------------------------------------------------------------------------------------------
 #import "irq.asm"
@@ -110,7 +103,10 @@ klik:   lda invoer_vuur
 #import "loopvak.asm"
 #import "actor.asm"
 #import "voorgrond.asm"
-#import "balk.asm"
+#import "bericht.asm"
+#import "vm.asm"
+#import "balk.asm"                              // vóór zin.asm: de kleuren van de balk
+#import "zin.asm"
 #import "invoer.asm"
 #import "cursor.asm"
 #import "status.asm"

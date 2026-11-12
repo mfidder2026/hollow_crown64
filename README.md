@@ -98,6 +98,8 @@ The game is a small **SCUMM-style engine**. The engine is generic; the game itse
   Actors **shrink with depth**: five sizes per pose, picked from the depth of their feet, so Eldric fits through
   the doors at the back of a room and walks a little slower there. The C64 cannot scale sprites, so the sizes are
   pre-made by the costume tool (the two smallest are hand-drawn).
+- **Languages:** Dutch first. English and French follow later as their own disks from the same engine: every
+  line the player reads lives in the scripts and a small text file, never in the engine code.
 - **Scripts:** plain-text `.hcs` files, compiled by a Python compiler into bytecode for a tiny VM. The compiler
   also checks that chapter 1 can actually be finished.
 - **Testing without hands:** an `AUTOTEST` build replays *input tapes* (cursor moves, fire, waits). VICE runs them
@@ -154,7 +156,7 @@ in this order:
 - [x] 0. Setup: build script, memory map with asserts, D64, test runner
 - [x] 1. The split screen and the cursor
 - [x] 2. Eldric walks (walkboxes, pathfinding)
-- [ ] 3. Objects and the sentence line
+- [x] 3. Objects and the sentence line
 - [ ] 4. Script VM and compiler
 - [ ] 5. Inventory
 - [ ] 6. More rooms, loading from disk

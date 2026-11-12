@@ -24,6 +24,8 @@ Het model leest dit bestand bij elk bericht in deze werkmap. Schrijf hier zelf i
 - Invoer: lees $DC00/$DC01 alleen in de onderrand-IRQ vóór de Kernal-scan (invoer_hardware). De Kernal-scan laat $DC00 op 0 staan: wie daarna $DC00 leest, ziet alle richtingen + vuur.
 - Loopvakken: de voeten alleen op LOOPKLEUREN (standaard groen, lichtgroen, geel); de build controleert elk LOOPVAK op het kamerplaatje. Uitzondering: `VRIJ x1,y1 x2,y2` in het script (bv. de waterstraal van de fontein). Controleplaatje: `python3 tools/loopkaart.py plein --toon`.
 - Sprites: 0 cursor, 1 voorgrond (bv. het torentje: data/plein_voorgrond.txt, ACHTER in het script), 2-3 Eldric. Een lager nummer komt vóór een hoger.
+- Voorwerpen in scripts/*.hcs: `VOORWERP naam "naam" VAK x,y b,h LOOP x,y richting` en per werkwoord een blok (`BEKIJK:` met `ZEG eldric "..."`); `STANDAARD werkwoord:` in scripts/spel.hcs. Een klikvak boven loopbaar gras maakt dat gras onbereikbaar: houd klikvakken klein.
+- Talen: eerst Nederlands afmaken; Engels en Frans later als eigen D64 uit dezelfde motor. Geen spelerstekst in de motor-asm.
 - Vuur op het toetsenbord: spatie of CTRL (in VICE op de Mac: linker Control), ook RETURN.
 - Muis 1351 in VICE: `-controlport1device 3`. De SID meet de muis alleen als $DC00 = $7F (POORT1_POTS) >512 cycli staat.
 

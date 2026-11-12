@@ -1,0 +1,76 @@
+# bekijk.band — hoofdstuk 3: voorwerpen, de zinregel en "Bekijk fontein".
+# Werkwoorden op de balk: rij 19-21 (cursor-y 152-175), kolom 0/10/20/30 (cursor-x 0/80/160/240).
+wacht 5
+cursor 300,190                         # een lege plek (de cursor begint op de fontein)
+verwacht_tekst 18 "Ga naar"            # standaardwerkwoord
+verwacht_tekst 0 ""                    # nog geen bericht
+
+# de naam onder de cursor
+cursor 160,100
+verwacht_tekst 18 "Ga naar fontein"
+
+# werkwoord kiezen: Bekijk (rij 20, kolom 0)
+cursor 20,164
+vuur
+wacht 2
+verwacht werkwoord = 4
+verwacht_tekst 18 "Bekijk"
+
+# Bekijk fontein: Eldric loopt naar het LOOP-punt (80,100 = schermpixel 160), kijkt ernaar (rug) en zegt iets
+cursor 160,100
+verwacht_tekst 18 "Bekijk fontein"
+vuur
+wacht 2
+verwacht werkwoord = 0                 # terug naar Ga naar ...
+verwacht_tekst 18 "Bekijk fontein"     # ... maar de zinregel toont de zin die wordt uitgevoerd
+wacht_tot_stil
+wacht 3
+verwacht act_x.w = 160
+verwacht act_y = 100
+verwacht act_richting = 1
+verwacht_tekst 0 "Het water is zwart sinds de zon weg is."
+verwacht_tekst 1 "Er glinstert iets op de bodem."
+screenshot bekijk_fontein
+
+# vuur haalt de tekst weg
+vuur
+wacht 2
+verwacht_tekst 0 ""
+verwacht_tekst 1 ""
+
+# Duw fontein: geen eigen script -> het standaardantwoord (Duw: rij 21, kolom 0)
+cursor 20,172
+vuur
+cursor 160,100
+verwacht_tekst 18 "Duw fontein"
+vuur
+wacht 3
+verwacht_tekst 0 "Het geeft niet mee."
+
+# en die tekst verdwijnt vanzelf: 50 + 19 * 2,5 = 98 beelden
+wacht 110
+verwacht_tekst 0 ""
+
+# Pak fontein: het muntje (de GEEF komt in hoofdstuk 4/5)
+cursor 100,156
+vuur
+cursor 160,100
+vuur
+wacht 3
+verwacht_tekst 0 "Muntjes! Mensen wensen hier van alles."
+verwacht_tekst 1 "Ik neem er één, voor het geluk."
+screenshot pak_fontein
+
+# een ander voorwerp: Bekijk herberg (loopt naar 122,90 = schermpixel 244, kijkt rechts)
+vuur
+cursor 20,164
+vuur
+cursor 290,60
+verwacht_tekst 18 "Bekijk herberg"
+vuur
+wacht_tot_stil
+wacht 3
+verwacht act_x.w = 244
+verwacht act_richting = 2
+verwacht_tekst 0 "De herberg 'De Laatste Straal'. Daar"
+screenshot bekijk_herberg

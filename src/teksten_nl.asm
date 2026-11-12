@@ -29,8 +29,3 @@ werkwoorden_hi: .byte >ww_ga_naar, >ww_pak, >ww_gebruik, >ww_open, >ww_bekijk, >
 tekst_hoofdstuk: .text "Hoofdstuk 1: Dawnhaven"
 .label tekst_hoofdstuk_lengte = * - tekst_hoofdstuk
                  .byte 0
-
-// Proeftekst voor rij 0-1 (hoofdstuk 1): met staartjes (g, j, p, y), zodat je de naad ziet als hij fout is
-tekst_proef1: .text "Zo stil was het plein nog nooit."; .byte 0
-tekst_proef2: .text "De fontein lijkt te wachten. Op mij?"; .byte 0
-.assert "proeftekst past op een regel", * - tekst_proef2 - 1 <= 40, true

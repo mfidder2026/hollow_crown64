@@ -1,3 +1,28 @@
 # spel.hcs — het begin van het spel.
 # BEGIN kamer x,y richting   (richting: VOOR, RUG, RECHTS, LINKS)
 BEGIN plein 60,112 VOOR
+
+# Wie praat, in welke kleur (berichten bovenaan, op rij 0-1)
+SPREKER eldric geel
+
+# Standaardantwoorden: als een voorwerp geen script heeft voor dat werkwoord
+STANDAARD BEKIJK:
+  ZEG eldric "Niets bijzonders."
+STANDAARD PAK:
+  ZEG eldric "Dat krijg ik niet mee."
+STANDAARD GEBRUIK:
+  ZEG eldric "Daar weet ik niets mee te doen."
+STANDAARD OPEN:
+  ZEG eldric "Dat gaat niet open."
+STANDAARD SLUIT:
+  ZEG eldric "Dat gaat niet dicht."
+STANDAARD PRAAT:
+  ZEG eldric "Daar valt niet mee te praten."
+STANDAARD GEEF:
+  ZEG eldric "Daar heb ik niets voor."
+STANDAARD DUW:
+  ZEG eldric "Het geeft niet mee."
+STANDAARD TREK:
+  ZEG eldric "Er zit geen beweging in."
+STANDAARD LEES:
+  ZEG eldric "Er staat niets op."
