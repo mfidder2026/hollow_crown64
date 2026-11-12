@@ -1,0 +1,11 @@
+# alles wat de build maakt
+build/
+*.prg
+*.d64
+*.vs
+*.sym
+
+# macOS en Python
+.DS_Store
+__pycache__/
+*.pyc
