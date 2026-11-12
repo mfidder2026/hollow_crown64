@@ -12,6 +12,8 @@ onbekende woorden zijn tot dan een fout, zodat er niets stilletjes wordt overges
                                  LOOPVAK moet daar (bijna) helemaal op liggen: zie tools/loopkaart.py.
       VRIJ x1,y1 x2,y2           hier geldt de kleurcontrole niet (bv. de waterstraal van de fontein boven het gras,
                                  of later een geheime doorgang). Zet er een opmerking bij waarom.
+      ACHTER x1,y1 x2,y2         staan Eldric's voeten hier, dan komt de voorgrond van de kamer (data/kamers.txt,
+                                 voorgrond=...) vóór hem: hij loopt achter het torentje langs. Hooguit één per kamer.
       SCHAAL y1 y2 ...           diepte: voeten op y >= y1 = maat 0 (groot), >= y2 = maat 1, ...; daarachter
                                  de volgende maat. Aflopend, hooguit 3 grenzen (4 maten in tools/costume.py).
     BEGIN kamer x,y richting      waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
@@ -59,7 +61,7 @@ def lees(bestanden):
                 kamer = woorden[1]
                 if kamer in kamers:
                     raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
-                kamers[kamer] = {"vakken": [], "waar": waar, "schaal": [], "kleuren": None, "vrij": []}
+                kamers[kamer] = {"vakken": [], "waar": waar, "schaal": [], "kleuren": None, "vrij": [], "achter": None}
                 volgorde.append(kamer)
             elif w == "LOOPVAK":
                 if kamer is None:
@@ -70,6 +72,15 @@ def lees(bestanden):
                 if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
                     raise Fout("%s: loopvak buiten de kamer (0-%d, 0-%d) of leeg" % (waar, KAMER_B - 1, KAMER_H - 1))
                 kamers[kamer]["vakken"].append((x1, y1, x2, y2, waar))
+            elif w == "ACHTER":
+                if kamer is None or len(woorden) != 3:
+                    raise Fout("%s: ACHTER x1,y1 x2,y2 (binnen een KAMER)" % waar)
+                if kamers[kamer]["achter"]:
+                    raise Fout("%s: hooguit één ACHTER per kamer" % waar)
+                (x1, y1), (x2, y2) = punt(woorden[1], waar), punt(woorden[2], waar)
+                if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
+                    raise Fout("%s: ACHTER-vak buiten de kamer of leeg" % waar)
+                kamers[kamer]["achter"] = (x1, y1, x2, y2, waar)
             elif w == "VRIJ":
                 if kamer is None or len(woorden) != 3:
                     raise Fout("%s: VRIJ x1,y1 x2,y2 (binnen een KAMER)" % waar)
@@ -147,6 +158,12 @@ def controleer(kamers, begin):
                 voorstel = loopkaart.krimp(m, x1, y1, x2, y2)
                 raise Fout("%s: dit loopvak %s. Kleiner dat wel past: %s (controleplaatje: python3 tools/loopkaart.py %s --toon)"
                            % (vwaar, uitleg, "LOOPVAK %d,%d %d,%d" % tuple(voorstel) if voorstel else "geen", naam))
+        if k["achter"]:
+            import kamer as kamermod
+            lijst = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "kamers.txt")
+            opties = {n: o for n, _, o, _ in kamermod.lees_lijst(lijst)}
+            if not (opties.get(naam) or {}).get("voorgrond"):
+                raise Fout("%s: ACHTER, maar de kamer heeft geen voorgrond (voorgrond=... in data/kamers.txt)" % k["achter"][4])
     if begin is None:
         raise Fout("geen BEGIN in de scripts")
     kamer, (x, y), _, waar = begin
@@ -173,13 +190,22 @@ def schrijf(kamers, volgorde, begin, pad):
         ]
         for wat, rij in velden:
             L.append("        .byte %s    // %s" % (", ".join("$%02x" % x for x in rij), wat))
+        ach = kamers[naam]["achter"]
+        L.append("achter_%s:    // ACHTER: aantal (0/1), x1 lo, x1 hi, x2 lo, x2 hi, y1, y2 (x in schermpixels)" % naam)
+        if ach:
+            x1, y1, x2, y2, _ = ach
+            L.append("        .byte 1, %d, %d, %d, %d, %d, %d" % ((x1 * 2) & 255, (x1 * 2) >> 8, (x2 * 2 + 1) & 255,
+                                                               (x2 * 2 + 1) >> 8, y1, y2))
+        else:
+            L.append("        .byte 0, 0, 0, 0, 0, 0, 0")
         sch = kamers[naam]["schaal"]
         L.append("schaal_%s:    // aantal grenzen, dan de grenzen (aflopend): y >= grens -> grotere maat" % naam)
         L.append("        .byte %d%s" % (len(sch), "".join(", %d" % g for g in sch)))
     kamer, (x, y), r, _ = begin
     L += [".const BEGIN_KAMER = KAMER_%s" % kamer.upper(), ".const BEGIN_X = %d    // schermpixels" % (x * 2),
           ".const BEGIN_Y = %d" % y, ".const BEGIN_RICHTING = %d" % r,
-          ".label begin_loopvakken = loopvakken_%s" % kamer, ".label begin_schaal = schaal_%s" % kamer]
+          ".label begin_loopvakken = loopvakken_%s" % kamer, ".label begin_schaal = schaal_%s" % kamer,
+          ".label begin_achter = achter_%s" % kamer]
     open(pad, "w").write("\n".join(L) + "\n")
 
 

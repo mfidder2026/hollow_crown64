@@ -24,7 +24,7 @@ Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwach
     st_magic+1 = $43      met een verschuiving
     beelden.w >= 300      .w = woord (lo, hi); vergelijkingen: = != < <= > >=
     scherm = ideaal       elke screenshot vergelijken met het scherm zoals het hoort, berekend uit het
-                          geheugen (rij 0-1 en 18-24 tekst, 2-17 multicolor bitmap), sprites niet meegeteld.
+                          geheugen (rij 0-1 en 18-24 tekst, 2-17 multicolor bitmap) mét de sprites.
                           Een verdwaalde pixel op een naad (rij 1/2, 17/18) is dan een fout.
 Een test slaagt alleen als de status klopt; een screenshot alleen is geen bewijs.
 """
@@ -288,8 +288,9 @@ RAND_X, RAND_Y = 32, 35          # waar schermpixel (0,0) in een VICE-screenshot
 
 
 def ideaal_scherm(vice):
-    """320x200 C64-kleurnummers zoals het scherm hoort te zijn, plus een masker van de sprites."""
-    scherm = vice.lees(0xC000, 1000)
+    """320x200 C64-kleurnummers zoals het scherm hoort te zijn, mét sprites (prioriteit zoals de VIC-II:
+    sprite 0 bovenop; met $d01b achter bitmapcode %10/%11 en achter tekenpixels)."""
+    scherm = vice.lees(0xC000, 1024)
     kleur = [b & 15 for b in vice.lees(0xD800, 1000)]
     vic = vice.lees(0xD000, 0x2F)
     vice.cmd("bank ram")                         # bitmap en lettertype liggen onder de Kernal-ROM
@@ -303,39 +304,57 @@ def ideaal_scherm(vice):
         raise Fout("$d018 is $%02x, verwacht $0E" % d018)
     achter = vic[0x21] & 15
     pix = [[achter] * 320 for _ in range(200)]
+    voor = [[False] * 320 for _ in range(200)]   # "voorgrond" voor sprites met $d01b
     for r in range(25):
         for c in range(40):
             i = r * 40 + c
             for y in range(8):
-                rij = pix[r * 8 + y]
+                rij, vr = pix[r * 8 + y], voor[r * 8 + y]
                 if r in RIJEN_TEKST:                 # hires tekst
                     b = font[scherm[i] * 8 + y]
                     for x in range(8):
                         if b & (0x80 >> x):
                             rij[c * 8 + x] = kleur[i]
+                            vr[c * 8 + x] = True
                 else:                                # multicolor bitmap
                     b = bitmap[i * 8 + y]
                     kl = [achter, scherm[i] >> 4, scherm[i] & 15, kleur[i]]
                     for x in range(4):
-                        k = kl[(b >> (6 - 2 * x)) & 3]
-                        rij[c * 8 + 2 * x] = rij[c * 8 + 2 * x + 1] = k
-    masker = [[False] * 320 for _ in range(200)]
-    for n in range(8):
+                        code = (b >> (6 - 2 * x)) & 3
+                        rij[c * 8 + 2 * x] = rij[c * 8 + 2 * x + 1] = kl[code]
+                        vr[c * 8 + 2 * x] = vr[c * 8 + 2 * x + 1] = code >= 2
+    if vic[0x17] or vic[0x1D]:
+        raise Fout("vergrote sprites ($d017/$d01d) tekent de test nog niet")
+    for n in range(7, -1, -1):                  # hoog nummer eerst: een lager nummer komt erbovenop
         if not vic[0x15] & (1 << n):
             continue
+        data = vice.lees(0xC000 + scherm[0x3F8 + n] * 64, 63)
         sx = vic[2 * n] + (256 if vic[0x10] & (1 << n) else 0) - 24
         sy = vic[2 * n + 1] - 50
-        bw = 48 if vic[0x1D] & (1 << n) else 24
-        bh = 42 if vic[0x17] & (1 << n) else 21
-        for y in range(max(0, sy), min(200, sy + bh)):
-            for x in range(max(0, sx), min(320, sx + bw)):
-                masker[y][x] = True
-    return pix, masker
+        mc = vic[0x1C] & (1 << n)
+        prio = vic[0x1B] & (1 << n)
+        eigen = vic[0x27 + n] & 15
+        for r in range(21):
+            bits = data[r * 3] << 16 | data[r * 3 + 1] << 8 | data[r * 3 + 2]
+            y = sy + r
+            if not 0 <= y < 200:
+                continue
+            for x in range(24):
+                if mc:
+                    code = bits >> (22 - (x & ~1)) & 3
+                    k = (None, vic[0x25] & 15, eigen, vic[0x26] & 15)[code]
+                else:
+                    k = eigen if bits >> (23 - x) & 1 else None
+                px = sx + x
+                if k is None or not 0 <= px < 320 or (prio and voor[y][px]):
+                    continue
+                pix[y][px] = k
+    return pix
 
 
 def scherm_vergelijken(vice, png_pad):
     from PIL import Image
-    pix, masker = ideaal_scherm(vice)
+    pix = ideaal_scherm(vice)
     img = Image.open(png_pad).convert("RGB")
     W, H = img.size
     data = img.load()
@@ -348,17 +367,15 @@ def scherm_vergelijken(vice, png_pad):
     fout_rijen = {}
     for y in range(200):
         for x in range(320):
-            if masker[y][x]:
-                continue
             if nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x]:
                 fout_rijen[y] = fout_rijen.get(y, 0) + 1
     if not fout_rijen:
-        return True, "klopt pixel voor pixel (sprites niet meegeteld)"
+        return True, "klopt pixel voor pixel (met sprites)"
     # een verschilplaatje: rood = anders dan het hoort
     uit = img.copy()
     for y in fout_rijen:
         for x in range(320):
-            if not masker[y][x] and nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x]:
+            if nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x]:
                 uit.putpixel((RAND_X + x, RAND_Y + y), (255, 0, 0))
     vpad = png_pad[:-4] + "_verschil.png"
     uit.save(vpad)

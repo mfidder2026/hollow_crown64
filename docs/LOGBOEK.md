@@ -209,3 +209,30 @@ buiten de vakken. `tests/invoer.band`: spatie en ctrl tellen als vuur (5 x). 4 v
 (de matrix uitlezen terwijl de gebruiker drukt) liet omhoog en omlaag correct zien: CRSR ⇓ + rechter SHIFT →
 omhoog. Rechts, links en de vuurtoetsen wachten nog op een tweede log. Eldric wordt achter de fontein nog vóór de
 waterstraal getekend: voorgrond is hoofdstuk 8.
+
+## 2026-11-12 — Eldric loopt achter het torentje van de fontein (voorgrond, uit hoofdstuk 8 vervroegd)
+
+**Gevraagd:** Eldric liep vóór het torentje langs als hij erachter stond.
+
+**Eerste poging, $d01b (zoals §6.2):** sprite achter bitmapcode %10/%11. Werkte in principe, maar rond het
+torentje moest elke achtergrondpixel %00/%01 zijn: per vakje zwart + 1 kleur. Daar zit gras, het gele pad, de
+waterdamp en de lichte doorkijk tussen de huizen: het pad en de damp verdwenen, er kwamen zwarte vlekken. Ook
+met een kleiner gebied (alleen waar Eldric kan zijn) bleef het zichtbaar slechter. Verworpen.
+
+**Gekozen, voorgrond-sprite:** het torentje is óók sprite 1. Een lager spritenummer komt vóór een hoger, en
+Eldric is nu sprite 2-3 (cursor 0). Sprite 1 staat alleen aan als Eldric's voeten in het ACHTER-vak staan
+(`ACHTER 72,69 86,75` in `scripts/plein.hcs`); vóór de fontein staat hij uit. `tools/kamer.py` geeft de
+torentjes-pixels in de bitmap precies de kleuren van de sprite (zwart + grijs, `KLEUR grijs` in
+`data/plein_voorgrond.txt`), dus aan/uit zie je niet. De rest van de kamer houdt al zijn kleuren; alleen het
+torentje verliest zijn cyaan randjes. Kost op dit scherm één sprite (er staan hier geen andere figuren).
+`VRIJ` uitgebreid naar x 82: achter het torentje staan de voeten op de (verstopte) zuil.
+
+**Ook:** `tools/vicetest.py` tekent nu de sprites mee in het ideale scherm (multicolor/hires, volgorde, $d01b),
+in plaats van ze weg te laten. Elke screenshot klopt pixel voor pixel mét cursor en Eldric (pose, maat,
+voorgrond). Proef: de sprites in de verkeerde volgorde tekenen → 50 foute pixels achter het torentje: gevonden.
+
+**Getest:** `tests/lopen.band` met een stap precies achter het torentje (act_achter = 1, alleen hoofd en
+schouders zichtbaar) en een vóór de fontein (act_achter = 0). 4 van 4 tests geslaagd.
+
+**Open:** er zijn 8 sprites; elke voorgrond kost er één zolang hij aan staat. In kamers met NPC's moet dat
+passen (cursor 1 + Eldric 2 + 2 NPC's 4 = 7: één voorgrond tegelijk).

@@ -4,12 +4,14 @@
 // Hoofdstuk 1 (het scherm): gesplitst scherm met berichtregels, kamer (Dawnhaven 160x128) en balk;
 // werkwoorden en een lege inventaris getekend; de cursor beweegt met joystick, muis of toetsen.
 // Hoofdstuk 2 (Eldric loopt): klik op de vloer en Eldric loopt erheen, via de loopvakken (BFS).
+// Voorgrond (uit hoofdstuk 8, vervroegd): achter de fontein staat het torentje vóór hem.
 
 #import "geheugen.asm"
 #import "../build/gen/lettertype_info.asm"     // cursor-midden en pijltekens (tools/lettertype.py)
 #import "teksten_nl.asm"                       // eerst: de constanten erin gebruikt de balk
 #import "../build/gen/spel.asm"                 // loopvakken en BEGIN_* (tools/scriptc.py)
 #import "../build/gen/costumes.asm"            // poses van Eldric (tools/costume.py)
+#import "../build/gen/kamer_plein_voorgrond.asm" // de voorgrond-sprite van het plein (tools/kamer.py)
 
 .file [name="hollowcrown.prg", segments="Basic,Code,Data"]
 
@@ -44,6 +46,11 @@ start:
         sta zp_ptr + 1
         jsr schaal_laden
         jsr actor_start
+        lda #<begin_achter
+        sta zp_ptr
+        lda #>begin_achter
+        sta zp_ptr + 1
+        jsr voorgrond_start
         jsr cursor_start
         jsr irq_start                   // zet ook het scherm aan
 #if AUTOTEST
@@ -69,6 +76,7 @@ hoofdlus:
         jsr klik
         jsr actor_beweeg
         jsr actor_plaatsen
+        jsr voorgrond_bij
         jsr cursor_plaatsen
 #if AUTOTEST
         jsr band_controle
@@ -101,6 +109,7 @@ klik:   lda invoer_vuur
 #import "kamer.asm"
 #import "loopvak.asm"
 #import "actor.asm"
+#import "voorgrond.asm"
 #import "balk.asm"
 #import "invoer.asm"
 #import "cursor.asm"

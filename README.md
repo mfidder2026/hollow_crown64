@@ -90,6 +90,9 @@ at the same time:
 The game is a small **SCUMM-style engine**. The engine is generic; the game itself is data and scripts.
 
 - **Rooms:** one compressed file per room on the disk, loaded into a fixed buffer.
+- **Foreground:** Eldric can walk *behind* things. The fountain's stone column is also a sprite with a lower
+  number than Eldric's, switched on only while his feet stand behind it. The column in the bitmap gets exactly the
+  sprite's colours, so you never see the switch, and the rest of the picture keeps all its colours.
 - **Walkboxes:** rectangles with a neighbour graph. Paths are found with BFS, then Eldric walks in straight lines.
 - **Actors:** two multicolour sprites stacked on top of each other, with poses copied into sprite slots on change.
   Actors **shrink with depth**: four sizes per pose, picked from the depth of their feet, so Eldric fits through
@@ -145,7 +148,7 @@ oud/        old experiments ("oud" is Dutch for "old")
 ## 🚧 Status
 
 Early days. The build makes a D64; automated tests boot it in VICE, play input tapes, check the game state and
-compare every screenshot pixel by pixel with the screen as memory says it should be. The engine is being built
+compare every screenshot pixel by pixel with the screen as memory says it should be, sprites included. The engine is being built
 in this order:
 
 - [x] 0. Setup: build script, memory map with asserts, D64, test runner
@@ -156,7 +159,7 @@ in this order:
 - [ ] 5. Inventory
 - [ ] 6. More rooms, loading from disk
 - [ ] 7. Conversations
-- [ ] 8. Foreground masking and small animations
+- [ ] 8. Foreground masking (first object done: the fountain) and small animations
 - [ ] 9. Chapter 1, fully playable
 - [ ] 10. Title screen with original SID music
 

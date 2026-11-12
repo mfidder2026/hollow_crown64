@@ -7,11 +7,12 @@
 // hoe trager (een kleine figuur die 1 pixel per beeld loopt, lijkt te rennen).
 // Hoofdstuk 2: alleen Eldric. NPC's als actor komen in hoofdstuk 7.
 //
-// Sprites: 1 (boven) en 2 (onder) in sprite-vak 0 en 1. Sprite 0 is de cursor.
+// Sprites: 2 (boven) en 3 (onder) in sprite-vak 0 en 1. Sprite 0 is de cursor, sprite 1 de voorgrond
+// (voorgrond.asm): een lager nummer komt vóór een hoger, zo staat het torentje vóór Eldric.
 
 .const ACT_VAK        = 0               // sprite-vak van de bovenste helft; de onderste in het volgende
 .const ACT_PTR        = (SPRITE_VAKKEN - SCHERM) / 64 + ACT_VAK
-.const ACT_SPRITES    = %00000110       // sprite 1 en 2
+.const ACT_SPRITES    = %00001100       // sprite 2 en 3
 .const STAP_BEELDEN   = 8
 .const R_VOOR = 0
 .const R_RUG = 1
@@ -38,13 +39,13 @@ actor_start:
         lda #HC_MC2
         sta $d026
         lda #ELDRIC_KB
-        sta $d028
-        lda #ELDRIC_KO
         sta $d029
+        lda #ELDRIC_KO
+        sta $d02a
         lda #ACT_PTR
-        sta SPRITE_PTR + 1
-        lda #ACT_PTR + 1
         sta SPRITE_PTR + 2
+        lda #ACT_PTR + 1
+        sta SPRITE_PTR + 3
         lda $d01c
         ora #ACT_SPRITES                // multicolor
         sta $d01c
@@ -403,13 +404,13 @@ klaar:  rts
 hulp:   .byte 0
 }
 
-// actor_plaatsen: sprites 1 en 2 op de plek van de voeten
+// actor_plaatsen: sprites 2 en 3 op de plek van de voeten
 actor_plaatsen:
         lda act_x                       // X = act_x + 24 - 12
         clc
         adc #12
-        sta $d002
         sta $d004
+        sta $d006
         lda act_x + 1
         adc #0
         beq !+
@@ -422,9 +423,9 @@ actor_plaatsen:
         lda act_y                       // Y boven = act_y + 16 (kamer begint op pixelrij 16) + 50 - VOETEN_RIJ
         clc
         adc #16 + 50 - VOETEN_RIJ
-        sta $d003
-        adc #21
         sta $d005
+        adc #21
+        sta $d007
         rts
 
 .segment Data

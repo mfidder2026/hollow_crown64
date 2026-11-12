@@ -33,7 +33,18 @@ wacht_tot_stil
 verwacht act_x.w = 200
 verwacht act_y = 72
 verwacht act_richting = 2
+verwacht act_achter = 0            # rechts van het torentje: niets vóór hem
 screenshot achter_rechts
+
+# 3b. terug, precies achter het torentje: het torentje komt vóór hem (voorgrond-sprite, ACHTER in het script)
+cursor 156,89
+vuur
+wacht_tot_stil
+verwacht act_x.w = 156
+verwacht act_y = 73
+verwacht act_richting = 3
+verwacht act_achter = 1
+screenshot achter_torentje
 
 # 4. klik op de voorkant van de fontein: daar kun je niet staan, hij gaat naar het dichtste punt ervoor
 cursor 160,110
@@ -43,6 +54,8 @@ verwacht act_x.w = 160
 verwacht act_y = 100
 verwacht act_richting = 3
 verwacht act_maat = 1
+verwacht act_achter = 0            # vóór de fontein: het torentje mag niet over hem heen
+screenshot voor_fontein
 
 # 5. klik op een dak: naar het dichtste punt op het pad rechts; onderweg kijken of hij pasjes zet
 cursor 220,36

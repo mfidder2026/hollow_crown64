@@ -23,6 +23,7 @@ Het model leest dit bestand bij elk bericht in deze werkmap. Schrijf hier zelf i
 - Lettertype (tools/lettertype.py): pixelrij 0 van ALLE tekens leeg, anders vuile naden.
 - Invoer: lees $DC00/$DC01 alleen in de onderrand-IRQ vóór de Kernal-scan (invoer_hardware). De Kernal-scan laat $DC00 op 0 staan: wie daarna $DC00 leest, ziet alle richtingen + vuur.
 - Loopvakken: de voeten alleen op LOOPKLEUREN (standaard groen, lichtgroen, geel); de build controleert elk LOOPVAK op het kamerplaatje. Uitzondering: `VRIJ x1,y1 x2,y2` in het script (bv. de waterstraal van de fontein). Controleplaatje: `python3 tools/loopkaart.py plein --toon`.
+- Sprites: 0 cursor, 1 voorgrond (bv. het torentje: data/plein_voorgrond.txt, ACHTER in het script), 2-3 Eldric. Een lager nummer komt vóór een hoger.
 - Vuur op het toetsenbord: spatie of CTRL (in VICE op de Mac: linker Control), ook RETURN.
 - Muis 1351 in VICE: `-controlport1device 3`. De SID meet de muis alleen als $DC00 = $7F (POORT1_POTS) >512 cycli staat.
 
