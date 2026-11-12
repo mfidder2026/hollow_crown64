@@ -11,8 +11,40 @@ VOORWERP munt "gouden munt" NERGENS
   BEKIJK:
     ZEG eldric "Een gouden munt uit de fontein. Er staat een zon op. Hoe toepasselijk."
 
+VOORWERP lantaarn "lantaarn" NERGENS
+  BEKIJK:
+    ALS STAND lantaarn 2
+      ZEG eldric "De lantaarn brandt. Het licht van de zon, in het klein."
+    ANDERS
+      ALS STAND lantaarn 1
+        ZEG eldric "De lantaarn zit vol olie. Nu nog vuur."
+      ANDERS
+        ZEG eldric "Een lege lantaarn van Bram."
+      EINDE
+    EINDE
+  GEBRUIK kruik:
+    ALS STAND kruik 1
+      ZEG eldric "Ik giet de olie in de lantaarn."
+      STAND lantaarn 1
+      STAND kruik 0
+    ANDERS
+      ZEG eldric "De kruik is leeg."
+    EINDE
+  GEBRUIK zwaard:
+    ALS STAND lantaarn 1
+      ZEG eldric "Het lichtfragment raakt de olie... en de lantaarn brandt!"
+      STAND lantaarn 2
+    ANDERS
+      ALS STAND lantaarn 2
+        ZEG eldric "Hij brandt al."
+      ANDERS
+        ZEG eldric "Er zit nog geen olie in."
+      EINDE
+    EINDE
+
 # Wie praat, in welke kleur (berichten bovenaan, op rij 0-1)
 SPREKER eldric geel
+SPREKER bram oranje
 
 # Standaardantwoorden: als een voorwerp geen script heeft voor dat werkwoord
 STANDAARD BEKIJK:

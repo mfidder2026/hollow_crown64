@@ -44,6 +44,10 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     NEEM voorwerp                     weg (nergens)
     PLAATS voorwerp kamer             neerzetten in een kamer (bv. de ziensteen onder de tafel)
     STAND voorwerp n                  stand van een voorwerp (open/dicht, vol/leeg, ...)
+    KAMER naam x,y richting           naar een andere kamer (laden van de diskette); het script houdt op,
+                                      daarna draait BINNENKOMST van die kamer
+    PATCH naam                        een patch van de kamer zetten (data/kamers.txt: patch=naam:...); in een
+                                      andere kamer dan de huidige doet hij niets (zet hem dan in BINNENKOMST)
     LOOP eldric x,y                   lopen en wachten tot hij er is
     KIJK eldric richting
     WACHT n                           n beelden
@@ -77,9 +81,9 @@ NIEUWE_REGEL = 0xFE
 OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLAG": 0x04, "ALS_HEEFT": 0x05,
       "ALS_NIET_HEEFT": 0x06, "ALS_STAND": 0x07, "ALS_NIET_STAND": 0x08, "ZET": 0x09, "WIS": 0x0A, "GEEF": 0x0B,
       "NEEM": 0x0C, "STAND": 0x0D, "PLAATS": 0x0E, "LOOP": 0x0F, "KIJK": 0x10, "WACHT": 0x11,
-      "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13}
+      "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13, "PATCH": 0x14, "KAMER": 0x15}
 OPDRACHTEN = {"ZEG", "ALS", "ANDERS", "EINDE", "ZET", "WIS", "GEEF", "NEEM", "PLAATS", "STAND", "LOOP", "KIJK",
-              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"}
+              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH"}
 
 
 class Fout(Exception):
@@ -192,8 +196,8 @@ def lees(bestanden):
                 voorwerp = None
                 continue
 
-            # ---- opdrachten in een script ----
-            if kop in OPDRACHTEN:
+            # ---- opdrachten in een script (KAMER met 4 woorden is de opdracht, met 2 de kamer zelf) ----
+            if kop in OPDRACHTEN or (kop == "KAMER" and len(w) == 4):
                 if blok is None:
                     raise Fout("%s: %s hoort in een script (onder BEKIJK: enz.)" % (waar, kop))
                 opdracht(blok, kop, w, waar)
@@ -394,6 +398,27 @@ def opdracht(blok, kop, w, waar):
         if n != 1:
             raise Fout("%s: %s (zonder meer)" % (waar, kop))
         L.append((kop, waar))
+    elif kop == "PATCH":
+        if n != 2:
+            raise Fout("%s: PATCH naam" % waar)
+        L.append(("PATCH", w[1], waar))
+    elif kop == "KAMER":
+        if w[3] not in RICHTINGEN:
+            raise Fout("%s: KAMER naam x,y richting" % waar)
+        x, y = punt(w[2], waar)
+        L.append(("KAMER", w[1], x, y, RICHTINGEN[w[3]], waar))
+
+
+def patches_van_kamers():
+    """naam -> (kamer, nummer) uit data/kamers.txt"""
+    import kamer as kamermod
+    uit = {}
+    for knaam, _, o, _ in kamermod.lees_lijst(os.path.join(WORTEL, "data", "kamers.txt")):
+        for i, (pnaam, _, _) in enumerate(o["patches"]):
+            if pnaam in uit:
+                raise Fout("data/kamers.txt: patch %s bestaat in twee kamers" % pnaam)
+            uit[pnaam] = (knaam, i)
+    return uit
 
 
 # ---------------------------------------------------------------------------------------------------
@@ -513,6 +538,11 @@ def alle_scripts(spel):
 
 def controleer_scripts(spel):
     import c64beeld
+    patches = patches_van_kamers()
+    for naam in spel.kamers:
+        import kamer as kamermod
+        if naam not in {n for n, *_ in kamermod.lees_lijst(os.path.join(WORTEL, "data", "kamers.txt"))}:
+            raise Fout("%s: kamer %s heeft geen plaatje in data/kamers.txt" % (spel.kamers[naam]["waar"], naam))
     for naam, (kleur, waar) in spel.sprekers.items():
         if kleur not in c64beeld.NAMEN:
             raise Fout("%s: onbekende kleur %s" % (waar, kleur))
@@ -548,6 +578,15 @@ def controleer_scripts(spel):
                     raise Fout("%s: onbekende kamer %s" % (waar, o[2]))
                 if spel.voorwerpen[o[1]]["vak"] is None or spel.voorwerpen[o[1]]["kamer"] != o[2]:
                     raise Fout("%s: %s kan alleen in de kamer waar zijn VAK bij hoort" % (waar, o[1]))
+            elif k == "PATCH":
+                if o[1] not in patches:
+                    raise Fout("%s: onbekende patch %s (zet hem in data/kamers.txt: patch=%s:x,y,b,h:plaatje)"
+                               % (waar, o[1], o[1]))
+            elif k == "KAMER":
+                if o[1] not in spel.kamers:
+                    raise Fout("%s: onbekende kamer %s" % (waar, o[1]))
+                if not in_loopvak(spel.kamers[o[1]], o[2], o[3]):
+                    raise Fout("%s: KAMER %s %d,%d: dat punt ligt niet in een loopvak van die kamer" % (waar, *o[1:4]))
             elif k in ("ZET", "WIS") and not re.fullmatch(r"[a-z_][a-z0-9_]*", o[1]):
                 raise Fout("%s: een vlagnaam is kleine letters, cijfers en _ (%r)" % (waar, o[1]))
     for vlag, waar in getest:
@@ -624,6 +663,7 @@ class Uitvoer:
         self.spel, self.L, self.teksten, self.vlaggen, self.nummer = spel, [], [], {}, 0
         self.vw = {n: i for i, n in enumerate(spel.vw_volgorde)}
         self.km = {n: i for i, n in enumerate(spel.kamer_volgorde)}
+        self.patches = patches_van_kamers()
 
     def vlag(self, naam):
         if naam not in self.vlaggen:
@@ -689,6 +729,13 @@ class Uitvoer:
                 L.append("        .byte $%02x, %d, %d    // WACHT %d" % (OP[k], o[1] & 255, o[1] >> 8, o[1]))
             elif k in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"):
                 L.append("        .byte $%02x    // %s" % (OP[k], k))
+            elif k == "PATCH":
+                pk, pn = self.patches[o[1]]
+                L.append("        .byte $%02x, %d, %d    // PATCH %s (%s)" % (OP[k], km[pk], pn, o[1], pk))
+            elif k == "KAMER":
+                x = o[2] * 2
+                L.append("        .byte $%02x, %d, %d, %d, %d, %d    // KAMER %s %d,%d" % (
+                    OP[k], km[o[1]], x & 255, x >> 8, o[3], o[4], o[1], o[2], o[3]))
         L.append("        .byte $%02x    // einde" % OP["STOP"])
 
 
@@ -782,6 +829,11 @@ def schrijf(spel, pad, json_pad):
     for veld in ("loopvakken", "achter", "schaal"):
         L.append("kamer_%s_lo: .byte %s" % (veld, ", ".join("<%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
         L.append("kamer_%s_hi: .byte %s" % (veld, ", ".join(">%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
+    for n in spel.kamer_volgorde:            # de bestandsnaam op de diskette (PETSCII: hoofdletters)
+        L.append("bestand_%s: .byte %s    // %s" % (n, ", ".join("$%02x" % ord(c) for c in n.upper()), n))
+    L.append("kamer_bestand_lo: .byte %s" % ", ".join("<bestand_%s" % n for n in spel.kamer_volgorde))
+    L.append("kamer_bestand_hi: .byte %s" % ", ".join(">bestand_%s" % n for n in spel.kamer_volgorde))
+    L.append("kamer_bestand_len: .byte %s" % ", ".join(str(len(n)) for n in spel.kamer_volgorde))
     L.append("kamer_binnen_lo: .byte %s" % ", ".join(
         "<binnen_%s" % n if "binnenkomst" in spel.kamers[n] else "0" for n in spel.kamer_volgorde))
     L.append("kamer_binnen_hi: .byte %s" % ", ".join(

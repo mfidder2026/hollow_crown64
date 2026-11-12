@@ -8,6 +8,9 @@ data/kamers.txt, één kamer per regel ('#' is commentaar):
 
     boven    bovenste pixelrij van de strook in het bronplaatje (de strook is 5:2, over de hele breedte)
     kleur    verzadiging vooraf; licht: helderheid vooraf; sterkte: Floyd-Steinberg (0 = geen menging)
+    patch=naam:x,y,b,h:plaatje   (mag vaker) een patch (§6.2): een rechthoek van vakjes (x, b veelvoud van 4;
+             y, h veelvoud van 8; kamerpixels) uit een tweede versie van het plaatje (bv. de deur open).
+             De scripts zetten hem met PATCH naam; de volgorde hier is zijn nummer.
     voorgrond=data/plein_voorgrond.txt   (mag weg) wat vóór een actor komt die erachter staat (§6.2):
              de '#'-pixels (bv. het torentje van de fontein) worden ook een voorgrond-sprite. In de bitmap krijgen
              ze dezelfde 2 kleuren als die sprite (zwart + 1 kleur), zodat je niets ziet als de sprite aan of uit
@@ -16,7 +19,13 @@ data/kamers.txt, één kamer per regel ('#' is commentaar):
 Per kamer:
     build/gen/kamer_<naam>.bin   ingepakt (tools/inpak.py): bitmap (16 rijen x 320) | scherm (640) | kleur (640)
     build/gen/kamer_<naam>.png   controle: de bronstrook naast de C64-pixels, zoals de VIC ze uit de bytes leest
-    build/gen/kamer_<naam>_voorgrond.asm   de voorgrond-sprite (64 bytes), zijn plek en kleur (VG_<NAAM> = 0: geen)
+    build/gen/kamer_<naam>.prg   het kamerbestand voor de diskette, geladen op KAMER_BUF ($A000):
+                                   +0 woord: plek van het voorgrondblok (0 = geen)
+                                   +2 woord: plek van de patchtabel
+                                   +4 het ingepakte plaatje (bitmap | scherm | kleur)
+                                   voorgrondblok: x (multicolor-pixels), y, kleur, 64 bytes sprite
+                                   patchtabel: aantal, per patch kolom, rij, breedte, hoogte (vakjes), plek (woord)
+                                   van zijn ingepakte data (per rij de bitmapbytes, dan scherm, dan kleur)
 
 Regels (§6.2 en de naden van §6.3):
     - de achtergrondkleur ($d021) is zwart, voor de hele kamer en voor het hele scherm;
@@ -34,7 +43,9 @@ B, H = 160, 128          # multicolor-pixels
 RIJEN, KOL = H // 8, B // 4
 ACHTER = 0               # zwart
 ZWART_BOVEN, ZWART_ONDER = 1, 2
-MAX_INGEPAKT = 6400      # de kamerbuffer in src/kamer.asm (ongepakt is het 5120 + 640 + 640)
+MAX_INGEPAKT = 6400      # alleen het plaatje (ongepakt is het 5120 + 640 + 640)
+KAMER_BUF = 0xA000       # gelijk houden met src/geheugen.asm
+KAMER_BUF_GROOTTE = 0x2000
 
 
 def lees_lijst(pad):
@@ -45,9 +56,20 @@ def lees_lijst(pad):
             continue
         if len(regel) < 2:
             raise SystemExit("%s:%d: naam en plaatje nodig" % (pad, nr))
-        opties = {"boven": 0, "kleur": 1.5, "licht": 1.0, "sterkte": 0.5, "voorgrond": None}
+        opties = {"boven": 0, "kleur": 1.5, "licht": 1.0, "sterkte": 0.5, "voorgrond": None, "patches": []}
         for o in regel[2:]:
             k, _, v = o.partition("=")
+            if k == "patch":
+                try:
+                    pnaam, vak, plaatje = v.split(":")
+                    x, y, b, h = (int(q) for q in vak.split(","))
+                except ValueError:
+                    raise SystemExit("%s:%d: patch=naam:x,y,b,h:plaatje" % (pad, nr))
+                if x % 4 or b % 4 or y % 8 or h % 8 or b < 4 or h < 8 or x + b > B or y + h > H:
+                    raise SystemExit("%s:%d: patch %s: x en breedte veelvoud van 4, y en hoogte van 8, in de kamer"
+                                     % (pad, nr, pnaam))
+                opties["patches"].append((pnaam, (x, y, b, h), plaatje))
+                continue
             if k not in opties:
                 raise SystemExit("%s:%d: onbekende optie %s" % (pad, nr, k))
             opties[k] = v if k == "voorgrond" else float(v)
@@ -151,13 +173,12 @@ def omzetten(klein, sterkte, vg=None, vkleur=None):
     return bytes(bitmap), bytes(scherm), bytes(kleur), vkleur
 
 
-def voorgrond_asm(naam, vg, pix, vkleur, pad):
-    """De voorgrond-sprite: '#'-pixels met hun kleur uit de kamer; zwart = %01 ($d025), vkleur = %10 (eigen kleur)."""
-    N = naam.upper()
-    L = ["// gemaakt door tools/kamer.py; niet met de hand wijzigen"]
+def voorgrond_blok(vg, pix, vkleur):
+    """De voorgrond-sprite: '#'-pixels met hun kleur uit de kamer; zwart = %01 ($d025), vkleur = %10 (eigen kleur).
+    Geeft x, y, kleur en 64 bytes (of None)."""
     if vg is None or not vg.any():
-        L += [".const VG_%s = 0" % N]
-    else:
+        return None
+    if True:
         ys, xs = np.nonzero(vg)
         x0, y0 = int(xs.min()), int(ys.min())
         data = []
@@ -172,14 +193,18 @@ def voorgrond_asm(naam, vg, pix, vkleur, pad):
                 bits = bits << 2 | code
             data += [bits >> 16 & 255, bits >> 8 & 255, bits & 255]
         data.append(0)
-        L += [".const VG_%s = 1" % N,
-              ".const VG_%s_X = %d    // multicolor-pixels" % (N, x0),
-              ".const VG_%s_Y = %d    // kamerrij" % (N, y0),
-              ".const VG_%s_KLEUR = %d    // %s" % (N, vkleur, cb.NAMEN[vkleur]),
-              ".segment Data", "vg_%s_sprite:" % naam]
-        for i in range(0, 64, 16):
-            L.append("        .byte " + ", ".join("$%02x" % v for v in data[i:i + 16]))
-    open(pad, "w").write("\n".join(L) + "\n")
+        return bytes([x0, y0, vkleur]) + bytes(data)
+
+
+def patch_data(bitmap, scherm, kleur, x, y, b, h):
+    """De vakjes van een patch: per vakjesrij de bitmapbytes, dan alle schermbytes, dan alle kleurbytes."""
+    k0, r0, kb, kh = x // 4, y // 8, b // 4, h // 8
+    bm, sc, kl = bytearray(), bytearray(), bytearray()
+    for r in range(r0, r0 + kh):
+        bm += bitmap[(r * 40 + k0) * 8:(r * 40 + k0 + kb) * 8]
+        sc += scherm[r * 40 + k0:r * 40 + k0 + kb]
+        kl += kleur[r * 40 + k0:r * 40 + k0 + kb]
+    return k0, r0, kb, kh, bytes(bm + sc + kl)
 
 
 def lees_terug(bitmap, scherm, kleur):
@@ -215,12 +240,14 @@ def main():
         bin_pad = os.path.join(uitmap, "kamer_%s.bin" % naam)
         bron_pad = os.path.join(wortel, plaatje)
         vg_pad = os.path.join(wortel, o["voorgrond"]) if o["voorgrond"] else None
-        vg_asm = os.path.join(uitmap, "kamer_%s_voorgrond.asm" % naam)
+        prg = os.path.join(uitmap, "kamer_%s.prg" % naam)
+        extra = [vg_pad] if vg_pad else []
+        extra += [os.path.join(wortel, p[2]) for p in o["patches"]]
         if not os.path.exists(bron_pad):
             raise SystemExit("%s:%d: plaatje %s bestaat niet" % (lijst, nr, plaatje))
         # alleen opnieuw als de bron, de lijst of dit programma nieuwer is
-        if os.path.exists(bin_pad) and os.path.exists(vg_asm) and all(os.path.getmtime(bin_pad) > os.path.getmtime(p)
-                                           for p in (bron_pad, lijst, __file__, cb.__file__) + ((vg_pad,) if vg_pad else ())):
+        if os.path.exists(bin_pad) and os.path.exists(prg) and all(os.path.getmtime(prg) > os.path.getmtime(p)
+                                                                   for p in [bron_pad, lijst, __file__, cb.__file__] + extra):
             print("[kamer]   %s is bij" % naam)
             continue
         beeld = cb.voorbewerk(cb.laad(bron_pad), o["kleur"], o["licht"])
@@ -228,7 +255,15 @@ def main():
         vg, vkleur = lees_voorgrond(vg_pad) if vg_pad else (None, None)
         bitmap, scherm, kleur, vkleur = omzetten(klein, o["sterkte"], vg, vkleur)
         pix = lees_terug(bitmap, scherm, kleur)
-        voorgrond_asm(naam, vg, pix, vkleur, vg_asm)
+        vgblok = voorgrond_blok(vg, pix, vkleur)
+        patches = []
+        for pnaam, (x, y, b, h), plaatje in o["patches"]:
+            pbron = os.path.join(wortel, plaatje)
+            if not os.path.exists(pbron):
+                raise SystemExit("%s:%d: patch %s: plaatje %s bestaat niet" % (lijst, nr, pnaam, plaatje))
+            _, pklein = strook(cb.voorbewerk(cb.laad(pbron), o["kleur"], o["licht"]), o["boven"])
+            pb, ps, pk, _ = omzetten(pklein, o["sterkte"], vg, vkleur)
+            patches.append(patch_data(pb, ps, pk, x, y, b, h))
         assert (pix[0] == ACHTER).all() and (pix[-ZWART_ONDER:] == ACHTER).all()
         data = inpak.pak(bitmap) + inpak.pak(scherm) + inpak.pak(kleur)
         if len(data) > MAX_INGEPAKT:
@@ -239,8 +274,25 @@ def main():
         c, i = inpak.uitpak(data, i)
         assert (a, b, c) == (bitmap, scherm, kleur) and i == len(data)
         open(bin_pad, "wb").write(data)
+        # het kamerbestand voor de diskette
+        bestand = bytearray(4) + data
+        vg_plek = 0
+        if vgblok:
+            vg_plek = len(bestand)
+            bestand += vgblok
+        tabel = len(bestand)
+        bestand += bytes([len(patches)]) + bytes(6 * len(patches))
+        for i, (k0, r0, kb, kh, pdata) in enumerate(patches):
+            plek = len(bestand)
+            bestand += inpak.pak(pdata)
+            bestand[tabel + 1 + 6 * i:tabel + 7 + 6 * i] = bytes([k0, r0, kb, kh, plek & 255, plek >> 8])
+        bestand[0:4] = bytes([vg_plek & 255, vg_plek >> 8, tabel & 255, tabel >> 8])
+        if len(bestand) > KAMER_BUF_GROOTTE:
+            raise SystemExit("%s:%d: kamer %s is %d bytes, de kamerbuffer %d" % (lijst, nr, naam, len(bestand), KAMER_BUF_GROOTTE))
+        open(prg, "wb").write(bytes([KAMER_BUF & 255, KAMER_BUF >> 8]) + bestand)
         controle_png(Image.fromarray(np.asarray(bron)), pix, os.path.join(uitmap, "kamer_%s.png" % naam))
-        print("[kamer]   %s: %d bytes ingepakt (ongepakt %d)" % (naam, len(data), len(bitmap) + len(scherm) + len(kleur)))
+        print("[kamer]   %s: %d bytes ingepakt (ongepakt %d), kamerbestand %d bytes, %d patches" % (
+            naam, len(data), len(bitmap) + len(scherm) + len(kleur), len(bestand), len(patches)))
 
 
 if __name__ == "__main__":

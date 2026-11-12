@@ -333,3 +333,40 @@ kruik rechts in de inventaris; Gebruik kruik met fontein → loopt erheen, stand
 inventaris zonder te lopen; Gebruik zwaard met kruik én Gebruik kruik met zwaard → beide het eigen script ("Tink.");
 Geef kruik aan fontein → standaardantwoord; 6 spullen: pijl omlaag schuift 2, nog eens omlaag kan niet, omhoog
 terug. 3 screenshots pixel voor pixel. Alle tests: 20/20 compiler, 7/7 banden.
+
+## 2026-11-13 — Hoofdstuk 6: meer kamers, de diskette en patches ✅
+
+**Klaar als:** band van het plein naar de herberg en terug; laadtijd gemeten en genoteerd. **Gehaald.**
+
+**Wat er is:**
+- Vier kamers: plein (FLUX), herberg, smidse, bosrand. Voor die drie zijn er **geen FLUX-plaatjes**: ze zijn
+  voorlopig getekend door `tools/maak_kamers.py` (eenvoudige vormen in C64-kleuren) naar `data/plaatjes/`.
+  Vervang ze door FLUX-plaatjes; daarna loopvakken en klikvakken aanpassen (de build controleert de loopvakken).
+- `tools/kamer.py` maakt per kamer een kamerbestand (`build/gen/kamer_<naam>.prg`, laadadres $A000): ingepakt
+  plaatje, voorgrond-sprite, patches (`patch=naam:x,y,b,h:plaatje` in `data/kamers.txt`). Patches: plein
+  deur_open, herberg tafel_weg en kruik_weg, smidse vuur_aan.
+- `src/schijf.asm`: één laadroutine via de Kernal (SETNAM/SETLFS/LOAD naar $A000). Tijdens het laden:
+  raster-IRQ's uit, tekstmodus, kamer leeg, sprites uit, SID stil, "Laden..." in de balk. Laadtijd met de
+  TOD-klok van CIA 1 (loopt door zonder IRQ's), in tienden van seconden.
+- `src/kamer.asm`: kamer_wissel (laden, plaatje, loopvakken, schaal, voorgrond, BINNENKOMST), patch_zetten.
+  Het plein zit niet meer in het programma (scheelt 4,5 KB); het programma moet onder $A000 blijven (assert).
+- Compiler: `KAMER naam x,y richting` (opdracht), `PATCH naam`, controles (kamer met plaatje, punt in een
+  loopvak, bekende patch). Scripts voor herberg, smidse en bosrand met uitgangen, en de puzzelstukken die geen
+  gesprek nodig hebben (tafel duwen → ziensteen, kruik, vat lampolie, smidsvuur → lantaarn van Bram, lantaarn
+  vullen en aansteken).
+
+**Gemeten:** laadtijd herberg (4920 bytes, 20 blokken) met echte 1541-emulatie en de Kernal: **14,0 s**
+(emulatietijd). Met het virtuele apparaat van VICE: 6,7 s. Een snellader kan later in `laad_kamer`, zonder dat de
+rest verandert (§6.7).
+
+**Een fout die de tests eerst níet zagen (en nu wel):** sinds het plein van de diskette komt, laadde het in de
+tests niet ("device not present": VICE zonder echte drive heeft `-busdevice8` nodig). Alle tests slaagden toch,
+want ze vergeleken het scherm alleen met het geheugen — en een zwarte kamer klopt ook met het geheugen. Nu:
+vicetest start met `-busdevice8`, stopt meteen bij een laadfout, en controleert bij elke screenshot dat de
+kamerbuffer byte voor byte het kamerbestand van de huidige kamer is.
+
+**Getest (`tests/kamers.band`):** Open herberg (patch), Ga naar herberg (laden 2), Duw tafel (patch, ziensteen
+ligt er), terug naar het plein (laden 3, deur nog open), weer naar binnen (tafel nog weg). 5 screenshots pixel
+voor pixel + kamerbuffer. Ook met `--echte-drive` geslaagd. Alle tests: 20/20 compiler, 8/8 banden.
+
+**Open:** snellader; FLUX-plaatjes voor herberg, smidse, bosrand; tijdens het laden staat het spel ~14 s stil.

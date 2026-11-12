@@ -35,6 +35,9 @@ voorzetsel_lo: .byte <vz_geen, <vz_geen, <vz_met, <vz_geen, <vz_geen, <vz_geen
 voorzetsel_hi: .byte >vz_geen, >vz_geen, >vz_met, >vz_geen, >vz_geen, >vz_geen
                .byte >vz_aan, >vz_geen, >vz_geen, >vz_geen, >vz_geen, >vz_geen
 
+tekst_laden:     .text "Laden..."
+.label tekst_laden_lengte = * - tekst_laden
+                 .byte 0
 tekst_hoofdstuk: .text "Hoofdstuk 1: Dawnhaven"
 .label tekst_hoofdstuk_lengte = * - tekst_hoofdstuk
                  .byte 0

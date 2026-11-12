@@ -64,6 +64,7 @@ ww:     stx teller
 
         // inventaris: inventaris.asm tekent hem (inventaris_anders staat bij het begin op 1)
         // hoofdstuk
+hoofdstuk_tekenen:
         lda #<tekst_hoofdstuk
         sta zp_ptr
         lda #>tekst_hoofdstuk

@@ -1,0 +1,55 @@
+# smidse.hcs — de smidse van Bram. Plaatje: data/plaatjes/smidse.png (voorlopig).
+KAMER smidse
+  LOOPKLEUREN bruin oranje               # aangestampte aarde
+  SCHAAL 104
+  LOOPVAK 2,106 157,124                  # 0 voor
+  LOOPVAK 38,84 108,124                  # 1 midden, voor het smidsvuur
+  LOOPVAK 2,92 20,124                    # 2 links, naast Bram
+  LOOPVAK 138,84 157,124                 # 3 rechts, bij de deur
+
+BINNENKOMST:
+  ALS vlag smidsvuur_aan
+    PATCH vuur_aan
+  EINDE
+
+VOORWERP deur_smidse "deur" VAK 140,50 13,34 LOOP 146,86 RUG
+  GA_NAAR:
+    KAMER plein 30,94 RECHTS
+  BEKIJK:
+    ZEG eldric "Terug naar het plein."
+
+VOORWERP smidsvuur "smidsvuur" VAK 58,48 41,30 LOOP 78,90 RUG
+  BEKIJK:
+    ALS vlag smidsvuur_aan
+      ZEG eldric "Het vuur brandt weer. Voor het eerst sinds de zon weg is."
+    ANDERS
+      ZEG eldric "Koude as. Het smidsvuur is uit sinds de zon weg is."
+    EINDE
+  GEBRUIK zwaard:
+    ALS vlag smidsvuur_aan
+      ZEG eldric "Het brandt al."
+    ANDERS
+      ZEG eldric "Ik houd het zwaard in de as. Het lichtfragment gloeit op..."
+      PATCH vuur_aan
+      ZET smidsvuur_aan
+      ZEG bram "Het vuur! Het brandt weer! Wie ben jij, jongen?"
+      ZEG eldric "Eldric. Wachter van de Lichte Kroon. De laatste."
+      ZEG bram "Dan heb je dit nodig. Een lantaarn. Leeg, maar jij vindt wel olie."
+      GEEF lantaarn
+    EINDE
+
+VOORWERP bram "Bram" VAK 20,55 17,36 LOOP 44,96 LINKS
+  BEKIJK:
+    ZEG eldric "Bram de smit. Groot, rood en chagrijnig."
+  PRAAT:
+    ALS vlag smidsvuur_aan
+      ZEG bram "Met dit vuur maak ik weer ijzer. Dank je, Wachter."
+    ANDERS
+      ZEG bram "Laat me. Zonder zon geen vuur, zonder vuur geen smit."
+    EINDE
+
+VOORWERP aambeeld "aambeeld" VAK 110,85 28,20 LOOP 104,100 RECHTS
+  BEKIJK:
+    ZEG eldric "Een aambeeld. Zwaar en koud."
+  PAK:
+    ZEG eldric "Ha. Nee."

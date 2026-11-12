@@ -19,6 +19,11 @@ KAMER plein
   LOOPVAK 73,65 94,69        # 6 helemaal bovenaan: het gras tussen de fontein en de huizen achteraan
   LOOPVAK 84,64 94,71        # 7 bovenaan rechts
 
+BINNENKOMST:
+  ALS vlag herbergdeur_open
+    PATCH deur_open
+  EINDE
+
 # ---- voorwerpen (hoofdstuk 3) -----------------------------------------------------------------------------
 # VOORWERP naam "naam op het scherm" VAK x,y breedte,hoogte LOOP x,y richting   (kamercoördinaten)
 # Het eerste voorwerp waarvan het VAK onder de cursor ligt, telt: zet kleine dingen vóór grote.
@@ -38,14 +43,35 @@ VOORWERP fontein "fontein" VAK 62,74 39,26 LOOP 80,100 RUG     # alleen de bak: 
     ZEG eldric "Ik heb geen dorst. Niet naar zwart water, in elk geval."
 
 VOORWERP smit "smit" VAK 0,56 26,44 LOOP 30,94 LINKS
+  GA_NAAR:
+    KAMER smidse 146,88 LINKS
   BEKIJK:
     ZEG eldric "Hier werkt Bram de smit. Het vuur is uit. Bram ook, zo te zien."
   OPEN:
-    ZEG eldric "Bram zit binnen te mokken. Dat laat ik nog even zo."
+    KAMER smidse 146,88 LINKS
 
 VOORWERP herberg "herberg" VAK 126,26 34,70 LOOP 122,90 RECHTS
+  OPEN:
+    ALS vlag herbergdeur_open
+      ZEG eldric "Hij staat al open."
+    ANDERS
+      PATCH deur_open
+      ZET herbergdeur_open
+    EINDE
+  GA_NAAR:
+    ALS vlag herbergdeur_open
+      KAMER herberg 45,86 VOOR
+    ANDERS
+      ZEG eldric "De deur is dicht."
+    EINDE
   BEKIJK:
     ZEG eldric "De herberg 'De Laatste Straal'. Daar brandt tenminste nog licht."
+
+VOORWERP pad "pad" VAK 74,40 16,24 LOOP 84,66 RUG     # vóór de huizen: het pad tussen de huizen door
+  GA_NAAR:
+    KAMER bosrand 80,120 RUG
+  BEKIJK:
+    ZEG eldric "Het pad naar de bosrand, en daarachter het Duisterwoud."
 
 VOORWERP huizen "huizen" VAK 30,20 96,42 LOOP 88,66 RUG
   BEKIJK:

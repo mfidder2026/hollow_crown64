@@ -13,7 +13,6 @@
 #import "teksten_nl.asm"                       // eerst: de constanten erin gebruikt de balk
 #import "../build/gen/spel.asm"                 // loopvakken en BEGIN_* (tools/scriptc.py)
 #import "../build/gen/costumes.asm"            // poses van Eldric (tools/costume.py)
-#import "../build/gen/kamer_plein_voorgrond.asm" // de voorgrond-sprite van het plein (tools/kamer.py)
 
 .file [name="hollowcrown.prg", segments="Basic,Code,Data"]
 
@@ -30,18 +29,21 @@ start:
         txs
 
         jsr status_begin
+        jsr tod_start
         jsr scherm_start
-        lda #<kamer_plein
-        sta zp_ptr
-        lda #>kamer_plein
-        sta zp_ptr + 1
-        jsr kamer_tonen
         jsr balk_tekenen
-        ldx st_kamer
-        jsr kamer_gegevens
         jsr actor_start
         jsr cursor_start
-        jsr irq_start                   // zet ook het scherm aan
+        lda #<BEGIN_X                   // de eerste kamer, van de diskette (laden_einde zet de IRQ's aan)
+        sta kw_x
+        lda #>BEGIN_X
+        sta kw_x + 1
+        lda #BEGIN_Y
+        sta kw_y
+        lda #BEGIN_RICHTING
+        sta kw_richting
+        lda #BEGIN_KAMER
+        jsr kamer_wissel
 #if AUTOTEST
         jsr band_begin
 #endif
@@ -117,6 +119,8 @@ kamer_nu: .byte 0
 #import "balk.asm"                              // vóór zin.asm: de kleuren van de balk
 #import "zin.asm"
 #import "inventaris.asm"
+#import "schijf.asm"
+#import "geluid.asm"
 #import "invoer.asm"
 #import "cursor.asm"
 #import "autotest.asm"
@@ -124,4 +128,4 @@ kamer_nu: .byte 0
 // Controle aan het eind, als alle segments gevuld zijn
 .segment Buffers
 buffers_eind:
-.assert "programma en buffers blijven onder $C000", buffers_eind <= PRG_EIND, true
+.assert "programma en buffers blijven onder de kamerbuffer ($A000)", buffers_eind <= PRG_EIND, true

@@ -26,6 +26,8 @@ Het model leest dit bestand bij elk bericht in deze werkmap. Schrijf hier zelf i
 - Sprites: 0 cursor, 1 voorgrond (bv. het torentje: data/plein_voorgrond.txt, ACHTER in het script), 2-3 Eldric. Een lager nummer komt vóór een hoger.
 - Voorwerpen in scripts/*.hcs: `VOORWERP naam "naam" VAK x,y b,h LOOP x,y richting` en per werkwoord een blok (`BEKIJK:` met `ZEG eldric "..."`); `STANDAARD werkwoord:` in scripts/spel.hcs. Een klikvak boven loopbaar gras maakt dat gras onbereikbaar: houd klikvakken klein.
 - Talen: eerst Nederlands afmaken; Engels en Frans later als eigen D64 uit dezelfde motor. Geen spelerstekst in de motor-asm.
+- Kamers komen van de diskette (kamerbuffer $A000). VICE zonder echte drive heeft `-busdevice8` nodig, anders 'device not present' (vicetest doet dat). vicetest controleert per screenshot of de kamerbuffer = het kamerbestand.
+- Voorlopige kamerplaatjes: tools/maak_kamers.py -> data/plaatjes/ (vervangen door FLUX).
 - Vuur op het toetsenbord: spatie of CTRL (in VICE op de Mac: linker Control), ook RETURN.
 - Muis 1351 in VICE: `-controlport1device 3`. De SID meet de muis alleen als $DC00 = $7F (POORT1_POTS) >512 cycli staat.
 

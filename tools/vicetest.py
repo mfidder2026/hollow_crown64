@@ -118,6 +118,9 @@ def lees_band(pad):
                 starts.append((len(data) - 2, arg))
             elif cmd == "wacht_op_script" and not arg:
                 data += bytes([OP_WACHT_VM])
+            elif cmd == "verwacht_kamer" and re.fullmatch(r"\w+", arg):
+                namen.append(("VERWACHT_KAMER", arg))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd in ("verwacht_vlag", "verwacht_eigenaar", "verwacht_stand"):
                 d = arg.split()
                 if len(d) != 2:
@@ -214,6 +217,8 @@ class Vice:
                 "-remotemonitor", "-remotemonitoraddress", "ip4://127.0.0.1:%d" % self.poort,
                 "-sounddev", "dummy", "+confirmonexit",
                 "-drive8truedrive" if echte_drive else "+drive8truedrive"]
+        if not echte_drive:
+            args.append("-busdevice8")           # virtueel apparaat 8: het spel laadt zelf kamers (Kernal LOAD)
         if warp:
             args.append("-warp")
         args += ["-autostart", d64]
@@ -378,6 +383,28 @@ def ideaal_scherm(vice):
     return pix
 
 
+def kamerbuffer_klopt(vice, sym, spel):
+    """De kamerbuffer ($A000) moet byte voor byte het kamerbestand van de huidige kamer zijn: anders laat het
+    scherm wel 'iets' zien dat bij het geheugen past, maar niet de kamer (zo bleef een mislukt laden onopgemerkt)."""
+    if "st_kamer" not in sym or "laad_teller" not in sym:
+        return True, "(geen kamers van de diskette)"
+    terug = {v: k for k, v in spel["kamers"].items()}
+    naam = terug.get(vice.lees(sym["st_kamer"])[0], "?")
+    pad = os.path.join(ROOT, "build", "gen", "kamer_%s.prg" % naam)
+    if not os.path.exists(pad):
+        return False, "geen bestand voor kamer %s" % naam
+    data = open(pad, "rb").read()[2:]
+    vice.cmd("bank ram")
+    try:
+        echt = vice.lees(0xA000, len(data))
+    finally:
+        vice.cmd("bank cpu")
+    if bytes(echt) != data:
+        eerste = next(i for i in range(len(data)) if echt[i] != data[i])
+        return False, "kamerbuffer is niet %s (eerste verschil op +%d)" % (os.path.basename(pad), eerste)
+    return True, "kamerbuffer = %s (%d bytes)" % (os.path.basename(pad), len(data))
+
+
 def scherm_vergelijken(vice, png_pad):
     from PIL import Image
     pix = ideaal_scherm(vice)
@@ -433,6 +460,10 @@ def controleer(vice, sym, regel, spel=None):
         nr = spel["vlaggen"][naam]
         echt = vice.lees(sym["st_vlaggen"] + nr // 8)[0] >> (nr % 8) & 1
         return echt == int(waarde), "vlag %s = %s%s" % (naam, waarde, "" if echt == int(waarde) else "  (is %d)" % echt)
+    if regel[0] == "VERWACHT_KAMER":
+        terug = {v: k for k, v in spel["kamers"].items()}
+        echt = terug.get(vice.lees(sym["st_kamer"])[0], "?")
+        return echt == regel[1], "kamer = %s%s" % (regel[1], "" if echt == regel[1] else "  (is %s)" % echt)
     if regel[0] == "VERWACHT_STAND":
         _, naam, waarde = regel
         echt = vice.lees(sym["st_stand"] + spel["voorwerpen"][naam])[0]
@@ -480,7 +511,7 @@ def draai(bandpad, args):
             if m[1] not in spel[soort]:
                 raise Fout("%s: onbekende %s %s" % (bandpad, "vlag" if soort == "vlaggen" else "voorwerp", m[1]))
     for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] not in
-                                     ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND")]:
+                                     ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND", "VERWACHT_KAMER")]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
     controles = [m for m in shots if isinstance(m, tuple)]
@@ -502,6 +533,9 @@ def draai(bandpad, args):
                 raise Fout("het spel startte niet binnen %d s" % args.starttijd)
             time.sleep(0.25)
         print("[test]   spel draait na %.1f s" % (time.time() - t0))
+        if "laad_fout" in sym and vice.lees(sym["laad_fout"])[0]:
+            raise Fout("de eerste kamer laadde niet van de diskette (laad_fout = %d, Kernal-status $%02x)"
+                       % (vice.lees(sym["laad_fout"])[0], vice.lees(0x90)[0]))
 
         # 2. band laden en starten
         vice.schrijf(sym["band"], band)
@@ -532,6 +566,9 @@ def draai(bandpad, args):
                         ok, uitleg = scherm_vergelijken(vice, pad)
                         schermfouten += 0 if ok else 1
                         print("[test]   %-4s scherm: %s" % ("ok" if ok else "FOUT", uitleg))
+                        ok, uitleg = kamerbuffer_klopt(vice, sym, spel)
+                        schermfouten += 0 if ok else 1
+                        print("[test]   %-4s kamer: %s" % ("ok" if ok else "FOUT", uitleg))
                 vice.schrijf(sym["band_markering"], [0])
             if status == BAND_KLAAR:
                 break

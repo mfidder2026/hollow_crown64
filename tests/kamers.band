@@ -1,0 +1,68 @@
+# kamers.band — hoofdstuk 6: van het plein naar de herberg en terug; laden van de D64; patches.
+# Werkwoorden: Open (260,156), Duw (20,172). Ga naar is het standaardwerkwoord.
+wacht 3
+verwacht_kamer plein
+verwacht laad_teller = 1               # het plein kwam al van de diskette
+
+# de herbergdeur open: een patch op het plein
+cursor 260,156
+vuur
+cursor 290,60
+verwacht_tekst 18 "Open herberg"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag herbergdeur_open 1
+screenshot plein_deur_open
+
+# naar binnen: Ga naar herberg -> KAMER herberg (laden)
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+verwacht laad_teller = 2
+verwacht laad_fout = 0
+verwacht act_x.w = 90
+verwacht act_y = 86
+verwacht act_richting = 0
+verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
+screenshot herberg
+
+# Duw tafel: patch, en de ziensteen ligt er
+cursor 20,172
+vuur
+cursor 140,111
+verwacht_tekst 18 "Duw tafel"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag tafel_geschoven 1
+verwacht_eigenaar ziensteen herberg
+cursor 124,122
+verwacht_tekst 18 "Ga naar ziensteen"
+screenshot tafel_weg
+
+# terug naar het plein: de deur staat nog open (BINNENKOMST zet de patch)
+cursor 90,76
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer plein
+verwacht laad_teller = 3
+verwacht act_x.w = 244
+verwacht act_y = 90
+screenshot plein_terug
+
+# en weer naar binnen: de tafel staat nog verschoven
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+verwacht laadtijd.w < 1000              # (tienden van seconden; in de echte-drivetest zie je de echte tijd)
+screenshot herberg_terug

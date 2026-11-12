@@ -1,0 +1,25 @@
+# bosrand.hcs — de rand van het Duisterwoud. Plaatje: data/plaatjes/bosrand.png (voorlopig).
+KAMER bosrand
+  LOOPKLEUREN groen lichtgroen geel oranje
+  SCHAAL 100 88
+  LOOPVAK 2,98 157,124                   # 0 voor
+  LOOPVAK 2,76 118,124                   # 1 links en het pad
+  LOOPVAK 122,76 157,124                 # 2 rechts van de wegwijzer
+
+VOORWERP dorp "dorp" VAK 130,112 30,16 LOOP 150,120 RECHTS
+  GA_NAAR:
+    KAMER plein 84,66 VOOR
+  BEKIJK:
+    ZEG eldric "Terug naar Dawnhaven."
+
+VOORWERP wegwijzer "wegwijzer" VAK 110,68 24,30 LOOP 116,100 RUG
+  LEES:
+    ZEG eldric "'Duisterwoud.' En met krijt eronder: 'Niet doen.'"
+  BEKIJK:
+    ZEG eldric "Een wegwijzer. Er staat iets op."
+
+VOORWERP bospad "pad" VAK 64,56 32,20 LOOP 80,80 RUG
+  BEKIJK:
+    ZEG eldric "Het pad het Duisterwoud in. Ergens daar is Baron Vex."
+  GA_NAAR:
+    ZEG eldric "Daar ga ik niet zomaar in. Nog niet."

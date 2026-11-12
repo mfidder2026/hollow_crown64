@@ -111,7 +111,9 @@ mv -f "$UIT/main.vs" "$UIT/$NAAM.vs"; mv -f "$UIT/main.sym" "$UIT/$NAAM.sym"   #
 stap "4/4 diskette"
 D64="$UIT/$NAAM.d64"
 rm -f "$D64"
-"$VICE_BIN/c1541" -format "$SCHIJFNAAM" d64 "$D64" -write "$UIT/$NAAM.prg" "$NAAM" >/dev/null 2>"$UIT/c1541.log" \
+KAMERS=()                                   # de kamerbestanden (tools/kamer.py), naam = de kamer
+for k in build/gen/kamer_*.prg; do KAMERS+=(-write "$k" "${${k:t:r}#kamer_}"); done
+"$VICE_BIN/c1541" -format "$SCHIJFNAAM" d64 "$D64" -write "$UIT/$NAAM.prg" "$NAAM" ${KAMERS[@]} >/dev/null 2>"$UIT/c1541.log" \
   || { cat "$UIT/c1541.log" >&2; fout "c1541"; }
 [[ -f "$D64" ]] || fout "geen D64 gemaakt"
 "$VICE_BIN/c1541" -attach "$D64" -list 2>/dev/null | grep -E '^[0-9]+ ' | sed 's/^/[build]   /'

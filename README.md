@@ -89,7 +89,9 @@ at the same time:
 
 The game is a small **SCUMM-style engine**. The engine is generic; the game itself is data and scripts.
 
-- **Rooms:** one compressed file per room on the disk, loaded into a fixed buffer.
+- **Rooms:** one compressed file per room on the disk (picture, foreground sprite, patches such as an opened
+  door), loaded with the Kernal into a fixed buffer at `$A000`. Only the village square has real FLUX art so far;
+  the tavern, smithy and forest edge use temporary drawn pictures (`tools/maak_kamers.py`) until FLUX art exists.
 - **Foreground:** Eldric can walk *behind* things. The fountain's stone column is also a sprite with a lower
   number than Eldric's, switched on only while his feet stand behind it. The column in the bitmap gets exactly the
   sprite's colours, so you never see the switch, and the rest of the picture keeps all its colours.
@@ -159,7 +161,7 @@ in this order:
 - [x] 3. Objects and the sentence line
 - [x] 4. Script VM and compiler
 - [x] 5. Inventory
-- [ ] 6. More rooms, loading from disk
+- [x] 6. More rooms, loading from disk
 - [ ] 7. Conversations
 - [ ] 8. Foreground masking (first object done: the fountain) and small animations
 - [ ] 9. Chapter 1, fully playable

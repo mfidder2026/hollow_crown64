@@ -1,6 +1,8 @@
 // geheugen.asm — de geheugenkaart van Hollow Crown (projectprompt §6.1), VIC-bank 3.
 //
-//   $0801-$BFFF  programma: motor, costumes, scripts en objecten van de kamer, buffers
+//   $0801-$9FFF  programma: motor, costumes, scripts, voorwerpen, buffers
+//   $A000-$BFFF  kamerbuffer: het kamerbestand van de diskette (plaatje ingepakt, voorgrond, patches);
+//                RAM onder het BASIC-ROM, dat uit staat ($01 = $36)
 //   $C000-$C3E7  scherm-RAM (rij 2-17: kleuren van de bitmap, de andere rijen: tekst)
 //   $C3F8-$C3FF  sprite-pointers
 //   $C400-$C7FF  16 sprite-vakken (vak 0-1 Eldric, 2-5 twee NPC's, 6 de cursor)
@@ -33,7 +35,9 @@
 .const BITMAP        = $e000
 .const KLEUR_OFFSET  = KLEUR_RAM - SCHERM   // van een schermadres naar het kleuradres
 
-.const PRG_EIND      = $c000            // het programma (ook buffers) moet hieronder blijven
+.const KAMER_BUF     = $a000            // het kamerbestand (tools/kamer.py: zelfde adres)
+.const KAMER_BUF_GROOTTE = $2000
+.const PRG_EIND      = KAMER_BUF        // het programma (ook buffers) moet hieronder blijven
 
 // De schermindeling (§4), in tekenrijen
 .const RIJ_BERICHT   = 0                // rij 0-1
@@ -85,6 +89,7 @@
 .segmentdef Data    [startAfter="Code", max=PRG_EIND - 1]
 // Buffers: geen bytes in de prg, wel ruimte onder $C000 (kamerbuffer, invoerband, ...)
 .segmentdef Buffers [startAfter="Data", max=PRG_EIND - 1, virtual]
+.segmentdef Kamerbuffer [start=KAMER_BUF, max=KAMER_BUF + KAMER_BUF_GROOTTE - 1, virtual]
 
 // Het VIC-gebied: alleen ter controle, er komen geen bytes uit in de prg
 .segmentdef Scherm     [start=SCHERM, max=SCHERM + $3e7, virtual]

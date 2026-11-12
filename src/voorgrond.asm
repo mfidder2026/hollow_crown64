@@ -14,7 +14,8 @@
 .assert "voorgrond-vak binnen de sprite-vakken", SPRITE_VAKKEN + (VG_VAK + 1) * 64 <= $c800, true
 
 .segment Code
-// voorgrond_start: de voorgrond van de kamer neerzetten (uit) en zijn ACHTER-vak laden van (zp_ptr)
+// voorgrond_start: de voorgrond van de kamer (uit de kamerbuffer) neerzetten, uit; en zijn ACHTER-vak laden
+// van (zp_ptr). Zonder voorgrondblok in het kamerbestand: nooit erachter.
 voorgrond_start: {
         ldy #6
 !:      lda (zp_ptr),y
@@ -24,23 +25,54 @@ voorgrond_start: {
         lda $d015
         and #~VG_SPRITE
         sta $d015
-.if (VG_PLEIN == 1) {
-        ldx #63
-!:      lda vg_plein_sprite,x
-        sta SPRITE_VAKKEN + VG_VAK * 64,x
-        dex
-        bpl !-
+        lda KAMER_BUF                   // plek van het voorgrondblok (0 = geen)
+        ora KAMER_BUF + 1
+        bne !+
+        lda #0
+        sta achter_vak
+        rts
+!:      lda KAMER_BUF
+        clc
+        adc #<KAMER_BUF
+        sta zp_ptr
+        lda KAMER_BUF + 1
+        adc #>KAMER_BUF
+        sta zp_ptr + 1
+        ldy #66                         // x, y, kleur, 64 bytes: de sprite naar vak 7
+!:      lda (zp_ptr),y
+        sta SPRITE_VAKKEN + VG_VAK * 64 - 3,y
+        dey
+        cpy #2
+        bne !-
         lda #VG_PTR
         sta SPRITE_PTR + 1
-        lda #<(24 + 2 * VG_PLEIN_X)
+        ldy #0
+        lda (zp_ptr),y                  // x: 24 + 2 * x (kan boven 255)
+        asl
+        sta hulp
+        lda #0
+        rol
+        sta hulp + 1
+        lda hulp
+        clc
+        adc #24
         sta $d002
+        lda hulp + 1
+        adc #0
+        beq !+
+        lda #VG_SPRITE
+!:      sta hulp
         lda $d010
         and #~VG_SPRITE
-        .if ((24 + 2 * VG_PLEIN_X) > 255) { ora #VG_SPRITE }
+        ora hulp
         sta $d010
-        lda #50 + RIJ_KAMER * 8 + VG_PLEIN_Y
+        ldy #1
+        lda (zp_ptr),y
+        clc
+        adc #50 + RIJ_KAMER * 8
         sta $d003
-        lda #VG_PLEIN_KLEUR
+        iny
+        lda (zp_ptr),y
         sta $d028
         lda $d01c
         ora #VG_SPRITE                  // multicolor: zwart ($d025) en de eigen kleur
@@ -48,11 +80,8 @@ voorgrond_start: {
         lda $d01b
         and #~VG_SPRITE
         sta $d01b
-} else {
-        lda #0
-        sta achter_vak                  // geen voorgrond: nooit erachter
-}
         rts
+hulp:   .word 0
 }
 
 // voorgrond_bij: elk beeld. Voeten van Eldric in het ACHTER-vak -> sprite 1 aan, anders uit.

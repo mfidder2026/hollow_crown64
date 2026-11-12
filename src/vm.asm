@@ -15,10 +15,12 @@
 //   $10 richting                  KIJK eldric
 //   $11 n(2)                      WACHT n beelden
 //   $12 / $13                     TUSSENSCENE / EINDE_TUSSENSCENE (geen invoer; vuur slaat over)
+//   $14 kamer n                   PATCH n van die kamer (alleen als we daar zijn)
+//   $15 kamer x(2) y richting     KAMER: laden en erheen; dit script houdt op, BINNENKOMST begint
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
 
 .const OP_STOP = $00
-.const OP_LAATSTE = $13
+.const OP_LAATSTE = $15
 .const EIGENAAR_ELDRIC = $ff
 .const EIGENAAR_NERGENS = $fe
 
@@ -272,6 +274,35 @@ op_einde_tussenscene:
         lda #1
         jmp verder
 
+op_patch:
+        ldy #1
+        lda (zp_vm),y
+        cmp st_kamer
+        bne !+
+        iny
+        lda (zp_vm),y
+        jsr patch_zetten
+!:      lda #3
+        jmp verder
+
+op_kamer:
+        ldy #2
+        lda (zp_vm),y
+        sta kw_x
+        iny
+        lda (zp_vm),y
+        sta kw_x + 1
+        iny
+        lda (zp_vm),y
+        sta kw_y
+        iny
+        lda (zp_vm),y
+        sta kw_richting
+        ldy #1
+        lda (zp_vm),y
+        jsr kamer_wissel                // stopt dit script; start eventueel BINNENKOMST
+        jmp lus
+
 // pc += A, en door met de volgende opdracht
 verder: clc
         adc vm_pc
@@ -315,6 +346,7 @@ sprongen:
         .word op_als_heeft - 1, op_als_niet_heeft - 1, op_als_stand - 1, op_als_niet_stand - 1
         .word op_zet - 1, op_wis - 1, op_geef - 1, op_neem - 1, op_stand - 1, op_plaats - 1
         .word op_loop - 1, op_kijk - 1, op_wacht - 1, op_tussenscene - 1, op_einde_tussenscene - 1
+        .word op_patch - 1, op_kamer - 1
 .assert "een sprong per opcode", (* - sprongen) / 2, OP_LAATSTE + 1
 }
 
