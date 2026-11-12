@@ -163,7 +163,7 @@ in this order:
 - [x] 5. Inventory
 - [x] 6. More rooms, loading from disk
 - [x] 7. Conversations
-- [ ] 8. Foreground masking (first object done: the fountain) and small animations
+- [x] 8. Foreground masking and small animations (flickering fire)
 - [ ] 9. Chapter 1, fully playable
 - [ ] 10. Title screen with original SID music
 

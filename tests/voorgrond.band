@@ -1,0 +1,23 @@
+# voorgrond.band — hoofdstuk 8: Eldric half achter de fontein, en vuur dat flakkert (kleurcyclus).
+# Het haardvuur in de herberg: FLAKKER 12,64 16,16 = vakjes kolom 3-6, kamerrij 8-9 = tekenrij 10-11.
+wacht 3
+cursor 156,89                          # achter het torentje van de fontein
+vuur
+wacht_tot_stil
+wacht 2
+verwacht act_achter = 1
+verwacht act_maat = 3
+screenshot achter_de_fontein
+
+start_script proef_naar_herberg
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+onthoud_kleur haard 10,3
+wacht 6                                # één stap (FLAKKER_TEMPO)
+verwacht_kleur_volgend haard 10,3 rood,oranje,geel
+wacht 6
+verwacht_kleur_volgend haard 10,3 rood,oranje,geel
+wacht 6
+verwacht_kleur_volgend haard 10,3 rood,oranje,geel
+screenshot haard

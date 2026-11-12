@@ -22,6 +22,8 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     ACHTER x1,y1 x2,y2                voeten hier: de voorgrond van de kamer komt vóór Eldric
     SCHAAL y1 y2 ...                  diepte: y >= y1 maat 0 (groot), >= y2 maat 1 ... (hooguit 4 grenzen)
     BINNENKOMST:                      script als Eldric de kamer binnenkomt
+    FLAKKER x,y b,h kleur kleur ...   een kleine animatie (hoofdstuk 8): in die vakjes (x, b veelvoud van 4; y, h van 8)
+                                      schuiven deze kleuren rond (bv. vuur: rood oranje geel). Hooguit 2 per kamer.
     ACTOR naam KOSTUUM k OP x,y [VERBORGEN]
                                       een figuur (NPC) in de kamer, met een kostuum uit tools/costume.py
                                       (mira, vex, wolf); OP = waar de voeten staan. Hooguit 2 per kamer.
@@ -281,7 +283,7 @@ def lees(bestanden):
                     if spel.kamers[kamer]["bestand"] == pad:
                         raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
                     continue                   # in een ander bestand: verder met dezelfde kamer
-                spel.kamers[kamer] = {"bestand": pad, "naam": kamer, "vakken": [], "waar": waar, "schaal": [], "kleuren": None,
+                spel.kamers[kamer] = {"bestand": pad, "flakker": [], "naam": kamer, "vakken": [], "waar": waar, "schaal": [], "kleuren": None,
                                       "vrij": [], "achter": None}
                 spel.kamer_volgorde.append(kamer)
             elif kop == "VOORWERP":
@@ -302,6 +304,20 @@ def lees(bestanden):
                     if k["achter"]:
                         raise Fout("%s: hooguit één ACHTER per kamer" % waar)
                     k["achter"] = (x1, y1, x2, y2, waar)
+            elif kop == "FLAKKER":
+                if kamer is None or len(w) < 5:
+                    raise Fout("%s: FLAKKER x,y b,h kleur kleur ... (binnen een KAMER)" % waar)
+                (x, y), (b, h) = punt(w[1], waar), punt(w[2], waar)
+                if x % 4 or b % 4 or y % 8 or h % 8 or b < 4 or h < 8 or x + b > KAMER_B or y + h > KAMER_H:
+                    raise Fout("%s: FLAKKER: x en b veelvoud van 4, y en h van 8, binnen de kamer" % waar)
+                import c64beeld
+                for kl in w[3:]:
+                    if kl not in c64beeld.NAMEN:
+                        raise Fout("%s: onbekende kleur %s" % (waar, kl))
+                k = spel.kamers[kamer]
+                k["flakker"].append((x, y, b, h, [c64beeld.NAMEN.index(kl) for kl in w[3:]], waar))
+                if len(k["flakker"]) > 2:
+                    raise Fout("%s: hooguit 2 keer FLAKKER per kamer" % waar)
             elif kop == "LOOPKLEUREN":
                 if kamer is None or len(w) < 2:
                     raise Fout("%s: LOOPKLEUREN kleur ... (binnen een KAMER)" % waar)
@@ -987,10 +1003,17 @@ def schrijf(spel, pad, json_pad):
             L.append("        .byte 0, 0, 0, 0, 0, 0, 0")
         sch = k["schaal"]
         L.append("schaal_%s: .byte %d%s" % (naam, len(sch), "".join(", %d" % g for g in sch)))
+        L.append("flakker_%s: .byte %d    // aantal; per gebied kolom, rij, breedte, hoogte (vakjes), 16 bytes kleur -> volgende" % (
+            naam, len(k["flakker"])))
+        for x, y, b, h, kleuren, _ in k["flakker"]:
+            tabel = list(range(16))
+            for i, kl in enumerate(kleuren):
+                tabel[kl] = kleuren[(i + 1) % len(kleuren)]
+            L.append("        .byte %d, %d, %d, %d, %s" % (x // 4, y // 8, b // 4, h // 8, ", ".join(str(t) for t in tabel)))
         if "binnenkomst" in k:
             u.script("binnen_%s" % naam, k["binnenkomst"])
     L.append(".const AANTAL_KAMERS = %d" % len(spel.kamer_volgorde))
-    for veld in ("loopvakken", "achter", "schaal"):
+    for veld in ("loopvakken", "achter", "schaal", "flakker"):
         L.append("kamer_%s_lo: .byte %s" % (veld, ", ".join("<%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
         L.append("kamer_%s_hi: .byte %s" % (veld, ", ".join(">%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
     for n in spel.kamer_volgorde:            # de bestandsnaam op de diskette (PETSCII: hoofdletters)

@@ -118,6 +118,13 @@ def lees_band(pad):
                 starts.append((len(data) - 2, arg))
             elif cmd == "wacht_op_script" and not arg:
                 data += bytes([OP_WACHT_VM])
+            elif cmd in ("onthoud_kleur", "verwacht_kleur_volgend"):
+                d = arg.split()                          # naam rij,kol [kleur,kleur,...]
+                if (cmd == "onthoud_kleur" and len(d) != 2) or (cmd != "onthoud_kleur" and len(d) != 3):
+                    raise ValueError
+                rij, kol = (int(v) for v in d[1].split(","))
+                namen.append((cmd.upper(), d[0], rij, kol, d[2].split(",") if len(d) == 3 else None))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd == "verwacht_kamer" and re.fullmatch(r"\w+", arg):
                 namen.append(("VERWACHT_KAMER", arg))
                 data += bytes([OP_MARKEER, len(namen)])
@@ -454,7 +461,31 @@ def scherm_tekst(vice, rij):
     return "".join(terug.get(c, "?") for c in vice.lees(0xC000 + rij * 40, 40)).rstrip()
 
 
+ONTHOUDEN = {}
+KLEURNAMEN = ["zwart", "wit", "rood", "cyaan", "paars", "groen", "blauw", "geel", "oranje", "bruin", "roze",
+              "donkergrijs", "grijs", "lichtgroen", "lichtblauw", "lichtgrijs"]
+
+
 def controleer(vice, sym, regel, spel=None):
+    if regel[0] == "ONTHOUD_KLEUR":
+        _, naam, rij, kol, _ = regel
+        ONTHOUDEN[naam] = (vice.lees(0xD800 + rij * 40 + kol)[0] & 15, vice.lees(sym["fl_stappen"])[0])
+        return True, "onthouden: kleur-RAM rij %d kolom %d = %s" % (rij, kol, KLEURNAMEN[ONTHOUDEN[naam][0]])
+    if regel[0] == "VERWACHT_KLEUR_VOLGEND":
+        _, naam, rij, kol, rij_kleuren = regel
+        # de kleur moet precies zoveel plekken in de rij opgeschoven zijn als er stappen waren (minstens één)
+        nu = vice.lees(0xD800 + rij * 40 + kol)[0] & 15
+        stappen_nu = vice.lees(sym["fl_stappen"])[0]
+        oud, stappen_oud = ONTHOUDEN.get(naam, (None, 0))
+        nrs = [KLEURNAMEN.index(k) for k in rij_kleuren]
+        if oud not in nrs:
+            return False, "onthouden kleur %s zit niet in de rij %s" % (KLEURNAMEN[oud] if oud is not None else "?", rij_kleuren)
+        n = (stappen_nu - stappen_oud) & 255
+        verwacht = nrs[(nrs.index(oud) + n) % len(nrs)]
+        ONTHOUDEN[naam] = (nu, stappen_nu)
+        ok = nu == verwacht and n >= 1
+        return ok, "kleur rij %d kolom %d: %s, %d stap(pen) verder: %s%s" % (
+            rij, kol, KLEURNAMEN[oud], n, KLEURNAMEN[verwacht], "" if ok else "  (is %s)" % KLEURNAMEN[nu])
     if regel[0] == "VERWACHT_VLAG":
         _, naam, waarde = regel
         nr = spel["vlaggen"][naam]
@@ -511,7 +542,8 @@ def draai(bandpad, args):
             if m[1] not in spel[soort]:
                 raise Fout("%s: onbekende %s %s" % (bandpad, "vlag" if soort == "vlaggen" else "voorwerp", m[1]))
     for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] not in
-                                     ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND", "VERWACHT_KAMER")]:
+                                     ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND", "VERWACHT_KAMER",
+                                      "ONTHOUD_KLEUR", "VERWACHT_KLEUR_VOLGEND")]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
     controles = [m for m in shots if isinstance(m, tuple)]

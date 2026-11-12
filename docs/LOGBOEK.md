@@ -397,3 +397,18 @@ teruggezet (hun document weer niet vastgelegd, verder onaangeroerd). Ik werk sin
 vlag mira_zoekt; keuze 1; keuze 3 (EINDE) → werkwoorden en inventaris terug; Duw tafel, Pak ziensteen, Geef
 ziensteen aan Mira → ziensteen weg, vlaggen ziensteen_terug en hint_wolven; opnieuw praten → keuze 2 is nu "Hoe
 kom ik langs de wolven?". 3 screenshots pixel voor pixel. Alle tests: 20/20 compiler, 9/9 banden.
+
+## 2026-11-13 — Hoofdstuk 8: voorgrond en kleine animaties ✅
+
+**Klaar als:** screenshot: Eldric half achter de fontein. **Gehaald** (de voorgrond-sprite van eerder; nu ook als
+eigen test met act_achter = 1 en maat 3).
+
+**Kleine animaties:** `FLAKKER x,y b,h kleur kleur ...` per kamer (hooguit 2). `src/flakker.asm` laat elke 6 beelden
+in die vakjes elke kleur uit de rij de volgende worden, in alle drie de kleurplekken (scherm-RAM hoog/laag,
+kleur-RAM). Vuur: rood → oranje → geel. Het haardvuur in de herberg flakkert altijd; het smidsvuur ook, maar
+zolang het uit is staat er alleen grijs in die vakjes en verandert er niets — geen extra voorwaarde nodig.
+
+**Getest (`tests/voorgrond.band`):** Eldric achter het torentje (screenshot pixel voor pixel); in de herberg drie
+keer: de kleur van een haardvakje is precies zoveel plekken in de rij opgeschoven als er flakkerstappen waren
+(de motor telt ze: fl_stappen). Eerst controleerde de test "één stap verder" en faalde soms: tussen twee
+controles zaten soms 2 stappen. Nu exact. Alle tests: 20/20 compiler, 10/10 banden.

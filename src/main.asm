@@ -67,6 +67,8 @@ kamer_gegevens:
         sta zp_ptr + 1
         jsr schaal_laden
         ldx kamer_nu
+        jsr flakker_laden
+        ldx kamer_nu
         lda kamer_achter_lo,x
         sta zp_ptr
         lda kamer_achter_hi,x
@@ -97,6 +99,7 @@ hoofdlus:
         jsr actor_plaatsen
         jsr npc_beweeg
         jsr npc_sprites
+        jsr flakker_beeld
         jsr voorgrond_bij
         jsr cursor_plaatsen
 #if AUTOTEST
@@ -124,6 +127,7 @@ kamer_nu: .byte 0
 #import "zin.asm"
 #import "npc.asm"
 #import "gesprek.asm"
+#import "flakker.asm"
 #import "inventaris.asm"
 #import "schijf.asm"
 #import "geluid.asm"

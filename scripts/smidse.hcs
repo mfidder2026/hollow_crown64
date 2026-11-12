@@ -6,6 +6,7 @@ KAMER smidse
   LOOPVAK 38,84 108,124                  # 1 midden, voor het smidsvuur
   LOOPVAK 2,92 20,124                    # 2 links, naast Bram
   LOOPVAK 138,84 157,124                 # 3 rechts, bij de deur
+  FLAKKER 60,56 36,24 rood oranje geel   # het smidsvuur (uit: alleen grijs in die vakjes, dan verandert er niets)
 
 BINNENKOMST:
   ALS vlag smidsvuur_aan

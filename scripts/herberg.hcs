@@ -6,6 +6,7 @@ KAMER herberg
   LOOPVAK 2,80 44,124                    # 1 links, bij de haard
   LOOPVAK 96,80 157,124                  # 2 rechts
   LOOPVAK 2,108 157,124                  # 3 voor de tafel langs
+  FLAKKER 12,64 16,16 rood oranje geel  # het haardvuur
   ACTOR mira KOSTUUM mira OP 28,96       # Mira, bij de haard
 
 BINNENKOMST:
