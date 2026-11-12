@@ -23,7 +23,9 @@ all our own. We borrow only the genre and the way you control it.
 
 ![Eldric walking across the village square of Dawnhaven, in VICE](docs/images/hoofdstuk2_lopen.png)
 
-*Eldric mid-stride on his way round the fountain, running in VICE. Messages on top, Dawnhaven as a 160×128
+![Eldric at three depths: front, by the smithy, between the houses at the back](docs/images/hoofdstuk2_diepte.png)
+
+*Eldric mid-stride on his way round the fountain (top), and at three depths (above), running in VICE. Messages on top, Dawnhaven as a 160×128
 multicolour room, the verb bar below (in Dutch for now). The test suite checks this screen pixel by pixel against
 what memory says it should be.*
 
@@ -90,6 +92,9 @@ The game is a small **SCUMM-style engine**. The engine is generic; the game itse
 - **Rooms:** one compressed file per room on the disk, loaded into a fixed buffer.
 - **Walkboxes:** rectangles with a neighbour graph. Paths are found with BFS, then Eldric walks in straight lines.
 - **Actors:** two multicolour sprites stacked on top of each other, with poses copied into sprite slots on change.
+  Actors **shrink with depth**: four sizes per pose, picked from the depth of their feet, so Eldric fits through
+  the doors at the back of a room and walks a little slower there. The C64 cannot scale sprites, so the sizes are
+  pre-made by the costume tool (the smallest one is hand-drawn).
 - **Scripts:** plain-text `.hcs` files, compiled by a Python compiler into bytecode for a tiny VM. The compiler
   also checks that chapter 1 can actually be finished.
 - **Testing without hands:** an `AUTOTEST` build replays *input tapes* (cursor moves, fire, waits). VICE runs them

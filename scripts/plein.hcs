@@ -4,6 +4,9 @@
 # Het plaatje staat (nog) in data/kamers.txt.
 
 KAMER plein
+  SCHAAL 104 88 76           # diepte: vooraan groot; achteraan zo klein dat hij door de deuren past
+                             # (deuren: achteraan ~14-16 hoog met de voet op y~66, smidse ~20 op y~78,
+                             #  herberg ~26 op y~84; Eldric: 34 / 26 / 20 / 14 rijen)
   LOOPVAK 4,96 152,124       # 0 voor: het gras en het pad vooraan
   LOOPVAK 16,78 62,98        # 1 links: het pad naar de smidse
   LOOPVAK 100,62 128,98      # 2 rechts: het pad omhoog, achter de fontein langs

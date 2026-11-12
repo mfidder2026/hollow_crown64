@@ -3,6 +3,8 @@
 // Positie = waar de voeten staan: act_x in schermpixels (0-319), act_y in kamerrijen (0-127).
 // Lopen: in rechte lijnen (Bresenham), 1 pixel per beeld langs de lange as; een stap elke 8 beelden.
 // Richting volgt de lange as van het stuk dat hij loopt; aan het eind blijft hij zo staan.
+// Diepte: hoe hoger in de kamer (kleinere y), hoe kleiner (maat 0-3, grenzen uit SCHAAL in het script) en
+// hoe trager (een kleine figuur die 1 pixel per beeld loopt, lijkt te rennen).
 // Hoofdstuk 2: alleen Eldric. NPC's als actor komen in hoofdstuk 7.
 //
 // Sprites: 1 (boven) en 2 (onder) in sprite-vak 0 en 1. Sprite 0 is de cursor.
@@ -222,7 +224,16 @@ actor_beweeg: {
         lda #0
         sta act_fase
         jmp actor_pose
-loopt:  lda seg_major
+loopt:  inc traag_teller                 // trager op afstand: in sommige beelden niet bewegen
+        lda traag_teller
+        and #7
+        tax
+        lda bits,x
+        ldx act_maat
+        and maat_tempo,x
+        bne beweeg
+        jmp anim
+beweeg: lda seg_major
         bne y_lang
         jsr stap_x                      // lange as X
         lda seg_dy
@@ -325,12 +336,51 @@ stap_y: lda seg_sy
         rts
 }
 
-// actor_pose: de pose van nu (richting * 3 + fase) in de sprite-vakken, als hij veranderd is
+// actor_maat: de maat bij de diepte van de voeten: het aantal SCHAAL-grenzen waar act_y onder ligt
+actor_maat: {
+        ldx #0
+        ldy schaal_aantal
+        beq klaar
+!:      lda act_y
+        cmp schaal_grens - 1,y
+        bcs !+
+        inx
+!:      dey
+        bne !--
+klaar:  stx act_maat
+        rts
+}
+
+// schaal_laden: de SCHAAL van een kamer op (zp_ptr): aantal, dan de grenzen (aflopend)
+schaal_laden:
+        ldy #0
+        lda (zp_ptr),y
+        sta schaal_aantal
+        tax
+        beq !++
+!:      iny
+        lda (zp_ptr),y
+        sta schaal_grens - 1,y
+        dex
+        bne !-
+!:      rts
+
+// actor_pose: de pose van nu (maat * 12 + richting * 3 + fase) in de sprite-vakken, als hij veranderd is
 actor_pose: {
+        jsr actor_maat
+        lda act_maat                    // maat * 12 = maat * 8 + maat * 4
+        asl
+        asl
+        sta hulp
+        asl
+        clc
+        adc hulp
+        sta hulp
         lda act_richting
         asl
         adc act_richting                // * 3 (C = 0: richting < 4)
         adc act_fase
+        adc hulp
         cmp act_pose
         beq klaar
         sta act_pose
@@ -350,6 +400,7 @@ actor_pose: {
         dey
         bpl !-
 klaar:  rts
+hulp:   .byte 0
 }
 
 // actor_plaatsen: sprites 1 en 2 op de plek van de voeten
@@ -387,6 +438,12 @@ act_hulp:     .byte 0
 stap_teller:  .byte 0
 stap_index:   .byte 0
 stappen:      .byte 0, 1, 0, 2          // staan, voet, staan, andere voet
+act_maat:     .byte 0                   // 0 = groot ... MATEN - 1 = het kleinst
+traag_teller: .byte 0
+maat_tempo:   .byte %11111111, %11111111, %01110111, %01010101   // per maat: in welke van 8 beelden hij beweegt
+.assert "maat_tempo heeft een waarde per maat", MATEN, 4
+schaal_aantal: .byte 0
+schaal_grens:  .fill 3, 0
 doel_x:       .word 0
 doel_y:       .byte 0
 route_pos:    .byte 0

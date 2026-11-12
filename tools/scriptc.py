@@ -3,11 +3,13 @@
 
     python3 tools/scriptc.py scripts build/gen      schrijft build/gen/spel.asm
 
-Hoofdstuk 2: alleen KAMER, LOOPVAK en BEGIN. De rest van de taal (VOORWERP, ZEG, ALS, ...) komt in hoofdstuk 4;
+Hoofdstuk 2: alleen KAMER, LOOPVAK, SCHAAL en BEGIN. De rest van de taal (VOORWERP, ZEG, ALS, ...) komt in hoofdstuk 4;
 onbekende woorden zijn tot dan een fout, zodat er niets stilletjes wordt overgeslagen.
 
     KAMER naam
       LOOPVAK x1,y1 x2,y2        rechthoek in kamercoördinaten: x 0-159 (multicolor-pixels), y 0-127
+      SCHAAL y1 y2 ...           diepte: voeten op y >= y1 = maat 0 (groot), >= y2 = maat 1, ...; daarachter
+                                 de volgende maat. Aflopend, hooguit 3 grenzen (4 maten in tools/costume.py).
     BEGIN kamer x,y richting      waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
 
 Controles: vakken binnen de kamer en niet leeg; hooguit 16 per kamer; elk vak bereikbaar vanuit elk ander
@@ -19,6 +21,7 @@ import glob, os, re, sys
 
 KAMER_B, KAMER_H = 160, 128
 MAX_VAKKEN = 16
+MAX_SCHAAL = 3           # grenzen; de motor heeft MATEN = 4 maten (tools/costume.py)
 RICHTINGEN = {"VOOR": 0, "RUG": 1, "RECHTS": 2, "LINKS": 3}
 
 
@@ -49,7 +52,7 @@ def lees(bestanden):
                 kamer = woorden[1]
                 if kamer in kamers:
                     raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
-                kamers[kamer] = {"vakken": [], "waar": waar}
+                kamers[kamer] = {"vakken": [], "waar": waar, "schaal": []}
                 volgorde.append(kamer)
             elif w == "LOOPVAK":
                 if kamer is None:
@@ -60,6 +63,17 @@ def lees(bestanden):
                 if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
                     raise Fout("%s: loopvak buiten de kamer (0-%d, 0-%d) of leeg" % (waar, KAMER_B - 1, KAMER_H - 1))
                 kamers[kamer]["vakken"].append((x1, y1, x2, y2, waar))
+            elif w == "SCHAAL":
+                if kamer is None:
+                    raise Fout("%s: SCHAAL buiten een KAMER" % waar)
+                try:
+                    grenzen = [int(g) for g in woorden[1:]]
+                except ValueError:
+                    raise Fout("%s: SCHAAL y1 y2 ... (getallen)" % waar)
+                if not 1 <= len(grenzen) <= MAX_SCHAAL or any(not 0 < g < KAMER_H for g in grenzen) \
+                        or grenzen != sorted(grenzen, reverse=True) or len(set(grenzen)) != len(grenzen):
+                    raise Fout("%s: SCHAAL: 1 tot %d grenzen tussen 1 en %d, aflopend" % (waar, MAX_SCHAAL, KAMER_H - 1))
+                kamers[kamer]["schaal"] = grenzen
             elif w == "BEGIN":
                 if len(woorden) != 4 or woorden[3] not in RICHTINGEN:
                     raise Fout("%s: BEGIN kamer x,y richting" % waar)
@@ -126,10 +140,13 @@ def schrijf(kamers, volgorde, begin, pad):
         ]
         for wat, rij in velden:
             L.append("        .byte %s    // %s" % (", ".join("$%02x" % x for x in rij), wat))
+        sch = kamers[naam]["schaal"]
+        L.append("schaal_%s:    // aantal grenzen, dan de grenzen (aflopend): y >= grens -> grotere maat" % naam)
+        L.append("        .byte %d%s" % (len(sch), "".join(", %d" % g for g in sch)))
     kamer, (x, y), r, _ = begin
     L += [".const BEGIN_KAMER = KAMER_%s" % kamer.upper(), ".const BEGIN_X = %d    // schermpixels" % (x * 2),
           ".const BEGIN_Y = %d" % y, ".const BEGIN_RICHTING = %d" % r,
-          ".label begin_loopvakken = loopvakken_%s" % kamer]
+          ".label begin_loopvakken = loopvakken_%s" % kamer, ".label begin_schaal = schaal_%s" % kamer]
     open(pad, "w").write("\n".join(L) + "\n")
 
 

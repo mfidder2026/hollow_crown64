@@ -9,6 +9,13 @@ volgorde richting * 3 + fase:
     fase     0 staan, 1 stap, 2 andere stap
 De motor kopieert de pose van het moment naar de sprite-vakken (alleen als hij verandert).
 
+Verkleind (voor diepte, §6.5 uitgebreid): de motor kiest per kamer een maat bij de diepte (y) van de voeten
+(SCHAAL in scripts/*.hcs). Hier maken we de maten uit dezelfde tekeningen: de figuur wordt verkleind binnen
+hetzelfde sprite-vak, met de voeten op dezelfde rij, zodat het plaatsen niet verandert. Volgorde van de poses:
+maat * 12 + richting * 3 + fase (maat 0 = de grootste). Het verkleinen kiest per nieuwe pixel de kleur die
+het meeste oppervlak heeft, met voorrang voor omlijning (k) en huid (s): zo blijven gezicht en rand heel.
+Wil je een maat met de hand bijwerken, teken hem dan in sprites_hc.py en zet hem in HANDWERK hieronder.
+
 Ook: VOETEN_RIJ, de onderste rij met pixels van de staande pose (daar staat de actor op zijn positie),
 en de kleuren. Spreken (mond open) komt met de gesprekken (hoofdstuk 7).
 """
@@ -18,6 +25,44 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sprites_hc as hc   # noqa: E402
 
 RICHTINGEN = ["voor", "rug", "rechts", "links"]
+# hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
+# het plein: achteraan ~14-16 hoog, de smidse ~20, de herberg ~26 (zie docs/LOGBOEK.md).
+MATEN = [None, 26, 20, 14]
+GEWICHT = {".": 1.0, "c": 1.0, "k": 1.45, "s": 1.35}
+# De kleinste maat is met de hand getekend: zo klein werkt verkleinen niet meer (gezicht en benen verdwijnen).
+# 6 breed x 14 hoog; staat in kolom 3-8, voeten op rij 34. Helemaal in de onderste sprite, dus 'c' = blauw.
+KLEIN = {
+    "voor": [
+        "..kk..", ".kkkk.", "kkkkkk", "kssssk", "skssks", ".ssss.", "kcccck",
+        "kcccck", "scccсs".replace("с", "c"), ".cccc.", ".kkkk.", ".k..k.", ".k..k.", "kk..kk"],
+    "rug": [
+        "..kk..", ".kkkk.", "kkkkkk", "kkkkkk", "kkkkkk", ".kkkk.", "kcccck",
+        "kcccck", "scccсs".replace("с", "c"), ".cccc.", ".kkkk.", ".k..k.", ".k..k.", "kk..kk"],
+    "rechts": [
+        ".kkk..", "kkkkk.", "kkkss.", "kksks.", ".ksss.", "..ss..", ".cccc.",
+        ".cccc.", ".ccsc.", ".cccc.", ".kkkk.", "..kk..", "..kk..", "..kkk."],
+}
+KLEIN_BENEN = {          # de laatste 3 rijen per (richting, fase); fase 0 = zoals hierboven
+    ("voor", 1): [".k..k.", "kk..k.", "....kk"], ("voor", 2): [".k..k.", ".k..kk", "kk...."],
+    ("rug", 1): [".k..k.", "kk..k.", "....kk"], ("rug", 2): [".k..k.", ".k..kk", "kk...."],
+    ("rechts", 1): [".k.k..", "k...k.", "k...kk"], ("rechts", 2): ["..k.k.", ".k..k.", ".kk.kk"],
+}
+
+
+def klein(richting, fase):
+    spiegel = richting == "links"
+    basis = "rechts" if spiegel else richting
+    rijen = list(KLEIN[basis])
+    if fase:
+        rijen[-3:] = KLEIN_BENEN[(basis, fase)]
+    if spiegel:
+        rijen = [r[::-1] for r in rijen]
+    assert len(rijen) == 14 and all(len(r) == 6 for r in rijen), (richting, fase)
+    leeg = "." * 12
+    return [leeg] * 21 + ["..." + r + "..." for r in rijen] + [leeg] * 7
+
+
+HANDWERK = {}            # (maat, posenaam) -> 42 rijen van 12, als een verkleinde pose met de hand beter is
 # naam van de pose in sprites_hc.CHARS per (richting, fase)
 ELDRIC = {
     ("voor", 0): "eldric_voor", ("voor", 1): "eldric_voor_l", ("voor", 2): "eldric_voor_r",
@@ -25,6 +70,35 @@ ELDRIC = {
     ("rechts", 0): "eldric_rechts", ("rechts", 1): "eldric_rechts_1", ("rechts", 2): "eldric_rechts_2",
     ("links", 0): "eldric_links", ("links", 1): "eldric_links_1", ("links", 2): "eldric_links_2",
 }
+
+
+def verklein(rijen, hoogte):
+    """De figuur (rij 'boven' t/m de voeten) verkleind tot <hoogte> rijen, voeten op dezelfde rij, gecentreerd."""
+    rijen = hc.pad(rijen)
+    gevuld = [i for i, r in enumerate(rijen) if r.strip(".")]
+    boven, voeten = gevuld[0], gevuld[-1]
+    H = voeten - boven + 1
+    if hoogte is None or hoogte >= H:
+        return rijen
+    sy = hoogte / H
+    # kleine figuren relatief breder (zoals in pixelkunst): bij de helft van de hoogte ~1,25 x zo breed
+    w = min(12, max(6, 2 * round(6 * sy * (1 + 0.5 * (1 - sy)))))   # even: symmetrisch rond het midden
+    sx = w / 12
+    links = (12 - w) // 2
+    uit = [["."] * 12 for _ in range(42)]
+    N = 6                                    # 6 x 6 meetpunten per nieuwe pixel
+    for tj in range(hoogte):
+        for ti in range(w):
+            telling = {}
+            for a in range(N):
+                for b in range(N):
+                    y = boven + int((tj + (a + .5) / N) / sy)
+                    x = int((ti + (b + .5) / N) / sx)
+                    ch = rijen[min(y, voeten)][min(x, 11)]
+                    telling[ch] = telling.get(ch, 0) + 1
+            beste = max(telling, key=lambda ch: telling[ch] * GEWICHT[ch])
+            uit[voeten - hoogte + 1 + tj][links + ti] = beste
+    return ["".join(r) for r in uit]
 
 
 def main():
@@ -41,23 +115,49 @@ def main():
          ".const ELDRIC_KB = %d    // kleur bovenste sprite: %s" % (kb, hc.NAMES[kb]),
          ".const ELDRIC_KO = %d    // kleur onderste sprite: %s" % (ko, hc.NAMES[ko]),
          ".segment Data",
-         "costume_eldric:    // 12 poses x 128 bytes: richting * 3 + fase"]
-    for r in RICHTINGEN:
-        for f in range(3):
-            naam = ELDRIC[(r, f)]
-            rijen, b, o = tekening[naam]
-            if (b, o) != (kb, ko):
-                raise SystemExit("pose %s heeft andere kleuren dan eldric_voor" % naam)
-            boven, onder = hc.halves(rijen)
-            L.append("        // %s (%s, fase %d)" % (naam, r, f))
-            for deel in (boven, onder):
-                data = hc.sprite_bytes(deel)
-                for i in range(0, 64, 16):
-                    L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
-    L.append(".assert \"costume_eldric is 12 x 128 bytes\", * - costume_eldric, 12 * 128")
+         ".const MATEN = %d" % len(MATEN),
+         "costume_eldric:    // MATEN x 12 poses x 128 bytes: maat * 12 + richting * 3 + fase"]
+    voorbeeld = []
+    for m, hoogte in enumerate(MATEN):
+        for r in RICHTINGEN:
+            for f in range(3):
+                naam = ELDRIC[(r, f)]
+                rijen, b, o = tekening[naam]
+                if (b, o) != (kb, ko):
+                    raise SystemExit("pose %s heeft andere kleuren dan eldric_voor" % naam)
+                if hoogte == 14:
+                    rijen = klein(r, f)
+                else:
+                    rijen = HANDWERK.get((m, naam)) or verklein(rijen, hoogte)
+                voorbeeld.append((m, r, f, rijen))
+                boven, onder = hc.halves(rijen)
+                L.append("        // %s, maat %d (%s, fase %d)" % (naam, m, r, f))
+                for deel in (boven, onder):
+                    data = hc.sprite_bytes(deel)
+                    for i in range(0, 64, 16):
+                        L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
+    L.append(".assert \"costume_eldric is MATEN x 12 x 128 bytes\", * - costume_eldric, MATEN * 12 * 128")
+    voorbeeld_png(voorbeeld, kb, ko, os.path.join(sys.argv[1], "costume_maten.png"))
     os.makedirs(sys.argv[1], exist_ok=True)
     open(os.path.join(sys.argv[1], "costumes.asm"), "w").write("\n".join(L) + "\n")
-    print("[costume] eldric: 12 poses, voeten op rij %d" % voeten)
+    print("[costume] eldric: %d maten x 12 poses, voeten op rij %d" % (len(MATEN), voeten))
+
+
+def voorbeeld_png(poses, kb, ko, pad, schaal=4):
+    """Controle: per maat (rij) alle 12 poses, in de echte kleuren (boven/onder-sprite)."""
+    from PIL import Image
+    W, H = 12 * 28, len(MATEN) * 44
+    img = Image.new("RGB", (W, H), (70, 140, 60))
+    for m, r, f, rijen in poses:
+        ox, oy = (RICHTINGEN.index(r) * 3 + f) * 28 + 2, m * 44 + 1
+        for y, rij in enumerate(rijen):
+            for x, ch in enumerate(rij):
+                if ch == ".":
+                    continue
+                kleur = {"k": hc.PALETTE[hc.MC1], "s": hc.PALETTE[hc.MC2], "c": hc.PALETTE[kb if y < 21 else ko]}[ch]
+                img.putpixel((ox + 2 * x, oy + y), kleur)
+                img.putpixel((ox + 2 * x + 1, oy + y), kleur)
+    img.resize((W * schaal, H * schaal), Image.NEAREST).save(pad)
 
 
 if __name__ == "__main__":

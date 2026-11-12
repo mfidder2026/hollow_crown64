@@ -38,6 +38,11 @@ start:
         lda #>begin_loopvakken
         sta zp_ptr + 1
         jsr loopvakken_laden
+        lda #<begin_schaal
+        sta zp_ptr
+        lda #>begin_schaal
+        sta zp_ptr + 1
+        jsr schaal_laden
         jsr actor_start
         jsr cursor_start
         jsr irq_start                   // zet ook het scherm aan

@@ -157,3 +157,27 @@ screenshots pixel voor pixel gelijk aan het geheugen (ook met 3 sprites). De and
 
 **Niet getest:** klikken met echte muis/joystick in VICE (zelfde code als de band, maar het indrukken zelf
 niet); naden met meer dan 3 sprites.
+
+## 2026-11-12 — Eldric wordt kleiner op afstand (aanvulling op hoofdstuk 2)
+
+**Gevraagd:** Eldric was te groot voor de deuren. Gekozen voor optie c: vooraan groot, verder weg kleiner.
+
+**Opgemeten** (voet van de deur → hoogte): huizen achteraan y~66 → 14-16 rijen; smidse y~78 → ~20;
+herberg y~84 → ~26. Eldric zelf: 34 rijen (haar t/m laarzen).
+
+**Wat er is:**
+- `tools/costume.py`: 4 maten per pose (34, 26, 20, 14 rijen) in hetzelfde sprite-vak, voeten op dezelfde rij.
+  26 en 20 worden verkleind uit de tekening (kleur met het meeste oppervlak, voorrang voor omlijning en huid;
+  kleine maten relatief breder, zoals in pixelkunst). 14 is met de hand getekend (6 x 14, met ogen, handen,
+  benen en laarzen): verkleinen gaf daar een klodder. Controle: `build/gen/costume_maten.png`.
+- `SCHAAL 104 88 76` in `scripts/plein.hcs` (compiler controleert: aflopend, 1-3 grenzen).
+- Motor: maat uit de diepte van de voeten; pose = maat * 12 + richting * 3 + fase (48 poses, 6 KB).
+  Op afstand ook trager: maat 2 beweegt in 6 van de 8 beelden, maat 3 in 4 van de 8.
+
+**Getest:** `tests/lopen.band` controleert ook de maat: vooraan 0, links (y 84) 2, achteraan (y 66) 3,
+fontein (y 96) 1, vooraan 0. Alle screenshots pixel voor pixel gelijk; 4 van 4 tests geslaagd.
+Foute SCHAAL (oplopend) wordt geweigerd.
+
+**Opgemerkt:** de kleine maten staan geheel of grotendeels in de onderste sprite, en die heeft maar één eigen
+kleur (blauw): het lichtblauwe harnas wordt daar blauw. Wisselt van maat met een sprong (4 maten); meer maten
+kan door MATEN in costume.py en SCHAAL uit te breiden.
