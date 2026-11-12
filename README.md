@@ -102,6 +102,13 @@ The game is a small **SCUMM-style engine**. The engine is generic; the game itse
 | Python | 3.9+ with Pillow | Sprite, room, script and music tools |
 
 On macOS, `/usr/bin/java` is only a stub. Use a real JDK, for example `brew install openjdk`.
+Tool paths live in one place, at the top of `build.sh` and `tools/vicetest.py` (or set `JAVA` / `VICE_BIN`).
+
+```bash
+./build.sh                              # build/hollowcrown.d64
+./build.sh --vice                       # ...and start it in VICE
+python3 tools/vicetest.py tests/*.band  # AUTOTEST build + every input tape, checked against tests/*.verwacht
+```
 
 ---
 
@@ -122,10 +129,10 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-Early days. The toolchain works: code assembles, goes onto a D64 and runs in VICE. The engine itself is
-being built in this order:
+Early days. Chapter 0 is done: the build makes a D64, and an automated test boots it in VICE, plays an input
+tape and checks the game state. The engine itself is being built in this order:
 
-- [ ] 0. Setup: build script, memory map with asserts, D64, test runner
+- [x] 0. Setup: build script, memory map with asserts, D64, test runner
 - [ ] 1. The split screen and the cursor
 - [ ] 2. Eldric walks (walkboxes, pathfinding)
 - [ ] 3. Objects and the sentence line

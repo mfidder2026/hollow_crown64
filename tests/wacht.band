@@ -1,0 +1,6 @@
+# wacht.band — hoofdstuk 0: de band doet niets dan wachten.
+# Bewijst: het spel start vanaf de D64, de band wordt gelezen, de beeldteller loopt.
+wacht 50
+screenshot begin
+wacht 250
+screenshot eind

@@ -1,0 +1,8 @@
+# Verwachte status na tests/wacht.band
+st_magic = $48          # 'H'
+st_magic+1 = $43        # 'C'
+st_versie = 1
+st_kamer = 0
+band_status = 2         # band helemaal afgespeeld
+band_fout = 0
+beelden.w >= 300        # minstens 50 + 250 beelden gewacht
