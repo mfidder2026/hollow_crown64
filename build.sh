@@ -1,5 +1,5 @@
 #!/bin/zsh
-# build.sh — bouwt Hollow Crown: scripts -> kamers/costumes -> assembleren -> D64.
+# build.sh — bouwt Hollow Crown: kamers/costumes -> scripts -> assembleren -> D64.
 # Stopt bij de eerste fout, met het bestand en de regel.
 #
 #   ./build.sh               gewone build:    build/hollowcrown.prg, build/hollowcrown.d64
@@ -46,17 +46,8 @@ mkdir -p "$UIT"
 [[ -x "$VICE_BIN/c1541" ]] || fout "c1541 niet gevonden in $VICE_BIN (zet VICE_BIN)"
 command -v "$PYTHON" >/dev/null || fout "Python niet gevonden: $PYTHON"
 
-# ---- 1. scripts compileren ----
-stap "1/4 scripts"
-if [[ -f tools/scriptc.py ]]; then
-  mkdir -p build/gen
-  "$PYTHON" tools/scriptc.py scripts build/gen || fout "scriptcompiler (zie hierboven)"
-else
-  print "[build]   nog geen tools/scriptc.py (hoofdstuk 4): overgeslagen"
-fi
-
-# ---- 2. kamers en costumes ----
-stap "2/4 kamers en costumes"
+# ---- 1. kamers en costumes ----
+stap "1/4 kamers en costumes"
 if [[ tools/sprites_hc.py -nt src/sprites_hc.asm ]]; then
   "$PYTHON" tools/sprites_hc.py || fout "tools/sprites_hc.py"
 else
@@ -66,6 +57,15 @@ mkdir -p build/gen
 "$PYTHON" tools/kamer.py data/kamers.txt build/gen || fout "tools/kamer.py (data/kamers.txt)"
 "$PYTHON" tools/lettertype.py build/gen || fout "tools/lettertype.py"
 "$PYTHON" tools/costume.py build/gen || fout "tools/costume.py"
+
+# ---- 2. scripts compileren (na de kamers: de compiler controleert de loopvakken op het plaatje) ----
+stap "2/4 scripts"
+if [[ -f tools/scriptc.py ]]; then
+  mkdir -p build/gen
+  "$PYTHON" tools/scriptc.py scripts build/gen || fout "scriptcompiler (zie hierboven)"
+else
+  print "[build]   nog geen tools/scriptc.py (hoofdstuk 4): overgeslagen"
+fi
 
 # ---- 3. assembleren ----
 stap "3/4 assembleren${AUTOTEST:+}$( (( AUTOTEST )) && print ' (AUTOTEST)')"
@@ -119,5 +119,5 @@ print "[build] OK: ${D64#$ROOT/}"
 if (( START_VICE )); then
   # Eigen procesgroep: bin/x64sc start op macOS een kindproces; zo stop je later alleen deze VICE.
   perl -e 'setpgrp(0,0); exec @ARGV' "$VICE_BIN/x64sc" -pal -autostart "$D64" >/dev/null 2>&1 &!
-  print "[build] VICE gestart: cursor met joystick 2 of de pijltjestoetsen (CRSR), vuur = RETURN"
+  print "[build] VICE gestart: cursor met joystick 2 of de pijltjestoetsen (CRSR), vuur = spatie of linker Control"
 fi

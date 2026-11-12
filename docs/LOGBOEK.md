@@ -181,3 +181,31 @@ Foute SCHAAL (oplopend) wordt geweigerd.
 **Opgemerkt:** de kleine maten staan geheel of grotendeels in de onderste sprite, en die heeft maar één eigen
 kleur (blauw): het lichtblauwe harnas wordt daar blauw. Wisselt van maat met een sprong (4 maten); meer maten
 kan door MATEN in costume.py en SCHAAL uit te breiden.
+
+## 2026-11-12 — Loopvakken alleen op gras en pad; vuur op spatie/Control
+
+**Gevraagd:** Eldric liep door huizen en door de fontein. Regel: de voeten mogen alleen groen of geel raken.
+Achter de fontein langs mag. Vuur niet op Enter (twee handen rechts), maar spatie of linker Control.
+
+**Wat er is:**
+- `tools/loopkaart.py`: maakt uit de kamer (zoals de VIC hem toont) een kaart van de loopkleuren; controleert
+  een vak (≥ 97% loopkleur, geen gat > 3 pixels op een rij of kolom); `krimp` maakt een fout vak kleiner;
+  `--toon` tekent de vakken op de kamer (`build/gen/loopkaart_plein.png`).
+- `tools/scriptc.py` controleert elk LOOPVAK op het plaatje en stopt anders, met een kleiner voorstel.
+  Nieuw: `LOOPKLEUREN` en `VRIJ x1,y1 x2,y2` (gebied zonder kleurcontrole). De build zet nu eerst de kamers om,
+  dan pas de scripts (de compiler heeft het plaatje nodig).
+- `scripts/plein.hcs`: 6 nieuwe vakken, met de hand gelegd en door de controle goedgekeurd. Het gras naast de
+  herberg is te versnipperd (struik) en doet niet mee. `VRIJ 76,62 81,76`: de witte waterstraal van de fontein
+  staat op het gras erachter; daardoor kan Eldric er achterlangs.
+- Geheime doorgangen later: geen uitzondering in de motor nodig. De motor kent alleen loopvakken (kleuren niet),
+  en een loopvak kan al aan/uit (`lv_aan`); een geheime gang = een vak dat een script aanzet.
+- Vuur: SPATIE (rij 7, kolom 4) en CTRL (rij 7, kolom 2; in VICE op de Mac de linker Control) naast RETURN.
+
+**Getest:** `tests/lopen.band` herschreven (6 klikken: links, achter de fontein links via een hoek, achter de
+fontein langs door de waterstraal, de fontein zelf, een dak, voor): plek, richting en maat kloppen, 0 beelden
+buiten de vakken. `tests/invoer.band`: spatie en ctrl tellen als vuur (5 x). 4 van 4 geslaagd.
+
+**Open:** de gebruiker meldt dat de pijltjes in VICE omgekeerd werken en vuur niet reageert. Een log in VICE
+(de matrix uitlezen terwijl de gebruiker drukt) liet omhoog en omlaag correct zien: CRSR ⇓ + rechter SHIFT →
+omhoog. Rechts, links en de vuurtoetsen wachten nog op een tweede log. Eldric wordt achter de fontein nog vóór de
+waterstraal getekend: voorgrond is hoofdstuk 8.

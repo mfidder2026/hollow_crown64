@@ -20,6 +20,10 @@ toets return 2             # vuur 2
 wacht 1
 joystick vuur 2            # vuur 3
 wacht 1
+toets spatie 2             # vuur 4 (spatiebalk)
+wacht 1
+toets ctrl 2               # vuur 5 (CTRL: in VICE op de Mac de linker Control)
+wacht 1
 muisknop rechts 1          # rechterknop: nog geen taak, geen vuur
 wacht 2
 screenshot einde

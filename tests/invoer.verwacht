@@ -3,5 +3,5 @@ band_status = 2
 band_fout = 0
 cursor_x.w = 154
 cursor_y = 95
-invoer_vuur_teller = 3
+invoer_vuur_teller = 5
 scherm = ideaal

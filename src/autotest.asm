@@ -9,7 +9,7 @@
 //   $03 xl xh y     CURSOR     beweeg de cursor naar x,y, met de gewone joystickcode (dus met versnellen);
 //                               de band wacht tot hij er is
 //   $04             VUUR       één beeld de vuurknop
-//   $05 j r0 r1 r6 p1 n  RUW   n beelden deze ruwe standen (joystick 2, toetsenbordrijen 0/1/6, poort 1);
+//   $05 j r0 r1 r6 r7 p1 n  RUW  n beelden deze ruwe standen (joystick 2, toetsenbordrijen 0/1/6/7, poort 1);
 //                               zo gaan joystick, toetsen en muisknoppen door de gewone omzetcode
 //   $06 px py       MUIS       de potmeters van de muis worden px/py (zoals een 1351 ze zou geven)
 //   $07             WACHT_STIL wacht tot Eldric stilstaat
@@ -45,6 +45,7 @@ leeg:   lda #0
         sta toets_rij0
         sta toets_rij1
         sta toets_rij6
+        sta toets_rij7
         sta poort1_stand
 stick:  lda #0
         sta invoer_stick
@@ -255,7 +256,7 @@ ruw:    ldx #0
         lda (zp_band),y
         sta ruw_doel_waarden,x
         inx
-        cpx #5
+        cpx #6
         bne !-
         lda ruw_doel_waarden
         sta joy_stand
@@ -266,11 +267,13 @@ ruw:    ldx #0
         lda ruw_doel_waarden + 3
         sta toets_rij6
         lda ruw_doel_waarden + 4
+        sta toets_rij7
+        lda ruw_doel_waarden + 5
         sta poort1_stand
         iny
         lda (zp_band),y
         sta band_ruw_teller
-        lda #7
+        lda #8
         jmp verder
 
 muis:   iny
@@ -306,7 +309,7 @@ band_hoogste_snelheid: .byte 0         // hoogste cursorsnelheid tot nu toe
 band_ruw_teller: .byte 0                // RUW: nog zoveel beelden
 band_wacht_stil: .byte 0                // WACHT_STIL loopt
 band_buiten:     .word 0                // beelden waarin Eldric buiten alle loopvakken stond
-ruw_doel_waarden: .fill 5, 0
+ruw_doel_waarden: .fill 6, 0
 
 .segment Buffers
 band:           .fill BAND_GROOTTE, 0

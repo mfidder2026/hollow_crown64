@@ -12,7 +12,7 @@ Een band (tests/<naam>.band) is tekst, één stap per regel ('#' is commentaar):
     vuur                  één beeld vuur
   Ruwe invoer, door dezelfde omzetcode als de echte joystick, toetsen en muis (src/invoer.asm):
     joystick neer,rechts 10    joystick 2: op neer links rechts vuur, n beelden
-    toets crsr_neer,shift 8    toetsen: crsr_neer crsr_rechts return shift rshift, n beelden
+    toets crsr_neer,shift 8    toetsen: crsr_neer crsr_rechts spatie ctrl return shift rshift, n beelden
     muisknop links 2           1351 in poort 1: links / rechts, n beelden
     muis 10,-6                 de muis één beeld bewegen (pixels; -31..31; y negatief = omhoog)
   Lopen en tussendoor controleren:
@@ -42,7 +42,8 @@ TESTUIT = os.path.join(ROOT, "build", "test")
 OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL = 0, 1, 2, 3, 4, 5, 6, 7
 JOY = {"op": 1, "neer": 2, "links": 4, "rechts": 8, "vuur": 16}
 # toets -> (rij, bit) in de matrix; rijen 0, 1, 6 (zie src/invoer.asm)
-TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10)}
+TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10),
+         "spatie": (7, 0x10), "ctrl": (7, 0x04)}
 MUISKNOP = {"links": 0x10, "rechts": 0x01}
 BAND_WACHT, BAND_LOOPT, BAND_KLAAR, BAND_FOUT = 0, 1, 2, 0xFF
 BAND_GROOTTE = 1024
@@ -95,16 +96,16 @@ def lees_band(pad):
                 data += bytes([OP_VUUR])
             elif cmd == "joystick":
                 bits, n = ruw(arg, JOY)
-                data += bytes([OP_RUW, sum(bits), 0, 0, 0, 0, n])
+                data += bytes([OP_RUW, sum(bits), 0, 0, 0, 0, 0, n])
             elif cmd == "toets":
                 toetsen, n = ruw(arg, TOETS)
-                rij = {0: 0, 1: 0, 6: 0}
+                rij = {0: 0, 1: 0, 6: 0, 7: 0}
                 for r, b in toetsen:
                     rij[r] |= b
-                data += bytes([OP_RUW, 0, rij[0], rij[1], rij[6], 0, n])
+                data += bytes([OP_RUW, 0, rij[0], rij[1], rij[6], rij[7], 0, n])
             elif cmd == "muisknop":
                 knoppen, n = ruw(arg, MUISKNOP)
-                data += bytes([OP_RUW, 0, 0, 0, 0, sum(knoppen), n])
+                data += bytes([OP_RUW, 0, 0, 0, 0, 0, sum(knoppen), n])
             elif cmd == "wacht_tot_stil" and not arg:
                 data += bytes([OP_WACHT_STIL])
             elif cmd == "verwacht":

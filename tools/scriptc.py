@@ -8,16 +8,23 @@ onbekende woorden zijn tot dan een fout, zodat er niets stilletjes wordt overges
 
     KAMER naam
       LOOPVAK x1,y1 x2,y2        rechthoek in kamercoördinaten: x 0-159 (multicolor-pixels), y 0-127
+      LOOPKLEUREN kleur ...      de kleuren waar de voeten op mogen (standaard: groen lichtgroen geel). Elk
+                                 LOOPVAK moet daar (bijna) helemaal op liggen: zie tools/loopkaart.py.
+      VRIJ x1,y1 x2,y2           hier geldt de kleurcontrole niet (bv. de waterstraal van de fontein boven het gras,
+                                 of later een geheime doorgang). Zet er een opmerking bij waarom.
       SCHAAL y1 y2 ...           diepte: voeten op y >= y1 = maat 0 (groot), >= y2 = maat 1, ...; daarachter
                                  de volgende maat. Aflopend, hooguit 3 grenzen (4 maten in tools/costume.py).
     BEGIN kamer x,y richting      waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
 
-Controles: vakken binnen de kamer en niet leeg; hooguit 16 per kamer; elk vak bereikbaar vanuit elk ander
+Controles: vakken binnen de kamer en niet leeg; vakken op de loopkleuren van het kamerplaatje
+(build/gen/kamer_<naam>.bin, dus de kamers worden eerst omgezet); hooguit 16 per kamer; elk vak bereikbaar vanuit elk ander
 (anders kan de speler vast komen te zitten); BEGIN staat in een loopvak.
 
 In de uitvoer zijn x-waarden schermpixels (x * 2, rechterrand x2 * 2 + 1): zo rekent de motor.
 """
 import glob, os, re, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 KAMER_B, KAMER_H = 160, 128
 MAX_VAKKEN = 16
@@ -52,7 +59,7 @@ def lees(bestanden):
                 kamer = woorden[1]
                 if kamer in kamers:
                     raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
-                kamers[kamer] = {"vakken": [], "waar": waar, "schaal": []}
+                kamers[kamer] = {"vakken": [], "waar": waar, "schaal": [], "kleuren": None, "vrij": []}
                 volgorde.append(kamer)
             elif w == "LOOPVAK":
                 if kamer is None:
@@ -63,6 +70,17 @@ def lees(bestanden):
                 if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
                     raise Fout("%s: loopvak buiten de kamer (0-%d, 0-%d) of leeg" % (waar, KAMER_B - 1, KAMER_H - 1))
                 kamers[kamer]["vakken"].append((x1, y1, x2, y2, waar))
+            elif w == "VRIJ":
+                if kamer is None or len(woorden) != 3:
+                    raise Fout("%s: VRIJ x1,y1 x2,y2 (binnen een KAMER)" % waar)
+                (x1, y1), (x2, y2) = punt(woorden[1], waar), punt(woorden[2], waar)
+                if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
+                    raise Fout("%s: VRIJ-gebied buiten de kamer of leeg" % waar)
+                kamers[kamer]["vrij"].append((x1, y1, x2, y2))
+            elif w == "LOOPKLEUREN":
+                if kamer is None or len(woorden) < 2:
+                    raise Fout("%s: LOOPKLEUREN kleur ... (binnen een KAMER)" % waar)
+                kamers[kamer]["kleuren"] = (woorden[1:], waar)
             elif w == "SCHAAL":
                 if kamer is None:
                     raise Fout("%s: SCHAAL buiten een KAMER" % waar)
@@ -114,6 +132,21 @@ def controleer(kamers, begin):
             if j not in gezien:
                 raise Fout("%s: dit loopvak raakt de andere niet (geen overlap): je kunt er niet komen" % v[j][4])
         k["buren"] = b
+        # de voeten alleen op de loopkleuren
+        import loopkaart
+        kleuren, kwaar = k["kleuren"] or (loopkaart.STANDAARD_KLEUREN, k["waar"])
+        try:
+            m = loopkaart.masker(naam, kleuren, k["vrij"])
+        except ValueError as e:
+            raise Fout("%s: %s" % (kwaar, e))
+        except OSError:
+            raise Fout("%s: geen build/gen/kamer_%s.bin: staat de kamer in data/kamers.txt?" % (k["waar"], naam))
+        for x1, y1, x2, y2, vwaar in v:
+            uitleg = loopkaart.controleer_vak(m, x1, y1, x2, y2)
+            if uitleg:
+                voorstel = loopkaart.krimp(m, x1, y1, x2, y2)
+                raise Fout("%s: dit loopvak %s. Kleiner dat wel past: %s (controleplaatje: python3 tools/loopkaart.py %s --toon)"
+                           % (vwaar, uitleg, "LOOPVAK %d,%d %d,%d" % tuple(voorstel) if voorstel else "geen", naam))
     if begin is None:
         raise Fout("geen BEGIN in de scripts")
     kamer, (x, y), _, waar = begin

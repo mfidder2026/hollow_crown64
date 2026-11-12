@@ -4,7 +4,8 @@
 // Toetsen (zoals de C64 ze kent; in VICE op de Mac doen de pijltjestoetsen precies dit):
 //   CRSR ⇓          omlaag          SHIFT + CRSR ⇓   omhoog
 //   CRSR ⇒          rechts          SHIFT + CRSR ⇒   links
-//   RETURN          vuur
+//   SPATIE of CTRL  vuur (links op het toetsenbord; in VICE op de Mac: spatiebalk of linker Control)
+//   RETURN          ook vuur
 // Muis (1351 in poort 1): bewegen = de cursor; linkerknop = vuur; rechterknop: gelezen, nog geen taak.
 // Een joystick in poort 1 werkt ook voor vuur.
 //
@@ -21,6 +22,8 @@
 .const TOETS_RIJ0_CRSR_OB  = %10000000  // rij 0, kolom 7 (CRSR ⇓)
 .const TOETS_RIJ1_LSHIFT   = %10000000  // rij 1, kolom 7 (ook SHIFT LOCK)
 .const TOETS_RIJ6_RSHIFT   = %00010000  // rij 6, kolom 4
+.const TOETS_RIJ7_CTRL     = %00000100  // rij 7, kolom 2
+.const TOETS_RIJ7_SPATIE   = %00010000  // rij 7, kolom 4
 .const MUIS_LINKS          = %00010000  // $DC01 bit 4 (zelfde als vuur van joystick 1)
 .const MUIS_RECHTS         = %00000001  // $DC01 bit 0
 // POORT1_POTS staat in geheugen.asm (irq.asm gebruikt hem ook)
@@ -57,6 +60,11 @@ invoer_hardware:
         lda $dc01
         eor #$ff
         sta toets_rij6
+        lda #%01111111                  // rij 7
+        sta $dc00
+        lda $dc01
+        eor #$ff
+        sta toets_rij7
         lda #POORT1_POTS
         sta $dc00
         // Kolommen die poort 1 (muis/joystick 1) al laag trekt zijn geen toetsen
@@ -71,6 +79,9 @@ invoer_hardware:
         txa
         and toets_rij6
         sta toets_rij6
+        txa
+        and toets_rij7
+        sta toets_rij7
         rts
 
 // invoer_lees: zet invoer_stick (1 = ingedrukt; bit 0 op, 1 neer, 2 links, 3 rechts, 4 vuur),
@@ -113,7 +124,7 @@ invoer_lees:
         inc invoer_vuur_teller
 !:      rts
 
-// toetsen_naar_stick: CRSR-toetsen en RETURN erbij in invoer_stick
+// toetsen_naar_stick: CRSR-toetsen, SPATIE, CTRL en RETURN erbij in invoer_stick
 toetsen_naar_stick: {
         lda toets_rij1
         and #TOETS_RIJ1_LSHIFT
@@ -141,10 +152,13 @@ zet1:   ora invoer_stick
         lda #%0100                      // met SHIFT: links
 zet2:   ora invoer_stick
         sta invoer_stick
-!:      lda toets_rij0
+!:      lda toets_rij7
+        and #TOETS_RIJ7_SPATIE | TOETS_RIJ7_CTRL
+        bne vuur
+        lda toets_rij0
         and #TOETS_RIJ0_RETURN
         beq klaar
-        lda invoer_stick
+vuur:   lda invoer_stick
         ora #%10000
         sta invoer_stick
 klaar:  rts
@@ -225,6 +239,7 @@ joy_stand:          .byte 0             // joystick 2
 toets_rij0:         .byte 0             // matrixrijen
 toets_rij1:         .byte 0
 toets_rij6:         .byte 0
+toets_rij7:         .byte 0
 poort1_stand:       .byte 0             // muisknoppen / joystick 1
 pot_x:              .byte $ff           // potmeters ($D419/$D41A), zoals gelezen
 pot_y:              .byte $ff

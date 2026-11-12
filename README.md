@@ -80,7 +80,7 @@ at the same time:
 |---|---|---|
 | Joystick (port 2) | stick | fire button |
 | 1351 mouse (port 1) | mouse | left button |
-| Keyboard | **CRSR** keys, with **SHIFT** for up/left (arrow keys in VICE) | **RETURN** |
+| Keyboard | **CRSR** keys, with **SHIFT** for up/left (arrow keys in VICE) | **SPACE** or **CTRL** (left Control in VICE), also RETURN |
 **F1** toggles music, **F5** saves, **F7** loads, and **space** skips text you've already read.
 
 ---
