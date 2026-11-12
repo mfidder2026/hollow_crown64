@@ -56,6 +56,10 @@
 .assert "kamer en bitmaprij 18 vallen voor het lettertype", BITMAP + (RIJ_ZIN + 1) * 320 <= LETTERTYPE, true
 .assert "cursorvak binnen de sprite-vakken", SPRITE_VAKKEN + 7 * 64 <= $c800, true
 
+// $DC00 tussen de invoerscans: bit 7 laag, bit 6 hoog = de SID meet de potmeters van poort 1 (de muis);
+// daarmee is ook toetsenbordrij 7 gekozen, wat de joystick in poort 2 niet stoort
+.const POORT1_POTS   = %01111111
+
 // Geheugenconfiguratie ($01): BASIC uit, Kernal en I/O aan
 .const CPU_NORMAAL   = $36
 

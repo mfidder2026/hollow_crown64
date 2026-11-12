@@ -1,0 +1,25 @@
+# invoer.band — joystick, toetsenbord en muis gaan door dezelfde omzetcode als in het echte spel.
+# De cursor begint op 160,100. Eerst een muis die op een willekeurige stand begint: dat mag de cursor
+# niet laten springen.
+muis 0,0
+# Tussen de stappen 'wacht 1': dan is alles even los (snelheid weer 1).
+joystick rechts 8          # 7 x 1 pixel, dan versnelt hij: 1 x 2 -> x = 169
+wacht 1
+toets crsr_neer 4          # CRSR omlaag: y = 104
+wacht 1
+toets crsr_neer,shift 3    # SHIFT + CRSR omlaag = omhoog: y = 101
+wacht 1
+toets crsr_rechts,rshift 5 # rechter SHIFT + CRSR rechts = links: x = 164
+wacht 1
+muis 10,-6                 # muis 10 rechts en 6 omhoog: x = 174, y = 95
+muis -20,0                 # x = 154
+wacht 1
+muisknop links 2           # vuur 1
+wacht 1
+toets return 2             # vuur 2
+wacht 1
+joystick vuur 2            # vuur 3
+wacht 1
+muisknop rechts 1          # rechterknop: nog geen taak, geen vuur
+wacht 2
+screenshot einde

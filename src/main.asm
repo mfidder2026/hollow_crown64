@@ -44,6 +44,7 @@ hoofdlus:
         beq !-
         jsr invoer_lees
         jsr cursor_beweeg
+        jsr cursor_muis
 #if AUTOTEST
         jsr band_na_beweging
 #endif

@@ -117,5 +117,5 @@ print "[build] OK: ${D64#$ROOT/}"
 if (( START_VICE )); then
   # Eigen procesgroep: bin/x64sc start op macOS een kindproces; zo stop je later alleen deze VICE.
   perl -e 'setpgrp(0,0); exec @ARGV' "$VICE_BIN/x64sc" -pal -autostart "$D64" >/dev/null 2>&1 &!
-  print "[build] VICE gestart"
+  print "[build] VICE gestart: cursor met joystick 2 of de pijltjestoetsen (CRSR), vuur = RETURN"
 fi

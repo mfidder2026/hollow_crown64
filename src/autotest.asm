@@ -9,6 +9,9 @@
 //   $03 xl xh y     CURSOR     beweeg de cursor naar x,y, met de gewone joystickcode (dus met versnellen);
 //                               de band wacht tot hij er is
 //   $04             VUUR       één beeld de vuurknop
+//   $05 j r0 r1 r6 p1 n  RUW   n beelden deze ruwe standen (joystick 2, toetsenbordrijen 0/1/6, poort 1);
+//                               zo gaan joystick, toetsen en muisknoppen door de gewone omzetcode
+//   $06 px py       MUIS       de potmeters van de muis worden px/py (zoals een 1351 ze zou geven)
 // Een onbekende opcode: band_status := $ff en band_fout := de opcode.
 //
 // In een AUTOTEST-build leest invoer.asm de joystick niet: band_invoer maakt de stand van de stick.
@@ -31,7 +34,17 @@ band_begin:
 
 // band_invoer: de stick voor dit beeld (zelfde bits als invoer_stick: 0 op, 1 neer, 2 links, 3 rechts, 4 vuur)
 band_invoer: {
-        lda #0
+        lda band_ruw_teller             // ruwe standen: nog n beelden, of weer leeg
+        beq leeg
+        dec band_ruw_teller
+        jmp stick
+leeg:   lda #0
+        sta joy_stand
+        sta toets_rij0
+        sta toets_rij1
+        sta toets_rij6
+        sta poort1_stand
+stick:  lda #0
         sta invoer_stick
         lda band_doel
         beq vuur
@@ -137,6 +150,7 @@ band_stap: {
         bne klaar
         lda band_markering              // wacht vicetest nog op een markering?
         ora band_doel                   // of is de cursor nog onderweg?
+        ora band_ruw_teller             // of lopen er nog ruwe standen?
         bne klaar
         lda band_wacht
         ora band_wacht + 1
@@ -149,16 +163,27 @@ klaar:  rts
 
 lees:   ldy #0
         lda (zp_band),y
-        beq einde
-        cmp #$01
-        beq wacht
-        cmp #$02
-        beq markeer
-        cmp #$03
-        beq cursor
-        cmp #$04
-        beq vuur
-        sta band_fout                   // onbekend
+        bne !+
+        jmp einde
+!:      cmp #$01
+        bne !+
+        jmp wacht
+!:      cmp #$02
+        bne !+
+        jmp markeer
+!:      cmp #$03
+        bne !+
+        jmp cursor
+!:      cmp #$04
+        bne !+
+        jmp vuur
+!:      cmp #$05
+        bne !+
+        jmp ruw
+!:      cmp #$06
+        bne !+
+        jmp muis
+!:      sta band_fout                   // onbekend
         lda #BAND_FOUT
         sta band_status
         rts
@@ -197,6 +222,38 @@ cursor: iny
         lda #4
         jmp verder
 
+ruw:    ldx #0
+!:      iny
+        lda (zp_band),y
+        sta ruw_doel_waarden,x
+        inx
+        cpx #5
+        bne !-
+        lda ruw_doel_waarden
+        sta joy_stand
+        lda ruw_doel_waarden + 1
+        sta toets_rij0
+        lda ruw_doel_waarden + 2
+        sta toets_rij1
+        lda ruw_doel_waarden + 3
+        sta toets_rij6
+        lda ruw_doel_waarden + 4
+        sta poort1_stand
+        iny
+        lda (zp_band),y
+        sta band_ruw_teller
+        lda #7
+        jmp verder
+
+muis:   iny
+        lda (zp_band),y
+        sta pot_x
+        iny
+        lda (zp_band),y
+        sta pot_y
+        lda #3
+        jmp verder
+
 vuur:   lda #1
         sta band_vuur
 
@@ -218,6 +275,8 @@ band_doel_x:    .word 0
 band_doel_y:    .byte 0
 band_vuur:      .byte 0
 band_hoogste_snelheid: .byte 0         // hoogste cursorsnelheid tot nu toe
+band_ruw_teller: .byte 0                // RUW: nog zoveel beelden
+ruw_doel_waarden: .fill 5, 0
 
 .segment Buffers
 band:           .fill BAND_GROOTTE, 0

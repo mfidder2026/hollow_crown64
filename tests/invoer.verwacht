@@ -1,0 +1,7 @@
+# Verwachte status na tests/invoer.band
+band_status = 2
+band_fout = 0
+cursor_x.w = 154
+cursor_y = 95
+invoer_vuur_teller = 3
+scherm = ideaal

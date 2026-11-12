@@ -70,7 +70,14 @@ Push        Pull        Read        What is
 
 *(In game the verbs are in Dutch for now; English comes later.)*
 
-Three raster interrupts per frame switch between text, bitmap and text. Joystick in port 2 moves the cursor.
+Three raster interrupts per frame switch between text, bitmap and text. Joystick, mouse and keyboard all work,
+at the same time:
+
+| | Move | Fire |
+|---|---|---|
+| Joystick (port 2) | stick | fire button |
+| 1351 mouse (port 1) | mouse | left button |
+| Keyboard | **CRSR** keys, with **SHIFT** for up/left (arrow keys in VICE) | **RETURN** |
 **F1** toggles music, **F5** saves, **F7** loads, and **space** skips text you've already read.
 
 ---

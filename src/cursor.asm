@@ -106,6 +106,55 @@ zet_neer:
 klaar:  rts
 }
 
+// cursor_muis: de muisbeweging van dit beeld erbij (muis_dx/muis_dy, met teken), binnen het scherm
+cursor_muis: {
+        lda muis_dx
+        beq y
+        bmi links
+        clc                             // rechts: x += dx, hooguit 319
+        adc cursor_x
+        sta cursor_x
+        lda cursor_x + 1
+        adc #0
+        sta cursor_x + 1
+        lda cursor_x
+        cmp #<320
+        lda cursor_x + 1
+        sbc #>320
+        bcc y
+        lda #<319
+        sta cursor_x
+        lda #>319
+        sta cursor_x + 1
+        jmp y
+links:  clc                             // x += dx (negatief), minstens 0
+        adc cursor_x
+        sta cursor_x
+        lda cursor_x + 1
+        adc #$ff
+        sta cursor_x + 1
+        bpl y
+        lda #0
+        sta cursor_x
+        sta cursor_x + 1
+y:      lda muis_dy
+        beq klaar
+        bmi op
+        clc                             // omlaag: hooguit 199
+        adc cursor_y
+        bcs onder
+        cmp #200
+        bcc zet
+onder:  lda #199
+        jmp zet
+op:     clc                             // omhoog: minstens 0
+        adc cursor_y
+        bcs zet                         // geen lening: nog >= 0
+        lda #0
+zet:    sta cursor_y
+klaar:  rts
+}
+
 // cursor_plaatsen: sprite 0 op cursor_x/y, met het midden van de tekening op dat punt
 cursor_plaatsen:
         lda cursor_x

@@ -9,8 +9,8 @@
 //              zwart, dus je ziet niets.
 //   lijn 194 -> wacht tot 195 (rij 18, pixelrij 0): tekstmodus. Ervoor toont de VIC bitmaprij 18
 //              (nul = zwart), erna pixelrij 0 van de tekens (leeg): op welke cyclus het ook valt, zwart.
-//   lijn 252 -> onderrand: tekstmodus voor rij 0-1 van het volgende beeld, beelden tellen, één keer
-//              per beeld naar de Kernal ($EA31).
+//   lijn 252 -> onderrand: tekstmodus voor rij 0-1 van het volgende beeld, beelden tellen, joystick,
+//              toetsen en muis lezen (invoer.asm), één keer per beeld naar de Kernal ($EA31).
 //
 // Gemeten (VICE 3.10, watchpoint op $d011, alleen de cursor als sprite): kamer op lijn 66 cyclus 62 of
 // lijn 67 cyclus 0; balk op lijn 195 cyclus 9 of 56 (na de badline); onderrand op lijn 252.
@@ -80,6 +80,8 @@ irq_balk:
         sta $d011
         lda #D016_TEKST
         sta $d016
+        lda #POORT1_POTS                // de SID meet vanaf nu de muis in poort 1 (invoer.asm)
+        sta $dc00
         lda #IRQ_ONDERRAND
         sta $d012
         lda #<irq_onderrand
@@ -99,7 +101,11 @@ irq_onderrand:
         inc beelden
         bne !+
         inc beelden + 1
-!:      lda #IRQ_KAMER
+!:
+#if !AUTOTEST
+        jsr invoer_hardware             // joystick, toetsen, muis (invoer.asm), vóór de Kernal-scan
+#endif
+        lda #IRQ_KAMER
         sta $d012
         lda #<irq_kamer
         sta $0314

@@ -95,3 +95,31 @@ cyclus 9 of 56; onderrand lijn 252.
 
 **Open:** de kamer is nog wat korrelig (Floyd-Steinberg in de lucht); afstemmen kan in `data/kamers.txt`.
 De cursor is in zijn zwarte fase onzichtbaar op zwart; prima voor nu.
+
+## 2026-11-12 — Invoer: joystick, muis en toetsenbord ✅ (aanvulling op hoofdstuk 1)
+
+**Gevraagd:** alles moet werken, ook op een echte C64 zonder joystick.
+
+**Wat er is (`src/invoer.asm`):**
+- Joystick in poort 2; 1351-muis in poort 1 (bewegen, linkerknop = vuur, rechterknop gelezen);
+  toetsenbord: CRSR ⇓ / CRSR ⇒, met SHIFT omhoog/links, RETURN = vuur. Alle drie tegelijk.
+- `invoer_hardware` leest alles in de IRQ op de onderrand, vóór de Kernal-scan. `irq_balk` zet op lijn 195
+  `$DC00 = $7F`, zodat de SID ~3600 cycli de muis in poort 1 meet (nodig: 512).
+- Kolommen die poort 1 (muis/joystick 1) al laag trekt, tellen niet als toets: geen spooktoetsen.
+- De muis begint pas te tellen na een eerste meting, en opnieuw als hij er (weer) in komt (potmeters $FF).
+
+**Twee fouten gevonden door in VICE te kijken (niet door de bandtests):**
+1. De joystick las `$DC00` in de hoofdlus. Na de Kernal-scan staat `$DC00` soms op 0, en dan las het spel
+   "alle richtingen + vuur": de cursor liep vanzelf weg en vuur telde 7 keer. Nu alleen in de IRQ gelezen.
+2. Met een 1351 in poort 1 sprong de cursor bij het starten naar 129,131 (één sprong van -31/+31): de eerste
+   meting werd met een willekeurige beginwaarde vergeleken. Nu is de eerste meting het beginpunt.
+
+**Getest:**
+- `tests/invoer.band` (nieuw): ruwe joystick-, toets-, muisknop- en muisstappen gaan door de gewone
+  omzetcode. Eindstand precies zoals vooraf berekend (x 154, y 95, 3 x vuur), ook met een muis die op een
+  willekeurige stand begint. `scherm` en `wacht` slagen nog.
+- In VICE (gewone build, 1351 in poort 1): cursor staat stil zonder invoer (160,100, vuur 0); de potmeters
+  lezen $40, dus de SID meet poort 1.
+
+**Niet getest:** echte toetsaanslagen en echte muisbewegingen in VICE (toegang tot het VICE-venster geweigerd),
+en een echte C64. De band test de omzetcode, niet het lezen van de CIA zelf.

@@ -21,6 +21,8 @@ Het model leest dit bestand bij elk bericht in deze werkmap. Schrijf hier zelf i
 - Kick Assembler: een `.const` moet vóór gebruik staan (anders "not yet defined"); een mislukte `.assert` geeft exitcode 0 (build.sh vangt dat af).
 - `$d018` bit 0 leest altijd als 1: maskeer met `& $FE` bij vergelijken.
 - Lettertype (tools/lettertype.py): pixelrij 0 van ALLE tekens leeg, anders vuile naden.
+- Invoer: lees $DC00/$DC01 alleen in de onderrand-IRQ vóór de Kernal-scan (invoer_hardware). De Kernal-scan laat $DC00 op 0 staan: wie daarna $DC00 leest, ziet alle richtingen + vuur.
+- Muis 1351 in VICE: `-controlport1device 3`. De SID meet de muis alleen als $DC00 = $7F (POORT1_POTS) >512 cycli staat.
 
 ## Geleerd
 <!-- macaimagic:lessons -->
