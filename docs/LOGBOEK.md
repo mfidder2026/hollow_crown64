@@ -55,3 +55,43 @@ FLUX-plaatjes naar `data/flux/`; Koala naar `data/`; KickAss-documentatie naar `
 - Het tijdelijke lettertype is de kleine-letterset uit de ROM; het eigen lettertype komt in hoofdstuk 1.
 
 **Open:** de split (lijn 66/194), de balk en de cursor: hoofdstuk 1.
+
+## 2026-11-12 — Hoofdstuk 1: het scherm ✅
+
+**Klaar als:** 3 screenshots op verschillende momenten, schone naden (rij 1/2 en 17/18), cursor op een andere
+plek. **Gehaald**, en strenger getest: elke screenshot wordt pixel voor pixel vergeleken met het scherm zoals het
+uit het geheugen hoort te zijn (`scherm = ideaal` in `tests/scherm.verwacht`); alleen sprites tellen niet mee.
+
+**Wat er is:**
+- `tools/kamer.py` + `data/kamers.txt`: FLUX-plaatje → strook 5:2 → 160×128 multicolor (gebruikt de omzetter
+  van `tools/c64beeld.py`), achtergrond zwart, bovenste rij en onderste 2 rijen zwart. Ingepakt met
+  `tools/inpak.py` (RLE, zelftest): plein 4508 bytes (ongepakt 6400). Controle: `build/gen/kamer_plein.png`.
+- `tools/lettertype.py`: eigen lettertype (88 tekens, met ↑ ↓ é ë ï ö ü), pixelrij 0 altijd leeg; de cursor.
+- `src/irq.asm`: drie raster-IRQ's (65→66, 194→195, 252). `src/scherm.asm`, `inpak.asm`, `kamer.asm`,
+  `balk.asm` (zinregel, 12 werkwoorden, lege inventaris met pijlen, hoofdstuknaam), `invoer.asm` (joystick 2),
+  `cursor.asm` (sprite 0, versnelt tot 4 px/beeld, wisselt van kleur om zichtbaar te blijven).
+- `src/teksten_nl.asm`: de vaste teksten apart van de motor (Engels later in een eigen bestand).
+- Band: `cursor x,y` beweegt de cursor met dezelfde joystickcode (versnellen inbegrepen), `vuur` drukt één beeld.
+
+**Beslissing (afwijking van §6.1):** lettertype op `$F800` i.p.v. `$C800`. Dan is `$d018` altijd `$0E` en wisselen
+op de naden alleen `$d011`/`$d016`. Een te late wissel valt dan weg tegen zwarte randrijen en lege pixelrij 0.
+De reden staat ook in `src/geheugen.asm`. `$C800-$CFFF` komt vrij. `$d021` is overal zwart.
+
+**Gemeten** (watchpoint op `$d011`): kamerwissel op lijn 66 cyclus 62 / lijn 67 cyclus 0; balkwissel op lijn 195
+cyclus 9 of 56; onderrand lijn 252.
+
+**Getest:**
+- `tests/scherm.band`: 5 screenshots (midden, linksboven, cursor óp naad 1/2, óp naad 17/18, in de balk): alle 5
+  pixel voor pixel gelijk. Cursor eindigt op 250,180, hoogste snelheid 4, vuur 1 keer geteld. GESLAAGD.
+- `tests/wacht.band`: nog steeds GESLAAGD.
+- Kan de test een vuile naad zien? Met opzet stukgemaakt: wachtlus weg → 5 pixels fout op pixelrij 15
+  (staartjes van j/p in rij 1); balkwissel op lijn 193 → 3 pixels fout op pixelrij 143. Beide gevonden.
+  (Balkwissel op lijn 194 valt in de rechterrand en is echt onzichtbaar: terecht geen fout.)
+
+**Niet getest:**
+- De echte joystick (`$DC00`): de band vervangt die in een AUTOTEST-build en VICE's monitor kan geen stick
+  vasthouden. Alleen de leesregel verschilt; de beweegcode is dezelfde.
+- Naden met 8 sprites tegelijk op de naadlijnen (komt met Eldric en NPC's in hoofdstuk 2/7).
+
+**Open:** de kamer is nog wat korrelig (Floyd-Steinberg in de lucht); afstemmen kan in `data/kamers.txt`.
+De cursor is in zijn zwarte fase onzichtbaar op zwart; prima voor nu.

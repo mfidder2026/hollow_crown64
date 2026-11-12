@@ -61,7 +61,9 @@ if [[ tools/sprites_hc.py -nt src/sprites_hc.asm ]]; then
 else
   print "[build]   src/sprites_hc.asm is bij"
 fi
-[[ -f tools/kamer.py ]] && { "$PYTHON" tools/kamer.py data build || fout "tools/kamer.py"; }
+mkdir -p build/gen
+"$PYTHON" tools/kamer.py data/kamers.txt build/gen || fout "tools/kamer.py (data/kamers.txt)"
+"$PYTHON" tools/lettertype.py build/gen || fout "tools/lettertype.py"
 
 # ---- 3. assembleren ----
 stap "3/4 assembleren${AUTOTEST:+}$( (( AUTOTEST )) && print ' (AUTOTEST)')"

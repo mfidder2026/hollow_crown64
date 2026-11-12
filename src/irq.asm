@@ -1,8 +1,30 @@
-// irq.asm — raster-IRQ's (§6.3).
-// Hoofdstuk 0: alleen de IRQ op de onderrand (lijn 252), die de beelden telt en de Kernal laat
-// doorlopen. De split voor kamer en balk (lijn 66 en 194) komt in hoofdstuk 1.
+// irq.asm — het gesplitste scherm (§6.3): drie raster-IRQ's per beeld.
+//
+// YSCROLL=3: tekenrij r begint op rasterlijn 51 + 8r. Rij 2 op lijn 67, rij 18 op lijn 195.
+// $d018 blijft altijd $0E (zie geheugen.asm); alleen $d011 en $d016 wisselen. $d021 is altijd zwart.
+//
+//   lijn 65 -> wacht tot 66, dan tegen het eind van lijn 66 (rechterrand): multicolor bitmap.
+//              Komt dat te laat (sprite-DMA), dan toont lijn 67 even tekstmodus met als tekens de
+//              kleurbytes van de kamer: pixelrij 0 van elk teken is leeg en de bovenste kamerrij is
+//              zwart, dus je ziet niets.
+//   lijn 194 -> wacht tot 195 (rij 18, pixelrij 0): tekstmodus. Ervoor toont de VIC bitmaprij 18
+//              (nul = zwart), erna pixelrij 0 van de tekens (leeg): op welke cyclus het ook valt, zwart.
+//   lijn 252 -> onderrand: tekstmodus voor rij 0-1 van het volgende beeld, beelden tellen, één keer
+//              per beeld naar de Kernal ($EA31).
+//
+// Gemeten (VICE 3.10, watchpoint op $d011, alleen de cursor als sprite): kamer op lijn 66 cyclus 62 of
+// lijn 67 cyclus 0; balk op lijn 195 cyclus 9 of 56 (na de badline); onderrand op lijn 252.
+// Nog niet gemeten met 8 sprites op de naad (hoofdstuk 2+): valt de kamerwissel dan na cyclus ~14 van
+// lijn 67, dan wacht de CPU tot cyclus 55 en is lijn 67 zwart — wat de bovenste kamerrij toch al is.
 
+.const IRQ_KAMER     = 65
+.const IRQ_BALK      = 194
 .const IRQ_ONDERRAND = 252
+
+.const D011_TEKST    = $1b              // scherm aan, 25 rijen, YSCROLL 3
+.const D011_BITMAP   = $3b
+.const D016_TEKST    = $c8              // hires, 40 kolommen
+.const D016_KAMER    = $d8              // multicolor
 
 .segment Code
 // irq_start: CIA-IRQ uit, raster-IRQ aan. Aanroepen met de IRQ's uit (SEI).
@@ -18,22 +40,72 @@ irq_start:
         sta $0315
         lda #IRQ_ONDERRAND
         sta $d012
-        lda $d011
-        and #%01111111                  // bit 8 van de rasterlijn = 0
+        lda #D011_TEKST                 // bit 7 = 0: bit 8 van de rasterlijn; scherm weer aan
         sta $d011
         lda #%00000001
         sta $d01a                       // raster-IRQ aan
         sta $d019                       // en een eventueel wachtend verzoek wissen
         rts
 
-// Lijn 252: beelden tellen, daarna de Kernal (toetsenbord, klok) via $EA31.
+// Lijn 65: naar de kamer
+irq_kamer:
+        lda #%00000001
+        sta $d019
+        lda #IRQ_KAMER + 1
+!:      cmp $d012                       // wacht op lijn 66 (hooguit 7 cycli later gezien)
+        bne !-
+        ldx #9                          // ~45 cycli: naar de rechterrand van lijn 66
+!:      dex
+        bne !-
+        lda #D016_KAMER                 // eerst multicolor (tekst in kleur 0-7 blijft gewoon)
+        sta $d016
+        lda #D011_BITMAP
+        sta $d011
+        lda #IRQ_BALK
+        sta $d012
+        lda #<irq_balk
+        sta $0314
+        lda #>irq_balk
+        sta $0315
+        jmp $ea81                       // registers terug, RTI
+
+// Lijn 194: naar de balk
+irq_balk:
+        lda #%00000001
+        sta $d019
+        lda #IRQ_BALK + 1
+!:      cmp $d012                       // wacht op lijn 195
+        bne !-
+        lda #D011_TEKST
+        sta $d011
+        lda #D016_TEKST
+        sta $d016
+        lda #IRQ_ONDERRAND
+        sta $d012
+        lda #<irq_onderrand
+        sta $0314
+        lda #>irq_onderrand
+        sta $0315
+        jmp $ea81
+
+// Lijn 252: onderrand
 irq_onderrand:
         lda #%00000001
         sta $d019
+        lda #D011_TEKST
+        sta $d011
+        lda #D016_TEKST
+        sta $d016
         inc beelden
         bne !+
         inc beelden + 1
-!:      jmp $ea31
+!:      lda #IRQ_KAMER
+        sta $d012
+        lda #<irq_kamer
+        sta $0314
+        lda #>irq_kamer
+        sta $0315
+        jmp $ea31                       // Kernal: toetsenbord, klok
 
 .segment Data
 beelden:      .word 0                  // beeldteller, telt op in de IRQ

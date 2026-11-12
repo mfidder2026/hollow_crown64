@@ -21,9 +21,10 @@ It plays the way the classic late-80s C64 adventures did: the room on top, a bar
 you use to build sentences like **"Use jug with barrel"**. The story, world, characters, art, music and code are
 all our own. We borrow only the genre and the way you control it.
 
-![Dawnhaven on a PAL C64 (VICE)](docs/images/dawnhaven_vice.png)
+![Hollow Crown, chapter 1 of the build: the split screen in VICE](docs/images/hoofdstuk1_scherm.png)
 
-*Dawnhaven, the starting village, running in VICE. This is the early tech demo; the real engine is being built now.*
+*The split screen running in VICE: messages on top, Dawnhaven as a 160×128 multicolour room, the verb bar below.
+The verbs are in Dutch for now. The test suite checks this screen pixel by pixel against what memory says it should be.*
 
 ---
 
@@ -87,8 +88,9 @@ The game is a small **SCUMM-style engine**. The engine is generic; the game itse
   and the test reads the game state straight from memory. A test only passes when the state is correct;
   a pretty screenshot alone doesn't count.
 
-**Memory map (VIC bank 3):** program `$0801-$BFFF`, screen `$C000`, sprites `$C400`, font `$C800`, bitmap
-`$E000` under the Kernal ROM.
+**Memory map (VIC bank 3):** program `$0801-$BFFF`, screen `$C000`, sprites `$C400`, bitmap `$E000` and font
+`$F800`, both under the Kernal ROM. With the font there, one `$d018` value serves text and bitmap alike, so the
+raster splits only touch `$d011` and `$d016`.
 
 ---
 
@@ -129,11 +131,12 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-Early days. Chapter 0 is done: the build makes a D64, and an automated test boots it in VICE, plays an input
-tape and checks the game state. The engine itself is being built in this order:
+Early days. The build makes a D64; automated tests boot it in VICE, play input tapes, check the game state and
+compare every screenshot pixel by pixel with the screen as memory says it should be. The engine is being built
+in this order:
 
 - [x] 0. Setup: build script, memory map with asserts, D64, test runner
-- [ ] 1. The split screen and the cursor
+- [x] 1. The split screen and the cursor
 - [ ] 2. Eldric walks (walkboxes, pathfinding)
 - [ ] 3. Objects and the sentence line
 - [ ] 4. Script VM and compiler

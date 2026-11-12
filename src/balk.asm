@@ -1,0 +1,106 @@
+// balk.asm — de balk onder de kamer (§4): zinregel, werkwoorden, inventaris, hoofdstuknaam,
+// en de berichtregels bovenaan (rij 0-1).
+//
+//   rij 18     zinregel ("Ga naar")
+//   rij 19-21  werkwoorden: 3 rijen x 4 kolommen (kolom 0, 10, 20, 30)
+//   rij 22-23  inventaris: 2 x 2 namen (kolom 0-17 en 22-39), pijlen in kolom 18-21
+//   rij 24     naam van het hoofdstuk
+
+.const KLEUR_ZIN        = 3             // cyaan
+.const KLEUR_WERKWOORD  = 5             // groen
+.const KLEUR_INVENTARIS = 4             // paars
+.const KLEUR_PIJL_UIT   = 11            // donkergrijs: niets om te schuiven
+.const KLEUR_PIJL_AAN   = 1
+.const KLEUR_HOOFDSTUK  = 12            // grijs
+.const KLEUR_ELDRIC     = 7             // geel: de spreekkleur van Eldric (kleur 0-7, zie irq.asm)
+.const KOLOM_PIJL       = 19
+
+.segment Code
+balk_tekenen: {
+        ldy #RIJ_ZIN                    // rij 18-24 leeg
+!:      tya
+        pha
+        lda #KLEUR_WERKWOORD
+        jsr rij_wissen
+        pla
+        tay
+        iny
+        cpy #25
+        bne !-
+
+        // zinregel: het standaardwerkwoord
+        lda werkwoorden_lo
+        sta zp_ptr
+        lda werkwoorden_hi
+        sta zp_ptr + 1
+        ldx #0
+        ldy #RIJ_ZIN
+        lda #KLEUR_ZIN
+        jsr tekst_schrijf
+
+        // werkwoorden
+        ldx #0
+ww:     stx teller
+        lda werkwoorden_lo,x
+        sta zp_ptr
+        lda werkwoorden_hi,x
+        sta zp_ptr + 1
+        txa
+        lsr
+        lsr
+        clc
+        adc #RIJ_WERKWOORD
+        tay
+        txa
+        and #3
+        tax
+        lda kolommen,x
+        tax
+        lda #KLEUR_WERKWOORD
+        jsr tekst_schrijf
+        ldx teller
+        inx
+        cpx #AANTAL_WERKWOORDEN
+        bne ww
+
+        // inventaris: nog leeg; alleen de pijlen (uit)
+        lda #TEKEN_PIJL_OP
+        sta SCHERM + RIJ_INVENTARIS * 40 + KOLOM_PIJL
+        lda #TEKEN_PIJL_NEER
+        sta SCHERM + (RIJ_INVENTARIS + 1) * 40 + KOLOM_PIJL
+        lda #KLEUR_PIJL_UIT
+        sta KLEUR_RAM + RIJ_INVENTARIS * 40 + KOLOM_PIJL
+        sta KLEUR_RAM + (RIJ_INVENTARIS + 1) * 40 + KOLOM_PIJL
+
+        // hoofdstuk
+        lda #<tekst_hoofdstuk
+        sta zp_ptr
+        lda #>tekst_hoofdstuk
+        sta zp_ptr + 1
+        ldx #(40 - tekst_hoofdstuk_lengte) / 2
+        ldy #RIJ_ONDER
+        lda #KLEUR_HOOFDSTUK
+        jmp tekst_schrijf
+
+kolommen: .byte 0, 10, 20, 30
+teller:   .byte 0
+}
+
+// bericht_proef: de proeftekst op rij 0-1 (hoofdstuk 1; in hoofdstuk 3 komt ZEG)
+bericht_proef:
+        lda #<tekst_proef1
+        sta zp_ptr
+        lda #>tekst_proef1
+        sta zp_ptr + 1
+        ldx #0
+        ldy #RIJ_BERICHT
+        lda #KLEUR_ELDRIC
+        jsr tekst_schrijf
+        lda #<tekst_proef2
+        sta zp_ptr
+        lda #>tekst_proef2
+        sta zp_ptr + 1
+        ldx #0
+        ldy #RIJ_BERICHT + 1
+        lda #KLEUR_ELDRIC
+        jmp tekst_schrijf

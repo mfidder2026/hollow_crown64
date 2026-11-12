@@ -1,0 +1,18 @@
+# scherm.band — hoofdstuk 1: het gesplitste scherm en de cursor.
+# Screenshots op verschillende momenten, de cursor telkens ergens anders, ook óp de naden
+# (een sprite daar kost de CPU cycli en kan de wissel van modus te laat maken).
+wacht 25
+screenshot midden          # cursor op de beginplek (160,100), in de kamer
+cursor 30,40               # linksboven in de kamer: de joystickcode beweegt hem, met versnellen
+wacht 7
+screenshot linksboven
+cursor 100,16              # op de naad rij 1/2 (pixelrij 16 = rasterlijn 67)
+wacht 3
+screenshot naad_boven
+cursor 200,144             # op de naad rij 17/18 (pixelrij 144 = rasterlijn 195)
+wacht 3
+screenshot naad_onder
+cursor 250,180             # in de balk, bij de werkwoorden
+vuur
+wacht 13
+screenshot balk

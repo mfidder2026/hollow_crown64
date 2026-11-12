@@ -1,0 +1,9 @@
+# Verwachte status na tests/scherm.band
+scherm = ideaal            # elke screenshot pixel voor pixel gelijk aan het geheugen: schone naden
+band_status = 2
+band_fout = 0
+cursor_x.w = 250
+cursor_y = 180
+band_hoogste_snelheid = 4  # lang vastgehouden: de cursor versnelde tot de topsnelheid
+cursor_snelheid = 1        # en na het loslaten weer langzaam
+invoer_vuur_teller = 1

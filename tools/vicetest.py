@@ -15,6 +15,9 @@ Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwach
     st_versie = 1         byte op label st_versie
     st_magic+1 = $43      met een verschuiving
     beelden.w >= 300      .w = woord (lo, hi); vergelijkingen: = != < <= > >=
+    scherm = ideaal       elke screenshot vergelijken met het scherm zoals het hoort, berekend uit het
+                          geheugen (rij 0-1 en 18-24 tekst, 2-17 multicolor bitmap), sprites niet meegeteld.
+                          Een verdwaalde pixel op een naad (rij 1/2, 17/18) is dan een fout.
 Een test slaagt alleen als de status klopt; een screenshot alleen is geen bewijs.
 """
 import argparse, os, re, signal, socket, subprocess, sys, time
@@ -82,6 +85,9 @@ def lees_verwacht(pad):
     for nr, regel in enumerate(open(pad, encoding="utf-8"), 1):
         regel = regel.split("#", 1)[0].strip()
         if not regel:
+            continue
+        if re.fullmatch(r"scherm\s*=\s*ideaal", regel):
+            regels.append((regel, "scherm", 0, False, "ideaal", 0))
             continue
         m = re.fullmatch(r"([A-Za-z_]\w*)(?:\+(\d+))?(\.w)?\s*(=|!=|<=|>=|<|>)\s*(\$[0-9A-Fa-f]+|\d+)", regel)
         if not m:
@@ -208,6 +214,99 @@ class Vice:
 
 
 # ---------------------------------------------------------------------------------------------------
+# Het scherm zoals het hoort, uit het geheugen (§4, §6.3)
+# ---------------------------------------------------------------------------------------------------
+# Kleuren zoals VICE 3.10 ze in een screenshot zet (dezelfde lijst als tools/c64beeld.py)
+VICE_RGB = [(0, 0, 0), (255, 255, 255), (175, 60, 88), (126, 243, 214), (170, 64, 245), (98, 213, 50),
+            (44, 61, 236), (255, 255, 70), (183, 99, 30), (119, 83, 0), (238, 123, 149), (98, 98, 98),
+            (148, 148, 148), (183, 255, 134), (115, 133, 255), (205, 205, 205)]
+RIJEN_TEKST = set(range(0, 2)) | set(range(18, 25))
+RAND_X, RAND_Y = 32, 35          # waar schermpixel (0,0) in een VICE-screenshot staat (gecontroleerd)
+
+
+def ideaal_scherm(vice):
+    """320x200 C64-kleurnummers zoals het scherm hoort te zijn, plus een masker van de sprites."""
+    scherm = vice.lees(0xC000, 1000)
+    kleur = [b & 15 for b in vice.lees(0xD800, 1000)]
+    vic = vice.lees(0xD000, 0x2F)
+    vice.cmd("bank ram")                         # bitmap en lettertype liggen onder de Kernal-ROM
+    try:
+        bitmap = vice.lees(0xE000, 0x1800)
+        font = vice.lees(0xF800, 0x800)
+    finally:
+        vice.cmd("bank cpu")
+    d018 = vic[0x18] & 0xFE                     # bit 0 bestaat niet en leest als 1
+    if d018 != 0x0E:
+        raise Fout("$d018 is $%02x, verwacht $0E" % d018)
+    achter = vic[0x21] & 15
+    pix = [[achter] * 320 for _ in range(200)]
+    for r in range(25):
+        for c in range(40):
+            i = r * 40 + c
+            for y in range(8):
+                rij = pix[r * 8 + y]
+                if r in RIJEN_TEKST:                 # hires tekst
+                    b = font[scherm[i] * 8 + y]
+                    for x in range(8):
+                        if b & (0x80 >> x):
+                            rij[c * 8 + x] = kleur[i]
+                else:                                # multicolor bitmap
+                    b = bitmap[i * 8 + y]
+                    kl = [achter, scherm[i] >> 4, scherm[i] & 15, kleur[i]]
+                    for x in range(4):
+                        k = kl[(b >> (6 - 2 * x)) & 3]
+                        rij[c * 8 + 2 * x] = rij[c * 8 + 2 * x + 1] = k
+    masker = [[False] * 320 for _ in range(200)]
+    for n in range(8):
+        if not vic[0x15] & (1 << n):
+            continue
+        sx = vic[2 * n] + (256 if vic[0x10] & (1 << n) else 0) - 24
+        sy = vic[2 * n + 1] - 50
+        bw = 48 if vic[0x1D] & (1 << n) else 24
+        bh = 42 if vic[0x17] & (1 << n) else 21
+        for y in range(max(0, sy), min(200, sy + bh)):
+            for x in range(max(0, sx), min(320, sx + bw)):
+                masker[y][x] = True
+    return pix, masker
+
+
+def scherm_vergelijken(vice, png_pad):
+    from PIL import Image
+    pix, masker = ideaal_scherm(vice)
+    img = Image.open(png_pad).convert("RGB")
+    W, H = img.size
+    data = img.load()
+    cache = {}
+
+    def nummer(rgb):
+        if rgb not in cache:
+            cache[rgb] = min(range(16), key=lambda k: sum((a - b) ** 2 for a, b in zip(rgb, VICE_RGB[k])))
+        return cache[rgb]
+    fout_rijen = {}
+    for y in range(200):
+        for x in range(320):
+            if masker[y][x]:
+                continue
+            if nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x]:
+                fout_rijen[y] = fout_rijen.get(y, 0) + 1
+    if not fout_rijen:
+        return True, "klopt pixel voor pixel (sprites niet meegeteld)"
+    # een verschilplaatje: rood = anders dan het hoort
+    uit = img.copy()
+    for y in fout_rijen:
+        for x in range(320):
+            if not masker[y][x] and nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x]:
+                uit.putpixel((RAND_X + x, RAND_Y + y), (255, 0, 0))
+    vpad = png_pad[:-4] + "_verschil.png"
+    uit.save(vpad)
+    rijen = sorted(fout_rijen)
+    naden = [y for y in rijen if y in (14, 15, 16, 17, 142, 143, 144, 145)]   # rij 1/2 en 17/18
+    return False, "%d pixels anders op %d pixelrijen (eerste %s%s); zie %s" % (
+        sum(fout_rijen.values()), len(rijen), rijen[:8], ", op de naden: %s" % naden if naden else "",
+        os.path.relpath(vpad, ROOT))
+
+
+# ---------------------------------------------------------------------------------------------------
 # Een test
 # ---------------------------------------------------------------------------------------------------
 def vergelijk(op, a, b):
@@ -225,6 +324,8 @@ def draai(bandpad, args):
     for nodig in ("band", "band_status", "band_markering", "band_fout", "st_magic"):
         if nodig not in sym:
             raise Fout("label %s niet in hollowcrown.vs: is dit een AUTOTEST-build?" % nodig)
+    scherm_ideaal = any(r[1] == "scherm" for r in verwacht)
+    verwacht = [r for r in verwacht if r[1] != "scherm"]
     for _, label, *_ in verwacht:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
@@ -254,6 +355,7 @@ def draai(bandpad, args):
         vice.verder()
 
         # 3. de band volgen: markeringen afhandelen tot hij klaar is
+        schermfouten = 0
         eind = time.time() + args.max_tijd
         while True:
             time.sleep(0.05)
@@ -264,6 +366,10 @@ def draai(bandpad, args):
                 pad = os.path.join(TESTUIT, "%s_%s.png" % (naam, shots[markering - 1]))
                 vice.screenshot(pad)
                 print("[test]   screenshot %s" % os.path.relpath(pad, ROOT))
+                if scherm_ideaal:
+                    ok, uitleg = scherm_vergelijken(vice, pad)
+                    schermfouten += 0 if ok else 1
+                    print("[test]   %-4s scherm: %s" % ("ok" if ok else "FOUT", uitleg))
                 vice.schrijf(sym["band_markering"], [0])
             if status == BAND_KLAAR:
                 break
@@ -274,7 +380,10 @@ def draai(bandpad, args):
                 raise Fout("band niet klaar binnen %d s" % args.max_tijd)
 
         # 4. de status vergelijken (de C64 staat stil in de monitor)
-        goed = True
+        goed = schermfouten == 0
+        if scherm_ideaal and not shots:
+            print("[test]   FOUT scherm = ideaal, maar de band maakt geen screenshot")
+            goed = False
         for tekst, label, plus, woord, op, waarde in verwacht:
             b = vice.lees(sym[label] + plus, 2 if woord else 1)
             echt = b[0] | (b[1] << 8) if woord else b[0]

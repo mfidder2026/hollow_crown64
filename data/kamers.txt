@@ -1,0 +1,2 @@
+# kamers: naam  plaatje  opties (zie tools/kamer.py)
+plein  data/flux/dawnhaven.png  boven=190  kleur=1.5  licht=1.0  sterkte=0.5
