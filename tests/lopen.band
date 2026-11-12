@@ -46,6 +46,17 @@ verwacht act_richting = 3
 verwacht act_achter = 1
 screenshot achter_torentje
 
+# 3c. helemaal bovenaan, tussen de fontein en de huizen achteraan: de allerkleinste maat
+cursor 176,81
+vuur
+wacht_tot_stil
+verwacht act_x.w = 176
+verwacht act_y = 65
+verwacht act_richting = 2
+verwacht act_maat = 4
+verwacht act_achter = 0
+screenshot bovenaan
+
 # 4. klik op de voorkant van de fontein: daar kun je niet staan, hij gaat naar het dichtste punt ervoor
 cursor 160,110
 vuur

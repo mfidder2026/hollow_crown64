@@ -441,10 +441,10 @@ stap_index:   .byte 0
 stappen:      .byte 0, 1, 0, 2          // staan, voet, staan, andere voet
 act_maat:     .byte 0                   // 0 = groot ... MATEN - 1 = het kleinst
 traag_teller: .byte 0
-maat_tempo:   .byte %11111111, %11111111, %01110111, %01010101   // per maat: in welke van 8 beelden hij beweegt
-.assert "maat_tempo heeft een waarde per maat", MATEN, 4
+maat_tempo:   .byte %11111111, %11111111, %01110111, %01010101, %01001001   // per maat: in welke van 8 beelden hij beweegt
+.assert "maat_tempo heeft een waarde per maat", MATEN, 5
 schaal_aantal: .byte 0
-schaal_grens:  .fill 3, 0
+schaal_grens:  .fill 4, 0
 doel_x:       .word 0
 doel_y:       .byte 0
 route_pos:    .byte 0

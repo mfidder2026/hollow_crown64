@@ -15,7 +15,7 @@ onbekende woorden zijn tot dan een fout, zodat er niets stilletjes wordt overges
       ACHTER x1,y1 x2,y2         staan Eldric's voeten hier, dan komt de voorgrond van de kamer (data/kamers.txt,
                                  voorgrond=...) vóór hem: hij loopt achter het torentje langs. Hooguit één per kamer.
       SCHAAL y1 y2 ...           diepte: voeten op y >= y1 = maat 0 (groot), >= y2 = maat 1, ...; daarachter
-                                 de volgende maat. Aflopend, hooguit 3 grenzen (4 maten in tools/costume.py).
+                                 de volgende maat. Aflopend, hooguit 4 grenzen (5 maten in tools/costume.py).
     BEGIN kamer x,y richting      waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
 
 Controles: vakken binnen de kamer en niet leeg; vakken op de loopkleuren van het kamerplaatje
@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 KAMER_B, KAMER_H = 160, 128
 MAX_VAKKEN = 16
-MAX_SCHAAL = 3           # grenzen; de motor heeft MATEN = 4 maten (tools/costume.py)
+MAX_SCHAAL = 4           # grenzen; de motor heeft MATEN = 5 maten (tools/costume.py)
 RICHTINGEN = {"VOOR": 0, "RUG": 1, "RECHTS": 2, "LINKS": 3}
 
 

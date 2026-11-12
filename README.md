@@ -95,9 +95,9 @@ The game is a small **SCUMM-style engine**. The engine is generic; the game itse
   sprite's colours, so you never see the switch, and the rest of the picture keeps all its colours.
 - **Walkboxes:** rectangles with a neighbour graph. Paths are found with BFS, then Eldric walks in straight lines.
 - **Actors:** two multicolour sprites stacked on top of each other, with poses copied into sprite slots on change.
-  Actors **shrink with depth**: four sizes per pose, picked from the depth of their feet, so Eldric fits through
+  Actors **shrink with depth**: five sizes per pose, picked from the depth of their feet, so Eldric fits through
   the doors at the back of a room and walks a little slower there. The C64 cannot scale sprites, so the sizes are
-  pre-made by the costume tool (the smallest one is hand-drawn).
+  pre-made by the costume tool (the two smallest are hand-drawn).
 - **Scripts:** plain-text `.hcs` files, compiled by a Python compiler into bytecode for a tiny VM. The compiler
   also checks that chapter 1 can actually be finished.
 - **Testing without hands:** an `AUTOTEST` build replays *input tapes* (cursor moves, fire, waits). VICE runs them

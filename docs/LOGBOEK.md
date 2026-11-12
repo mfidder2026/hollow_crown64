@@ -236,3 +236,16 @@ schouders zichtbaar) en een vóór de fontein (act_achter = 0). 4 van 4 tests ge
 
 **Open:** er zijn 8 sprites; elke voorgrond kost er één zolang hij aan staat. In kamers met NPC's moet dat
 passen (cursor 1 + Eldric 2 + 2 NPC's 4 = 7: één voorgrond tegelijk).
+
+## 2026-11-12 — Vijfde maat: helemaal bovenaan het dorp
+
+**Gevraagd:** bovenaan het dorp mag Eldric nog een maat kleiner.
+
+- Twee nieuwe loopvakken bovenaan, tussen de fontein en de huizen achteraan (`73,65 94,69` en `84,64 94,71`),
+  goedgekeurd door de kleurcontrole. Eldric komt nu tot y 64.
+- Maat 4: 10 rijen hoog, 4 breed, met de hand getekend (`KLEINST` in `tools/costume.py`), 4 richtingen met pasjes.
+  `SCHAAL 104 88 76 69`: onder y 69 de kleinste. Trager: 3 van de 8 beelden. 5 maten x 12 poses = 7,5 KB.
+- `ACHTER` loopt nu van y 62: ook bovenaan staat het torentje vóór hem als hij erachter is.
+
+**Getest:** `tests/lopen.band` loopt naar 176,65 (via 3 → 4 → 6), kijkt rechts, maat 4; screenshot pixel voor
+pixel gelijk, met sprites. 4 van 4 tests geslaagd.

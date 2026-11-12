@@ -27,7 +27,7 @@ import sprites_hc as hc   # noqa: E402
 RICHTINGEN = ["voor", "rug", "rechts", "links"]
 # hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
 # het plein: achteraan ~14-16 hoog, de smidse ~20, de herberg ~26 (zie docs/LOGBOEK.md).
-MATEN = [None, 26, 20, 14]
+MATEN = [None, 26, 20, 14, 10]   # 10: helemaal bovenaan het dorp
 GEWICHT = {".": 1.0, "c": 1.0, "k": 1.45, "s": 1.35}
 # De kleinste maat is met de hand getekend: zo klein werkt verkleinen niet meer (gezicht en benen verdwijnen).
 # 6 breed x 14 hoog; staat in kolom 3-8, voeten op rij 34. Helemaal in de onderste sprite, dus 'c' = blauw.
@@ -49,17 +49,34 @@ KLEIN_BENEN = {          # de laatste 3 rijen per (richting, fase); fase 0 = zoa
 }
 
 
-def klein(richting, fase):
+# De allerkleinste: 4 breed x 10 hoog, kolom 4-7, voeten op rij 34.
+KLEINST = {
+    "voor":   [".kk.", "kkkk", "ssss", ".ss.", "cccc", "sccs", "cccc", ".kk.", "k..k", "k..k"],
+    "rug":    [".kk.", "kkkk", "kkkk", ".kk.", "cccc", "sccs", "cccc", ".kk.", "k..k", "k..k"],
+    "rechts": [".kk.", "kkss", ".kss", "..s.", ".cc.", ".cs.", ".cc.", ".kk.", ".kk.", ".kkk"],
+}
+KLEINST_BENEN = {        # de laatste 2 rijen per (richting, fase)
+    ("voor", 1): ["k..k", "kk.."], ("voor", 2): ["k..k", "..kk"],
+    ("rug", 1): ["k..k", "kk.."], ("rug", 2): ["k..k", "..kk"],
+    ("rechts", 1): ["k.k.", "k..k"], ("rechts", 2): [".kk.", "kk.."],
+}
+HANDGETEKEND = {14: (KLEIN, KLEIN_BENEN, 6), 10: (KLEINST, KLEINST_BENEN, 4)}
+
+
+def klein(richting, fase, hoogte=14):
+    tekening, benen, breed = HANDGETEKEND[hoogte]
     spiegel = richting == "links"
     basis = "rechts" if spiegel else richting
-    rijen = list(KLEIN[basis])
+    rijen = list(tekening[basis])
     if fase:
-        rijen[-3:] = KLEIN_BENEN[(basis, fase)]
+        n = len(benen[(basis, fase)])
+        rijen[-n:] = benen[(basis, fase)]
     if spiegel:
         rijen = [r[::-1] for r in rijen]
-    assert len(rijen) == 14 and all(len(r) == 6 for r in rijen), (richting, fase)
+    assert len(rijen) == hoogte and all(len(r) == breed for r in rijen), (richting, fase, hoogte)
     leeg = "." * 12
-    return [leeg] * 21 + ["..." + r + "..." for r in rijen] + [leeg] * 7
+    links = (12 - breed) // 2
+    return [leeg] * (35 - hoogte) + ["." * links + r + "." * (12 - links - breed) for r in rijen] + [leeg] * 7
 
 
 HANDWERK = {}            # (maat, posenaam) -> 42 rijen van 12, als een verkleinde pose met de hand beter is
@@ -125,8 +142,8 @@ def main():
                 rijen, b, o = tekening[naam]
                 if (b, o) != (kb, ko):
                     raise SystemExit("pose %s heeft andere kleuren dan eldric_voor" % naam)
-                if hoogte == 14:
-                    rijen = klein(r, f)
+                if hoogte in HANDGETEKEND:
+                    rijen = klein(r, f, hoogte)
                 else:
                     rijen = HANDWERK.get((m, naam)) or verklein(rijen, hoogte)
                 voorbeeld.append((m, r, f, rijen))

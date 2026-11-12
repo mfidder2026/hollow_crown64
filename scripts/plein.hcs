@@ -4,11 +4,11 @@
 # Het plaatje staat (nog) in data/kamers.txt.
 
 KAMER plein
-  SCHAAL 104 88 76           # diepte: vooraan groot; achteraan zo klein dat hij door de deuren past
+  SCHAAL 104 88 76 69        # diepte: vooraan groot; achteraan zo klein dat hij door de deuren past
                              # (deuren: achteraan ~14-16 hoog met de voet op y~66, smidse ~20 op y~78,
-                             #  herberg ~26 op y~84; Eldric: 34 / 26 / 20 / 14 rijen)
+                             #  herberg ~26 op y~84; Eldric: 34 / 26 / 20 / 14 / 10 rijen; 10 = helemaal bovenaan)
   LOOPKLEUREN groen lichtgroen geel   # de voeten mogen alleen hierop staan (de build controleert elk LOOPVAK)
-  ACHTER 72,69 86,75         # achter de fontein, bij het torentje: dan staat het torentje vóór Eldric
+  ACHTER 72,62 86,75         # achter de fontein, bij het torentje: dan staat het torentje vóór Eldric
   LOOPVAK 7,100 157,124      # 0 voor: het gras en het pad vooraan
   LOOPVAK 27,88 59,101       # 1 links: het gele pad naar de smidse
   LOOPVAK 50,74 63,90        # 2 links omhoog, naast de fontein
@@ -16,3 +16,5 @@ KAMER plein
   LOOPVAK 59,72 104,75       # 3 achter de fontein langs (dwars door de waterstraal)
   LOOPVAK 82,69 104,75       # 4 achter de fontein, rechts
   LOOPVAK 96,72 125,101      # 5 rechts: het pad omhoog
+  LOOPVAK 73,65 94,69        # 6 helemaal bovenaan: het gras tussen de fontein en de huizen achteraan
+  LOOPVAK 84,64 94,71        # 7 bovenaan rechts
