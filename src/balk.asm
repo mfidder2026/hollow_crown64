@@ -62,15 +62,7 @@ ww:     stx teller
         cpx #AANTAL_WERKWOORDEN
         bne ww
 
-        // inventaris: nog leeg; alleen de pijlen (uit)
-        lda #TEKEN_PIJL_OP
-        sta SCHERM + RIJ_INVENTARIS * 40 + KOLOM_PIJL
-        lda #TEKEN_PIJL_NEER
-        sta SCHERM + (RIJ_INVENTARIS + 1) * 40 + KOLOM_PIJL
-        lda #KLEUR_PIJL_UIT
-        sta KLEUR_RAM + RIJ_INVENTARIS * 40 + KOLOM_PIJL
-        sta KLEUR_RAM + (RIJ_INVENTARIS + 1) * 40 + KOLOM_PIJL
-
+        // inventaris: inventaris.asm tekent hem (inventaris_anders staat bij het begin op 1)
         // hoofdstuk
         lda #<tekst_hoofdstuk
         sta zp_ptr

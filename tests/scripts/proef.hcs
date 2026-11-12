@@ -55,3 +55,24 @@ SCRIPT proef_scene:                    # TUSSENSCENE EINDE_TUSSENSCENE (en overs
   WACHT 2000
   EINDE_TUSSENSCENE
   ZET proef_i
+
+# ---- hoofdstuk 5: inventaris ----
+KAMER plein
+VOORWERP proef_kruik "kruik" VAK 40,104 6,8 LOOP 44,112 VOOR
+  PAK:
+    ZEG eldric "Een kruik. Leeg."
+    GEEF proef_kruik
+  GEBRUIK zwaard:                      # "Gebruik zwaard met kruik" (en andersom: de VM zoekt ook bij het zwaard)
+    ZEG eldric "Tink."
+    ZET proef_paar
+
+VOORWERP proef_appel "appel" NERGENS
+VOORWERP proef_brood "brood" NERGENS
+VOORWERP proef_kaars "kaars" NERGENS
+VOORWERP proef_touw "touw" NERGENS
+
+SCRIPT proef_veel:
+  GEEF proef_appel
+  GEEF proef_brood
+  GEEF proef_kaars
+  GEEF proef_touw

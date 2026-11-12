@@ -6,6 +6,7 @@
 // Hoofdstuk 2 (Eldric loopt): klik op de vloer en Eldric loopt erheen, via de loopvakken (BFS).
 // Voorgrond (uit hoofdstuk 8, vervroegd): achter de fontein staat het torentje vóór hem.
 // Hoofdstuk 3 (voorwerpen en zinregel): "Bekijk fontein" -> Eldric loopt erheen en zegt iets (VM: ZEG).
+// Hoofdstuk 4 (VM): alle opdrachten, voorwerpen met eigenaar en stand. Hoofdstuk 5: inventaris, "Gebruik x met y".
 
 #import "geheugen.asm"
 #import "../build/gen/lettertype_info.asm"     // cursor-midden en pijltekens (tools/lettertype.py)
@@ -103,6 +104,7 @@ hoofdlus:
 kamer_nu: .byte 0
 
 // ---------------------------------------------------------------------------------------------
+#import "status.asm"                            // vroeg: MAX_VOORWERPEN e.d.
 #import "irq.asm"
 #import "scherm.asm"
 #import "inpak.asm"
@@ -114,9 +116,9 @@ kamer_nu: .byte 0
 #import "vm.asm"
 #import "balk.asm"                              // vóór zin.asm: de kleuren van de balk
 #import "zin.asm"
+#import "inventaris.asm"
 #import "invoer.asm"
 #import "cursor.asm"
-#import "status.asm"
 #import "autotest.asm"
 
 // Controle aan het eind, als alle segments gevuld zijn

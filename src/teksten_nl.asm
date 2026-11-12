@@ -26,6 +26,15 @@ werkwoorden_hi: .byte >ww_ga_naar, >ww_pak, >ww_gebruik, >ww_open, >ww_bekijk, >
                 .byte >ww_geef, >ww_sluit, >ww_duw, >ww_trek, >ww_lees, >ww_wat_is
 .const AANTAL_WERKWOORDEN = 12
 
+// voorzetsels voor zinnen met twee voorwerpen: "Gebruik kruik met vat", "Geef steen aan Mira"
+vz_met:       .text "met";       .byte 0
+vz_aan:       .text "aan";       .byte 0
+vz_geen:      .byte 0
+voorzetsel_lo: .byte <vz_geen, <vz_geen, <vz_met, <vz_geen, <vz_geen, <vz_geen
+               .byte <vz_aan, <vz_geen, <vz_geen, <vz_geen, <vz_geen, <vz_geen
+voorzetsel_hi: .byte >vz_geen, >vz_geen, >vz_met, >vz_geen, >vz_geen, >vz_geen
+               .byte >vz_aan, >vz_geen, >vz_geen, >vz_geen, >vz_geen, >vz_geen
+
 tekst_hoofdstuk: .text "Hoofdstuk 1: Dawnhaven"
 .label tekst_hoofdstuk_lengte = * - tekst_hoofdstuk
                  .byte 0

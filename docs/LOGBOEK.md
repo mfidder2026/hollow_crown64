@@ -314,3 +314,22 @@ genoeg. De rest is voor andermans wensen." Eldric begint met zijn zwaard (BIJ el
   op gras, los loopvak, dubbel voorwerp, te lange naam, werkwoord zonder voorwerp, foute richting): alle 19
   geweigerd met de juiste melding; de echte scripts compileren.
 - `./tests/alles.sh` draait alles: 20/20 compiler, 6/6 banden.
+
+## 2026-11-12 — Hoofdstuk 5: inventaris ✅
+
+**Klaar als:** band: pak kruik, gebruik kruik met fontein (standaardantwoord); de inventaris klopt in het geheugen.
+**Gehaald** (met een proefkruik op het plein; de echte kruik komt in de herberg, hoofdstuk 6/9).
+
+**Wat er is:**
+- `src/inventaris.asm`: lijst van alles met eigenaar Eldric (in scriptvolgorde), rij 22-23 met 2 x 2 namen,
+  pijlen ↑ ↓ (wit als je kunt schuiven, grijs als niet), schuiven per 2.
+- `src/zin.asm` herschreven: voorwerpen onder de cursor in kamer én inventaris; zinregel met twee voorwerpen
+  ("Gebruik kruik met fontein", "Geef kruik aan fontein"); inventaris aanklikken zonder te lopen; Gebruik/Geef met
+  iets uit de inventaris wacht op het tweede voorwerp; script eerst bij het tweede voorwerp, bij Gebruik ook
+  andersom, anders het standaardantwoord. Voorzetsels in `src/teksten_nl.asm`.
+
+**Getest (`tests/inventaris.band`, 29 tussencontroles):** zwaard in de inventaris bij het begin; Pak kruik →
+kruik rechts in de inventaris; Gebruik kruik met fontein → loopt erheen, standaardantwoord; Bekijk zwaard uit de
+inventaris zonder te lopen; Gebruik zwaard met kruik én Gebruik kruik met zwaard → beide het eigen script ("Tink.");
+Geef kruik aan fontein → standaardantwoord; 6 spullen: pijl omlaag schuift 2, nog eens omlaag kan niet, omhoog
+terug. 3 screenshots pixel voor pixel. Alle tests: 20/20 compiler, 7/7 banden.

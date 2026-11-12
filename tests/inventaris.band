@@ -1,0 +1,113 @@
+# inventaris.band — hoofdstuk 5: pakken, gebruiken met, geven, schuiven met de pijlen.
+# Werkwoorden: Pak (100,156), Gebruik (180,156), Bekijk (20,164), Geef (180,164).
+# Inventaris: rij 22-23 = cursor-y 176-191; links x < 144, pijlen x 144-175, rechts x >= 176.
+wacht 3
+verwacht_tekst 22 "zwaard             ↑"
+verwacht_eigenaar zwaard eldric
+
+# pak de kruik
+cursor 100,156
+vuur
+cursor 86,124
+verwacht_tekst 18 "Pak kruik"
+vuur
+wacht_tot_stil
+wacht 3
+verwacht_tekst 0 "Een kruik. Leeg."
+vuur
+wacht 2
+verwacht_eigenaar proef_kruik eldric
+verwacht_tekst 22 "zwaard             ↑  kruik"
+screenshot kruik_gepakt
+
+# gebruik kruik met fontein: geen script -> het standaardantwoord
+cursor 180,156
+vuur
+cursor 200,180
+verwacht_tekst 18 "Gebruik kruik"
+vuur
+wacht 2
+verwacht_tekst 18 "Gebruik kruik met"
+cursor 160,100
+verwacht_tekst 18 "Gebruik kruik met fontein"
+vuur
+wacht_tot_stil
+wacht 3
+verwacht act_richting = 1              # hij liep naar de fontein en kijkt ernaar
+verwacht_tekst 0 "Daar weet ik niets mee te doen."
+vuur
+wacht 2
+
+# bekijk iets uit de inventaris: geen lopen
+cursor 20,164
+vuur
+cursor 20,180
+verwacht_tekst 18 "Bekijk zwaard"
+vuur
+wacht 3
+verwacht act_lopen = 0
+verwacht_tekst 0 "Mijn zwaard. Het laatste lichtfragment"
+vuur
+wacht 2
+
+# twee voorwerpen met een eigen script, in beide volgordes
+cursor 180,156
+vuur
+cursor 20,180
+vuur
+cursor 200,180
+verwacht_tekst 18 "Gebruik zwaard met kruik"
+vuur
+wacht 3
+verwacht_tekst 0 "Tink."
+vuur
+wacht 2
+verwacht_vlag proef_paar 1             # ZET komt na de tekst
+cursor 180,156
+vuur
+cursor 200,180
+vuur
+cursor 20,180
+verwacht_tekst 18 "Gebruik kruik met zwaard"
+vuur
+wacht 3
+verwacht_tekst 0 "Tink."
+vuur
+wacht 2
+
+# geef kruik aan fontein: het standaardantwoord voor Geef
+cursor 180,164
+vuur
+cursor 200,180
+vuur
+cursor 160,100
+verwacht_tekst 18 "Geef kruik aan fontein"
+vuur
+wacht_tot_stil
+wacht 3
+verwacht_tekst 0 "Daar heb ik niets voor."
+vuur
+wacht 2
+
+# meer spullen: schuiven met de pijlen
+start_script proef_veel
+wacht_op_script
+wacht 2
+verwacht inv_aantal = 6
+verwacht_tekst 22 "zwaard             ↑  kruik"
+verwacht_tekst 23 "appel              ↓  brood"
+screenshot zes_spullen
+cursor 156,188                         # pijl omlaag
+vuur
+wacht 2
+verwacht inv_begin = 2
+verwacht_tekst 22 "appel              ↑  brood"
+verwacht_tekst 23 "kaars              ↓  touw"
+vuur                                   # nog eens omlaag: kan niet verder
+wacht 2
+verwacht inv_begin = 2
+cursor 156,180                         # pijl omhoog
+vuur
+wacht 2
+verwacht inv_begin = 0
+screenshot terug_boven

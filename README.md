@@ -158,7 +158,7 @@ in this order:
 - [x] 2. Eldric walks (walkboxes, pathfinding)
 - [x] 3. Objects and the sentence line
 - [x] 4. Script VM and compiler
-- [ ] 5. Inventory
+- [x] 5. Inventory
 - [ ] 6. More rooms, loading from disk
 - [ ] 7. Conversations
 - [ ] 8. Foreground masking (first object done: the fountain) and small animations
