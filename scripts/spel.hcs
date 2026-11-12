@@ -45,6 +45,8 @@ VOORWERP lantaarn "lantaarn" NERGENS
 # Wie praat, in welke kleur (berichten bovenaan, op rij 0-1)
 SPREKER eldric geel
 SPREKER bram oranje
+SPREKER mira cyaan
+SPREKER vex rood
 
 # Standaardantwoorden: als een voorwerp geen script heeft voor dat werkwoord
 STANDAARD BEKIJK:

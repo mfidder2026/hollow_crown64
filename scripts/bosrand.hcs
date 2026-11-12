@@ -5,6 +5,8 @@ KAMER bosrand
   LOOPVAK 2,98 157,124                   # 0 voor
   LOOPVAK 2,76 118,124                   # 1 links en het pad
   LOOPVAK 122,76 157,124                 # 2 rechts van de wegwijzer
+  ACTOR wolf KOSTUUM wolf OP 80,82       # een schaduwwolf op het pad (er zijn er meer, in het donker)
+  ACTOR vex KOSTUUM vex OP 80,62 VERBORGEN   # Baron Vex, tussen de bomen (tussenscène, hoofdstuk 9)
 
 VOORWERP dorp "dorp" VAK 130,112 30,16 LOOP 150,120 RECHTS
   GA_NAAR:
@@ -23,3 +25,10 @@ VOORWERP bospad "pad" VAK 64,56 32,20 LOOP 80,80 RUG
     ZEG eldric "Het pad het Duisterwoud in. Ergens daar is Baron Vex."
   GA_NAAR:
     ZEG eldric "Daar ga ik niet zomaar in. Nog niet."
+
+VOORWERP wolven "wolven" VAK 66,68 28,18 LOOP 80,100 RUG
+  BEKIJK:
+    ZEG eldric "Schaduwwolven. Ze laten niemand door. Ogen als kolen."
+  PRAAT:
+    ZEG eldric "Brave hondjes?"
+    ZEG eldric "Nee. Geen brave hondjes."

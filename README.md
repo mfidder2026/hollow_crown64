@@ -162,7 +162,7 @@ in this order:
 - [x] 4. Script VM and compiler
 - [x] 5. Inventory
 - [x] 6. More rooms, loading from disk
-- [ ] 7. Conversations
+- [x] 7. Conversations
 - [ ] 8. Foreground masking (first object done: the fountain) and small animations
 - [ ] 9. Chapter 1, fully playable
 - [ ] 10. Title screen with original SID music

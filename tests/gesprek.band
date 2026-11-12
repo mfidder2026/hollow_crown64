@@ -1,0 +1,104 @@
+# gesprek.band — hoofdstuk 7: het hele gesprek met Mira, met de juiste vlag aan het eind.
+# Praat met = (100,164); Mira staat links bij de haard (cursor 56,96). Keuzes op rij 19-22 (cursor-y 156, 164, 172, 180).
+start_script proef_naar_herberg
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+cursor 56,96
+verwacht_tekst 18 "Ga naar Mira"
+screenshot mira
+
+# Praat met Mira: de keuzes komen in plaats van de werkwoorden
+cursor 100,164
+vuur
+cursor 56,96
+verwacht_tekst 18 "Praat met Mira"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 2
+verwacht gs_actief = 1
+verwacht gs_aantal = 3
+verwacht_tekst 19 "Wie bent u?"
+verwacht_tekst 20 "Ik moet het Duisterwoud in."
+verwacht_tekst 21 "Ik ga maar weer."
+verwacht_tekst 22 ""
+screenshot keuzes
+
+# keuze 2: ze vertelt over de ziensteen (de hint voor Duw tafel)
+cursor 20,164
+vuur
+wacht 3
+verwacht_tekst 0 "Ik moet het Duisterwoud in. Kunt u me de"
+wacht_op_script
+wacht 2
+verwacht_vlag mira_zoekt 1
+verwacht_tekst 19 "Wie bent u?"                 # de keuzes zijn terug
+
+# keuze 1
+cursor 20,156
+vuur
+wacht 3
+verwacht_tekst 0 "Wie bent u?"
+wacht_op_script
+wacht 2
+
+# keuze 3: EINDE -> de werkwoorden en de inventaris zijn terug
+cursor 20,172
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+verwacht_tekst 19 "Ga naar   Pak       Gebruik   Open"
+verwacht_tekst 22 "zwaard             ↑"
+
+# de ziensteen: Duw tafel, Pak ziensteen, Geef ziensteen aan Mira
+cursor 20,172
+vuur
+cursor 140,111
+vuur
+wacht_tot_stil
+wacht_op_script
+cursor 100,156
+vuur
+cursor 124,122
+verwacht_tekst 18 "Pak ziensteen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar ziensteen eldric
+cursor 180,164
+vuur
+cursor 20,180                          # de ziensteen staat links (de herberg komt vóór het zwaard in de scripts)
+verwacht_tekst 18 "Geef ziensteen"
+vuur
+cursor 56,96
+verwacht_tekst 18 "Geef ziensteen aan Mira"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar ziensteen nergens
+verwacht_vlag ziensteen_terug 1
+verwacht_vlag hint_wolven 1
+
+# opnieuw praten: nu een andere keuze (de wolven)
+cursor 100,164
+vuur
+cursor 56,96
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 2
+verwacht_tekst 20 "Hoe kom ik langs de wolven?"
+screenshot keuzes_na
+cursor 20,180
+verwacht_tekst 20 "Hoe kom ik langs de wolven?"
+cursor 20,164
+vuur
+wacht_op_script
+wacht 2
+cursor 20,172
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0

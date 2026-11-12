@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sprites_hc as hc   # noqa: E402
 
 RICHTINGEN = ["voor", "rug", "rechts", "links"]
+NPCS = [("mira", 0), ("vex", 0), ("wolf", 1)]          # (naam, vorm) — zie hieronder
 # hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
 # het plein: achteraan ~14-16 hoog, de smidse ~20, de herberg ~26 (zie docs/LOGBOEK.md).
 MATEN = [None, 26, 20, 14, 10]   # 10: helemaal bovenaan het dorp
@@ -154,6 +155,26 @@ def main():
                     for i in range(0, 64, 16):
                         L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
     L.append(".assert \"costume_eldric is MATEN x 12 x 128 bytes\", * - costume_eldric, MATEN * 12 * 128")
+    # NPC's (hoofdstuk 7): één pose, 2 sprites (128 bytes). vorm 0 = boven elkaar (de onderste 21 lager),
+    # vorm 1 = naast elkaar (de rechter 24 schermpixels verder). voeten = de onderste rij met pixels.
+    import json
+    info = {}
+    for naam, vorm in NPCS:
+        if naam == "wolf":
+            rijen, kb, ko = hc.wolf, 11, 11
+            delen = [[r[:12] for r in rijen], [r[12:] for r in rijen]]
+        else:
+            rijen, kb, ko = tekening[naam]
+            delen = list(hc.halves(rijen))
+        rijen_v = delen[0] + delen[1] if vorm == 0 else delen[0]
+        voeten_n = max(i for i, r in enumerate(rijen_v) if r.strip("."))
+        L.append("npc_%s:    // %s, %s" % (naam, "boven elkaar" if vorm == 0 else "naast elkaar", hc.NAMES[kb]))
+        for deel in delen:
+            data = hc.sprite_bytes(deel)
+            for i in range(0, 64, 16):
+                L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
+        info[naam] = {"vorm": vorm, "kb": kb, "ko": ko, "voeten": voeten_n}
+    json.dump(info, open(os.path.join(sys.argv[1], "kostuums.json"), "w"), indent=1)
     voorbeeld_png(voorbeeld, kb, ko, os.path.join(sys.argv[1], "costume_maten.png"))
     os.makedirs(sys.argv[1], exist_ok=True)
     open(os.path.join(sys.argv[1], "costumes.asm"), "w").write("\n".join(L) + "\n")

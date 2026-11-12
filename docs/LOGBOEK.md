@@ -370,3 +370,30 @@ ligt er), terug naar het plein (laden 3, deur nog open), weer naar binnen (tafel
 voor pixel + kamerbuffer. Ook met `--echte-drive` geslaagd. Alle tests: 20/20 compiler, 8/8 banden.
 
 **Open:** snellader; FLUX-plaatjes voor herberg, smidse, bosrand; tijdens het laden staat het spel ~14 s stil.
+
+## 2026-11-13 — Hoofdstuk 7: praten ✅
+
+**Klaar als:** band: het hele gesprek, met de juiste vlag aan het eind. **Gehaald.**
+
+**Werkwijze-opmerking:** de app MacAIMagic werkt sinds 23:23 in `~/Development/Hollow_Crown` op een eigen branch
+(`docs/script-walkthrough`, een verhaal-/walkthroughdocument). Mijn commit van hoofdstuk 6 kwam daardoor eerst
+op die branch, mét hun document. Hersteld: hoofdstuk 6 opnieuw op main gezet zonder hun bestand, hun branch
+teruggezet (hun document weer niet vastgelegd, verder onaangeroerd). Ik werk sindsdien in een eigen worktree:
+`~/Development/Hollow_Crown_motor` (branch main). Hun document heb ik niet gebruikt: hoofdstuk 1 volgt de prompt.
+
+**Wat er is:**
+- `tools/costume.py`: NPC-kostuums (mira, vex, wolf) + `build/gen/kostuums.json`.
+- Compiler: `ACTOR naam KOSTUUM k OP x,y [VERBORGEN]`, `GESPREK naam` met `KEUZE "zin" [ALS [NIET] vlag/HEEFT]
+  [EINDE]`, opdrachten `PRAAT`, `TOON`, `VERBERG`, `LOOP figuur x,y`. Controles: kostuum bestaat, hooguit 2
+  figuren per kamer, elk gesprek heeft een uitweg (EINDE), keuzetekst op één regel. Uitspeelbaarheid rekent
+  gesprekken mee (een keuze telt pas als het gesprek ergens begint); "Gebruik/Geef X" telt pas als je X hebt.
+- `src/npc.asm`: twee slots (sprite 4-5, 6-7), zichtbaarheid in de spelstatus, rechte lijn lopen.
+- `src/gesprek.asm`: keuzes op rij 19-22 (alleen die waarvan de voorwaarde klopt), gele keuze onder de cursor,
+  na een keuze terug naar de keuzes of (EINDE) terug naar werkwoorden en inventaris.
+- Mira (herberg): BEKIJK, PRAAT (gesprek met 4 keuzes), GEEF ziensteen (→ ziensteen_terug, hint_wolven),
+  GEEF munt. Bosrand: een schaduwwolf en Vex (verborgen, voor de tussenscène).
+
+**Getest (`tests/gesprek.band`, 26 tussencontroles):** Praat met Mira → 3 keuzes; keuze 2 → hint over de tafel,
+vlag mira_zoekt; keuze 1; keuze 3 (EINDE) → werkwoorden en inventaris terug; Duw tafel, Pak ziensteen, Geef
+ziensteen aan Mira → ziensteen weg, vlaggen ziensteen_terug en hint_wolven; opnieuw praten → keuze 2 is nu "Hoe
+kom ik langs de wolven?". 3 screenshots pixel voor pixel. Alle tests: 20/20 compiler, 9/9 banden.

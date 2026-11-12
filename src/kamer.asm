@@ -60,6 +60,7 @@ kamer_wissel: {
         jsr laad_kamer                  // schijf.asm: scherm leeg, "Laden...", laden, alles weer aan
         ldx st_kamer
         jsr kamer_gegevens              // main.asm: loopvakken, schaal, ACHTER + voorgrond
+        jsr npc_kamer_in                // de figuren van deze kamer
         ldx st_kamer                    // BINNENKOMST
         lda kamer_binnen_hi,x
         beq !+

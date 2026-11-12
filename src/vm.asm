@@ -17,10 +17,13 @@
 //   $12 / $13                     TUSSENSCENE / EINDE_TUSSENSCENE (geen invoer; vuur slaat over)
 //   $14 kamer n                   PATCH n van die kamer (alleen als we daar zijn)
 //   $15 kamer x(2) y richting     KAMER: laden en erheen; dit script houdt op, BINNENKOMST begint
+//   $16 gesprek(2)                PRAAT: het gesprek begint (de keuzes komen als het script klaar is)
+//   $17 figuur / $18 figuur       TOON / VERBERG
+//   $19 figuur x(2) y             LOOP figuur (rechte lijn; wacht tot hij er is)
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
 
 .const OP_STOP = $00
-.const OP_LAATSTE = $15
+.const OP_LAATSTE = $19
 .const EIGENAAR_ELDRIC = $ff
 .const EIGENAAR_NERGENS = $fe
 
@@ -56,7 +59,24 @@ lus:    lda vm_pc + 1                   // 0 = er loopt geen script
         jsr act_er_meteen
 !:      lda #0
         sta vm_loopt
-        lda vm_wacht                    // WACHT
+        ldx vm_npc_wacht                // LOOP figuur: wacht tot hij er is
+        beq !+
+        lda npc_lopen - 1,x
+        beq klaar_npc
+        lda vm_overslaan
+        beq wacht
+        lda npc_dx_lo - 1,x             // overslaan: meteen op het doel
+        sta npc_px_lo - 1,x
+        lda npc_dx_hi - 1,x
+        sta npc_px_hi - 1,x
+        lda npc_dy - 1,x
+        sta npc_py - 1,x
+        lda #0
+        sta npc_lopen - 1,x
+klaar_npc:
+        lda #0
+        sta vm_npc_wacht
+!:      lda vm_wacht                    // WACHT
         ora vm_wacht + 1
         beq voer_uit
         lda vm_overslaan
@@ -303,6 +323,53 @@ op_kamer:
         jsr kamer_wissel                // stopt dit script; start eventueel BINNENKOMST
         jmp lus
 
+op_praat:
+        ldy #1
+        lda (zp_vm),y
+        pha
+        iny
+        lda (zp_vm),y
+        tax
+        pla
+        jsr gesprek_start
+        lda #3
+        jmp verder
+
+op_toon:
+        lda #1
+        bne npc_zichtbaar
+op_verberg:
+        lda #0
+npc_zichtbaar:
+        pha
+        ldy #1
+        lda (zp_vm),y
+        tax
+        pla
+        sta st_npc,x
+        lda #2
+        jmp verder
+
+op_npc_loop:
+        ldy #1
+        lda (zp_vm),y
+        tax
+        iny
+        lda (zp_vm),y
+        sta npc_dx_lo,x
+        iny
+        lda (zp_vm),y
+        sta npc_dx_hi,x
+        iny
+        lda (zp_vm),y
+        sta npc_dy,x
+        lda #1
+        sta npc_lopen,x
+        inx
+        stx vm_npc_wacht
+        lda #5
+        jmp verder
+
 // pc += A, en door met de volgende opdracht
 verder: clc
         adc vm_pc
@@ -346,7 +413,7 @@ sprongen:
         .word op_als_heeft - 1, op_als_niet_heeft - 1, op_als_stand - 1, op_als_niet_stand - 1
         .word op_zet - 1, op_wis - 1, op_geef - 1, op_neem - 1, op_stand - 1, op_plaats - 1
         .word op_loop - 1, op_kijk - 1, op_wacht - 1, op_tussenscene - 1, op_einde_tussenscene - 1
-        .word op_patch - 1, op_kamer - 1
+        .word op_patch - 1, op_kamer - 1, op_praat - 1, op_toon - 1, op_verberg - 1, op_npc_loop - 1
 .assert "een sprong per opcode", (* - sprongen) / 2, OP_LAATSTE + 1
 }
 
@@ -358,6 +425,7 @@ vm_stop:
         sta vm_scene
         sta vm_overslaan
         sta vm_loopt
+        sta vm_npc_wacht
         rts
 
 // vm_bezig: A != 0 als er een script loopt
@@ -384,3 +452,4 @@ vm_wacht:     .word 0
 vm_loopt:     .byte 0                   // LOOP: wacht tot Eldric stilstaat
 vm_scene:     .byte 0                   // 1: tussenscène (geen invoer)
 vm_overslaan: .byte 0                   // 1: vuur in een tussenscène: alles meteen afmaken
+vm_npc_wacht: .byte 0                   // LOOP figuur: figuur + 1 waarop gewacht wordt (0 = niet)

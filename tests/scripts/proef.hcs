@@ -76,3 +76,8 @@ SCRIPT proef_veel:
   GEEF proef_brood
   GEEF proef_kaars
   GEEF proef_touw
+
+# ---- hoofdstuk 7: snel naar de herberg ----
+SCRIPT proef_naar_herberg:
+  ZET herbergdeur_open
+  KAMER herberg 45,86 VOOR

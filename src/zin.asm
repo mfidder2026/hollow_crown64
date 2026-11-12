@@ -68,7 +68,10 @@ klaar:  rts
 
 // zin_beeld: elk beeld; inventaris bijwerken, zinregel en werkwoordkleuren tekenen als er iets veranderd is
 zin_beeld: {
-        jsr inv_bijwerken
+        lda gs_actief                   // tijdens een gesprek: de keuzes in plaats van zinregel en werkwoorden
+        beq !+
+        jmp gesprek_beeld
+!:      jsr inv_bijwerken
         jsr voorwerp_onder
         lda werkwoord                   // wat moet er staan?
         sta nu_ww
@@ -221,6 +224,9 @@ klik: {
 !:      lda bericht_actief              // eerst: een tekst wegklikken
         beq !+
         jmp bericht_weg
+!:      lda gs_actief                   // gesprek: een keuze
+        beq !+
+        jmp gesprek_klik
 !:      lda cursor_y
         cmp #RIJ_WERKWOORD * 8
         bcc kamer

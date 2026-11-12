@@ -6,6 +6,7 @@
 // Hoofdstuk 2 (Eldric loopt): klik op de vloer en Eldric loopt erheen, via de loopvakken (BFS).
 // Voorgrond (uit hoofdstuk 8, vervroegd): achter de fontein staat het torentje vóór hem.
 // Hoofdstuk 3 (voorwerpen en zinregel): "Bekijk fontein" -> Eldric loopt erheen en zegt iets (VM: ZEG).
+// Hoofdstuk 7: figuren (NPC's) en gesprekken met keuzes.
 // Hoofdstuk 4 (VM): alle opdrachten, voorwerpen met eigenaar en stand. Hoofdstuk 5: inventaris, "Gebruik x met y".
 
 #import "geheugen.asm"
@@ -29,6 +30,7 @@ start:
         txs
 
         jsr status_begin
+        jsr npc_begin
         jsr tod_start
         jsr scherm_start
         jsr balk_tekenen
@@ -93,6 +95,8 @@ hoofdlus:
         jsr zin_beeld
         jsr actor_beweeg
         jsr actor_plaatsen
+        jsr npc_beweeg
+        jsr npc_sprites
         jsr voorgrond_bij
         jsr cursor_plaatsen
 #if AUTOTEST
@@ -118,6 +122,8 @@ kamer_nu: .byte 0
 #import "vm.asm"
 #import "balk.asm"                              // vóór zin.asm: de kleuren van de balk
 #import "zin.asm"
+#import "npc.asm"
+#import "gesprek.asm"
 #import "inventaris.asm"
 #import "schijf.asm"
 #import "geluid.asm"
