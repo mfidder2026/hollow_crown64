@@ -412,3 +412,43 @@ zolang het uit is staat er alleen grijs in die vakjes en verandert er niets — 
 keer: de kleur van een haardvakje is precies zoveel plekken in de rij opgeschoven als er flakkerstappen waren
 (de motor telt ze: fl_stappen). Eerst controleerde de test "één stap verder" en faalde soms: tussen twee
 controles zaten soms 2 stappen. Nu exact. Alle tests: 20/20 compiler, 10/10 banden.
+
+## 2026-11-13 — Hoofdstuk 9: hoofdstuk 1 helemaal speelbaar ✅
+
+**Klaar als:** band met de volledige oplossing eindigt op "Hoofdstuk 1 voltooid"; band die halverwege opslaat,
+laadt en verdergaat. **Beide gehaald.**
+
+**Geluid (`src/geluid.asm`):** effecten op stem 3 (stem 1 en 2 blijven voor de muziek van hoofdstuk 10). Een
+effect = golfvorm, ADSR, beginfrequentie, frequentiestap per beeld, pulsbreedte en duur; `geluid_beeld` draait in
+de IRQ op de onderrand. Nieuwe opdracht `GELUID naam` (opcode $1A; deur munt vuur wolf klaar klik). Gebruikt bij
+de herbergdeur, de munt uit de fontein, het smidsvuur, de wolven; "klaar" klinkt bij het einde van het hoofdstuk.
+Tijdens het laden is de SID stil (volume 0), daarna weer aan.
+
+**Opslaan/laden (`src/opslaan.asm`):** F5 slaat op, F7 laadt (alleen als er geen script, gesprek of lopen bezig is).
+Opslaan: eerst `S0:HCSAVE` scratchen via kanaal 15, dan SAVE van het spelstatusblok (183 bytes) — nooit `@0:`.
+Laden: naar een aparte buffer; alleen met magic "HC" en de juiste versie wordt het de spelstatus, dan naar de
+opgeslagen kamer en plek. Geen opgeslagen spel → een melding, er verandert niets. Na opslaan staat dezelfde kamer
+er weer (plaatje uit de kamerbuffer, BINNENKOMST zet de patches terug). Meldingen in Eldrics kleur op rij 0-1.
+
+**Finale (bosrand):** "Gebruik lantaarn met wolven" met een brandende lantaarn → tussenscène: de wolf loopt weg,
+Baron Vex verschijnt tussen de bomen, praat, en verdwijnt het bos in. Vlaggen wolven_weg en hoofdstuk1_klaar
+(`DOEL hoofdstuk1_klaar` in spel.hcs; de compiler bevestigt: te halen). De motor toont dan onderaan "Hoofdstuk 1
+voltooid" in geel. Wolven/pad reageren daarna anders.
+
+**Gevonden fouten:**
+- Figuurslot 1 (sprite 6-7) kreeg zijn kostuum op $C600 i.p.v. $C500 (carry telde dubbel): Vex was een
+  rood-wit gestreept blok. Tot nu toe stond er nooit een tweede figuur in een kamer. Nu een tabel, en de
+  oplossingsband controleert Vex in slot 1 en vergelijkt het scherm pixel voor pixel (met sprites).
+- De spelstatus kopiëren met `ldx #182 ... dex / bpl` stopt meteen (182 is "negatief"): laden zette maar één byte
+  terug. Nu optellend. De opslaanband vond dit.
+- De testdiskette: opslaan schrijft op de D64. vicetest werkt nu per band op een eigen kopie (build/test/<band>.d64),
+  zodat een test geen HCSAVE achterlaat voor de volgende. Toetsen f1/f5/f7 erbij in de banden.
+
+**Getest:** `tests/oplossing.band` (37 tussencontroles: herberg open, kruik pakken en vullen, smidsvuur aan →
+lantaarn, olie erin, aansteken, naar de bosrand, de tussenscène met Vex, "Hoofdstuk 1 voltooid", geluid "klaar").
+`tests/opslaan.band` (28: F7 zonder opslag, munt, F5, verder naar de herberg, F7 → terug bij de fontein met de munt
+en de deur dicht, verder spelen, nog eens F5 → er blijft één HCSAVE op de diskette, nagekeken met c1541).
+Alle tests: 21/21 compiler, 12/12 banden.
+
+**Nog open:** de geluiden zijn alleen op registerniveau getest (welk effect, volume), niet beluisterd. Op een
+echte 1541 duurt opslaan/laden net als een kamer enkele seconden (Kernal; geen snellader).

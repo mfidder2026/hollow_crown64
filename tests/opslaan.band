@@ -1,0 +1,81 @@
+# opslaan.band — hoofdstuk 9: opslaan (F5), verder spelen, laden (F7) en weer verder.
+# Werkwoorden: Pak (100,156), Open (260,156). De fontein: cursor 160,100.
+wacht 3
+verwacht_kamer plein
+
+# laden zonder opgeslagen spel: een melding, niets verandert
+toets f7 2
+wacht 3
+verwacht opslag_teller = 0
+verwacht_tekst 0 "Er is geen opgeslagen spel."
+verwacht_kamer plein
+wacht 150
+
+# een munt uit de fontein, dan opslaan
+cursor 100,156
+vuur
+cursor 160,100
+verwacht_tekst 18 "Pak fontein"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar munt eldric
+verwacht gl_laatste = 1                # GL_MUNT
+verwacht act_x.w = 160
+verwacht act_y = 100
+toets f5 2
+wacht 3
+verwacht opslag_teller = 1
+verwacht opslag_fout = 0
+verwacht_tekst 0 "Het spel is opgeslagen."
+verwacht_kamer plein
+screenshot na_opslaan
+wacht 150
+
+# verder spelen: de herberg open en naar binnen
+cursor 260,156
+vuur
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag herbergdeur_open 1
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+
+# laden: terug op het plein, bij de fontein, de deur weer dicht, de munt nog bij Eldric
+toets f7 2
+wacht 5
+verwacht opslag_teller = 2
+verwacht_kamer plein
+verwacht_vlag herbergdeur_open 0
+verwacht_vlag munt_gepakt 1
+verwacht_eigenaar munt eldric
+verwacht act_x.w = 160
+verwacht act_y = 100
+verwacht_tekst 0 "Daar ben ik weer."
+verwacht_tekst 22 "zwaard             ↑  gouden munt"
+screenshot na_laden
+wacht 150
+
+# en weer verder: de deur gaat gewoon open
+cursor 260,156
+vuur
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag herbergdeur_open 1
+screenshot verder
+
+# nog eens opslaan: het oude bestand wordt eerst gescratcht (geen "@0:"), dus er blijft één HCSAVE
+wacht 150
+toets f5 2
+wacht 3
+verwacht opslag_teller = 3
+verwacht opslag_fout = 0
+verwacht_tekst 0 "Het spel is opgeslagen."

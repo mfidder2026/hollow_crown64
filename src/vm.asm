@@ -20,10 +20,12 @@
 //   $16 gesprek(2)                PRAAT: het gesprek begint (de keuzes komen als het script klaar is)
 //   $17 figuur / $18 figuur       TOON / VERBERG
 //   $19 figuur x(2) y             LOOP figuur (rechte lijn; wacht tot hij er is)
+//   $16 gesprek(2) PRAAT   $17 n TOON   $18 n VERBERG   $19 n x(2) y NPC_LOOP (gesprek.asm, npc.asm)
+//   $1A effect                    GELUID: een effect op stem 3 (geluid.asm); wacht niet
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
 
 .const OP_STOP = $00
-.const OP_LAATSTE = $19
+.const OP_LAATSTE = $1a
 .const EIGENAAR_ELDRIC = $ff
 .const EIGENAAR_NERGENS = $fe
 
@@ -370,6 +372,13 @@ op_npc_loop:
         lda #5
         jmp verder
 
+op_geluid:
+        ldy #1
+        lda (zp_vm),y
+        jsr geluid_speel
+        lda #2
+        jmp verder
+
 // pc += A, en door met de volgende opdracht
 verder: clc
         adc vm_pc
@@ -414,6 +423,7 @@ sprongen:
         .word op_zet - 1, op_wis - 1, op_geef - 1, op_neem - 1, op_stand - 1, op_plaats - 1
         .word op_loop - 1, op_kijk - 1, op_wacht - 1, op_tussenscene - 1, op_einde_tussenscene - 1
         .word op_patch - 1, op_kamer - 1, op_praat - 1, op_toon - 1, op_verberg - 1, op_npc_loop - 1
+        .word op_geluid - 1
 .assert "een sprong per opcode", (* - sprongen) / 2, OP_LAATSTE + 1
 }
 

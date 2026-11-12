@@ -31,6 +31,7 @@ VOORWERP smidsvuur "smidsvuur" VAK 58,48 41,30 LOOP 78,90 RUG
       ZEG eldric "Het brandt al."
     ANDERS
       ZEG eldric "Ik houd het zwaard in de as. Het lichtfragment gloeit op..."
+      GELUID vuur
       PATCH vuur_aan
       ZET smidsvuur_aan
       ZEG bram "Het vuur! Het brandt weer! Wie ben jij, jongen?"

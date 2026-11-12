@@ -1,6 +1,8 @@
 # spel.hcs — het begin van het spel.
 # BEGIN kamer x,y richting   (richting: VOOR, RUG, RECHTS, LINKS)
 BEGIN plein 60,112 VOOR
+# Het einde van hoofdstuk 1: de wolven zijn verjaagd en Vex is gezien
+DOEL hoofdstuk1_klaar
 
 # Wat Eldric bij zich heeft (en wat later bij hem komt)
 VOORWERP zwaard "zwaard" BIJ eldric

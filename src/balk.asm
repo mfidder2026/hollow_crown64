@@ -12,6 +12,7 @@
 .const KLEUR_PIJL_UIT   = 11            // donkergrijs: niets om te schuiven
 .const KLEUR_PIJL_AAN   = 1
 .const KLEUR_HOOFDSTUK  = 12            // grijs
+.const KLEUR_VOLTOOID   = 7             // geel
 .const KOLOM_PIJL       = 19
 
 .segment Code

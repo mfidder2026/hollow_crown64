@@ -36,6 +36,7 @@ VOORWERP fontein "fontein" VAK 62,74 39,26 LOOP 80,100 RUG     # alleen de bak: 
       ZEG eldric "Eén is genoeg. De rest is voor andermans wensen."
     ANDERS
       ZEG eldric "Muntjes! Mensen wensen hier van alles. Ik neem er één, voor het geluk."
+      GELUID munt
       GEEF munt
       ZET munt_gepakt
     EINDE
@@ -55,6 +56,7 @@ VOORWERP herberg "herberg" VAK 126,26 34,70 LOOP 122,90 RECHTS
     ALS vlag herbergdeur_open
       ZEG eldric "Hij staat al open."
     ANDERS
+      GELUID deur
       PATCH deur_open
       ZET herbergdeur_open
     EINDE

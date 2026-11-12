@@ -102,6 +102,9 @@ hoofdlus:
         jsr flakker_beeld
         jsr voorgrond_bij
         jsr cursor_plaatsen
+        jsr functietoetsen              // F5 opslaan, F7 laden (opslaan.asm)
+        jsr melding_beeld
+        jsr voltooid_beeld
 #if AUTOTEST
         jsr band_controle
         jsr band_stap
@@ -131,6 +134,7 @@ kamer_nu: .byte 0
 #import "inventaris.asm"
 #import "schijf.asm"
 #import "geluid.asm"
+#import "opslaan.asm"
 #import "invoer.asm"
 #import "cursor.asm"
 #import "autotest.asm"

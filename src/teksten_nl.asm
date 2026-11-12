@@ -38,6 +38,20 @@ voorzetsel_hi: .byte >vz_geen, >vz_geen, >vz_met, >vz_geen, >vz_geen, >vz_geen
 tekst_laden:     .text "Laden..."
 .label tekst_laden_lengte = * - tekst_laden
                  .byte 0
+tekst_opslaan:   .text "Opslaan..."
+.label tekst_opslaan_lengte = * - tekst_opslaan
+                 .byte 0
+tekst_spel_laden: .text "Spel laden..."
+.label tekst_spel_laden_lengte = * - tekst_spel_laden
+                 .byte 0
+// meldingen (rij 0-1, zoals Eldric praat)
+tekst_opgeslagen:       .text "Het spel is opgeslagen."; .byte 0
+tekst_opslaan_fout:     .text "Opslaan lukte niet. Zit de diskette erin?"; .byte 0
+tekst_geladen:          .text "Daar ben ik weer."; .byte 0
+tekst_niets_opgeslagen: .text "Er is geen opgeslagen spel."; .byte 0
+tekst_voltooid:  .text "Hoofdstuk 1 voltooid"
+.label tekst_voltooid_lengte = * - tekst_voltooid
+                 .byte 0
 tekst_hoofdstuk: .text "Hoofdstuk 1: Dawnhaven"
 .label tekst_hoofdstuk_lengte = * - tekst_hoofdstuk
                  .byte 0

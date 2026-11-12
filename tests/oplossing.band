@@ -1,0 +1,143 @@
+# oplossing.band — hoofdstuk 9: het hele hoofdstuk 1 uitspelen, van het plein tot "Hoofdstuk 1 voltooid".
+# Werkwoorden: Pak (100,156), Gebruik (180,156), Open (260,156). Ga naar is het standaardwerkwoord.
+# Inventaris: links x 20, rechts x 200; rij 22 = y 180, rij 23 = y 188. Volgorde: zoals in de scripts
+# (herberg.hcs vóór spel.hcs): kruik, zwaard, lantaarn.
+wacht 3
+verwacht_kamer plein
+
+# 1. de herberg open en naar binnen (met het deurgeluid)
+cursor 260,156
+vuur
+cursor 290,60
+verwacht_tekst 18 "Open herberg"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag herbergdeur_open 1
+verwacht gl_laatste = 0                # GL_DEUR
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+
+# 2. de kruik pakken en vullen bij het vat
+cursor 100,156
+vuur
+cursor 288,55
+verwacht_tekst 18 "Pak kruik"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar kruik eldric
+cursor 180,156
+vuur
+cursor 20,180
+verwacht_tekst 18 "Gebruik kruik"
+vuur
+wacht 2
+cursor 186,80
+verwacht_tekst 18 "Gebruik kruik met vat"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_stand kruik 1
+
+# 3. terug naar het plein en naar de smidse
+cursor 90,76
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer plein
+cursor 26,94
+verwacht_tekst 18 "Ga naar smit"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer smidse
+
+# 4. het smidsvuur aan met het zwaard: Bram geeft de lantaarn
+cursor 180,156
+vuur
+cursor 200,180
+vuur
+wacht 2
+cursor 156,78
+verwacht_tekst 18 "Gebruik zwaard met smidsvuur"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag smidsvuur_aan 1
+verwacht_eigenaar lantaarn eldric
+verwacht_tekst 23 "lantaarn           ↓"
+
+# 5. olie in de lantaarn, en aansteken met het zwaard
+cursor 180,156
+vuur
+cursor 20,180
+vuur
+wacht 2
+cursor 20,188
+verwacht_tekst 18 "Gebruik kruik met lantaarn"
+vuur
+wacht_op_script
+verwacht_stand lantaarn 1
+verwacht_stand kruik 0
+cursor 180,156
+vuur
+cursor 200,180
+vuur
+wacht 2
+cursor 20,188
+verwacht_tekst 18 "Gebruik zwaard met lantaarn"
+vuur
+wacht_op_script
+verwacht_stand lantaarn 2
+
+# 6. naar de bosrand: smidse -> plein -> pad
+cursor 292,80
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer plein
+cursor 164,70
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bosrand
+verwacht voltooid = 0
+screenshot bosrand_wolf
+
+# 7. de finale: de lantaarn verjaagt de wolven, Vex verschijnt en verdwijnt het bos in
+cursor 180,156
+vuur
+cursor 20,188
+verwacht_tekst 18 "Gebruik lantaarn"
+vuur
+wacht 2
+cursor 160,92
+verwacht_tekst 18 "Gebruik lantaarn met wolven"
+vuur
+wacht_tot_stil
+wacht 60
+verwacht vm_scene = 1                  # de tussenscène loopt
+wacht 300
+verwacht_tekst 0 "Zo. De kleine lichtdrager van Dawnhaven."
+verwacht slot_npc+1 = 1                # Vex in figuurslot 1 (sprite 6-7; tot nu toe alleen slot 0 getest)
+screenshot vex
+wacht_op_script
+wacht 3
+verwacht_vlag wolven_weg 1
+verwacht_vlag hoofdstuk1_klaar 1
+verwacht vm_scene = 0
+verwacht voltooid = 1
+verwacht gl_laatste = 4                # GL_KLAAR
+verwacht_tekst 24 "          Hoofdstuk 1 voltooid"
+screenshot voltooid

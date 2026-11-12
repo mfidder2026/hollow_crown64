@@ -57,15 +57,10 @@ kostuum_naar_slot: {
         sta zp_ptr
         lda npc_data_hi,x
         sta zp_ptr + 1
-        lda slot                        // vak 2 + 2 * slot: SPRITE_VAKKEN + 128 + slot * 128
-        lsr
-        lda #0
-        ror                             // slot 1 -> $80
-        clc
-        adc #<(SPRITE_VAKKEN + 128)
+        ldy slot                        // vak 2 + 2 * slot: SPRITE_VAKKEN + 128 + slot * 128
+        lda slot_vak_lo,y
         sta zp_ptr2
-        lda #>(SPRITE_VAKKEN + 128)
-        adc slot
+        lda slot_vak_hi,y
         sta zp_ptr2 + 1
         ldy #127
 !:      lda (zp_ptr),y
@@ -255,6 +250,8 @@ klaar:  rts
 .segment Data
 slot_npc:     .byte NPC_GEEN, NPC_GEEN
 slot_sprite:  .byte 4, 6
+slot_vak_lo:  .byte <(SPRITE_VAKKEN + 128), <(SPRITE_VAKKEN + 256)
+slot_vak_hi:  .byte >(SPRITE_VAKKEN + 128), >(SPRITE_VAKKEN + 256)
 slot_bits:    .byte %00110000, %11000000
 slot_niet:    .byte %11001111, %00111111
 slot_ptr:     .byte (SPRITE_VAKKEN - SCHERM) / 64 + 2, (SPRITE_VAKKEN - SCHERM) / 64 + 4

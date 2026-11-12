@@ -102,6 +102,7 @@ irq_onderrand:
         bne !+
         inc beelden + 1
 !:
+        jsr geluid_beeld                // geluidseffecten (geluid.asm)
 #if !AUTOTEST
         jsr invoer_hardware             // joystick, toetsen, muis (invoer.asm), vóór de Kernal-scan
 #endif

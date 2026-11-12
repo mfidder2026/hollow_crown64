@@ -24,11 +24,56 @@ VOORWERP bospad "pad" VAK 64,56 32,20 LOOP 80,80 RUG
   BEKIJK:
     ZEG eldric "Het pad het Duisterwoud in. Ergens daar is Baron Vex."
   GA_NAAR:
-    ZEG eldric "Daar ga ik niet zomaar in. Nog niet."
+    ALS vlag wolven_weg
+      ZEG eldric "Het Duisterwoud in. Achter Vex aan. Maar dat is voor hoofdstuk 2."
+    ANDERS
+      ZEG eldric "Daar ga ik niet zomaar in. Nog niet."
+    EINDE
 
 VOORWERP wolven "wolven" VAK 66,68 28,18 LOOP 80,100 RUG
   BEKIJK:
-    ZEG eldric "Schaduwwolven. Ze laten niemand door. Ogen als kolen."
+    ALS vlag wolven_weg
+      ZEG eldric "Weg zijn ze. Alleen hun pootafdrukken nog."
+    ANDERS
+      ZEG eldric "Schaduwwolven. Ze laten niemand door. Ogen als kolen."
+    EINDE
   PRAAT:
-    ZEG eldric "Brave hondjes?"
-    ZEG eldric "Nee. Geen brave hondjes."
+    ALS vlag wolven_weg
+      ZEG eldric "Er is niemand meer om tegen te praten."
+    ANDERS
+      GELUID wolf
+      ZEG eldric "Brave hondjes?"
+      ZEG eldric "Nee. Geen brave hondjes."
+    EINDE
+  GEBRUIK zwaard:
+    ZEG eldric "Het fragment gloeit, maar het zijn er te veel. Ik heb meer licht nodig."
+  GEBRUIK lantaarn:
+    ALS vlag wolven_weg
+      ZEG eldric "Ze zijn al weg."
+    ANDERS
+      ALS STAND lantaarn 2
+        TUSSENSCENE
+        ZEG eldric "Weg met jullie! Hier is het licht van de zon!"
+        GELUID wolf
+        LOOP wolf 4,82
+        VERBERG wolf
+        ZET wolven_weg
+        WACHT 25
+        TOON vex
+        ZEG vex "Zo. De kleine lichtdrager van Dawnhaven."
+        ZEG vex "Eén fragment, Eldric. Ik heb de andere zes. De kroon is bijna van mij."
+        ZEG eldric "Vex! Geef de zon terug!"
+        ZEG vex "Kom ze maar halen. Als je durft. Het Duisterwoud wacht op je."
+        LOOP vex 80,40
+        VERBERG vex
+        ZEG eldric "Hij is het bos in. Ik ga achter hem aan."
+        ZET hoofdstuk1_klaar
+        EINDE_TUSSENSCENE
+      ANDERS
+        ALS STAND lantaarn 1
+          ZEG eldric "De lantaarn brandt nog niet. Ik heb vuur nodig."
+        ANDERS
+          ZEG eldric "Een lege lantaarn schrikt geen wolf af."
+        EINDE
+      EINDE
+    EINDE

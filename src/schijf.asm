@@ -128,7 +128,15 @@ begin:  .word 0
 }
 
 // laden_begin: raster-IRQ's uit, tekstmodus, kamer leeg, sprites uit, "Laden..."
-laden_begin: {
+laden_begin:
+        lda #<tekst_laden
+        ldx #>tekst_laden
+        ldy #tekst_laden_lengte
+// schijf_begin: hetzelfde met een andere tekst (A/X = tekst, Y = lengte), bv. "Opslaan..."
+schijf_begin: {
+        sta tekst
+        stx tekst + 1
+        sty lengte
         sei
         lda #0
         sta $d01a                       // geen raster-IRQ's meer
@@ -157,14 +165,20 @@ laden_begin: {
         ldy #RIJ_ONDER
         lda #KLEUR_HOOFDSTUK
         jsr rij_wissen
-        lda #<tekst_laden
+        lda tekst
         sta zp_ptr
-        lda #>tekst_laden
+        lda tekst + 1
         sta zp_ptr + 1
-        ldx #(40 - tekst_laden_lengte) / 2
+        lda #40                         // in het midden
+        sec
+        sbc lengte
+        lsr
+        tax
         ldy #RIJ_ONDER
         lda #KLEUR_HOOFDSTUK
         jmp tekst_schrijf
+tekst:  .word 0
+lengte: .byte 0
 }
 
 // laden_einde: de hoofdstuknaam terug, sprites en raster-IRQ's weer aan
@@ -175,6 +189,7 @@ laden_einde:
         jsr balk_tekenen.hoofdstuk_tekenen   // balk.asm
         lda sprites_aan
         sta $d015
+        jsr geluid_aan
         sei
         jsr irq_start
         cli

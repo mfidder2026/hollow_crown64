@@ -164,7 +164,7 @@ in this order:
 - [x] 6. More rooms, loading from disk
 - [x] 7. Conversations
 - [x] 8. Foreground masking and small animations (flickering fire)
-- [ ] 9. Chapter 1, fully playable
+- [x] 9. Chapter 1, fully playable (sound effects, save/load with F5/F7, finale)
 - [ ] 10. Title screen with original SID music
 
 Progress notes are in [`docs/LOGBOEK.md`](docs/LOGBOEK.md) (in Dutch).

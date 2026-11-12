@@ -62,6 +62,7 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     WACHT n                           n beelden
     PRAAT gesprek                     een gesprek beginnen (de werkwoorden maken plaats voor de keuzes)
     TOON naam / VERBERG naam          een figuur (ACTOR) tonen of weghalen
+    GELUID naam                       een geluidseffect op stem 3 (deur munt vuur wolf klaar klik); wacht niet
     LOOP naam x,y                     een figuur in een rechte lijn laten lopen (wacht tot hij er is)
     TUSSENSCENE / EINDE_TUSSENSCENE   geen invoer daartussen; vuur of spatie slaat over
     STOP                              het script eindigt
@@ -94,11 +95,13 @@ OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLA
       "ALS_NIET_HEEFT": 0x06, "ALS_STAND": 0x07, "ALS_NIET_STAND": 0x08, "ZET": 0x09, "WIS": 0x0A, "GEEF": 0x0B,
       "NEEM": 0x0C, "STAND": 0x0D, "PLAATS": 0x0E, "LOOP": 0x0F, "KIJK": 0x10, "WACHT": 0x11,
       "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13, "PATCH": 0x14, "KAMER": 0x15, "PRAAT": 0x16,
-      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19}
+      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A}
+# geluidseffecten: gelijk houden met de GL_-nummers in src/geluid.asm
+GELUIDEN = ["deur", "munt", "vuur", "wolf", "klaar", "klik"]
 MAX_NPC_KAMER = 2
 MAX_KEUZES = 8
 OPDRACHTEN = {"ZEG", "ALS", "ANDERS", "EINDE", "ZET", "WIS", "GEEF", "NEEM", "PLAATS", "STAND", "LOOP", "KIJK",
-              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG"}
+              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID"}
 
 
 class Fout(Exception):
@@ -474,6 +477,10 @@ def opdracht(blok, kop, w, waar):
         if n != 2:
             raise Fout("%s: %s naam" % (waar, kop))
         L.append((kop, w[1], waar))
+    elif kop == "GELUID":
+        if n != 2 or w[1] not in GELUIDEN:
+            raise Fout("%s: GELUID naam  (een van: %s)" % (waar, " ".join(GELUIDEN)))
+        L.append(("GELUID", GELUIDEN.index(w[1]), waar))
     elif kop == "KIJK":
         if n != 3 or w[1] != "eldric" or w[2] not in RICHTINGEN:
             raise Fout("%s: KIJK eldric richting" % waar)
@@ -856,6 +863,8 @@ class Uitvoer:
             elif k == "LOOP":
                 x = o[1] * 2
                 L.append("        .byte $%02x, %d, %d, %d    // LOOP eldric %d,%d" % (OP[k], x & 255, x >> 8, o[2], o[1], o[2]))
+            elif k == "GELUID":
+                L.append("        .byte $%02x, %d    // GELUID %s" % (OP[k], o[1], GELUIDEN[o[1]]))
             elif k == "KIJK":
                 L.append("        .byte $%02x, %d    // KIJK eldric" % (OP[k], o[1]))
             elif k == "WACHT":

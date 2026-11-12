@@ -35,7 +35,7 @@ Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwach
                           Een verdwaalde pixel op een naad (rij 1/2, 17/18) is dan een fout.
 Een test slaagt alleen als de status klopt; een screenshot alleen is geen bewijs.
 """
-import argparse, json, os, re, signal, socket, subprocess, sys, time
+import argparse, json, os, re, shutil, signal, socket, subprocess, sys, time
 
 # ---- instellingen: het pad naar VICE staat hier (en bovenin build.sh) ----------------------------
 VICE_BIN = os.environ.get("VICE_BIN", "/Applications/vice-arm64-gtk3-3.10/bin")
@@ -50,7 +50,8 @@ OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_ST
 JOY = {"op": 1, "neer": 2, "links": 4, "rechts": 8, "vuur": 16}
 # toets -> (rij, bit) in de matrix; rijen 0, 1, 6 (zie src/invoer.asm)
 TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10),
-         "spatie": (7, 0x10), "ctrl": (7, 0x04)}
+         "spatie": (7, 0x10), "ctrl": (7, 0x04),
+         "f1": (0, 0x10), "f5": (0, 0x40), "f7": (0, 0x08)}
 MUISKNOP = {"links": 0x10, "rechts": 0x01}
 BAND_WACHT, BAND_LOOPT, BAND_KLAAR, BAND_FOUT = 0, 1, 2, 0xFF
 BAND_GROOTTE = 1024
@@ -552,7 +553,9 @@ def draai(bandpad, args):
 
     print("[test] %s: %d stappen-bytes, %d screenshots, %d tussencontroles" % (naam, len(band), shots_n, len(controles)))
     t0 = time.time()
-    vice = Vice(os.path.join(BUILD, "hollowcrown.d64"), warp=not args.geen_warp,
+    d64 = os.path.join(TESTUIT, naam + ".d64")         # een eigen kopie: opslaan (F5) schrijft op de diskette
+    shutil.copyfile(os.path.join(BUILD, "hollowcrown.d64"), d64)
+    vice = Vice(d64, warp=not args.geen_warp,
                 echte_drive=args.echte_drive, zichtbaar_houden=args.houd_open)
     try:
         # 1. wachten tot het spel draait: magic "HC" staat er en de band wacht op ons
