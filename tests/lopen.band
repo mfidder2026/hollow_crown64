@@ -1,0 +1,47 @@
+# lopen.band — hoofdstuk 2: Eldric loopt naar waar je klikt, via de loopvakken van scripts/plein.hcs.
+# Eldric begint op 120,112 (schermpixels x, kamerrij y), kijkend naar voren (richting 0).
+# Richting: 0 voor, 1 rug, 2 rechts, 3 links. Cursor-y = kamerrij + 16.
+verwacht act_x.w = 120
+verwacht act_richting = 0
+screenshot begin
+
+# 1. links boven, op het pad naar de smidse: van vak 0 (voor) naar vak 1 (links)
+cursor 60,100
+vuur
+wacht_tot_stil
+verwacht act_x.w = 60
+verwacht act_y = 84
+verwacht act_richting = 3          # laatste stuk liep naar links
+screenshot links
+
+# 2. rechts boven, het pad omhoog: om de fontein heen (vak 1 -> 0 -> 2): achter een hoek
+cursor 220,82
+vuur
+wacht 40
+verwacht act_lopen = 1             # onderweg ...
+verwacht stap_index >= 4           # ... en hij zet pasjes: elke 8 beelden een stap,
+verwacht stap_index <= 5           # dus na ~40 beelden 4 of 5
+screenshot onderweg
+wacht_tot_stil
+verwacht act_x.w = 220
+verwacht act_y = 66
+verwacht act_richting = 1          # laatste stuk liep omhoog: rug naar ons
+screenshot rechts
+
+# 3. op de fontein: daar kun je niet staan; hij gaat naar het dichtstbijzijnde punt (160,96)
+cursor 160,88
+vuur
+wacht_tot_stil
+verwacht act_x.w = 160
+verwacht act_y = 96
+verwacht act_richting = 3
+screenshot fontein
+
+# 4. naar voren
+cursor 160,136
+vuur
+wacht_tot_stil
+verwacht act_x.w = 160
+verwacht act_y = 120
+verwacht act_richting = 0
+screenshot voor

@@ -12,6 +12,8 @@
 //   $05 j r0 r1 r6 p1 n  RUW   n beelden deze ruwe standen (joystick 2, toetsenbordrijen 0/1/6, poort 1);
 //                               zo gaan joystick, toetsen en muisknoppen door de gewone omzetcode
 //   $06 px py       MUIS       de potmeters van de muis worden px/py (zoals een 1351 ze zou geven)
+//   $07             WACHT_STIL wacht tot Eldric stilstaat
+// Elk beeld telt band_controle de beelden waarin Eldric buiten alle loopvakken staat (band_buiten).
 // Een onbekende opcode: band_status := $ff en band_fout := de opcode.
 //
 // In een AUTOTEST-build leest invoer.asm de joystick niet: band_invoer maakt de stand van de stick.
@@ -143,6 +145,26 @@ x_is_doel:
         rts
 }
 
+// band_controle: elk beeld. Telt beelden buiten het loopgebied; houdt WACHT_STIL bij.
+band_controle: {
+        lda act_x
+        sta p_x
+        lda act_x + 1
+        sta p_x + 1
+        lda act_y
+        sta p_y
+        jsr vak_van_punt
+        cmp #GEEN_VAK
+        bne !+
+        inc band_buiten
+        bne !+
+        inc band_buiten + 1
+!:      lda act_lopen
+        bne !+
+        sta band_wacht_stil             // staat stil: niet meer wachten
+!:      rts
+}
+
 // Eén stap per beeld; aanroepen vanuit de hoofdlus.
 band_stap: {
         lda band_status
@@ -151,6 +173,7 @@ band_stap: {
         lda band_markering              // wacht vicetest nog op een markering?
         ora band_doel                   // of is de cursor nog onderweg?
         ora band_ruw_teller             // of lopen er nog ruwe standen?
+        ora band_wacht_stil             // of wachten we tot Eldric stilstaat?
         bne klaar
         lda band_wacht
         ora band_wacht + 1
@@ -183,6 +206,11 @@ lees:   ldy #0
 !:      cmp #$06
         bne !+
         jmp muis
+!:      cmp #$07
+        bne !+
+        lda #1
+        sta band_wacht_stil
+        jmp verder                      // A = 1
 !:      sta band_fout                   // onbekend
         lda #BAND_FOUT
         sta band_status
@@ -276,6 +304,8 @@ band_doel_y:    .byte 0
 band_vuur:      .byte 0
 band_hoogste_snelheid: .byte 0         // hoogste cursorsnelheid tot nu toe
 band_ruw_teller: .byte 0                // RUW: nog zoveel beelden
+band_wacht_stil: .byte 0                // WACHT_STIL loopt
+band_buiten:     .word 0                // beelden waarin Eldric buiten alle loopvakken stond
 ruw_doel_waarden: .fill 5, 0
 
 .segment Buffers

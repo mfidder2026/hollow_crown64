@@ -49,7 +49,8 @@ command -v "$PYTHON" >/dev/null || fout "Python niet gevonden: $PYTHON"
 # ---- 1. scripts compileren ----
 stap "1/4 scripts"
 if [[ -f tools/scriptc.py ]]; then
-  "$PYTHON" tools/scriptc.py scripts build || fout "scriptcompiler (zie hierboven)"
+  mkdir -p build/gen
+  "$PYTHON" tools/scriptc.py scripts build/gen || fout "scriptcompiler (zie hierboven)"
 else
   print "[build]   nog geen tools/scriptc.py (hoofdstuk 4): overgeslagen"
 fi
@@ -64,6 +65,7 @@ fi
 mkdir -p build/gen
 "$PYTHON" tools/kamer.py data/kamers.txt build/gen || fout "tools/kamer.py (data/kamers.txt)"
 "$PYTHON" tools/lettertype.py build/gen || fout "tools/lettertype.py"
+"$PYTHON" tools/costume.py build/gen || fout "tools/costume.py"
 
 # ---- 3. assembleren ----
 stap "3/4 assembleren${AUTOTEST:+}$( (( AUTOTEST )) && print ' (AUTOTEST)')"

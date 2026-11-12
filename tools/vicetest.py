@@ -15,6 +15,9 @@ Een band (tests/<naam>.band) is tekst, één stap per regel ('#' is commentaar):
     toets crsr_neer,shift 8    toetsen: crsr_neer crsr_rechts return shift rshift, n beelden
     muisknop links 2           1351 in poort 1: links / rechts, n beelden
     muis 10,-6                 de muis één beeld bewegen (pixels; -31..31; y negatief = omhoog)
+  Lopen en tussendoor controleren:
+    wacht_tot_stil             wacht tot Eldric stilstaat
+    verwacht act_x.w = 120     controle op dit moment (zelfde vorm als in .verwacht); de C64 wacht zolang
 
 Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwacht:
     st_versie = 1         byte op label st_versie
@@ -36,7 +39,7 @@ BUILD = os.path.join(ROOT, "build", "autotest")
 TESTUIT = os.path.join(ROOT, "build", "test")
 
 # opcodes van de invoerband: gelijk houden met src/autotest.asm
-OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS = 0, 1, 2, 3, 4, 5, 6
+OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL = 0, 1, 2, 3, 4, 5, 6, 7
 JOY = {"op": 1, "neer": 2, "links": 4, "rechts": 8, "vuur": 16}
 # toets -> (rij, bit) in de matrix; rijen 0, 1, 6 (zie src/invoer.asm)
 TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10)}
@@ -53,7 +56,7 @@ class Fout(Exception):
 # De band
 # ---------------------------------------------------------------------------------------------------
 def lees_band(pad):
-    """Geeft (bytes, lijst van screenshotnamen; markering k hoort bij namen[k-1])."""
+    """Geeft (bytes, markeringen): markering k hoort bij namen[k-1], een screenshotnaam of een controle."""
     data, namen = bytearray(), []
     pot = [0x24, 0x52]                           # potmeters van de muis: een willekeurige beginstand
 
@@ -102,6 +105,16 @@ def lees_band(pad):
             elif cmd == "muisknop":
                 knoppen, n = ruw(arg, MUISKNOP)
                 data += bytes([OP_RUW, 0, 0, 0, 0, sum(knoppen), n])
+            elif cmd == "wacht_tot_stil" and not arg:
+                data += bytes([OP_WACHT_STIL])
+            elif cmd == "verwacht":
+                r = verwacht_regel(arg)
+                if not r:
+                    raise ValueError
+                namen.append(r)
+                if len(namen) > 255:
+                    raise Fout("%s:%d: te veel markeringen" % (pad, nr))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd == "muis":
                 dx, dy = (int(v) for v in arg.split(","))
                 if not (-31 <= dx <= 31 and -31 <= dy <= 31):
@@ -119,6 +132,18 @@ def lees_band(pad):
     return bytes(data), namen
 
 
+VERWACHT_RE = r"([A-Za-z_]\w*)(?:\+(\d+))?(\.w)?\s*(=|!=|<=|>=|<|>)\s*(\$[0-9A-Fa-f]+|\d+)"
+
+
+def verwacht_regel(regel):
+    m = re.fullmatch(VERWACHT_RE, regel)
+    if not m:
+        return None
+    label, plus, woord, op, waarde = m.groups()
+    waarde = int(waarde[1:], 16) if waarde.startswith("$") else int(waarde)
+    return (regel, label, int(plus or 0), bool(woord), op, waarde)
+
+
 def lees_verwacht(pad):
     regels = []
     for nr, regel in enumerate(open(pad, encoding="utf-8"), 1):
@@ -128,12 +153,10 @@ def lees_verwacht(pad):
         if re.fullmatch(r"scherm\s*=\s*ideaal", regel):
             regels.append((regel, "scherm", 0, False, "ideaal", 0))
             continue
-        m = re.fullmatch(r"([A-Za-z_]\w*)(?:\+(\d+))?(\.w)?\s*(=|!=|<=|>=|<|>)\s*(\$[0-9A-Fa-f]+|\d+)", regel)
-        if not m:
+        r = verwacht_regel(regel)
+        if not r:
             raise Fout("%s:%d: kan dit niet lezen: %s" % (pad, nr, regel))
-        label, plus, woord, op, waarde = m.groups()
-        waarde = int(waarde[1:], 16) if waarde.startswith("$") else int(waarde)
-        regels.append((regel, label, int(plus or 0), bool(woord), op, waarde))
+        regels.append(r)
     return regels
 
 
@@ -352,6 +375,13 @@ def vergelijk(op, a, b):
     return {"=": a == b, "!=": a != b, "<": a < b, "<=": a <= b, ">": a > b, ">=": a >= b}[op]
 
 
+def controleer(vice, sym, regel):
+    tekst, label, plus, woord, op, waarde = regel
+    b = vice.lees(sym[label] + plus, 2 if woord else 1)
+    echt = b[0] | (b[1] << 8) if woord else b[0]
+    return vergelijk(op, echt, waarde), "%-28s (is %d / $%x)" % (tekst, echt, echt)
+
+
 def draai(bandpad, args):
     naam = os.path.splitext(os.path.basename(bandpad))[0]
     band, shots = lees_band(bandpad)
@@ -365,12 +395,14 @@ def draai(bandpad, args):
             raise Fout("label %s niet in hollowcrown.vs: is dit een AUTOTEST-build?" % nodig)
     scherm_ideaal = any(r[1] == "scherm" for r in verwacht)
     verwacht = [r for r in verwacht if r[1] != "scherm"]
-    for _, label, *_ in verwacht:
+    for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple)]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
+    controles = [m for m in shots if isinstance(m, tuple)]
+    shots_n = len(shots) - len(controles)
     os.makedirs(TESTUIT, exist_ok=True)
 
-    print("[test] %s: %d stappen-bytes, %d screenshots" % (naam, len(band), len(shots)))
+    print("[test] %s: %d stappen-bytes, %d screenshots, %d tussencontroles" % (naam, len(band), shots_n, len(controles)))
     t0 = time.time()
     vice = Vice(os.path.join(BUILD, "hollowcrown.d64"), warp=not args.geen_warp,
                 echte_drive=args.echte_drive, zichtbaar_houden=args.houd_open)
@@ -402,13 +434,19 @@ def draai(bandpad, args):
             if markering:
                 if markering > len(shots):
                     raise Fout("onbekende markering %d" % markering)
-                pad = os.path.join(TESTUIT, "%s_%s.png" % (naam, shots[markering - 1]))
-                vice.screenshot(pad)
-                print("[test]   screenshot %s" % os.path.relpath(pad, ROOT))
-                if scherm_ideaal:
-                    ok, uitleg = scherm_vergelijken(vice, pad)
+                m = shots[markering - 1]
+                if isinstance(m, tuple):              # tussencontrole
+                    ok, tekst = controleer(vice, sym, m)
                     schermfouten += 0 if ok else 1
-                    print("[test]   %-4s scherm: %s" % ("ok" if ok else "FOUT", uitleg))
+                    print("[test]   %-4s %s" % ("ok" if ok else "FOUT", tekst))
+                else:
+                    pad = os.path.join(TESTUIT, "%s_%s.png" % (naam, m))
+                    vice.screenshot(pad)
+                    print("[test]   screenshot %s" % os.path.relpath(pad, ROOT))
+                    if scherm_ideaal:
+                        ok, uitleg = scherm_vergelijken(vice, pad)
+                        schermfouten += 0 if ok else 1
+                        print("[test]   %-4s scherm: %s" % ("ok" if ok else "FOUT", uitleg))
                 vice.schrijf(sym["band_markering"], [0])
             if status == BAND_KLAAR:
                 break
@@ -420,15 +458,13 @@ def draai(bandpad, args):
 
         # 4. de status vergelijken (de C64 staat stil in de monitor)
         goed = schermfouten == 0
-        if scherm_ideaal and not shots:
+        if scherm_ideaal and not shots_n:
             print("[test]   FOUT scherm = ideaal, maar de band maakt geen screenshot")
             goed = False
-        for tekst, label, plus, woord, op, waarde in verwacht:
-            b = vice.lees(sym[label] + plus, 2 if woord else 1)
-            echt = b[0] | (b[1] << 8) if woord else b[0]
-            ok = vergelijk(op, echt, waarde)
+        for r in verwacht:
+            ok, tekst = controleer(vice, sym, r)
             goed &= ok
-            print("[test]   %-4s %-28s (is %d / $%x)" % ("ok" if ok else "FOUT", tekst, echt, echt))
+            print("[test]   %-4s %s" % ("ok" if ok else "FOUT", tekst))
         print("[test] %s: %s in %.1f s" % (naam, "GESLAAGD" if goed else "MISLUKT", time.time() - t0))
         return goed
     finally:

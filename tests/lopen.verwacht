@@ -1,0 +1,7 @@
+# Verwachte status na tests/lopen.band (de tussenstanden staan in de band zelf)
+band_status = 2
+band_fout = 0
+band_buiten.w = 0          # geen enkel beeld buiten de loopvakken
+act_lopen = 0
+act_fase = 0               # staat stil: geen looppas
+scherm = ideaal

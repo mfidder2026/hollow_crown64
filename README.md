@@ -21,10 +21,11 @@ It plays the way the classic late-80s C64 adventures did: the room on top, a bar
 you use to build sentences like **"Use jug with barrel"**. The story, world, characters, art, music and code are
 all our own. We borrow only the genre and the way you control it.
 
-![Hollow Crown, chapter 1 of the build: the split screen in VICE](docs/images/hoofdstuk1_scherm.png)
+![Eldric walking across the village square of Dawnhaven, in VICE](docs/images/hoofdstuk2_lopen.png)
 
-*The split screen running in VICE: messages on top, Dawnhaven as a 160×128 multicolour room, the verb bar below.
-The verbs are in Dutch for now. The test suite checks this screen pixel by pixel against what memory says it should be.*
+*Eldric mid-stride on his way round the fountain, running in VICE. Messages on top, Dawnhaven as a 160×128
+multicolour room, the verb bar below (in Dutch for now). The test suite checks this screen pixel by pixel against
+what memory says it should be.*
 
 ---
 
@@ -144,7 +145,7 @@ in this order:
 
 - [x] 0. Setup: build script, memory map with asserts, D64, test runner
 - [x] 1. The split screen and the cursor
-- [ ] 2. Eldric walks (walkboxes, pathfinding)
+- [x] 2. Eldric walks (walkboxes, pathfinding)
 - [ ] 3. Objects and the sentence line
 - [ ] 4. Script VM and compiler
 - [ ] 5. Inventory

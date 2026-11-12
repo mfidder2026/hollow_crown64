@@ -1,0 +1,3 @@
+# spel.hcs — het begin van het spel.
+# BEGIN kamer x,y richting   (richting: VOOR, RUG, RECHTS, LINKS)
+BEGIN plein 60,112 VOOR

@@ -123,3 +123,37 @@ De cursor is in zijn zwarte fase onzichtbaar op zwart; prima voor nu.
 
 **Niet getest:** echte toetsaanslagen en echte muisbewegingen in VICE (toegang tot het VICE-venster geweigerd),
 en een echte C64. De band test de omzetcode, niet het lezen van de CIA zelf.
+
+## 2026-11-12 — Hoofdstuk 2: Eldric loopt ✅
+
+**Klaar als:** band met klikken op 3 plekken (één achter een hoek); Eldric komt aan binnen het loopgebied en
+kijkt de goede kant op (geheugen + screenshot). **Gehaald**, met 4 klikken.
+
+**Wat er is:**
+- `scripts/plein.hcs`: 3 loopvakken (voor, links naar de smidse, rechts omhoog); de fontein ligt ertussen.
+  `scripts/spel.hcs`: `BEGIN plein 60,112 VOOR`.
+- `tools/scriptc.py` (begin van de compiler): KAMER, LOOPVAK, BEGIN. Controleert: vak binnen de kamer, ≤16
+  vakken, alle vakken bereikbaar (overlap), begin in een vak. Onbekende woorden zijn een fout. Proeven met
+  een los vak, begin buiten een vak, vak buiten de kamer, onbekend woord en onbekende kamer: alle 5 geweigerd.
+- `tools/costume.py`: de 12 poses van Eldric (richting × staan/stap/stap) uit `sprites_hc.py`; voeten op rij 34.
+- `src/loopvak.asm`: punt-in-vak, dichtstbijzijnde punt, overlap van twee vakken ("deur"), BFS in de motor.
+- `src/actor.asm`: lopen in rechte lijnen (Bresenham), 1 pixel per beeld; via het dichtstbijzijnde punt in
+  de deur naar het volgende vak; een pas per 8 beelden; richting volgt de lange as van het laatste stuk.
+- Klik in de kamer = "Ga naar" (ook buiten het loopgebied: dan het dichtstbijzijnde punt).
+
+**Beslissingen:**
+- Coördinaten in de motor: x in schermpixels (0-319), y in kamerrijen; in de scripts x in multicolor-pixels
+  (0-159), zoals het voorbeeld in §6.4. De compiler rekent om.
+- BFS draait in de motor, niet vooraf in de compiler: dan kunnen vakken later aan/uit (het pad bij de wolven).
+- Alleen Eldric is nu een actor; NPC's als actor komen in hoofdstuk 7. Links wordt (nog) niet gespiegeld via
+  een tabel: de 12 poses kosten 1,5 KB en er is ruimte.
+- AUTOTEST: zolang vicetest een markering afhandelt staat de hele wereld stil. Zonder dat liep Eldric tussen
+  twee controles verder (gemeten: 14 en 20 pasjes) en waren controles onderweg toeval.
+
+**Getest (`tests/lopen.band`):** begin 120,112 voor → links (60,84, kijkt links) → rechts boven om de fontein
+heen (220,66, rug) → klik op de fontein (naar 160,96, kijkt links) → voor (160,120, voor). Onderweg: loopt,
+5 pasjes na 40 beelden, screenshot met Eldric halverwege een pas. 0 beelden buiten de loopvakken. Alle 6
+screenshots pixel voor pixel gelijk aan het geheugen (ook met 3 sprites). De andere 3 tests slagen nog.
+
+**Niet getest:** klikken met echte muis/joystick in VICE (zelfde code als de band, maar het indrukken zelf
+niet); naden met meer dan 3 sprites.

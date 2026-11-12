@@ -1,0 +1,9 @@
+# plein.hcs — Dawnhaven, het dorpsplein (hoofdstuk 1 van het verhaal).
+# Coördinaten zoals in de kamer: x 0-159 (multicolor-pixels), y 0-127 (pixelrijen). Een LOOPVAK is een
+# rechthoek "x1,y1 x2,y2" (randen horen erbij). Vakken die elkaar overlappen zijn buren: daar loop je over.
+# Het plaatje staat (nog) in data/kamers.txt.
+
+KAMER plein
+  LOOPVAK 4,96 152,124       # 0 voor: het gras en het pad vooraan
+  LOOPVAK 16,78 62,98        # 1 links: het pad naar de smidse
+  LOOPVAK 100,62 128,98      # 2 rechts: het pad omhoog, achter de fontein langs
