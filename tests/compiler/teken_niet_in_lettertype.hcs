@@ -1,0 +1,3 @@
+# verwacht: zit niet in het lettertype
+SCRIPT x:
+  ZEG eldric "Hallo € wereld"

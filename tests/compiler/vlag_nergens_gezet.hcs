@@ -1,0 +1,5 @@
+# verwacht: wordt getest maar nergens gezet
+SCRIPT x:
+  ALS vlag zon_terug
+    ZEG eldric "Hoera"
+  EINDE

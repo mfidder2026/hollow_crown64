@@ -1,0 +1,66 @@
+# vm.band — hoofdstuk 4: elke opcode van de VM, via de proefscripts in tests/scripts/proef.hcs.
+wacht 3
+verwacht_eigenaar zwaard eldric        # begint in de inventaris
+verwacht_eigenaar munt nergens
+verwacht_eigenaar proef_steen nergens
+
+start_script proef_vlaggen
+wacht_op_script
+verwacht_vlag proef_a 0
+verwacht_vlag proef_b 1
+verwacht_vlag proef_c 1
+verwacht_vlag proef_fout 0
+
+start_script proef_voorwerpen
+wacht_op_script
+verwacht_vlag proef_d 1
+verwacht_vlag proef_e 1
+verwacht_vlag proef_f 1
+verwacht_vlag proef_g 1
+verwacht_eigenaar munt nergens
+verwacht_stand fontein 3
+verwacht_eigenaar proef_steen plein
+
+start_script proef_lopen
+wacht 5
+verwacht act_lopen = 1                 # LOOP wacht ...
+verwacht vm_loopt = 1
+wacht_op_script
+verwacht act_x.w = 80
+verwacht act_y = 110
+verwacht act_richting = 3              # KIJK eldric LINKS
+verwacht_vlag proef_h 1
+verwacht_vlag proef_fout 0             # na STOP gebeurt niets meer
+
+start_script proef_scene
+wacht 10
+verwacht vm_scene = 1
+verwacht_tekst 0 "Deze tekst sla je over."
+vuur                                   # overslaan
+wacht_op_script
+verwacht vm_scene = 0
+verwacht act_x.w = 200                 # LOOP is meteen klaar
+verwacht act_y = 112
+verwacht_vlag proef_i 1
+verwacht_tekst 0 ""
+
+# het echte spel: "Pak fontein" geeft de munt, maar één keer (Pak = rij 19, kolom 10)
+cursor 100,156
+vuur
+cursor 160,100
+vuur
+wacht_tot_stil
+wacht 3
+verwacht_tekst 0 "Muntjes! Mensen wensen hier van alles."
+verwacht_eigenaar munt nergens        # ZEG wacht: GEEF komt pas na de tekst
+vuur
+wacht 2
+verwacht_eigenaar munt eldric
+verwacht_vlag munt_gepakt 1
+cursor 100,156
+vuur
+cursor 160,100
+vuur
+wacht 3
+verwacht_tekst 0 "Eén is genoeg. De rest is voor andermans"
+verwacht_eigenaar munt eldric

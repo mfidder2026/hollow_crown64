@@ -72,7 +72,8 @@
 .label zp_ptr2       = $04              // tweede pointer (2 bytes)
 .label zp_band       = $06              // AUTOTEST: positie in de invoerband (2 bytes)
 .label zp_ptr3       = $08              // derde pointer (2 bytes)
-.label zp_vrij       = $0a              // eerste vrije zeropage-byte
+.label zp_vm         = $0a              // de script-VM: de opdracht die nu draait (2 bytes)
+.label zp_vrij       = $0c              // eerste vrije zeropage-byte
 
 .assert "zeropage binnen $02-$8F", zp_vrij <= ZP_EIND + 1, true
 

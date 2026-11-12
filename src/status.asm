@@ -18,4 +18,31 @@ st_stand:     .fill MAX_VOORWERPEN, 0  // per voorwerp: stand (bv. open/dicht)
 spelstatus_eind:
 
 .const STATUS_GROOTTE = spelstatus_eind - spelstatus
+.assert "alle voorwerpen passen in de spelstatus", AANTAL_VW <= MAX_VOORWERPEN, true
+.assert "alle vlaggen passen in de spelstatus", AANTAL_VLAGGEN <= MAX_VLAGGEN, true
+
+.segment Code
+// status_begin: de spelstatus van een nieuw spel (uit build/gen/spel.asm)
+status_begin:
+        ldx #MAX_VLAGGEN / 8 - 1
+        lda #0
+!:      sta st_vlaggen,x
+        dex
+        bpl !-
+        ldx #AANTAL_VW - 1
+!:      lda vw_eigenaar_begin,x
+        sta st_eigenaar,x
+        lda vw_stand_begin,x
+        sta st_stand,x
+        dex
+        bpl !-
+        lda #BEGIN_KAMER
+        sta st_kamer
+        lda #<BEGIN_X
+        sta st_x
+        lda #>BEGIN_X
+        sta st_x + 1
+        lda #BEGIN_Y
+        sta st_y
+        rts
 .assert "spelstatus past in 1 pagina", STATUS_GROOTTE <= 256, true

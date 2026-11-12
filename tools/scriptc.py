@@ -1,52 +1,85 @@
 #!/usr/bin/env python3
 """scriptc.py — de compiler voor de scripts van Hollow Crown (scripts/*.hcs, §6.4).
 
-    python3 tools/scriptc.py scripts build/gen      schrijft build/gen/spel.asm
+    python3 tools/scriptc.py scripts build/gen [extra-map ...]
+        schrijft build/gen/spel.asm, build/gen/spel.json (namen -> nummers, voor de tests) en
+        build/gen/puzzelstappen.txt. Een extra map (bv. tests/scripts) komt erbij (alleen de testbuild).
 
-Tot nu toe: KAMER, LOOPVAK, SCHAAL, BEGIN (hoofdstuk 2), en VOORWERP, STANDAARD, SPREKER en ZEG (hoofdstuk 3).
-De rest van de taal (ALS, ZET, GEEF, LOOP, ...) komt in hoofdstuk 4; onbekende woorden zijn tot dan een fout,
-zodat er niets stilletjes wordt overgeslagen.
+DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aanhalingstekens)
 
-    KAMER naam
-      LOOPVAK x1,y1 x2,y2        rechthoek in kamercoördinaten: x 0-159 (multicolor-pixels), y 0-127
-      LOOPKLEUREN kleur ...      de kleuren waar de voeten op mogen (standaard: groen lichtgroen geel). Elk
-                                 LOOPVAK moet daar (bijna) helemaal op liggen: zie tools/loopkaart.py.
-      VRIJ x1,y1 x2,y2           hier geldt de kleurcontrole niet (bv. de waterstraal van de fontein boven het gras,
-                                 of later een geheime doorgang). Zet er een opmerking bij waarom.
-      ACHTER x1,y1 x2,y2         staan Eldric's voeten hier, dan komt de voorgrond van de kamer (data/kamers.txt,
-                                 voorgrond=...) vóór hem: hij loopt achter het torentje langs. Hooguit één per kamer.
-      SCHAAL y1 y2 ...           diepte: voeten op y >= y1 = maat 0 (groot), >= y2 = maat 1, ...; daarachter
-                                 de volgende maat. Aflopend, hooguit 4 grenzen (5 maten in tools/costume.py).
-      VOORWERP naam "naam op het scherm" VAK x,y b,h LOOP x,y richting
-                                 klikvak (linkerbovenhoek + breedte, hoogte) en waar Eldric gaat staan, kijkend
-                                 in de richting. Daaronder per werkwoord een script:
-        BEKIJK:
-          ZEG eldric "tekst"     (de compiler breekt de tekst over 2 regels van 40)
-    BEGIN kamer x,y richting      waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
-    SPREKER naam kleur            wie kan praten, in welke kleur (berichten op rij 0-1)
-    STANDAARD werkwoord:          het antwoord als een voorwerp geen script voor dat werkwoord heeft
-      ZEG eldric "Dat kan ik niet openen."
-Werkwoorden: GA_NAAR PAK GEBRUIK OPEN BEKIJK PRAAT GEEF SLUIT DUW TREK LEES WAT_IS (de volgorde van de balk).
+  Bovenaan:
+    BEGIN kamer x,y richting          waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
+    SPREKER naam kleur                wie kan praten, in welke kleur (berichten op rij 0-1)
+    DOEL vlag                         het einde van het hoofdstuk: de compiler controleert dat het te halen is
+    STANDAARD werkwoord:              antwoord als een voorwerp geen script heeft voor dat werkwoord
+    SCRIPT naam:                      een los script (voor tests, of om aan te roepen)
 
-Controles: vakken binnen de kamer en niet leeg; vakken op de loopkleuren van het kamerplaatje
-(build/gen/kamer_<naam>.bin, dus de kamers worden eerst omgezet); hooguit 16 per kamer; elk vak bereikbaar vanuit elk ander
-(anders kan de speler vast komen te zitten); BEGIN staat in een loopvak.
+  KAMER naam                          een kamer; daaronder:
+    LOOPVAK x1,y1 x2,y2               waar de voeten mogen staan (x 0-159 multicolor-pixels, y 0-127)
+    LOOPKLEUREN kleur ...             de kleuren onder de voeten (standaard groen lichtgroen geel); de build
+                                      controleert elk LOOPVAK op het kamerplaatje
+    VRIJ x1,y1 x2,y2                  daar geldt de kleurcontrole niet (zet erbij waarom)
+    ACHTER x1,y1 x2,y2                voeten hier: de voorgrond van de kamer komt vóór Eldric
+    SCHAAL y1 y2 ...                  diepte: y >= y1 maat 0 (groot), >= y2 maat 1 ... (hooguit 4 grenzen)
+    BINNENKOMST:                      script als Eldric de kamer binnenkomt
 
-In de uitvoer zijn x-waarden schermpixels (x * 2, rechterrand x2 * 2 + 1): zo rekent de motor.
+  VOORWERP naam "naam" [VAK x,y b,h LOOP x,y richting] [BIJ eldric | NERGENS] [STAND n]
+                                      Onder een KAMER ligt het voorwerp in die kamer (tenzij BIJ eldric of
+                                      NERGENS: dan begint het in de inventaris of nergens; PLAATS zet het later
+                                      neer). Daaronder scripts per werkwoord:
+    BEKIJK:                           één voorwerp: "Bekijk fontein"
+    GEBRUIK kruik:                    twee voorwerpen: "Gebruik kruik met <dit voorwerp>"
+    GEEF ziensteen:                   "Geef ziensteen aan <dit voorwerp>"
+    GA_NAAR:                          draait als Eldric bij het voorwerp is (bv. een deur)
+
+  Werkwoorden: GA_NAAR PAK GEBRUIK OPEN BEKIJK PRAAT GEEF SLUIT DUW TREK LEES WAT_IS (de volgorde van de balk).
+
+  Opdrachten in een script:
+    ZEG spreker "tekst"               rij 0-1; de compiler breekt hem over 2 regels van 40; wacht tot hij weg is
+    ALS [NIET] vlag naam              ... [ANDERS ...] EINDE
+    ALS [NIET] HEEFT voorwerp         (in de inventaris)
+    ALS [NIET] STAND voorwerp n
+    ZET vlag / WIS vlag
+    GEEF voorwerp                     naar de inventaris
+    NEEM voorwerp                     weg (nergens)
+    PLAATS voorwerp kamer             neerzetten in een kamer (bv. de ziensteen onder de tafel)
+    STAND voorwerp n                  stand van een voorwerp (open/dicht, vol/leeg, ...)
+    LOOP eldric x,y                   lopen en wachten tot hij er is
+    KIJK eldric richting
+    WACHT n                           n beelden
+    TUSSENSCENE / EINDE_TUSSENSCENE   geen invoer daartussen; vuur of spatie slaat over
+    STOP                              het script eindigt
+
+CONTROLES: onbekende woorden, kamers, voorwerpen, sprekers; te lange teksten en tekens die niet in het lettertype
+zitten; loopvakken (binnen de kamer, op de loopkleuren, allemaal bereikbaar); LOOP-punten in een loopvak;
+ALS/ANDERS/EINDE in balans; vlaggen die getest maar nergens gezet worden; en of DOEL te halen is (alle
+benodigde vlaggen en voorwerpen ergens te krijgen). puzzelstappen.txt zegt wat waar te krijgen is.
 """
-import glob, os, re, sys
+import glob, json, os, re, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+WORTEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAMER_B, KAMER_H = 160, 128
 MAX_VAKKEN = 16
 MAX_SCHAAL = 4           # grenzen; de motor heeft MATEN = 5 maten (tools/costume.py)
-MAX_VOORWERPEN = 16      # per kamer
-WERKWOORDEN = ["GA_NAAR", "PAK", "GEBRUIK", "OPEN", "BEKIJK", "PRAAT", "GEEF", "SLUIT", "DUW", "TREK", "LEES", "WAT_IS"]
-OP_STOP, OP_ZEG = 0, 1   # bytecode: gelijk houden met src/vm.asm
-REGEL = 40               # tekens per berichtregel
-NIEUWE_REGEL = 0xFE      # in een tekst: verder op de tweede regel
+MAX_VOORWERPEN = 64      # in het hele spel (src/status.asm)
+MAX_VLAGGEN = 256
+MAX_NAAM = 13            # "Gebruik <naam> met <naam>" moet op de zinregel passen
 RICHTINGEN = {"VOOR": 0, "RUG": 1, "RECHTS": 2, "LINKS": 3}
+WERKWOORDEN = ["GA_NAAR", "PAK", "GEBRUIK", "OPEN", "BEKIJK", "PRAAT", "GEEF", "SLUIT", "DUW", "TREK", "LEES", "WAT_IS"]
+TWEE = {"GEBRUIK": "met", "GEEF": "aan"}         # werkwoorden met een tweede voorwerp
+EIGENAAR_ELDRIC, EIGENAAR_NERGENS = 0xFF, 0xFE
+REGEL = 40
+NIEUWE_REGEL = 0xFE
+
+# bytecode: gelijk houden met src/vm.asm
+OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLAG": 0x04, "ALS_HEEFT": 0x05,
+      "ALS_NIET_HEEFT": 0x06, "ALS_STAND": 0x07, "ALS_NIET_STAND": 0x08, "ZET": 0x09, "WIS": 0x0A, "GEEF": 0x0B,
+      "NEEM": 0x0C, "STAND": 0x0D, "PLAATS": 0x0E, "LOOP": 0x0F, "KIJK": 0x10, "WACHT": 0x11,
+      "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13}
+OPDRACHTEN = {"ZEG", "ALS", "ANDERS", "EINDE", "ZET", "WIS", "GEEF", "NEEM", "PLAATS", "STAND", "LOOP", "KIJK",
+              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"}
 
 
 class Fout(Exception):
@@ -54,15 +87,21 @@ class Fout(Exception):
 
 
 def punt(tekst, waar):
-    m = re.fullmatch(r"(\d+),(\d+)", tekst)
+    m = re.fullmatch(r"(\d+),(\d+)", tekst) if isinstance(tekst, str) else None
     if not m:
         raise Fout("%s: verwacht x,y, niet %r" % (waar, tekst))
     return int(m.group(1)), int(m.group(2))
 
 
+def getal(tekst, waar, laag=0, hoog=255):
+    if not isinstance(tekst, str) or not re.fullmatch(r"\d+", tekst) or not laag <= int(tekst) <= hoog:
+        raise Fout("%s: verwacht een getal %d-%d, niet %r" % (waar, laag, hoog, tekst))
+    return int(tekst)
+
+
 def splits(regel, waar):
-    """Woorden van een regel; tekst tussen aanhalingstekens is één woord (als ("tekst", ...)); '#' daarbuiten
-    begint een opmerking."""
+    """Woorden van een regel; tekst tussen aanhalingstekens is één woord ("tekst", ...); '#' daarbuiten begint
+    een opmerking."""
     uit, i = [], 0
     while i < len(regel):
         c = regel[i]
@@ -85,128 +124,281 @@ def splits(regel, waar):
     return uit
 
 
+def is_tekst(w):
+    return isinstance(w, tuple)
+
+
+# ---------------------------------------------------------------------------------------------------
+# Lezen
+# ---------------------------------------------------------------------------------------------------
+class Spel:
+    def __init__(self):
+        self.kamers, self.kamer_volgorde = {}, []
+        self.voorwerpen, self.vw_volgorde = {}, []
+        self.sprekers, self.standaard, self.losse = {}, {}, {}
+        self.begin, self.doel = None, None
+
+
 def lees(bestanden):
-    kamers, volgorde, begin = {}, [], None
-    sprekers, standaard = {}, {}
+    spel = Spel()
     for pad in bestanden:
-        kamer = None
-        script = None                  # de lijst waar opdrachten in komen (een werkwoordblok)
-        voorwerp = None
+        kamer = voorwerp = None
+        blok = None
         for nr, regel in enumerate(open(pad, encoding="utf-8"), 1):
-            waar = "%s:%d" % (pad, nr)
-            woorden = splits(regel, waar)
-            if not woorden:
+            waar = "%s:%d" % (os.path.relpath(pad, WORTEL) if os.path.abspath(pad).startswith(WORTEL) else pad, nr)
+            w = splits(regel, waar)
+            if not w:
                 continue
-            w = woorden[0]
-            if not isinstance(w, str):
+            kop = w[0]
+            if is_tekst(kop):
                 raise Fout("%s: een regel begint niet met een tekst" % waar)
-            # een werkwoordblok: "BEKIJK:" (onder een VOORWERP) of "STANDAARD BEKIJK:"
-            if w.endswith(":") and w[:-1] in WERKWOORDEN and len(woorden) == 1:
+
+            # ---- koppen van scriptblokken ----
+            if len(w) == 1 and kop.endswith(":") and kop[:-1] in WERKWOORDEN:      # BEKIJK:
                 if voorwerp is None:
-                    raise Fout("%s: %s hoort onder een VOORWERP (of: STANDAARD %s)" % (waar, w, w))
-                if w[:-1] in voorwerp["scripts"]:
-                    raise Fout("%s: %s staat al bij dit voorwerp" % (waar, w))
-                script = voorwerp["scripts"][w[:-1]] = []
+                    raise Fout("%s: %s hoort onder een VOORWERP (of: STANDAARD %s)" % (waar, kop, kop))
+                if kop[:-1] in voorwerp["scripts"]:
+                    raise Fout("%s: %s staat al bij %s" % (waar, kop, voorwerp["naam"]))
+                blok = nieuw_blok(blok, voorwerp["scripts"], kop[:-1], waar)
                 continue
-            if w == "STANDAARD":
-                if len(woorden) != 2 or not isinstance(woorden[1], str) or woorden[1][:-1] not in WERKWOORDEN \
-                        or not woorden[1].endswith(":"):
+            if len(w) == 1 and kop == "BINNENKOMST:":
+                if kamer is None:
+                    raise Fout("%s: BINNENKOMST: hoort onder een KAMER" % waar)
+                blok = nieuw_blok(blok, spel.kamers[kamer], "binnenkomst", waar)
+                voorwerp = None
+                continue
+            if len(w) == 2 and kop in TWEE and isinstance(w[1], str) and w[1].endswith(":"):  # GEBRUIK kruik:
+                if voorwerp is None:
+                    raise Fout("%s: %s %s hoort onder een VOORWERP" % (waar, kop, w[1]))
+                sleutel = (kop, w[1][:-1])
+                if sleutel in voorwerp["paren"]:
+                    raise Fout("%s: %s %s staat al bij %s" % (waar, kop, w[1], voorwerp["naam"]))
+                blok = nieuw_blok(blok, voorwerp["paren"], sleutel, waar)
+                continue
+            if kop == "STANDAARD":
+                if len(w) != 2 or not isinstance(w[1], str) or not w[1].endswith(":") or w[1][:-1] not in WERKWOORDEN:
                     raise Fout("%s: STANDAARD werkwoord:  (bv. STANDAARD OPEN:)" % waar)
-                ww = woorden[1][:-1]
-                if ww in standaard:
-                    raise Fout("%s: STANDAARD %s staat er al" % (waar, ww))
-                script = standaard[ww] = []
+                if w[1][:-1] in spel.standaard:
+                    raise Fout("%s: STANDAARD %s staat er al" % (waar, w[1]))
+                blok = nieuw_blok(blok, spel.standaard, w[1][:-1], waar)
                 voorwerp = None
                 continue
-            if w == "ZEG":
-                if script is None:
-                    raise Fout("%s: ZEG hoort in een script (onder BEKIJK: enz.)" % waar)
-                if len(woorden) != 3 or not isinstance(woorden[1], str) or not isinstance(woorden[2], tuple):
-                    raise Fout('%s: ZEG spreker "tekst"' % waar)
-                script.append(("ZEG", woorden[1], woorden[2][1], waar))
+            if kop == "SCRIPT":
+                if len(w) != 2 or not isinstance(w[1], str) or not re.fullmatch(r"\w+:", w[1]):
+                    raise Fout("%s: SCRIPT naam:" % waar)
+                if w[1][:-1] in spel.losse:
+                    raise Fout("%s: SCRIPT %s bestaat al" % (waar, w[1][:-1]))
+                blok = nieuw_blok(blok, spel.losse, w[1][:-1], waar)
+                voorwerp = None
                 continue
-            if any(isinstance(x, tuple) for x in woorden) and w not in ("VOORWERP",):
-                raise Fout("%s: %s kent geen tekst tussen aanhalingstekens" % (waar, w))
-            script = None
-            if w == "VOORWERP":
-                if kamer is None:
-                    raise Fout("%s: VOORWERP buiten een KAMER" % waar)
-                if len(woorden) != 9 or not isinstance(woorden[1], str) or not isinstance(woorden[2], tuple) \
-                        or woorden[3] != "VAK" or woorden[6] != "LOOP" or woorden[8] not in RICHTINGEN:
-                    raise Fout('%s: VOORWERP naam "naam" VAK x,y b,h LOOP x,y richting' % waar)
-                (x, y), (b, h), (lx, ly) = punt(woorden[4], waar), punt(woorden[5], waar), punt(woorden[7], waar)
-                if b < 1 or h < 1 or x + b > KAMER_B or y + h > KAMER_H:
-                    raise Fout("%s: het VAK van het voorwerp valt buiten de kamer" % waar)
-                if any(v["naam"] == woorden[1] for v in kamers[kamer]["voorwerpen"]):
-                    raise Fout("%s: voorwerp %s bestaat al in deze kamer" % (waar, woorden[1]))
-                voorwerp = {"naam": woorden[1], "tekst": woorden[2][1], "vak": (x, y, x + b - 1, y + h - 1),
-                            "loop": (lx, ly), "richting": RICHTINGEN[woorden[8]], "scripts": {}, "waar": waar}
-                kamers[kamer]["voorwerpen"].append(voorwerp)
+
+            # ---- opdrachten in een script ----
+            if kop in OPDRACHTEN:
+                if blok is None:
+                    raise Fout("%s: %s hoort in een script (onder BEKIJK: enz.)" % (waar, kop))
+                opdracht(blok, kop, w, waar)
                 continue
-            if w == "SPREKER":
-                if len(woorden) != 3:
-                    raise Fout("%s: SPREKER naam kleur" % waar)
-                sprekers[woorden[1]] = (woorden[2], waar)
-                continue
-            if w == "KAMER":
-                if len(woorden) != 2:
+
+            # ---- declaraties ----
+            if blok is not None:
+                sluit_blok(blok)
+                blok = None
+            if any(is_tekst(x) for x in w) and kop != "VOORWERP":
+                raise Fout("%s: %s kent geen tekst tussen aanhalingstekens" % (waar, kop))
+            if kop == "KAMER":
+                if len(w) != 2:
                     raise Fout("%s: KAMER naam" % waar)
-                kamer = woorden[1]
-                if kamer in kamers:
-                    raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
-                kamers[kamer] = {"vakken": [], "waar": waar, "schaal": [], "kleuren": None, "vrij": [], "achter": None,
-                                 "voorwerpen": []}
-                voorwerp = None
-                volgorde.append(kamer)
-            elif w == "LOOPVAK":
-                if kamer is None:
-                    raise Fout("%s: LOOPVAK buiten een KAMER" % waar)
-                if len(woorden) != 3:
-                    raise Fout("%s: LOOPVAK x1,y1 x2,y2" % waar)
-                (x1, y1), (x2, y2) = punt(woorden[1], waar), punt(woorden[2], waar)
+                kamer, voorwerp = w[1], None
+                if kamer in spel.kamers:
+                    if spel.kamers[kamer]["bestand"] == pad:
+                        raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
+                    continue                   # in een ander bestand: verder met dezelfde kamer
+                spel.kamers[kamer] = {"bestand": pad, "naam": kamer, "vakken": [], "waar": waar, "schaal": [], "kleuren": None,
+                                      "vrij": [], "achter": None}
+                spel.kamer_volgorde.append(kamer)
+            elif kop == "VOORWERP":
+                voorwerp = lees_voorwerp(spel, w, kamer, waar)
+            elif kop in ("LOOPVAK", "ACHTER", "VRIJ"):
+                if kamer is None or len(w) != 3:
+                    raise Fout("%s: %s x1,y1 x2,y2 (binnen een KAMER)" % (waar, kop))
+                (x1, y1), (x2, y2) = punt(w[1], waar), punt(w[2], waar)
                 if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
-                    raise Fout("%s: loopvak buiten de kamer (0-%d, 0-%d) of leeg" % (waar, KAMER_B - 1, KAMER_H - 1))
-                kamers[kamer]["vakken"].append((x1, y1, x2, y2, waar))
-            elif w == "ACHTER":
-                if kamer is None or len(woorden) != 3:
-                    raise Fout("%s: ACHTER x1,y1 x2,y2 (binnen een KAMER)" % waar)
-                if kamers[kamer]["achter"]:
-                    raise Fout("%s: hooguit één ACHTER per kamer" % waar)
-                (x1, y1), (x2, y2) = punt(woorden[1], waar), punt(woorden[2], waar)
-                if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
-                    raise Fout("%s: ACHTER-vak buiten de kamer of leeg" % waar)
-                kamers[kamer]["achter"] = (x1, y1, x2, y2, waar)
-            elif w == "VRIJ":
-                if kamer is None or len(woorden) != 3:
-                    raise Fout("%s: VRIJ x1,y1 x2,y2 (binnen een KAMER)" % waar)
-                (x1, y1), (x2, y2) = punt(woorden[1], waar), punt(woorden[2], waar)
-                if not (x1 <= x2 < KAMER_B and y1 <= y2 < KAMER_H):
-                    raise Fout("%s: VRIJ-gebied buiten de kamer of leeg" % waar)
-                kamers[kamer]["vrij"].append((x1, y1, x2, y2))
-            elif w == "LOOPKLEUREN":
-                if kamer is None or len(woorden) < 2:
+                    raise Fout("%s: %s buiten de kamer (0-%d, 0-%d) of leeg" % (waar, kop, KAMER_B - 1, KAMER_H - 1))
+                k = spel.kamers[kamer]
+                if kop == "LOOPVAK":
+                    k["vakken"].append((x1, y1, x2, y2, waar))
+                elif kop == "VRIJ":
+                    k["vrij"].append((x1, y1, x2, y2))
+                else:
+                    if k["achter"]:
+                        raise Fout("%s: hooguit één ACHTER per kamer" % waar)
+                    k["achter"] = (x1, y1, x2, y2, waar)
+            elif kop == "LOOPKLEUREN":
+                if kamer is None or len(w) < 2:
                     raise Fout("%s: LOOPKLEUREN kleur ... (binnen een KAMER)" % waar)
-                kamers[kamer]["kleuren"] = (woorden[1:], waar)
-            elif w == "SCHAAL":
+                spel.kamers[kamer]["kleuren"] = (w[1:], waar)
+            elif kop == "SCHAAL":
                 if kamer is None:
                     raise Fout("%s: SCHAAL buiten een KAMER" % waar)
-                try:
-                    grenzen = [int(g) for g in woorden[1:]]
-                except ValueError:
-                    raise Fout("%s: SCHAAL y1 y2 ... (getallen)" % waar)
-                if not 1 <= len(grenzen) <= MAX_SCHAAL or any(not 0 < g < KAMER_H for g in grenzen) \
-                        or grenzen != sorted(grenzen, reverse=True) or len(set(grenzen)) != len(grenzen):
+                grenzen = [getal(g, waar, 1, KAMER_H - 1) for g in w[1:]]
+                if not 1 <= len(grenzen) <= MAX_SCHAAL or grenzen != sorted(grenzen, reverse=True) \
+                        or len(set(grenzen)) != len(grenzen):
                     raise Fout("%s: SCHAAL: 1 tot %d grenzen tussen 1 en %d, aflopend" % (waar, MAX_SCHAAL, KAMER_H - 1))
-                kamers[kamer]["schaal"] = grenzen
-            elif w == "BEGIN":
-                if len(woorden) != 4 or woorden[3] not in RICHTINGEN:
+                spel.kamers[kamer]["schaal"] = grenzen
+            elif kop == "BEGIN":
+                if len(w) != 4 or w[3] not in RICHTINGEN:
                     raise Fout("%s: BEGIN kamer x,y richting" % waar)
-                begin = (woorden[1], punt(woorden[2], waar), RICHTINGEN[woorden[3]], waar)
+                spel.begin = (w[1], punt(w[2], waar), RICHTINGEN[w[3]], waar)
+            elif kop == "SPREKER":
+                if len(w) != 3:
+                    raise Fout("%s: SPREKER naam kleur" % waar)
+                spel.sprekers[w[1]] = (w[2], waar)
+            elif kop == "DOEL":
+                if len(w) != 2:
+                    raise Fout("%s: DOEL vlag" % waar)
+                spel.doel = (w[1], waar)
             else:
-                raise Fout("%s: %s kent de compiler nog niet (de rest van de taal komt in hoofdstuk 4)" % (waar, w))
-    return kamers, volgorde, begin, sprekers, standaard
+                raise Fout("%s: onbekend woord %s" % (waar, kop))
+        if blok is not None:
+            sluit_blok(blok)
+    return spel
 
 
+def lees_voorwerp(spel, w, kamer, waar):
+    if len(w) < 3 or not isinstance(w[1], str) or not is_tekst(w[2]):
+        raise Fout('%s: VOORWERP naam "naam" [VAK x,y b,h LOOP x,y richting] [BIJ eldric | NERGENS] [STAND n]' % waar)
+    naam = w[1]
+    if not re.fullmatch(r"[a-z_][a-z0-9_]*", naam):
+        raise Fout("%s: een voorwerpnaam is kleine letters, cijfers en _ (%r)" % (waar, naam))
+    if naam in spel.voorwerpen:
+        raise Fout("%s: voorwerp %s bestaat al (%s)" % (waar, naam, spel.voorwerpen[naam]["waar"]))
+    v = {"naam": naam, "tekst": w[2][1], "vak": None, "loop": None, "richting": 0, "scripts": {}, "paren": {},
+         "waar": waar, "kamer": kamer, "eigenaar": kamer, "stand": 0}
+    i = 3
+    while i < len(w):
+        if w[i] == "VAK" and i + 2 < len(w):
+            (x, y), (b, h) = punt(w[i + 1], waar), punt(w[i + 2], waar)
+            if b < 1 or h < 1 or x + b > KAMER_B or y + h > KAMER_H:
+                raise Fout("%s: het VAK van %s valt buiten de kamer" % (waar, naam))
+            v["vak"] = (x, y, x + b - 1, y + h - 1)
+            i += 3
+        elif w[i] == "LOOP" and i + 2 < len(w) and w[i + 2] in RICHTINGEN:
+            v["loop"], v["richting"] = punt(w[i + 1], waar), RICHTINGEN[w[i + 2]]
+            i += 3
+        elif w[i] == "BIJ" and i + 1 < len(w) and w[i + 1] == "eldric":
+            v["eigenaar"] = "eldric"
+            i += 2
+        elif w[i] == "NERGENS":
+            v["eigenaar"] = None
+            i += 1
+        elif w[i] == "STAND" and i + 1 < len(w):
+            v["stand"] = getal(w[i + 1], waar)
+            i += 2
+        else:
+            raise Fout('%s: VOORWERP: %r begrijp ik niet (VAK x,y b,h / LOOP x,y richting / BIJ eldric / NERGENS / STAND n)'
+                       % (waar, w[i]))
+    if (v["vak"] is None) != (v["loop"] is None):
+        raise Fout("%s: VAK en LOOP horen bij elkaar" % waar)
+    if v["vak"] is not None and kamer is None:
+        raise Fout("%s: een VAK kan alleen bij een voorwerp in een KAMER" % waar)
+    if v["eigenaar"] == kamer and kamer is not None and v["vak"] is None:
+        raise Fout("%s: %s ligt in kamer %s maar heeft geen VAK en LOOP" % (waar, naam, kamer))
+    if kamer is None and v["eigenaar"] is None and False:
+        pass
+    if kamer is None and v["eigenaar"] not in ("eldric", None):
+        raise Fout("%s: een voorwerp buiten een KAMER is BIJ eldric of NERGENS" % waar)
+    if len(v["tekst"]) > MAX_NAAM:
+        raise Fout("%s: de naam %r is te lang (hooguit %d tekens: 'Gebruik x met y' moet op de zinregel passen)"
+                   % (waar, v["tekst"], MAX_NAAM))
+    spel.voorwerpen[naam] = v
+    spel.vw_volgorde.append(naam)
+    return v
+
+
+def nieuw_blok(oud, waarin, sleutel, waar):
+    if oud is not None:
+        sluit_blok(oud)
+    lijst = []
+    waarin[sleutel] = lijst
+    return {"lijst": lijst, "stapel": [], "waar": waar}
+
+
+def sluit_blok(blok):
+    if blok["stapel"]:
+        raise Fout("%s: ALS zonder EINDE" % blok["stapel"][-1][1])
+
+
+def opdracht(blok, kop, w, waar):
+    L = blok["lijst"]
+    n = len(w)
+    if kop == "ZEG":
+        if n != 3 or not isinstance(w[1], str) or not is_tekst(w[2]):
+            raise Fout('%s: ZEG spreker "tekst"' % waar)
+        L.append(("ZEG", w[1], w[2][1], waar))
+        return
+    if any(is_tekst(x) for x in w):
+        raise Fout("%s: %s kent geen tekst tussen aanhalingstekens" % (waar, kop))
+    if kop == "ALS":
+        rest = list(w[1:])
+        niet = bool(rest) and rest[0] == "NIET"
+        if niet:
+            rest = rest[1:]
+        if len(rest) == 2 and rest[0] == "vlag":
+            cond = ("vlag", rest[1])
+        elif len(rest) == 2 and rest[0] == "HEEFT":
+            cond = ("heeft", rest[1])
+        elif len(rest) == 3 and rest[0] == "STAND":
+            cond = ("stand", rest[1], getal(rest[2], waar))
+        else:
+            raise Fout("%s: ALS [NIET] vlag naam | ALS [NIET] HEEFT voorwerp | ALS [NIET] STAND voorwerp n" % waar)
+        L.append(("ALS", niet, cond, waar))
+        blok["stapel"].append(("ALS", waar))
+    elif kop == "ANDERS":
+        if n != 1 or not blok["stapel"] or blok["stapel"][-1][0] != "ALS":
+            raise Fout("%s: ANDERS zonder ALS" % waar)
+        blok["stapel"][-1] = ("ANDERS", waar)
+        L.append(("ANDERS", waar))
+    elif kop == "EINDE":
+        if n != 1 or not blok["stapel"]:
+            raise Fout("%s: EINDE zonder ALS" % waar)
+        blok["stapel"].pop()
+        L.append(("EINDE", waar))
+    elif kop in ("ZET", "WIS", "GEEF", "NEEM"):
+        if n != 2:
+            raise Fout("%s: %s %s" % (waar, kop, "vlag" if kop in ("ZET", "WIS") else "voorwerp"))
+        L.append((kop, w[1], waar))
+    elif kop == "PLAATS":
+        if n != 3:
+            raise Fout("%s: PLAATS voorwerp kamer" % waar)
+        L.append(("PLAATS", w[1], w[2], waar))
+    elif kop == "STAND":
+        if n != 3:
+            raise Fout("%s: STAND voorwerp n" % waar)
+        L.append(("STAND", w[1], getal(w[2], waar), waar))
+    elif kop == "LOOP":
+        if n != 3 or w[1] != "eldric":
+            raise Fout("%s: LOOP eldric x,y" % waar)
+        x, y = punt(w[2], waar)
+        if not (x < KAMER_B and y < KAMER_H):
+            raise Fout("%s: LOOP buiten de kamer" % waar)
+        L.append(("LOOP", x, y, waar))
+    elif kop == "KIJK":
+        if n != 3 or w[1] != "eldric" or w[2] not in RICHTINGEN:
+            raise Fout("%s: KIJK eldric richting" % waar)
+        L.append(("KIJK", RICHTINGEN[w[2]], waar))
+    elif kop == "WACHT":
+        if n != 2:
+            raise Fout("%s: WACHT beelden" % waar)
+        L.append(("WACHT", getal(w[1], waar, 1, 65535), waar))
+    elif kop in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"):
+        if n != 1:
+            raise Fout("%s: %s (zonder meer)" % (waar, kop))
+        L.append((kop, waar))
+
+
+# ---------------------------------------------------------------------------------------------------
+# Controleren
+# ---------------------------------------------------------------------------------------------------
 def tekst_codes(tekst, waar, regels_max=2):
     """Tekst -> schermcodes van het eigen lettertype, afgebroken over regels van 40 (NIEUWE_REGEL ertussen)."""
     import lettertype
@@ -250,35 +442,13 @@ def buren(vakken):
     return b
 
 
-def controleer_scripts(kamers, sprekers, standaard):
-    import c64beeld
-    for naam, (kleur, waar) in sprekers.items():
-        if kleur not in c64beeld.NAMEN:
-            raise Fout("%s: onbekende kleur %s" % (waar, kleur))
-    alle = [s for k in kamers.values() for v in k["voorwerpen"] for s in v["scripts"].values()] + list(standaard.values())
-    for script in alle:
-        for opdracht in script:
-            if opdracht[0] == "ZEG":
-                _, spreker, tekst, waar = opdracht
-                if spreker not in sprekers:
-                    raise Fout("%s: onbekende spreker %s (zet hem in een SPREKER-regel)" % (waar, spreker))
-                tekst_codes(tekst, waar)
-    for knaam, k in kamers.items():
-        if len(k["voorwerpen"]) > MAX_VOORWERPEN:
-            raise Fout("%s: kamer %s heeft meer dan %d voorwerpen" % (k["waar"], knaam, MAX_VOORWERPEN))
-        for v in k["voorwerpen"]:
-            lx, ly = v["loop"]
-            if not any(a[0] <= lx <= a[2] and a[1] <= ly <= a[3] for a in k["vakken"]):
-                raise Fout("%s: het LOOP-punt van %s ligt niet in een loopvak" % (v["waar"], v["naam"]))
-            langste = max(len(w) for w in ("Ga naar", "Pak", "Gebruik", "Open", "Bekijk", "Praat met", "Geef",
-                                           "Sluit", "Duw", "Trek", "Lees", "Wat is"))
-            if langste + 1 + len(v["tekst"]) > REGEL:
-                raise Fout("%s: de naam %r is te lang voor de zinregel" % (v["waar"], v["tekst"]))
-            tekst_codes(v["tekst"], v["waar"], 1)
+def in_loopvak(k, x, y):
+    return any(a[0] <= x <= a[2] and a[1] <= y <= a[3] for a in k["vakken"])
 
 
-def controleer(kamers, begin):
-    for naam, k in kamers.items():
+def controleer_kamers(spel, kleurcontrole=True):
+    import loopkaart
+    for naam, k in spel.kamers.items():
         v = k["vakken"]
         if not v:
             raise Fout("%s: kamer %s heeft geen loopvak" % (k["waar"], naam))
@@ -296,8 +466,8 @@ def controleer(kamers, begin):
             if j not in gezien:
                 raise Fout("%s: dit loopvak raakt de andere niet (geen overlap): je kunt er niet komen" % v[j][4])
         k["buren"] = b
-        # de voeten alleen op de loopkleuren
-        import loopkaart
+        if not kleurcontrole:
+            continue
         kleuren, kwaar = k["kleuren"] or (loopkaart.STANDAARD_KLEUREN, k["waar"])
         try:
             m = loopkaart.masker(naam, kleuren, k["vrij"])
@@ -313,131 +483,356 @@ def controleer(kamers, begin):
                            % (vwaar, uitleg, "LOOPVAK %d,%d %d,%d" % tuple(voorstel) if voorstel else "geen", naam))
         if k["achter"]:
             import kamer as kamermod
-            lijst = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "kamers.txt")
-            opties = {n: o for n, _, o, _ in kamermod.lees_lijst(lijst)}
+            opties = {n: o for n, _, o, _ in kamermod.lees_lijst(os.path.join(WORTEL, "data", "kamers.txt"))}
             if not (opties.get(naam) or {}).get("voorgrond"):
                 raise Fout("%s: ACHTER, maar de kamer heeft geen voorgrond (voorgrond=... in data/kamers.txt)" % k["achter"][4])
-    if begin is None:
+    if spel.begin is None:
         raise Fout("geen BEGIN in de scripts")
-    kamer, (x, y), _, waar = begin
-    if kamer not in kamers:
+    kamer, (x, y), _, waar = spel.begin
+    if kamer not in spel.kamers:
         raise Fout("%s: onbekende kamer %s" % (waar, kamer))
-    if not any(a[0] <= x <= a[2] and a[1] <= y <= a[3] for a in kamers[kamer]["vakken"]):
+    if not in_loopvak(spel.kamers[kamer], x, y):
         raise Fout("%s: het beginpunt staat niet in een loopvak" % waar)
 
 
-def script_asm(label, script, sprekers, L, teksten):
-    """Bytecode van een script: ZEG = OP_ZEG spreker tekst(lo, hi) duur(lo, hi); daarna OP_STOP."""
-    volgorde = list(sprekers)
-    L.append("%s:" % label)
-    for opdracht in script:
-        if opdracht[0] == "ZEG":
-            _, spreker, tekst, waar = opdracht
-            codes, n = tekst_codes(tekst, waar)
-            t = "t_%d" % len(teksten)
-            teksten.append((t, codes, tekst))
-            duur = min(65535, 50 + (n * 5 + 1) // 2)     # 1 s + 1 s per 20 tekens (50 beelden per seconde)
-            L.append("        .byte %d, %d, <%s, >%s, %d, %d    // ZEG %s" % (
-                OP_ZEG, volgorde.index(spreker), t, t, duur & 255, duur >> 8, spreker))
-    L.append("        .byte %d    // STOP" % OP_STOP)
+def alle_scripts(spel):
+    """(script, omschrijving, voorwerp of None, tweede voorwerp of None)."""
+    for ww, s in spel.standaard.items():
+        yield s, "STANDAARD %s" % ww, None, None
+    for naam, s in spel.losse.items():
+        yield s, "SCRIPT %s" % naam, None, None
+    for k in spel.kamers.values():
+        if "binnenkomst" in k:
+            yield k["binnenkomst"], "BINNENKOMST %s" % k["naam"], None, None
+    for v in spel.voorwerpen.values():
+        for ww, s in v["scripts"].items():
+            yield s, "%s %s" % (ww, v["naam"]), v["naam"], None
+        for (ww, ander), s in v["paren"].items():
+            yield s, "%s %s %s %s" % (ww, ander, TWEE[ww], v["naam"]), v["naam"], ander
 
 
-def schrijf(kamers, volgorde, begin, pad, sprekers, standaard):
+def controleer_scripts(spel):
     import c64beeld
-    L = ["// spel.asm — gemaakt door tools/scriptc.py uit scripts/*.hcs; niet met de hand wijzigen",
-         ".segment Data"]
-    teksten = []
-    L.append("// sprekers: kleur per nummer")
-    for i, sp in enumerate(sprekers):
+    for naam, (kleur, waar) in spel.sprekers.items():
+        if kleur not in c64beeld.NAMEN:
+            raise Fout("%s: onbekende kleur %s" % (waar, kleur))
+    gezet = {o[1] for s, *_ in alle_scripts(spel) for o in s if o[0] == "ZET"}
+    getest = []
+    for v in spel.voorwerpen.values():
+        tekst_codes(v["tekst"], v["waar"], 1)
+        if v["kamer"] is not None and v["loop"] is not None and not in_loopvak(spel.kamers[v["kamer"]], *v["loop"]):
+            raise Fout("%s: het LOOP-punt van %s ligt niet in een loopvak" % (v["waar"], v["naam"]))
+        for (ww, ander) in v["paren"]:
+            if ander not in spel.voorwerpen:
+                raise Fout("%s: %s %s: onbekend voorwerp %s" % (v["waar"], ww, ander, ander))
+    for s, wie, eig, ander in alle_scripts(spel):
+        for o in s:
+            waar = o[-1]
+            k = o[0]
+            if k == "ZEG":
+                if o[1] not in spel.sprekers:
+                    raise Fout("%s: onbekende spreker %s (zet hem in een SPREKER-regel)" % (waar, o[1]))
+                tekst_codes(o[2], waar)
+            elif k == "ALS":
+                cond = o[2]
+                if cond[0] == "vlag":
+                    getest.append((cond[1], waar))
+                elif cond[1] not in spel.voorwerpen:
+                    raise Fout("%s: onbekend voorwerp %s" % (waar, cond[1]))
+            elif k in ("GEEF", "NEEM", "STAND") and o[1] not in spel.voorwerpen:
+                raise Fout("%s: onbekend voorwerp %s" % (waar, o[1]))
+            elif k == "PLAATS":
+                if o[1] not in spel.voorwerpen:
+                    raise Fout("%s: onbekend voorwerp %s" % (waar, o[1]))
+                if o[2] not in spel.kamers:
+                    raise Fout("%s: onbekende kamer %s" % (waar, o[2]))
+                if spel.voorwerpen[o[1]]["vak"] is None or spel.voorwerpen[o[1]]["kamer"] != o[2]:
+                    raise Fout("%s: %s kan alleen in de kamer waar zijn VAK bij hoort" % (waar, o[1]))
+            elif k in ("ZET", "WIS") and not re.fullmatch(r"[a-z_][a-z0-9_]*", o[1]):
+                raise Fout("%s: een vlagnaam is kleine letters, cijfers en _ (%r)" % (waar, o[1]))
+    for vlag, waar in getest:
+        if vlag not in gezet:
+            raise Fout("%s: vlag %s wordt getest maar nergens gezet (ZET %s)" % (waar, vlag, vlag))
+    if len(gezet) > MAX_VLAGGEN:
+        raise Fout("meer dan %d vlaggen" % MAX_VLAGGEN)
+    if len(spel.voorwerpen) > MAX_VOORWERPEN:
+        raise Fout("meer dan %d voorwerpen" % MAX_VOORWERPEN)
+    if spel.doel and spel.doel[0] not in gezet:
+        raise Fout("%s: DOEL %s wordt nergens gezet" % (spel.doel[1], spel.doel[0]))
+
+
+def uitspeelbaar(spel):
+    """Kan DOEL gehaald worden? Vanaf het begin: welke vlaggen en voorwerpen kun je krijgen, en welke voorwerpen
+    liggen ergens (en zijn dus aan te klikken)? Een script telt mee als zijn voorwerp(en) bereikbaar zijn en de
+    ALS-voorwaarden erboven al te halen zijn (NIET-voorwaarden tellen als waar te maken). Geeft (gehaald, stappen)."""
+    vlaggen = set()
+    in_bezit = {n for n, v in spel.voorwerpen.items() if v["eigenaar"] == "eldric"}
+    liggend = {n for n, v in spel.voorwerpen.items() if v["eigenaar"] not in ("eldric", None)}
+    stappen = []
+
+    def effecten(script):
+        uit, stapel = [], []
+        for o in script:
+            if o[0] == "ALS":
+                stapel.append(None if o[1] else o[2])
+            elif o[0] == "ANDERS":
+                stapel[-1] = None
+            elif o[0] == "EINDE":
+                stapel.pop()
+            elif o[0] in ("ZET", "GEEF", "PLAATS"):
+                uit.append((o, [c for c in stapel if c]))
+        return uit
+
+    def voldaan(c):
+        if c[0] == "vlag":
+            return c[1] in vlaggen
+        if c[0] == "heeft":
+            return c[1] in in_bezit
+        return True
+
+    veranderd = True
+    while veranderd:
+        veranderd = False
+        for s, wie, eig, ander in alle_scripts(spel):
+            if eig is not None and eig not in liggend and eig not in in_bezit:
+                continue
+            if ander is not None and ander not in in_bezit and ander not in liggend:
+                continue
+            for o, eisen in effecten(s):
+                if not all(voldaan(c) for c in eisen):
+                    continue
+                if o[0] == "ZET" and o[1] not in vlaggen:
+                    vlaggen.add(o[1])
+                    stappen.append("%-44s -> vlag %s" % (wie, o[1]))
+                    veranderd = True
+                elif o[0] == "GEEF" and o[1] not in in_bezit:
+                    in_bezit.add(o[1])
+                    stappen.append("%-44s -> krijgt %s" % (wie, o[1]))
+                    veranderd = True
+                elif o[0] == "PLAATS" and o[1] not in liggend:
+                    liggend.add(o[1])
+                    stappen.append("%-44s -> %s ligt in %s" % (wie, o[1], o[2]))
+                    veranderd = True
+    return (spel.doel is None or spel.doel[0] in vlaggen), stappen
+
+
+# ---------------------------------------------------------------------------------------------------
+# Schrijven
+# ---------------------------------------------------------------------------------------------------
+class Uitvoer:
+    def __init__(self, spel):
+        self.spel, self.L, self.teksten, self.vlaggen, self.nummer = spel, [], [], {}, 0
+        self.vw = {n: i for i, n in enumerate(spel.vw_volgorde)}
+        self.km = {n: i for i, n in enumerate(spel.kamer_volgorde)}
+
+    def vlag(self, naam):
+        if naam not in self.vlaggen:
+            self.vlaggen[naam] = len(self.vlaggen)
+        return self.vlaggen[naam]
+
+    def label(self):
+        self.nummer += 1
+        return "l_%d" % self.nummer
+
+    def script(self, label, script):
+        L, vw, km, sp = self.L, self.vw, self.km, list(self.spel.sprekers)
+        L.append("%s:" % label)
+        stapel = []
+        for o in script:
+            k = o[0]
+            if k == "ZEG":
+                codes, n = tekst_codes(o[2], o[3])
+                t = "t_%d" % len(self.teksten)
+                self.teksten.append((t, codes, o[2]))
+                duur = min(65535, 50 + (n * 5 + 1) // 2)        # 1 s + 1 s per 20 tekens
+                L.append("        .byte $%02x, %d, <%s, >%s, %d, %d    // ZEG %s" % (
+                    OP["ZEG"], sp.index(o[1]), t, t, duur & 255, duur >> 8, o[1]))
+            elif k == "ALS":
+                niet, cond = o[1], o[2]
+                anders = self.label()
+                stapel.append([anders, None])
+                # de opcode springt als de voorwaarde NIET klopt
+                if cond[0] == "vlag":
+                    L.append("        .byte $%02x, %d, <%s, >%s    // ALS %svlag %s" % (
+                        OP["ALS_NIET_VLAG" if niet else "ALS_VLAG"], self.vlag(cond[1]), anders, anders,
+                        "NIET " if niet else "", cond[1]))
+                elif cond[0] == "heeft":
+                    L.append("        .byte $%02x, %d, <%s, >%s    // ALS %sHEEFT %s" % (
+                        OP["ALS_NIET_HEEFT" if niet else "ALS_HEEFT"], vw[cond[1]], anders, anders,
+                        "NIET " if niet else "", cond[1]))
+                else:
+                    L.append("        .byte $%02x, %d, %d, <%s, >%s    // ALS %sSTAND %s %d" % (
+                        OP["ALS_NIET_STAND" if niet else "ALS_STAND"], vw[cond[1]], cond[2], anders, anders,
+                        "NIET " if niet else "", cond[1], cond[2]))
+            elif k == "ANDERS":
+                einde = self.label()
+                L.append("        .byte $%02x, <%s, >%s    // ANDERS" % (OP["SPRING"], einde, einde))
+                L.append("%s:" % stapel[-1][0])
+                stapel[-1][1] = einde
+            elif k == "EINDE":
+                anders, einde = stapel.pop()
+                L.append("%s:    // EINDE" % (einde or anders))
+            elif k in ("ZET", "WIS"):
+                L.append("        .byte $%02x, %d    // %s %s" % (OP[k], self.vlag(o[1]), k, o[1]))
+            elif k in ("GEEF", "NEEM"):
+                L.append("        .byte $%02x, %d    // %s %s" % (OP[k], vw[o[1]], k, o[1]))
+            elif k == "PLAATS":
+                L.append("        .byte $%02x, %d, %d    // PLAATS %s %s" % (OP[k], vw[o[1]], km[o[2]], o[1], o[2]))
+            elif k == "STAND":
+                L.append("        .byte $%02x, %d, %d    // STAND %s %d" % (OP[k], vw[o[1]], o[2], o[1], o[2]))
+            elif k == "LOOP":
+                x = o[1] * 2
+                L.append("        .byte $%02x, %d, %d, %d    // LOOP eldric %d,%d" % (OP[k], x & 255, x >> 8, o[2], o[1], o[2]))
+            elif k == "KIJK":
+                L.append("        .byte $%02x, %d    // KIJK eldric" % (OP[k], o[1]))
+            elif k == "WACHT":
+                L.append("        .byte $%02x, %d, %d    // WACHT %d" % (OP[k], o[1] & 255, o[1] >> 8, o[1]))
+            elif k in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"):
+                L.append("        .byte $%02x    // %s" % (OP[k], k))
+        L.append("        .byte $%02x    // einde" % OP["STOP"])
+
+
+def schrijf(spel, pad, json_pad):
+    import c64beeld
+    u = Uitvoer(spel)
+    L, vw, km = u.L, u.vw, u.km
+    L += ["// spel.asm — gemaakt door tools/scriptc.py uit scripts/*.hcs; niet met de hand wijzigen",
+          ".segment Data"]
+    for i, sp in enumerate(spel.sprekers):
         L.append(".const SPREKER_%s = %d" % (sp.upper(), i))
-    L.append("spreker_kleur: .byte %s" % ", ".join(str(c64beeld.NAMEN.index(k)) for k, _ in sprekers.values()))
-    L.append("// standaardantwoorden: per werkwoord een script (0 = geen)")
+    L.append("spreker_kleur: .byte %s" % ", ".join(str(c64beeld.NAMEN.index(k)) for k, _ in spel.sprekers.values()))
     for ww in WERKWOORDEN:
-        if ww in standaard:
-            script_asm("std_%s" % ww.lower(), standaard[ww], sprekers, L, teksten)
-    L.append("standaard_scripts:")
-    L.append("        .word %s" % ", ".join("std_%s" % ww.lower() if ww in standaard else "0" for ww in WERKWOORDEN))
-    for nr, naam in enumerate(volgorde):
-        v, b = kamers[naam]["vakken"], kamers[naam]["buren"]
-        L.append(".const KAMER_%s = %d" % (naam.upper(), nr))
-        L.append("// loopvakken: aantal, dan per veld een rij van <aantal> bytes (x in schermpixels)")
-        L.append("loopvakken_%s:" % naam)
+        if ww in spel.standaard:
+            u.script("std_%s" % ww.lower(), spel.standaard[ww])
+    L.append("standaard_scripts: .word %s" % ", ".join(
+        "std_%s" % ww.lower() if ww in spel.standaard else "0" for ww in WERKWOORDEN))
+    for naam, s in spel.losse.items():
+        u.script("scr_%s" % naam, s)
+    # per voorwerp: 12 scripts (werkwoorden), dan paren (werkwoord, ander voorwerp, script), $ff
+    for naam in spel.vw_volgorde:
+        v = spel.voorwerpen[naam]
+        codes, _ = tekst_codes(v["tekst"], v["waar"], 1)
+        L.append("naam_%s: .byte %s, 0    // %s" % (naam, ", ".join("$%02x" % c for c in codes), v["tekst"]))
+        for ww, s in v["scripts"].items():
+            u.script("s_%s_%s" % (naam, ww.lower()), s)
+        for (ww, ander), s in v["paren"].items():
+            u.script("p_%s_%s_%s" % (naam, ww.lower(), ander), s)
+        L.append("scripts_%s: .word %s" % (naam, ", ".join(
+            "s_%s_%s" % (naam, ww.lower()) if ww in v["scripts"] else "0" for ww in WERKWOORDEN)))
+        for (ww, ander) in v["paren"]:
+            L.append("        .byte %d, %d, <p_%s_%s_%s, >p_%s_%s_%s    // %s %s" % (
+                WERKWOORDEN.index(ww), vw[ander], naam, ww.lower(), ander, naam, ww.lower(), ander, ww, ander))
+        L.append("        .byte $ff")
+    L.append(".const AANTAL_VW = %d" % len(spel.vw_volgorde))
+    for naam in spel.vw_volgorde:
+        L.append(".const VW_%s = %d" % (naam.upper(), vw[naam]))
+    vs = [spel.voorwerpen[x] for x in spel.vw_volgorde]
+
+    def eigenaar(v):
+        return EIGENAAR_ELDRIC if v["eigenaar"] == "eldric" else EIGENAAR_NERGENS if v["eigenaar"] is None \
+            else km[v["eigenaar"]]
+
+    def rij(label, waarden):
+        L.append("%s: .byte %s" % (label, ", ".join(waarden) if waarden else "0"))
+    leeg = (0, 0, 0, 0)
+    rij("vw_eigenaar_begin", [str(eigenaar(v)) for v in vs])
+    rij("vw_stand_begin", [str(v["stand"]) for v in vs])
+    rij("vw_x1_lo", ["$%02x" % (((v["vak"] or leeg)[0] * 2) & 255) for v in vs])
+    rij("vw_x1_hi", ["$%02x" % (((v["vak"] or leeg)[0] * 2) >> 8) for v in vs])
+    rij("vw_x2_lo", ["$%02x" % ((v["vak"][2] * 2 + 1) & 255) if v["vak"] else "0" for v in vs])
+    rij("vw_x2_hi", ["$%02x" % ((v["vak"][2] * 2 + 1) >> 8) if v["vak"] else "0" for v in vs])
+    rij("vw_y1", [str((v["vak"] or leeg)[1]) for v in vs])
+    rij("vw_y2", [str((v["vak"] or leeg)[3]) for v in vs])
+    rij("vw_loop_x_lo", ["$%02x" % (((v["loop"] or (0, 0))[0] * 2) & 255) for v in vs])
+    rij("vw_loop_x_hi", ["$%02x" % (((v["loop"] or (0, 0))[0] * 2) >> 8) for v in vs])
+    rij("vw_loop_y", [str((v["loop"] or (0, 0))[1]) for v in vs])
+    rij("vw_richting", [str(v["richting"]) for v in vs])
+    rij("vw_heeft_vak", ["1" if v["vak"] else "0" for v in vs])
+    rij("vw_naam_lo", ["<naam_%s" % v["naam"] for v in vs])
+    rij("vw_naam_hi", [">naam_%s" % v["naam"] for v in vs])
+    rij("vw_scripts_lo", ["<scripts_%s" % v["naam"] for v in vs])
+    rij("vw_scripts_hi", [">scripts_%s" % v["naam"] for v in vs])
+
+    for naam in spel.kamer_volgorde:
+        k = spel.kamers[naam]
+        v, b = k["vakken"], k["buren"]
+        L.append(".const KAMER_%s = %d" % (naam.upper(), km[naam]))
+        L.append("loopvakken_%s:    // aantal, dan per veld een rij van <aantal> bytes (x in schermpixels)" % naam)
         L.append("        .byte %d" % len(v))
         velden = [
             ("x1 lo", [(a[0] * 2) & 255 for a in v]), ("x1 hi", [(a[0] * 2) >> 8 for a in v]),
             ("x2 lo", [(a[2] * 2 + 1) & 255 for a in v]), ("x2 hi", [(a[2] * 2 + 1) >> 8 for a in v]),
             ("y1", [a[1] for a in v]), ("y2", [a[3] for a in v]),
-            ("buren lo", [x & 255 for x in b]), ("buren hi", [x >> 8 for x in b]),
-        ]
-        for wat, rij in velden:
-            L.append("        .byte %s    // %s" % (", ".join("$%02x" % x for x in rij), wat))
-        ach = kamers[naam]["achter"]
-        L.append("achter_%s:    // ACHTER: aantal (0/1), x1 lo, x1 hi, x2 lo, x2 hi, y1, y2 (x in schermpixels)" % naam)
+            ("buren lo", [x & 255 for x in b]), ("buren hi", [x >> 8 for x in b])]
+        for wat, r in velden:
+            L.append("        .byte %s    // %s" % (", ".join("$%02x" % x for x in r), wat))
+        ach = k["achter"]
+        L.append("achter_%s:    // ACHTER: aantal (0/1), x1 lo, x1 hi, x2 lo, x2 hi, y1, y2" % naam)
         if ach:
             x1, y1, x2, y2, _ = ach
             L.append("        .byte 1, %d, %d, %d, %d, %d, %d" % ((x1 * 2) & 255, (x1 * 2) >> 8, (x2 * 2 + 1) & 255,
                                                                (x2 * 2 + 1) >> 8, y1, y2))
         else:
             L.append("        .byte 0, 0, 0, 0, 0, 0, 0")
-        vw = kamers[naam]["voorwerpen"]
-        for v in vw:
-            n = "%s_%s" % (naam, v["naam"])
-            codes, _ = tekst_codes(v["tekst"], v["waar"], 1)
-            L.append("naam_%s: .byte %s, 0    // %s" % (n, ", ".join("$%02x" % c for c in codes), v["tekst"]))
-            for ww in WERKWOORDEN:
-                if ww in v["scripts"]:
-                    script_asm("s_%s_%s" % (n, ww.lower()), v["scripts"][ww], sprekers, L, teksten)
-            L.append("scripts_%s: .word %s" % (n, ", ".join(
-                "s_%s_%s" % (n, ww.lower()) if ww in v["scripts"] else "0" for ww in WERKWOORDEN)))
-        L.append("// voorwerpen: aantal, dan per veld een rij van <aantal> bytes (x in schermpixels)")
-        L.append("voorwerpen_%s:" % naam)
-        L.append("        .byte %d" % len(vw))
-        if vw:
-            nm = ["%s_%s" % (naam, v["naam"]) for v in vw]
-            velden = [
-                ("x1 lo", ["$%02x" % ((v["vak"][0] * 2) & 255) for v in vw]),
-                ("x1 hi", ["$%02x" % ((v["vak"][0] * 2) >> 8) for v in vw]),
-                ("x2 lo", ["$%02x" % ((v["vak"][2] * 2 + 1) & 255) for v in vw]),
-                ("x2 hi", ["$%02x" % ((v["vak"][2] * 2 + 1) >> 8) for v in vw]),
-                ("y1", [str(v["vak"][1]) for v in vw]), ("y2", [str(v["vak"][3]) for v in vw]),
-                ("loop x lo", ["$%02x" % ((v["loop"][0] * 2) & 255) for v in vw]),
-                ("loop x hi", ["$%02x" % ((v["loop"][0] * 2) >> 8) for v in vw]),
-                ("loop y", [str(v["loop"][1]) for v in vw]), ("richting", [str(v["richting"]) for v in vw]),
-                ("naam lo", ["<naam_%s" % n for n in nm]), ("naam hi", [">naam_%s" % n for n in nm]),
-                ("scripts lo", ["<scripts_%s" % n for n in nm]), ("scripts hi", [">scripts_%s" % n for n in nm]),
-            ]
-            for wat, rij in velden:
-                L.append("        .byte %s    // %s" % (", ".join(rij), wat))
-        sch = kamers[naam]["schaal"]
-        L.append("schaal_%s:    // aantal grenzen, dan de grenzen (aflopend): y >= grens -> grotere maat" % naam)
-        L.append("        .byte %d%s" % (len(sch), "".join(", %d" % g for g in sch)))
-    kamer, (x, y), r, _ = begin
+        sch = k["schaal"]
+        L.append("schaal_%s: .byte %d%s" % (naam, len(sch), "".join(", %d" % g for g in sch)))
+        if "binnenkomst" in k:
+            u.script("binnen_%s" % naam, k["binnenkomst"])
+    L.append(".const AANTAL_KAMERS = %d" % len(spel.kamer_volgorde))
+    for veld in ("loopvakken", "achter", "schaal"):
+        L.append("kamer_%s_lo: .byte %s" % (veld, ", ".join("<%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
+        L.append("kamer_%s_hi: .byte %s" % (veld, ", ".join(">%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
+    L.append("kamer_binnen_lo: .byte %s" % ", ".join(
+        "<binnen_%s" % n if "binnenkomst" in spel.kamers[n] else "0" for n in spel.kamer_volgorde))
+    L.append("kamer_binnen_hi: .byte %s" % ", ".join(
+        ">binnen_%s" % n if "binnenkomst" in spel.kamers[n] else "0" for n in spel.kamer_volgorde))
+    kamer, (x, y), r, _ = spel.begin
     L += [".const BEGIN_KAMER = KAMER_%s" % kamer.upper(), ".const BEGIN_X = %d    // schermpixels" % (x * 2),
-          ".const BEGIN_Y = %d" % y, ".const BEGIN_RICHTING = %d" % r,
-          ".label begin_loopvakken = loopvakken_%s" % kamer, ".label begin_schaal = schaal_%s" % kamer,
-          ".label begin_achter = achter_%s" % kamer, ".label begin_voorwerpen = voorwerpen_%s" % kamer]
+          ".const BEGIN_Y = %d" % y, ".const BEGIN_RICHTING = %d" % r]
+    L.append(".const DOEL_VLAG = %d    // %s" % ((u.vlag(spel.doel[0]), spel.doel[0]) if spel.doel else (255, "geen")))
+    L.append(".const AANTAL_VLAGGEN = %d" % len(u.vlaggen))
     L.append("// teksten (schermcodes; $%02x = tweede regel, 0 = einde)" % NIEUWE_REGEL)
-    for t, codes, tekst in teksten:
+    for t, codes, tekst in u.teksten:
         L.append("%s: .byte %s, 0    // %s" % (t, ", ".join("$%02x" % c for c in codes), tekst[:60]))
     open(pad, "w").write("\n".join(L) + "\n")
+    json.dump({"vlaggen": u.vlaggen, "voorwerpen": vw, "kamers": km,
+               "eigenaar": {"eldric": EIGENAAR_ELDRIC, "nergens": EIGENAAR_NERGENS},
+               "werkwoorden": WERKWOORDEN, "losse_scripts": list(spel.losse)},
+              open(json_pad, "w"), indent=1)
+
+
+def compileer(mappen, uitmap, kleurcontrole=True):
+    bestanden = []
+    for m in mappen:
+        bestanden += sorted(glob.glob(os.path.join(m, "*.hcs")))
+    spel = lees(bestanden)
+    controleer_kamers(spel, kleurcontrole)
+    controleer_scripts(spel)
+    gehaald, stappen = uitspeelbaar(spel)
+    if not gehaald:
+        raise Fout("%s: DOEL %s is niet te halen. Wel te krijgen:\n  %s" % (
+            spel.doel[1], spel.doel[0], "\n  ".join(stappen) or "(niets)"))
+    os.makedirs(uitmap, exist_ok=True)
+    schrijf(spel, os.path.join(uitmap, "spel.asm"), os.path.join(uitmap, "spel.json"))
+    with open(os.path.join(uitmap, "puzzelstappen.txt"), "w") as f:
+        f.write("# puzzelstappen — gemaakt door tools/scriptc.py: wat er te krijgen is, in een volgorde die kan\n")
+        f.write("\n".join(stappen) + "\n")
+        f.write(("# DOEL %s: te halen\n" % spel.doel[0]) if spel.doel else "# geen DOEL\n")
+    return spel, bestanden, stappen
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) < 3:
         raise SystemExit(__doc__)
-    bestanden = sorted(glob.glob(os.path.join(sys.argv[1], "*.hcs")))
-    os.makedirs(sys.argv[2], exist_ok=True)
+    mappen = [sys.argv[1]] + sys.argv[3:]
     try:
-        kamers, volgorde, begin, sprekers, standaard = lees(bestanden)
-        controleer(kamers, begin)
-        controleer_scripts(kamers, sprekers, standaard)
+        spel, bestanden, stappen = compileer(mappen, sys.argv[2])
     except Fout as e:
         print("[scriptc] FOUT: %s" % e, file=sys.stderr)
         sys.exit(1)
-    schrijf(kamers, volgorde, begin, os.path.join(sys.argv[2], "spel.asm"), sprekers, standaard)
-    print("[scriptc] %d bestanden, %d kamers, %d loopvakken, %d voorwerpen, %d standaardantwoorden" % (
-        len(bestanden), len(kamers), sum(len(k["vakken"]) for k in kamers.values()),
-        sum(len(k["voorwerpen"]) for k in kamers.values()), len(standaard)))
+    print("[scriptc] %d bestanden, %d kamers, %d voorwerpen, %d loopvakken, %d puzzelstappen%s" % (
+        len(bestanden), len(spel.kamers), len(spel.voorwerpen), sum(len(k["vakken"]) for k in spel.kamers.values()),
+        len(stappen), ", DOEL te halen" if spel.doel else ""))
 
 
 if __name__ == "__main__":

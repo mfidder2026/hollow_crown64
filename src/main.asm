@@ -28,6 +28,7 @@ start:
         ldx #$ff
         txs
 
+        jsr status_begin
         jsr scherm_start
         lda #<kamer_plein
         sta zp_ptr
@@ -35,33 +36,37 @@ start:
         sta zp_ptr + 1
         jsr kamer_tonen
         jsr balk_tekenen
-        lda #<begin_loopvakken
-        sta zp_ptr
-        lda #>begin_loopvakken
-        sta zp_ptr + 1
-        jsr loopvakken_laden
-        lda #<begin_schaal
-        sta zp_ptr
-        lda #>begin_schaal
-        sta zp_ptr + 1
-        jsr schaal_laden
+        ldx st_kamer
+        jsr kamer_gegevens
         jsr actor_start
-        lda #<begin_achter
-        sta zp_ptr
-        lda #>begin_achter
-        sta zp_ptr + 1
-        jsr voorgrond_start
-        lda #<begin_voorwerpen
-        sta zp_ptr
-        lda #>begin_voorwerpen
-        sta zp_ptr + 1
-        jsr voorwerpen_laden
         jsr cursor_start
         jsr irq_start                   // zet ook het scherm aan
 #if AUTOTEST
         jsr band_begin
 #endif
         cli
+        jmp hoofdlus
+
+// kamer_gegevens: loopvakken, schaal en ACHTER van kamer X (tabellen uit build/gen/spel.asm)
+kamer_gegevens:
+        stx kamer_nu
+        lda kamer_loopvakken_lo,x
+        sta zp_ptr
+        lda kamer_loopvakken_hi,x
+        sta zp_ptr + 1
+        jsr loopvakken_laden
+        ldx kamer_nu
+        lda kamer_schaal_lo,x
+        sta zp_ptr
+        lda kamer_schaal_hi,x
+        sta zp_ptr + 1
+        jsr schaal_laden
+        ldx kamer_nu
+        lda kamer_achter_lo,x
+        sta zp_ptr
+        lda kamer_achter_hi,x
+        sta zp_ptr + 1
+        jmp voorgrond_start
 
 // De hoofdlus: één ronde per beeld.
 hoofdlus:
@@ -94,6 +99,8 @@ hoofdlus:
         jmp hoofdlus
 
 
+
+kamer_nu: .byte 0
 
 // ---------------------------------------------------------------------------------------------
 #import "irq.asm"

@@ -1,0 +1,57 @@
+# proef.hcs — proefscripts voor de VM (hoofdstuk 4). Alleen in de testbuild (./build.sh --autotest).
+# Samen gebruiken ze elke opcode minstens één keer; tests/vm.band speelt ze af en controleert het resultaat.
+
+KAMER plein
+VOORWERP proef_steen "steen" VAK 10,110 4,4 LOOP 12,112 VOOR NERGENS
+
+SCRIPT proef_vlaggen:                  # ZET WIS ALS(NIET) vlag ANDERS EINDE SPRING
+  ZET proef_a
+  ALS vlag proef_a
+    ZET proef_b
+  ANDERS
+    ZET proef_fout
+  EINDE
+  ALS NIET vlag proef_a
+    ZET proef_fout
+  EINDE
+  WIS proef_a
+  ALS NIET vlag proef_a
+    ZET proef_c
+  ANDERS
+    ZET proef_fout
+  EINDE
+
+SCRIPT proef_voorwerpen:               # GEEF NEEM ALS(NIET) HEEFT STAND ALS(NIET) STAND PLAATS
+  GEEF munt
+  ALS HEEFT munt
+    ZET proef_d
+  EINDE
+  NEEM munt
+  ALS NIET HEEFT munt
+    ZET proef_e
+  EINDE
+  STAND fontein 3
+  ALS STAND fontein 3
+    ZET proef_f
+  EINDE
+  ALS NIET STAND fontein 2
+    ZET proef_g
+  EINDE
+  PLAATS proef_steen plein
+
+SCRIPT proef_lopen:                    # LOOP KIJK WACHT ZEG STOP
+  LOOP eldric 40,110
+  KIJK eldric LINKS
+  WACHT 20
+  ZEG eldric "Proef geslaagd."
+  ZET proef_h
+  STOP
+  ZET proef_fout
+
+SCRIPT proef_scene:                    # TUSSENSCENE EINDE_TUSSENSCENE (en overslaan met vuur)
+  TUSSENSCENE
+  ZEG eldric "Deze tekst sla je over."
+  LOOP eldric 100,112
+  WACHT 2000
+  EINDE_TUSSENSCENE
+  ZET proef_i

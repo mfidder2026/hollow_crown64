@@ -152,7 +152,7 @@ def main():
     pad = os.path.join(WORTEL, "build", "gen", "loopkaart_%s.png" % naam)
     if "--toon" in sys.argv:
         import scriptc
-        kamers = scriptc.lees(sorted(__import__("glob").glob(os.path.join(WORTEL, "scripts", "*.hcs"))))[0]
+        kamers = scriptc.lees(sorted(__import__("glob").glob(os.path.join(WORTEL, "scripts", "*.hcs")))).kamers
         vakken = [list(v[:4]) for v in kamers[naam]["vakken"]]
         m = masker(naam, vrij=kamers[naam]["vrij"])
     else:

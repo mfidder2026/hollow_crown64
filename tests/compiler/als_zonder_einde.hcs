@@ -1,0 +1,4 @@
+# verwacht: ALS zonder EINDE
+SCRIPT x:
+  ALS vlag munt_gepakt
+    ZEG eldric "Ja"

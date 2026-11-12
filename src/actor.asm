@@ -21,11 +21,11 @@
 
 .segment Code
 actor_start:
-        lda #<BEGIN_X
+        lda st_x                        // de plek uit de spelstatus
         sta act_x
-        lda #>BEGIN_X
+        lda st_x + 1
         sta act_x + 1
-        lda #BEGIN_Y
+        lda st_y
         sta act_y
         lda #BEGIN_RICHTING
         sta act_richting

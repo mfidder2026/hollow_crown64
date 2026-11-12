@@ -8,55 +8,14 @@
 //   Klik op de vloer: Ga naar. Na elke klik in de kamer is het werkwoord weer "Ga naar".
 // - Vuur terwijl er een tekst staat: de tekst weg (en verder niets).
 
-.const MAX_KAMER_VW    = 16             // per kamer (status.asm: MAX_VOORWERPEN in het hele spel)
 .const GEEN_VOORWERP   = $ff
 .const WW_GA_NAAR      = 0
 .const WW_WAT_IS       = 11
 .const KLEUR_GEKOZEN   = 7              // geel: het gekozen werkwoord
-.const VW_VELDEN       = 14
 
 .segment Code
-// voorwerpen_laden: de tabel op (zp_ptr) — aantal, dan 14 rijen van <aantal> bytes — naar vw_velden
-voorwerpen_laden: {
-        ldy #0
-        lda (zp_ptr),y
-        sta vw_aantal
-        jsr bron_verder
-        lda #<vw_velden
-        sta zp_ptr2
-        lda #>vw_velden
-        sta zp_ptr2 + 1
-        ldx #VW_VELDEN
-veld:   ldy #0
-!:      cpy vw_aantal
-        beq klaar
-        lda (zp_ptr),y
-        sta (zp_ptr2),y
-        iny
-        bne !-
-klaar:  tya
-        clc
-        adc zp_ptr
-        sta zp_ptr
-        bcc !+
-        inc zp_ptr + 1
-!:      lda zp_ptr2
-        clc
-        adc #MAX_KAMER_VW
-        sta zp_ptr2
-        bcc !+
-        inc zp_ptr2 + 1
-!:      dex
-        bne veld
-        lda #WW_GA_NAAR
-        sta werkwoord
-        lda #$fe                        // zinregel en werkwoordkleuren opnieuw tekenen
-        sta zin_ww
-        sta ww_kleur
-        rts
-}
-
 // voorwerp_onder: welk voorwerp ligt onder de cursor? -> vw_onder (of GEEN_VOORWERP)
+// Alleen voorwerpen die in deze kamer liggen (st_eigenaar = st_kamer) en een klikvak hebben.
 voorwerp_onder: {
         lda #GEEN_VOORWERP
         sta vw_onder
@@ -68,8 +27,13 @@ voorwerp_onder: {
         bcs klaar                       // eronder
         sta p_y
         ldx #0
-lus:    cpx vw_aantal
+lus:    cpx #AANTAL_VW
         beq klaar
+        lda st_eigenaar,x
+        cmp st_kamer
+        bne volgende
+        lda vw_heeft_vak,x
+        beq volgende
         lda cursor_x                    // x1 <= cursor_x <= x2
         cmp vw_x1_lo,x
         lda cursor_x + 1
@@ -179,6 +143,11 @@ klik: {
         lda invoer_vuur
         bne !+
         rts
+!:      lda vm_scene                    // tussenscène: vuur = overslaan, verder niets
+        beq !+
+        lda #1
+        sta vm_overslaan
+        rts
 !:      lda bericht_actief              // eerst: een tekst wegklikken
         beq !+
         jmp bericht_weg
@@ -218,9 +187,7 @@ kamer:  cmp #RIJ_KAMER * 8
         bcc geen
         cmp #(RIJ_KAMER + KAMER_RIJEN) * 8
         bcs geen                        // de zinregel
-        lda #0                          // een nieuwe klik breekt een lopend script af
-        sta vm_pc
-        sta vm_pc + 1
+        jsr vm_stop                     // een nieuwe klik breekt een lopend script af
         ldx vw_onder
         cpx #GEEN_VOORWERP
         beq vloer
@@ -262,9 +229,7 @@ actie_beeld: {
         ldx actie_vw
         lda vw_richting,x
         sta act_richting
-        lda actie_ww
-        cmp #WW_GA_NAAR
-        beq klaar
+        lda actie_ww                    // (Ga naar: alleen als het voorwerp een GA_NAAR-script heeft)
         cmp #WW_WAT_IS
         beq klaar
         asl                             // het script van het voorwerp voor dit werkwoord
@@ -292,22 +257,6 @@ hoog:   .byte 0
 }
 
 .segment Data
-vw_aantal:    .byte 0
-vw_velden:    .fill VW_VELDEN * MAX_KAMER_VW, 0
-.label vw_x1_lo     = vw_velden + 0 * MAX_KAMER_VW
-.label vw_x1_hi     = vw_velden + 1 * MAX_KAMER_VW
-.label vw_x2_lo     = vw_velden + 2 * MAX_KAMER_VW
-.label vw_x2_hi     = vw_velden + 3 * MAX_KAMER_VW
-.label vw_y1        = vw_velden + 4 * MAX_KAMER_VW
-.label vw_y2        = vw_velden + 5 * MAX_KAMER_VW
-.label vw_loop_x_lo = vw_velden + 6 * MAX_KAMER_VW
-.label vw_loop_x_hi = vw_velden + 7 * MAX_KAMER_VW
-.label vw_loop_y    = vw_velden + 8 * MAX_KAMER_VW
-.label vw_richting  = vw_velden + 9 * MAX_KAMER_VW
-.label vw_naam_lo   = vw_velden + 10 * MAX_KAMER_VW
-.label vw_naam_hi   = vw_velden + 11 * MAX_KAMER_VW
-.label vw_scripts_lo = vw_velden + 12 * MAX_KAMER_VW
-.label vw_scripts_hi = vw_velden + 13 * MAX_KAMER_VW
 vw_onder:     .byte GEEN_VOORWERP
 werkwoord:    .byte WW_GA_NAAR
 zin_ww:       .byte $fe                 // wat er nu op de zinregel staat
@@ -316,5 +265,6 @@ ww_kleur:     .byte $fe                 // welk werkwoord nu geel is
 actie_bezig:  .byte 0
 actie_ww:     .byte 0
 actie_vw:     .byte 0
+inventaris_anders: .byte 0              // GEEF/NEEM/PLAATS: de inventaris opnieuw tekenen (hoofdstuk 5)
 kleur_rij_lo: .fill 3, <(KLEUR_RAM + (RIJ_WERKWOORD + i) * 40)
 kleur_rij_hi: .fill 3, >(KLEUR_RAM + (RIJ_WERKWOORD + i) * 40)

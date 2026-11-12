@@ -2,6 +2,15 @@
 # BEGIN kamer x,y richting   (richting: VOOR, RUG, RECHTS, LINKS)
 BEGIN plein 60,112 VOOR
 
+# Wat Eldric bij zich heeft (en wat later bij hem komt)
+VOORWERP zwaard "zwaard" BIJ eldric
+  BEKIJK:
+    ZEG eldric "Mijn zwaard. Het laatste lichtfragment zit erin, en het gloeit."
+
+VOORWERP munt "gouden munt" NERGENS
+  BEKIJK:
+    ZEG eldric "Een gouden munt uit de fontein. Er staat een zon op. Hoe toepasselijk."
+
 # Wie praat, in welke kleur (berichten bovenaan, op rij 0-1)
 SPREKER eldric geel
 

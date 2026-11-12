@@ -19,6 +19,12 @@ Een band (tests/<naam>.band) is tekst, één stap per regel ('#' is commentaar):
     wacht_tot_stil             wacht tot Eldric stilstaat
     verwacht act_x.w = 120     controle op dit moment (zelfde vorm als in .verwacht); de C64 wacht zolang
     verwacht_tekst 18 "Bekijk fontein"   wat er op tekenrij 18 staat (schermgeheugen, zonder spaties achteraan)
+  Scripts (namen uit build/gen/spel.json):
+    start_script proef_vlaggen      start SCRIPT proef_vlaggen (tests/scripts/*.hcs)
+    wacht_op_script                 wacht tot er geen script meer loopt
+    verwacht_vlag munt_gepakt 1     een vlag (1 = gezet)
+    verwacht_eigenaar munt eldric   eldric (inventaris), nergens, of een kamer
+    verwacht_stand fontein 3
 
 Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwacht:
     st_versie = 1         byte op label st_versie
@@ -29,7 +35,7 @@ Na de band leest de test het geheugen en vergelijkt het met tests/<naam>.verwach
                           Een verdwaalde pixel op een naad (rij 1/2, 17/18) is dan een fout.
 Een test slaagt alleen als de status klopt; een screenshot alleen is geen bewijs.
 """
-import argparse, os, re, signal, socket, subprocess, sys, time
+import argparse, json, os, re, signal, socket, subprocess, sys, time
 
 # ---- instellingen: het pad naar VICE staat hier (en bovenin build.sh) ----------------------------
 VICE_BIN = os.environ.get("VICE_BIN", "/Applications/vice-arm64-gtk3-3.10/bin")
@@ -40,7 +46,7 @@ BUILD = os.path.join(ROOT, "build", "autotest")
 TESTUIT = os.path.join(ROOT, "build", "test")
 
 # opcodes van de invoerband: gelijk houden met src/autotest.asm
-OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL = 0, 1, 2, 3, 4, 5, 6, 7
+OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL, OP_START, OP_WACHT_VM = range(10)
 JOY = {"op": 1, "neer": 2, "links": 4, "rechts": 8, "vuur": 16}
 # toets -> (rij, bit) in de matrix; rijen 0, 1, 6 (zie src/invoer.asm)
 TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10),
@@ -59,7 +65,7 @@ class Fout(Exception):
 # ---------------------------------------------------------------------------------------------------
 def lees_band(pad):
     """Geeft (bytes, markeringen): markering k hoort bij namen[k-1], een screenshotnaam of een controle."""
-    data, namen = bytearray(), []
+    data, namen, starts = bytearray(), [], []
     pot = [0x24, 0x52]                           # potmeters van de muis: een willekeurige beginstand
 
     def ruw(arg, tabel):
@@ -107,6 +113,17 @@ def lees_band(pad):
             elif cmd == "muisknop":
                 knoppen, n = ruw(arg, MUISKNOP)
                 data += bytes([OP_RUW, 0, 0, 0, 0, 0, sum(knoppen), n])
+            elif cmd == "start_script" and re.fullmatch(r"\w+", arg):
+                data += bytes([OP_START, 0, 0])          # het adres vult draai() in (scr_<naam> uit hollowcrown.vs)
+                starts.append((len(data) - 2, arg))
+            elif cmd == "wacht_op_script" and not arg:
+                data += bytes([OP_WACHT_VM])
+            elif cmd in ("verwacht_vlag", "verwacht_eigenaar", "verwacht_stand"):
+                d = arg.split()
+                if len(d) != 2:
+                    raise ValueError
+                namen.append((cmd.upper(), d[0], d[1]))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd == "wacht_tot_stil" and not arg:
                 data += bytes([OP_WACHT_STIL])
             elif cmd == "verwacht_tekst":
@@ -139,7 +156,7 @@ def lees_band(pad):
     data.append(OP_EINDE)
     if len(data) > BAND_GROOTTE:
         raise Fout("%s: band is %d bytes, de buffer %d" % (pad, len(data), BAND_GROOTTE))
-    return bytes(data), namen
+    return data, namen, starts
 
 
 VERWACHT_RE = r"([A-Za-z_]\w*)(?:\+(\d+))?(\.w)?\s*(=|!=|<=|>=|<|>)\s*(\$[0-9A-Fa-f]+|\d+)"
@@ -410,7 +427,23 @@ def scherm_tekst(vice, rij):
     return "".join(terug.get(c, "?") for c in vice.lees(0xC000 + rij * 40, 40)).rstrip()
 
 
-def controleer(vice, sym, regel):
+def controleer(vice, sym, regel, spel=None):
+    if regel[0] == "VERWACHT_VLAG":
+        _, naam, waarde = regel
+        nr = spel["vlaggen"][naam]
+        echt = vice.lees(sym["st_vlaggen"] + nr // 8)[0] >> (nr % 8) & 1
+        return echt == int(waarde), "vlag %s = %s%s" % (naam, waarde, "" if echt == int(waarde) else "  (is %d)" % echt)
+    if regel[0] == "VERWACHT_STAND":
+        _, naam, waarde = regel
+        echt = vice.lees(sym["st_stand"] + spel["voorwerpen"][naam])[0]
+        return echt == int(waarde), "stand %s = %s%s" % (naam, waarde, "" if echt == int(waarde) else "  (is %d)" % echt)
+    if regel[0] == "VERWACHT_EIGENAAR":
+        _, naam, waar = regel
+        terug = {v: k for k, v in spel["kamers"].items()}
+        terug.update({v: k for k, v in spel["eigenaar"].items()})
+        echt = vice.lees(sym["st_eigenaar"] + spel["voorwerpen"][naam])[0]
+        echt_n = terug.get(echt, str(echt))
+        return echt_n == waar, "%s is bij/in %s%s" % (naam, waar, "" if echt_n == waar else "  (is %s)" % echt_n)
     if regel[0] == "TEKST":
         _, rij, verwacht = regel
         echt = scherm_tekst(vice, rij)
@@ -423,7 +456,7 @@ def controleer(vice, sym, regel):
 
 def draai(bandpad, args):
     naam = os.path.splitext(os.path.basename(bandpad))[0]
-    band, shots = lees_band(bandpad)
+    band, shots, starts = lees_band(bandpad)
     verwachtpad = os.path.splitext(bandpad)[0] + ".verwacht"
     if not os.path.exists(verwachtpad):
         raise Fout("%s ontbreekt: zonder verwachte status is er geen test" % verwachtpad)
@@ -434,7 +467,20 @@ def draai(bandpad, args):
             raise Fout("label %s niet in hollowcrown.vs: is dit een AUTOTEST-build?" % nodig)
     scherm_ideaal = any(r[1] == "scherm" for r in verwacht)
     verwacht = [r for r in verwacht if r[1] != "scherm"]
-    for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] != "TEKST"]:
+    for pos, naam_s in starts:                       # START: het adres van het script
+        if "scr_" + naam_s not in sym:
+            raise Fout("%s: onbekend script %s (SCRIPT %s: in tests/scripts/*.hcs?)" % (bandpad, naam_s, naam_s))
+        adres = sym["scr_" + naam_s]
+        band[pos], band[pos + 1] = adres & 255, adres >> 8
+    band = bytes(band)
+    spel = json.load(open(os.path.join(ROOT, "build", "gen", "spel.json")))
+    for m in shots:
+        if isinstance(m, tuple) and m[0] in ("VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND"):
+            soort = {"VERWACHT_VLAG": "vlaggen"}.get(m[0], "voorwerpen")
+            if m[1] not in spel[soort]:
+                raise Fout("%s: onbekende %s %s" % (bandpad, "vlag" if soort == "vlaggen" else "voorwerp", m[1]))
+    for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] not in
+                                     ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND")]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
     controles = [m for m in shots if isinstance(m, tuple)]
@@ -475,7 +521,7 @@ def draai(bandpad, args):
                     raise Fout("onbekende markering %d" % markering)
                 m = shots[markering - 1]
                 if isinstance(m, tuple):              # tussencontrole
-                    ok, tekst = controleer(vice, sym, m)
+                    ok, tekst = controleer(vice, sym, m, spel)
                     schermfouten += 0 if ok else 1
                     print("[test]   %-4s %s" % ("ok" if ok else "FOUT", tekst))
                 else:

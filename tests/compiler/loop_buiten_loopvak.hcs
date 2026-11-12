@@ -1,0 +1,3 @@
+# verwacht: ligt niet in een loopvak
+KAMER plein
+VOORWERP dak "dak" VAK 40,10 10,10 LOOP 40,10 VOOR

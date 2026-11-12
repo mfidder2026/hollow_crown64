@@ -62,7 +62,9 @@ mkdir -p build/gen
 stap "2/4 scripts"
 if [[ -f tools/scriptc.py ]]; then
   mkdir -p build/gen
-  "$PYTHON" tools/scriptc.py scripts build/gen || fout "scriptcompiler (zie hierboven)"
+  EXTRA_SCRIPTS=()
+  (( AUTOTEST )) && EXTRA_SCRIPTS=(tests/scripts)      # proefscripts alleen in de testbuild
+  "$PYTHON" tools/scriptc.py scripts build/gen ${EXTRA_SCRIPTS[@]} || fout "scriptcompiler (zie hierboven)"
 else
   print "[build]   nog geen tools/scriptc.py (hoofdstuk 4): overgeslagen"
 fi

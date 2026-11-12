@@ -127,7 +127,7 @@ Tool paths live in one place, at the top of `build.sh` and `tools/vicetest.py` (
 ```bash
 ./build.sh                              # build/hollowcrown.d64
 ./build.sh --vice                       # ...and start it in VICE
-python3 tools/vicetest.py tests/*.band  # AUTOTEST build + every input tape, checked against tests/*.verwacht
+./tests/alles.sh                        # every test: compiler errors + every input tape in VICE
 ```
 
 ---
@@ -157,7 +157,7 @@ in this order:
 - [x] 1. The split screen and the cursor
 - [x] 2. Eldric walks (walkboxes, pathfinding)
 - [x] 3. Objects and the sentence line
-- [ ] 4. Script VM and compiler
+- [x] 4. Script VM and compiler
 - [ ] 5. Inventory
 - [ ] 6. More rooms, loading from disk
 - [ ] 7. Conversations

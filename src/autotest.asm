@@ -13,6 +13,8 @@
 //                               zo gaan joystick, toetsen en muisknoppen door de gewone omzetcode
 //   $06 px py       MUIS       de potmeters van de muis worden px/py (zoals een 1351 ze zou geven)
 //   $07             WACHT_STIL wacht tot Eldric stilstaat
+//   $08 lo hi       START      start het script op dat adres (vicetest zoekt scr_<naam> op)
+//   $09             WACHT_VM   wacht tot er geen script meer loopt
 // Elk beeld telt band_controle de beelden waarin Eldric buiten alle loopvakken staat (band_buiten).
 // Een onbekende opcode: band_status := $ff en band_fout := de opcode.
 //
@@ -163,6 +165,9 @@ band_controle: {
 !:      lda act_lopen
         bne !+
         sta band_wacht_stil             // staat stil: niet meer wachten
+!:      lda vm_pc + 1
+        bne !+
+        sta band_wacht_vm               // geen script meer
 !:      rts
 }
 
@@ -175,6 +180,7 @@ band_stap: {
         ora band_doel                   // of is de cursor nog onderweg?
         ora band_ruw_teller             // of lopen er nog ruwe standen?
         ora band_wacht_stil             // of wachten we tot Eldric stilstaat?
+        ora band_wacht_vm               // of tot het script klaar is?
         bne klaar
         lda band_wacht
         ora band_wacht + 1
@@ -212,6 +218,23 @@ lees:   ldy #0
         lda #1
         sta band_wacht_stil
         jmp verder                      // A = 1
+!:      cmp #$08
+        bne !+
+        iny
+        lda (zp_band),y
+        pha
+        iny
+        lda (zp_band),y
+        tax
+        pla
+        jsr vm_start
+        lda #3
+        jmp verder
+!:      cmp #$09
+        bne !+
+        lda #1
+        sta band_wacht_vm
+        jmp verder
 !:      sta band_fout                   // onbekend
         lda #BAND_FOUT
         sta band_status
@@ -308,6 +331,7 @@ band_vuur:      .byte 0
 band_hoogste_snelheid: .byte 0         // hoogste cursorsnelheid tot nu toe
 band_ruw_teller: .byte 0                // RUW: nog zoveel beelden
 band_wacht_stil: .byte 0                // WACHT_STIL loopt
+band_wacht_vm:   .byte 0                // WACHT_VM loopt
 band_buiten:     .word 0                // beelden waarin Eldric buiten alle loopvakken stond
 ruw_doel_waarden: .fill 6, 0
 

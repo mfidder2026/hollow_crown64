@@ -1,0 +1,7 @@
+# verwacht: is niet te halen
+DOEL kroon_terug
+VOORWERP kroon "kroon" NERGENS
+SCRIPT x:
+  ALS HEEFT kroon
+    ZET kroon_terug
+  EINDE

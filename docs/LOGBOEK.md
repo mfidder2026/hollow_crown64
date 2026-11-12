@@ -281,3 +281,36 @@ daar "Ga naar fontein" en kon Eldric er niet meer achter. Klikvak = alleen de ba
 - Talen: eerst de Nederlandse versie afmaken; Engels en Frans later als eigen D64 uit dezelfde motor.
 
 **Open:** een vaste letter per werkwoord (§4) is er nog niet; "Wat is" doet bij klikken nog niets extra.
+
+## 2026-11-12 — Hoofdstuk 4: script-VM en compiler ✅
+
+**Klaar als:** scripttests (elke opcode één keer) en fouten die de compiler moet weigeren. **Gehaald.**
+
+**Compiler (`tools/scriptc.py`, herschreven):** de taal staat bovenin het bestand. Nieuw: voorwerpen globaal
+genummerd (hooguit 64) met een eigenaar (kamer / Eldric / nergens) en een stand; `BIJ eldric`, `NERGENS`,
+`STAND n`; scripts voor twee voorwerpen (`GEBRUIK kruik:` onder het vat = "Gebruik kruik met vat", `GEEF x:`);
+`SCRIPT naam:`, `BINNENKOMST:`, `DOEL vlag`; opdrachten ZEG, ALS [NIET] vlag/HEEFT/STAND, ANDERS, EINDE, ZET, WIS,
+GEEF, NEEM, PLAATS, STAND, LOOP, KIJK, WACHT, TUSSENSCENE, EINDE_TUSSENSCENE, STOP. Een KAMER mag in een ander
+bestand opnieuw geopend worden (testscripts). Uitvoer: `spel.asm`, `spel.json` (namen → nummers voor de tests),
+`puzzelstappen.txt`. **Uitspeelbaarheid:** vanaf het begin rekent de compiler uit welke vlaggen en voorwerpen te
+krijgen zijn (een script telt als zijn voorwerpen bereikbaar zijn en zijn ALS-voorwaarden te halen); is DOEL
+niet te halen, dan stopt de build met de lijst van wat wél kan.
+
+**VM (`src/vm.asm`):** 20 opcodes via een sprongtabel; per beeld lopen opdrachten door tot er een wacht (ZEG,
+LOOP, WACHT). Tussenscène: geen invoer, de cursor weg; vuur = overslaan (tekst weg, LOOP meteen klaar, WACHT
+voorbij). Spelstatus wordt bij het begin gevuld uit de tabellen van de compiler.
+
+**Het muntje (wens van de gebruiker):** "Pak fontein" → GEEF munt + vlag munt_gepakt; de tweede keer: "Eén is
+genoeg. De rest is voor andermans wensen." Eldric begint met zijn zwaard (BIJ eldric).
+
+**Tests:**
+- `tests/vm.band` + `tests/scripts/proef.hcs` (alleen in de testbuild): alle opcodes, ook ALS NIET, ANDERS, STOP
+  (daarna gebeurt niets), LOOP/KIJK/WACHT, tussenscène overslaan; en het echte "Pak fontein" twee keer.
+  33 tussencontroles (nieuw: `verwacht_vlag`, `verwacht_eigenaar`, `verwacht_stand`, `start_script`,
+  `wacht_op_script`). GESLAAGD.
+- `tools/compilertest.py` + `tests/compiler/*.hcs`: 19 foute scripts (onbekend woord, opdracht buiten een
+  script, te lange tekst, teken niet in het lettertype, onbekende spreker/voorwerp/kamer, ALS zonder EINDE,
+  ANDERS/EINDE zonder ALS, vlag nergens gezet, DOEL niet te halen, LOOP-punt buiten een loopvak, loopvak niet
+  op gras, los loopvak, dubbel voorwerp, te lange naam, werkwoord zonder voorwerp, foute richting): alle 19
+  geweigerd met de juiste melding; de echte scripts compileren.
+- `./tests/alles.sh` draait alles: 20/20 compiler, 6/6 banden.
