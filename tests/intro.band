@@ -1,0 +1,52 @@
+# intro.band — hoofdstuk 10: het intro. Titelplaatje, logo met kleurenloop, scrolltekst, het thema op de SID.
+# "Zonder oren": verwacht_muziek vergelijkt wat de speler naar de SID schreef met de noten van tools/thema.py.
+intro
+wacht 5
+verwacht intro_actief = 1
+verwacht laad_fout = 0
+verwacht muz_aan = 1
+verwacht_tekst 22 "         Druk op spatie of vuur"
+verwacht_muziek
+screenshot titel
+wacht 37
+verwacht_muziek
+verwacht_logo
+wacht 50
+verwacht intro_kleur > 10              # de kleurenloop loopt (een stap per 3 beelden)
+verwacht_logo
+verwacht_muziek
+wacht 250                              # over een paar noten heen (ook rusten en het einde van noten)
+verwacht_muziek
+wacht 1
+verwacht_muziek
+wacht 29
+verwacht_muziek
+verwacht intro_scroll_tekens.w > 30    # de tekst schuift
+screenshot scroll
+
+# F1: de muziek uit (geen gate meer aan), en weer aan (van voren af aan)
+toets f1 2
+wacht 3
+verwacht muz_aan = 0
+verwacht muz_mag = 0
+verwacht muz_ctrl = 0
+verwacht muz_ctrl+1 = 0
+verwacht muz_ctrl+2 = 0
+toets f1 2
+wacht 3
+verwacht muz_aan = 1
+verwacht muz_beelden.w < 10
+verwacht_muziek
+
+# spatie: het spel begint; geen hangende toon, de IRQ's zoals in het spel
+toets spatie 2
+wacht 5
+verwacht intro_gedaan = 1
+verwacht intro_actief = 0
+verwacht muz_aan = 0
+verwacht muz_ctrl = 0                  # geen gate meer aan: geen hangende toon
+verwacht muz_ctrl+1 = 0
+verwacht muz_ctrl+2 = 0
+verwacht_kamer plein
+verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
+screenshot spel

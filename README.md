@@ -21,6 +21,8 @@ It plays the way the classic late-80s C64 adventures did: the room on top, a bar
 you use to build sentences like **"Use jug with barrel"**. The story, world, characters, art, music and code are
 all our own. We borrow only the genre and the way you control it.
 
+![The title screen: the hollow crown above the castle, the logo with its colour cycle, and the scroll text](docs/images/hoofdstuk10_intro.png)
+
 ![Eldric walking across the village square of Dawnhaven, in VICE](docs/images/hoofdstuk2_lopen.png)
 
 ![Eldric at three depths: front, by the smithy, between the houses at the back](docs/images/hoofdstuk2_diepte.png)
@@ -151,7 +153,9 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-Early days. The build makes a D64; automated tests boot it in VICE, play input tapes, check the game state and
+Chapter 1 is playable from the title screen to "Chapter 1 complete". The art for the inn, the smithy and the
+forest edge is still placeholder (generated, not FLUX). The build makes a D64; automated tests boot it in VICE,
+play input tapes (one of them plays the whole chapter, another saves, loads and carries on), check the game state and
 compare every screenshot pixel by pixel with the screen as memory says it should be, sprites included. The engine is being built
 in this order:
 
@@ -165,7 +169,7 @@ in this order:
 - [x] 7. Conversations
 - [x] 8. Foreground masking and small animations (flickering fire)
 - [x] 9. Chapter 1, fully playable (sound effects, save/load with F5/F7, finale)
-- [ ] 10. Title screen with original SID music
+- [x] 10. Title screen with original SID music (own theme in D minor, checked note by note against the SID)
 
 Progress notes are in [`docs/LOGBOEK.md`](docs/LOGBOEK.md) (in Dutch).
 

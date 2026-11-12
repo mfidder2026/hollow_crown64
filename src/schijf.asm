@@ -151,6 +151,7 @@ schijf_begin: {
         lda #D016_TEKST
         sta $d016
         cli
+        jsr muziek_stop                 // de muziek staat stil (muziek.asm); een kamer zet hem zelf weer aan
         jsr geluid_stil                 // geen hangende toon (geluid.asm)
         ldy #RIJ_KAMER                  // rij 2-17: leeg (in tekstmodus zie je anders de kleuren als tekens)
 !:      tya

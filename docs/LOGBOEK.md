@@ -452,3 +452,50 @@ Alle tests: 21/21 compiler, 12/12 banden.
 
 **Nog open:** de geluiden zijn alleen op registerniveau getest (welk effect, volume), niet beluisterd. Op een
 echte 1541 duurt opslaan/laden net als een kamer enkele seconden (Kernal; geen snellader).
+
+## 2026-11-13 — Hoofdstuk 10: het intro ✅
+
+**Klaar als:** intro → spel start; muziek speelt (SID-registers veranderen volgens de noten); geen hangende toon na
+het intro. **Gehaald.**
+
+**Het beeld (`src/intro.asm`):**
+- Titelplaatje met FLUX (`data/flux/titel.png`, gekozen uit 3 versies): een gebroken gouden kroon boven een donker
+  kasteel met één verlicht raam, Eldric als silhouet. Het is een "kamer" in `data/kamers.txt` (bestand TITEL op de
+  diskette), dus dezelfde omzetter, hetzelfde laden en dezelfde rastersplit als het spel.
+- Logo HOLLOW CROWN in een eigen logo-lettertype (`tools/logo.py`): letters van 10 x 12 blokjes van 2 x 2 pixels,
+  met een zwarte "chroom"-snede; 46 tegels als tekens $80-$AD in het lettertype op $F800 (het spel gebruikt alleen
+  codes onder $80). Kleurenloop: elke 3 beelden schuift een rij van 16 kleuren (goud/vuur, dan zilver) een kolom op.
+- Scrolltekst op rij 24 met het verhaal, de bediening en de makers: vloeiend (1 pixel per beeld) met een extra
+  raster-IRQ op lijn 241 die XSCROLL zet in 38-kolommenmodus; de onderrand zet hem terug. Alleen tijdens het intro.
+- Spatie of vuur start het spel: muziek stil, de SID helemaal leeg, de IRQ's zoals in het spel, de cursor terug.
+
+**De muziek (`tools/thema.py`, `src/muziek.asm`):** een eigen thema in D-mineur, 16 maten op 100 slagen per minuut
+(38,4 s, dan opnieuw). Stem 1 melodie (puls met langzame pulsbreedte-modulatie), stem 2 bas (zaagtand: grondtoon,
+kwint, octaaf), stem 3 akkoorden als arpeggio (elke 2 beelden een toon). Akkoorden: Dm Bb C Am Dm Gm A A | Bb F Gm
+Dm Bb C A Dm; de A groot (C#, harmonisch mineur) trekt telkens terug naar D. Eigen kleine speler in de IRQ op de
+onderrand. Stem 3 wijkt voor een geluidseffect (geluid.asm), dus effecten en muziek gaan samen.
+Het thema keert terug in de herberg (`MUZIEK thema` in BINNENKOMST; nieuwe opdracht `MUZIEK thema|stil`, opcode
+$1B). Bij het laden van een kamer stopt de muziek. F1 zet de muziek uit en aan (in het intro en in het spel).
+
+**Getest zonder oren:** de SID kun je niet teruglezen, dus de speler houdt bij wat hij schreef (muz_flo/fhi/ctrl).
+`verwacht_muziek` in vicetest rekent uit `build/gen/muziek.json` uit welke noot er op dit beeld moet klinken (en
+of de gate aan of uit moet: uit in het laatste beeld van een noot en in rusten; voor het arpeggio welke toon van
+het akkoord) en vergelijkt. Tijdens een controle staat de muziek stil (AUTOTEST), zodat het een echte momentopname
+is. `tests/intro.band`: titel, logo (kleurenloop in alle 120 logovakjes), 7 muziekcontroles over 400 beelden, de
+scrolltekst, F1 uit (alle gates 0) en weer aan (van voren af), spatie → het plein, geen gate meer aan.
+`tests/kamers.band`: het thema speelt in de herberg en stopt op het plein.
+Daarnaast met oren (van de computer): VICE opgenomen als WAV (echte build, zonder warp) en met
+`tools/muziek.py luister` de toonhoogtes eruit gehaald: D5 F5 A5 | Bb5 A5 G5 F5 | E5 G5 E5 | A4, met de bas
+D2 A2 D3 | Bb1 F2 Bb2 ... — precies het thema.
+
+**In AUTOTEST-builds** draait het intro alleen als een band met `intro` begint (nieuwe bandopcode $0A); alle andere
+banden beginnen dus nog steeds direct in het spel.
+
+**Verhaal rechtgetrokken:** de scrolltekst en Vex volgen nu het verhaal van de README (de Holle Koning stal het
+zonlicht; Eldric draagt het laatste lichtfragment; Vex dient de Holle Koning).
+
+**Getest:** 22/22 compiler, 13/13 banden.
+
+**Nog open (voor later):** het thema "bij de titel van elk hoofdstuk" (er is nu één hoofdstuk); een snellader
+(laden via de Kernal duurt op een echte 1541 ~14 s per kamer); FLUX-plaatjes voor herberg, smidse en bosrand;
+invoer op echte hardware (joystick, 1351-muis, toetsenbord) is alleen in VICE getest; Engels en Frans als aparte D64.

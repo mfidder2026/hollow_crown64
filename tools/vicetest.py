@@ -46,7 +46,8 @@ BUILD = os.path.join(ROOT, "build", "autotest")
 TESTUIT = os.path.join(ROOT, "build", "test")
 
 # opcodes van de invoerband: gelijk houden met src/autotest.asm
-OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL, OP_START, OP_WACHT_VM = range(10)
+OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL, OP_START, OP_WACHT_VM, \
+    OP_INTRO = range(11)
 JOY = {"op": 1, "neer": 2, "links": 4, "rechts": 8, "vuur": 16}
 # toets -> (rij, bit) in de matrix; rijen 0, 1, 6 (zie src/invoer.asm)
 TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10),
@@ -117,6 +118,16 @@ def lees_band(pad):
             elif cmd == "start_script" and re.fullmatch(r"\w+", arg):
                 data += bytes([OP_START, 0, 0])          # het adres vult draai() in (scr_<naam> uit hollowcrown.vs)
                 starts.append((len(data) - 2, arg))
+            elif cmd == "intro" and not arg:
+                if data:
+                    raise Fout("%s:%d: intro moet de eerste stap zijn" % (pad, nr))
+                data += bytes([OP_INTRO])
+            elif cmd == "verwacht_logo" and not arg:
+                namen.append(("LOGO", None))
+                data += bytes([OP_MARKEER, len(namen)])
+            elif cmd == "verwacht_muziek" and not arg:
+                namen.append(("MUZIEK", None))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd == "wacht_op_script" and not arg:
                 data += bytes([OP_WACHT_VM])
             elif cmd in ("onthoud_kleur", "verwacht_kleur_volgend"):
@@ -450,6 +461,42 @@ def scherm_vergelijken(vice, png_pad):
 # ---------------------------------------------------------------------------------------------------
 # Een test
 # ---------------------------------------------------------------------------------------------------
+def muziek_klopt(vice, sym):
+    """Controle zonder oren (§9): wat de speler naar de SID schreef (muz_flo/fhi/ctrl, ook in de SID zelf te
+    schrijven maar niet terug te lezen) moet kloppen met de noten van tools/thema.py op dit beeld (muz_beelden).
+    Melodie en bas: precies die noot, gate uit in het laatste beeld en in rusten. Arpeggio: de juiste toon van het
+    akkoord (elke 2 beelden de volgende)."""
+    m = json.load(open(os.path.join(ROOT, "build", "gen", "muziek.json")))
+    if not vice.lees(sym["muz_aan"])[0]:
+        return False, "muziek: de speler loopt niet (muz_aan = 0)"
+    b = vice.lees(sym["muz_beelden"], 2)
+    f = b[0] | b[1] << 8
+    t = (f - 1) % m["lengte"]
+    flo, fhi, ctrl = vice.lees(sym["muz_flo"], 3), vice.lees(sym["muz_fhi"], 3), vice.lees(sym["muz_ctrl"], 3)
+    fouten, uitleg = [], []
+    for v, stem in enumerate(m["stemmen"]):
+        begin = 0
+        for noot, duur in stem:
+            if begin <= t < begin + duur:
+                break
+            begin += duur
+        gate_verwacht = 0 if noot == 0 or t == begin + duur - 1 else 1
+        echt_f = flo[v] | fhi[v] << 8
+        if noot == 0:
+            verwacht_f, naam = None, "rust"
+        elif v == 2:
+            c = t - begin
+            midi_n = m["akkoorden"][noot - 1][((c + 1) % 6) // 2]
+            verwacht_f, naam = m["freq"][midi_n], "akkoord %d toon %d" % (noot, ((c + 1) % 6) // 2)
+        else:
+            verwacht_f, naam = m["freq"][noot], "noot %d" % noot
+        ok = (verwacht_f is None or echt_f == verwacht_f) and (ctrl[v] & 1) == gate_verwacht
+        uitleg.append("stem %d %s%s" % (v + 1, naam, "" if ok else " (freq $%04x, gate %d)" % (echt_f, ctrl[v] & 1)))
+        if not ok:
+            fouten.append(v + 1)
+    return not fouten, "muziek op beeld %d (tel %.2f): %s" % (f, t / m["tel"], "; ".join(uitleg))
+
+
 def vergelijk(op, a, b):
     return {"=": a == b, "!=": a != b, "<": a < b, "<=": a <= b, ">": a > b, ">=": a >= b}[op]
 
@@ -487,6 +534,18 @@ def controleer(vice, sym, regel, spel=None):
         ok = nu == verwacht and n >= 1
         return ok, "kleur rij %d kolom %d: %s, %d stap(pen) verder: %s%s" % (
             rij, kol, KLEURNAMEN[oud], n, KLEURNAMEN[verwacht], "" if ok else "  (is %s)" % KLEURNAMEN[nu])
+    if regel[0] == "MUZIEK":
+        return muziek_klopt(vice, sym)
+    if regel[0] == "LOGO":
+        # de kleurenloop: elke logokolom k heeft kleur logo_kleuren[(k + intro_kleur) & 15], in alle 3 de rijen
+        stap = vice.lees(sym["intro_kleur"])[0]
+        tabel = vice.lees(sym["logo_kleuren"], 16)
+        scherm = vice.lees(0xC000 + 18 * 40, 120)
+        kleur = [b & 15 for b in vice.lees(0xD800 + 18 * 40, 120)]
+        tekens = sum(1 for c in scherm if c >= 0x80)
+        fout = [i for i in range(120) if kleur[i] != tabel[(i % 40 + stap) & 15]]
+        return tekens > 60 and not fout, "logo: %d logotekens, kleurenloop op stap %d%s" % (
+            tekens, stap, "" if not fout else "  (fout in %d vakjes)" % len(fout))
     if regel[0] == "VERWACHT_VLAG":
         _, naam, waarde = regel
         nr = spel["vlaggen"][naam]
@@ -544,7 +603,7 @@ def draai(bandpad, args):
                 raise Fout("%s: onbekende %s %s" % (bandpad, "vlag" if soort == "vlaggen" else "voorwerp", m[1]))
     for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] not in
                                      ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND", "VERWACHT_KAMER",
-                                      "ONTHOUD_KLEUR", "VERWACHT_KLEUR_VOLGEND")]:
+                                      "ONTHOUD_KLEUR", "VERWACHT_KLEUR_VOLGEND", "MUZIEK", "LOGO")]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
     controles = [m for m in shots if isinstance(m, tuple)]

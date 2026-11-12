@@ -33,9 +33,13 @@ start:
         jsr npc_begin
         jsr tod_start
         jsr scherm_start
-        jsr balk_tekenen
         jsr actor_start
         jsr cursor_start
+#if AUTOTEST
+        jsr band_begin                  // vóór het intro: de band kan het intro bedienen
+#endif
+        jsr intro                       // titel, logo, scrolltekst en muziek tot spatie of vuur (intro.asm)
+        jsr balk_tekenen
         lda #<BEGIN_X                   // de eerste kamer, van de diskette (laden_einde zet de IRQ's aan)
         sta kw_x
         lda #>BEGIN_X
@@ -46,9 +50,6 @@ start:
         sta kw_richting
         lda #BEGIN_KAMER
         jsr kamer_wissel
-#if AUTOTEST
-        jsr band_begin
-#endif
         cli
         jmp hoofdlus
 
@@ -135,6 +136,8 @@ kamer_nu: .byte 0
 #import "schijf.asm"
 #import "geluid.asm"
 #import "opslaan.asm"
+#import "muziek.asm"
+#import "intro.asm"
 #import "invoer.asm"
 #import "cursor.asm"
 #import "autotest.asm"

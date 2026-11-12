@@ -167,9 +167,18 @@ melding_beeld:
         jmp melding
 !:      rts
 
-// functietoetsen: F5 opslaan, F7 laden (alleen als je mag klikken: geen script, gesprek of tussenscène)
+// functietoetsen: F1 muziek aan/uit; F5 opslaan, F7 laden (alleen als je mag klikken: geen script, gesprek of tussenscène)
 functietoetsen: {
-        lda toets_rij0
+        lda toets_rij0                  // F1 (kolom 4): muziek aan/uit, altijd
+        and #%00010000
+        tax
+        eor f1_vorig
+        and toets_rij0
+        stx f1_vorig
+        and #%00010000
+        beq !+
+        jsr muziek_f1
+!:      lda toets_rij0
         and #%01001000                  // F5 = kolom 6, F7 = kolom 3
         tax
         eor ft_vorig

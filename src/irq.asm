@@ -20,6 +20,7 @@
 .const IRQ_KAMER     = 65
 .const IRQ_BALK      = 194
 .const IRQ_ONDERRAND = 252
+.const IRQ_SCROLL    = 241              // alleen in het intro
 
 .const D011_TEKST    = $1b              // scherm aan, 25 rijen, YSCROLL 3
 .const D011_BITMAP   = $3b
@@ -82,6 +83,31 @@ irq_balk:
         sta $d016
         lda #POORT1_POTS                // de SID meet vanaf nu de muis in poort 1 (invoer.asm)
         sta $dc00
+        lda intro_actief                // het intro: eerst nog de scroll-split (rij 24)
+        beq !+
+        lda #IRQ_SCROLL
+        sta $d012
+        lda #<irq_scroll
+        sta $0314
+        lda #>irq_scroll
+        sta $0315
+        jmp $ea81
+!:      lda #IRQ_ONDERRAND
+        sta $d012
+        lda #<irq_onderrand
+        sta $0314
+        lda #>irq_onderrand
+        sta $0315
+        jmp $ea81
+
+// Lijn 241 (alleen in het intro): rij 24 vloeiend scrollen. Rij 23 is leeg, dus waar op de lijn dit valt maakt
+// niet uit. 38 kolommen: de tekens die in- en uitschuiven verdwijnen achter de rand.
+irq_scroll:
+        lda #%00000001
+        sta $d019
+        lda intro_xscroll
+        ora #%11000000                  // (bit 3 = 0: 38 kolommen)
+        sta $d016
         lda #IRQ_ONDERRAND
         sta $d012
         lda #<irq_onderrand
@@ -103,6 +129,7 @@ irq_onderrand:
         inc beelden + 1
 !:
         jsr geluid_beeld                // geluidseffecten (geluid.asm)
+        jsr muziek_beeld                // het thema (muziek.asm)
 #if !AUTOTEST
         jsr invoer_hardware             // joystick, toetsen, muis (invoer.asm), vóór de Kernal-scan
 #endif

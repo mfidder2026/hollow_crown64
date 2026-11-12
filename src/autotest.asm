@@ -15,6 +15,7 @@
 //   $07             WACHT_STIL wacht tot Eldric stilstaat
 //   $08 lo hi       START      start het script op dat adres (vicetest zoekt scr_<naam> op)
 //   $09             WACHT_VM   wacht tot er geen script meer loopt
+//   $0A             INTRO      (alleen als eerste opdracht) het intro draait; zonder: meteen het spel
 // Elk beeld telt band_controle de beelden waarin Eldric buiten alle loopvakken staat (band_buiten).
 // Een onbekende opcode: band_status := $ff en band_fout := de opcode.
 //
@@ -27,6 +28,7 @@
 .const BAND_LOOPT     = 1
 .const BAND_KLAAR     = 2
 .const BAND_FOUT      = $ff
+.const BAND_OP_INTRO  = $0a             // INTRO: alleen als eerste opdracht; dan draait het intro (intro.asm)
 
 .segment Code
 band_begin:
@@ -234,6 +236,10 @@ lees:   ldy #0
         bne !+
         lda #1
         sta band_wacht_vm
+        jmp verder
+!:      cmp #BAND_OP_INTRO              // (intro.asm leest hem al; verderop doet hij niets)
+        bne !+
+        lda #1
         jmp verder
 !:      sta band_fout                   // onbekend
         lda #BAND_FOUT

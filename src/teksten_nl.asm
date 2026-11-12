@@ -52,6 +52,21 @@ tekst_niets_opgeslagen: .text "Er is geen opgeslagen spel."; .byte 0
 tekst_voltooid:  .text "Hoofdstuk 1 voltooid"
 .label tekst_voltooid_lengte = * - tekst_voltooid
                  .byte 0
+// het intro (intro.asm)
+tekst_druk:      .text "Druk op spatie of vuur"
+.label tekst_druk_lengte = * - tekst_druk
+                 .byte 0
+tekst_scroll:
+        .text "Hollow Crown ... Het rijk Aethermoor leefde onder de Eeuwige Zon, tot de nacht van de dubbele "
+        .text "maansverduistering. Toen kroop de Holle Koning uit de aarde, stal het zonlicht en nam het kasteel. "
+        .text "Sindsdien is het overal schemer. Eldric, de laatste Wachter van de Lichte Kroon, draagt het "
+        .text "laatste lichtfragment in zijn zwaard. Help hem het licht terug te brengen ... "
+        .text "Bediening: joystick in poort 2, 1351-muis in poort 1, of de cursortoetsen met spatie als vuur. "
+        .text "F1 muziek aan/uit, F5 opslaan, F7 laden ... "
+        .text "Een point-and-click-avontuur voor de Commodore 64, gemaakt met Kick Assembler, Python en VICE. "
+        .text "Muziek: een eigen thema in D-mineur. Plaatjes: FLUX. ... "
+        .text "Groeten aan iedereen die nog een C64 aanzet!          "
+        .byte 0
 tekst_hoofdstuk: .text "Hoofdstuk 1: Dawnhaven"
 .label tekst_hoofdstuk_lengte = * - tekst_hoofdstuk
                  .byte 0

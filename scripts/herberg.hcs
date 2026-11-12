@@ -10,6 +10,7 @@ KAMER herberg
   ACTOR mira KOSTUUM mira OP 28,96       # Mira, bij de haard
 
 BINNENKOMST:
+  MUZIEK thema                         # het thema keert terug in de herberg (§9)
   ALS vlag tafel_geschoven
     PATCH tafel_weg
   EINDE

@@ -4,3 +4,4 @@ plein    data/flux/dawnhaven.png      boven=190  kleur=1.5  licht=1.0  sterkte=0
 herberg  data/plaatjes/herberg.png    boven=0  kleur=1.0  sterkte=0  patch=tafel_weg:44,88,72,24:data/plaatjes/herberg_tafel_weg.png  patch=kruik_weg:140,32,8,16:data/plaatjes/herberg_zonder_kruik.png
 smidse   data/plaatjes/smidse.png     boven=0  kleur=1.0  sterkte=0  patch=vuur_aan:60,56,36,24:data/plaatjes/smidse_vuur.png
 bosrand  data/plaatjes/bosrand.png    boven=0  kleur=1.0  sterkte=0
+titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen

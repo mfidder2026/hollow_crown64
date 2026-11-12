@@ -57,6 +57,8 @@ mkdir -p build/gen
 "$PYTHON" tools/kamer.py data/kamers.txt build/gen || fout "tools/kamer.py (data/kamers.txt)"
 "$PYTHON" tools/lettertype.py build/gen || fout "tools/lettertype.py"
 "$PYTHON" tools/costume.py build/gen || fout "tools/costume.py"
+"$PYTHON" tools/logo.py build/gen || fout "tools/logo.py"
+"$PYTHON" tools/thema.py build/gen || fout "tools/thema.py"
 
 # ---- 2. scripts compileren (na de kamers: de compiler controleert de loopvakken op het plaatje) ----
 stap "2/4 scripts"

@@ -61,7 +61,7 @@ VOORWERP wolven "wolven" VAK 66,68 28,18 LOOP 80,100 RUG
         WACHT 25
         TOON vex
         ZEG vex "Zo. De kleine lichtdrager van Dawnhaven."
-        ZEG vex "Eén fragment, Eldric. Ik heb de andere zes. De kroon is bijna van mij."
+        ZEG vex "Het laatste lichtfragment. De Holle Koning wil het hebben, Eldric."
         ZEG eldric "Vex! Geef de zon terug!"
         ZEG vex "Kom ze maar halen. Als je durft. Het Duisterwoud wacht op je."
         LOOP vex 80,40
