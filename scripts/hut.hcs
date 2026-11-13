@@ -1,0 +1,67 @@
+# hut.hcs — hoofdstuk 5: de hut van Oma Rijm (data/plaatjes/hut.png, met de hand getekend: tools/teken_ijs.py).
+# Oma vertelt over de nacht van de spreuk en het steentje, en geeft een wollen want voor het baken ("het bijt").
+KAMER hut
+  LOOPKLEUREN bruin donkergrijs rood oranje
+  LOOPVAK 2,110 157,122                  # 0 voor
+  LOOPVAK 2,96 12,122                    # 1 bij de deur naar het pad
+  LOOPVAK 60,96 76,122                   # 2 voor de tafel langs
+  LOOPVAK 104,96 157,122                 # 3 bij de haard en de achterdeur
+  FLAKKER 112,56 24,24 rood oranje geel  # het vuur
+  BINNENKOMST:
+    MUZIEK herberg
+
+VOORWERP oma "Oma Rijm" VAK 80,68 24,38 LOOP 72,112 RECHTS
+  BEKIJK:
+    ZEG eldric "Oma Rijm. Mijn oma. Ze breit, alsof ze op me wachtte."
+  PRAAT:
+    PRAAT oma_praat
+
+VOORWERP oma_boek "boek" VAK 26,84 18,8 LOOP 36,112 RUG
+  BEKIJK:
+    ZEG eldric "Oma's boek. Vol aantekeningen en tekeningen van manen."
+  LEES:
+    ZEG eldric "'De kroon houdt de manen vast. Neem er een maansteen uit...'"
+    ZEG eldric "'...en het licht moet ergens heen kunnen.' Dat zei het spreukenboek ook."
+
+VOORWERP haard_oma "haard" VAK 104,24 40,57 LOOP 120,100 RUG
+  BEKIJK:
+    ZEG eldric "Een warm vuur. Het eerste echte vuur sinds lang."
+
+VOORWERP raam_oma "raam" VAK 18,20 30,28 LOOP 30,112 RUG
+  BEKIJK:
+    ZEG eldric "Sneeuw, en de zwarte zon. Hierboven lijkt hij dichterbij."
+
+VOORWERP deur_bergpad "deur" VAK 2,40 13,42 LOOP 8,100 LINKS
+  GA_NAAR:
+    KAMER bergpad 150,88 LINKS
+
+VOORWERP deur_ijsbrug "deur" VAK 146,40 13,42 LOOP 152,100 RECHTS
+  GA_NAAR:
+    ALS HEEFT want
+      KAMER ijsbrug 10,108 RECHTS
+    ANDERS
+      ZEG oma "Waar ga jij heen, jongen? Eerst even praten met je oma."
+    EINDE
+
+GESPREK oma_praat
+  KEUZE "Oma!" ALS NIET vlag oma_begroet
+    ZEG oma "Kijk eens wie er is. Mijn gewone jongen."
+    ZEG oma "En met een vriendin. Ga zitten, kind. Je bent koud."
+    ZET oma_begroet
+  KEUZE "Wat gebeurde er, die nacht?" ALS vlag oma_begroet
+    ZEG oma "Die nacht schoven de manen voor de zon."
+    ZEG oma "En in mijn tuin viel een gloeiend steentje."
+    ZEG oma "Het laatste licht, voordat het donker werd. Ik gaf het aan jou."
+    ZEG oma "Daarna ging ik de bergen in. Ik wilde weten wat er gebeurd was."
+  KEUZE "Waarom gaf je het steentje aan mij?" ALS vlag oma_begroet
+    ZEG oma "Niet omdat jij een held bent, jongen."
+    ZEG oma "Omdat jij lief bent. Dat is meer waard."
+  KEUZE "Ik moet naar het zonnebaken." ALS NIET HEEFT want
+    ZEG oma "Het licht moet ergens heen kunnen, jongen. Anders breekt het alles."
+    ZEG oma "Het baken vangt het op. Maar het bijt. Hier, een wollen want."
+    GEEF want
+    PUNTEN 10
+  KEUZE "Ga je mee, oma?" ALS HEEFT want
+    ZEG oma "Nee. Steek het baken aan. Dan zie ik vanaf hier of je het haalt."
+  KEUZE "Tot straks, oma." EINDE
+    ZEG oma "Tot straks, lieverd."

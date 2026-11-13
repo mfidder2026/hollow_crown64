@@ -1,0 +1,20 @@
+# veerman.hcs — tussenscène na hoofdstuk 2: de boot van Olm komt door de mist (data/plaatjes/veerman.png, met de hand
+# getekend: tools/teken_zee.py). Een toneel: geen Eldric. Daarna begint hoofdstuk 3 op de steiger.
+KAMER veerman
+  TONEEL
+  LOOPKLEUREN blauw zwart donkergrijs grijs lichtgrijs
+  LOOPVAK 134,100 150,110                # (alleen omdat een kamer een loopvak moet hebben)
+  FLAKKER 20,64 8,8 geel oranje wit      # de lantaarn aan de boeg
+  BINNENKOMST:
+    TUSSENSCENE
+    MUZIEK zee
+    WACHT 40
+    ZEG verteller "De Zee van Vergetelheid. Wie erop vaart, vergeet."
+    ZEG verteller "Zelfs de veerman weet niet meer wie hij is."
+    WACHT 30
+    ZEG olm "Iemand belde. Ik hoorde een bel. Of was dat gisteren?"
+    ZEG olm "Ik roei naar de bel. Dat weet ik nog. Verder... niets."
+    WACHT 50
+    EINDE_TUSSENSCENE
+    HOOFDSTUK 3
+    KAMER steiger 8,110 RECHTS

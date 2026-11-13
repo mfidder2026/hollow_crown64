@@ -1,0 +1,69 @@
+# steiger.hcs — hoofdstuk 3: het eind van de steiger, de boot van Olm ernaast (data/plaatjes/steiger.png, met de hand
+# getekend: tools/teken_zee.py). Olm vaart niet zonder zijn naam; zijn naam staat op zijn boot.
+KAMER steiger
+  LOOPKLEUREN bruin donkergrijs zwart oranje grijs lichtgrijs
+  LOOPVAK 2,100 108,122                  # de planken
+  FLAKKER 156,48 4,16 geel oranje wit    # de lantaarn op de boot
+  BINNENKOMST:
+    MUZIEK zee
+
+VOORWERP terug_oever "oever" VAK 0,96 4,28 LOOP 4,110 LINKS
+  GA_NAAR:
+    KAMER oever 100,80 LINKS
+  BEKIJK:
+    ZEG eldric "Terug over de steiger naar de oever."
+
+# (Olm staat voor de boot: bij overlappende vakken wint de eerste)
+VOORWERP olm "Olm" VAK 116,52 26,30 LOOP 104,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Een oude veerman met een baard tot op zijn buik. Hij staart naar het water."
+  PRAAT:
+    PRAAT olm_praat
+
+VOORWERP olm_boot "boot" VAK 70,82 88,16 LOOP 104,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Een roeiboot. Er staat iets op de zijkant geschreven."
+  LEES:
+    ZEG eldric "Op de zijkant staat, in witte letters: OLM."
+    ZET boot_gelezen
+  GA_NAAR:
+    ZEG eldric "Instappen zonder iets te vragen? Dat doe je niet bij een veerman."
+
+VOORWERP bel_steiger "bel" VAK 90,52 16,30 LOOP 92,102 RUG
+  BEKIJK:
+    ZEG eldric "De bel waarmee ik Olm riep."
+  TREK:
+    GELUID munt
+    ZEG olm "Ja ja. Ik ben er al. Denk ik."
+
+VOORWERP zee_steiger "zee" VAK 0,54 34,40 LOOP 30,102 RUG
+  BEKIJK:
+    ZEG eldric "Mist op het water. Ik weet ineens niet meer wat ik als ontbijt had."
+
+VOORWERP vuurtoren_ver "vuurtoren" VAK 34,16 20,36 LOOP 40,102 RUG
+  BEKIJK:
+    ZEG eldric "Een vuurtoren op een eiland, ver weg. Donker."
+    ZEG mira "Ik hoor meeuwen. Daar woont iemand."
+
+GESPREK olm_praat
+  KEUZE "Wie ben jij?"
+    ZEG olm "Wie ik ben? Goeie vraag. Wie ben ik eigenlijk?"
+    ZEG olm "Ik vaar niet zonder mijn naam. Dan weet ik niet waar ik thuishoor."
+  KEUZE "Je heet Olm." ALS vlag boot_gelezen EINDE
+    ZEG olm "Olm... OLM! Ja! Zo heet ik! Zo heet ik al jaren!"
+    ZEG olm "Stap in, jongen. En u ook, mevrouw."
+    ZET olm_weet_naam
+    PUNTEN 10
+    KAMER boot 80,110 RUG
+  KEUZE "Je heet Bram." EINDE
+    ZEG olm "Bram? Bram! Natuurlijk. Bram vaart altijd recht op de rots af."
+    TUSSENSCENE
+    VERBERG mira_mee
+    VERBERG eldric
+    ZEG verteller "Olm roeit, zeker van zijn zaak. Recht op een rots af."
+    TOON tik
+    ZEG tik "Olm vond de Rots van de Zekere Dood. Jij ook."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  KEUZE "Tot ziens." EINDE
+    ZEG olm "Tot... wat zei je?"

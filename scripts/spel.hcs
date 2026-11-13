@@ -6,8 +6,11 @@ VERHAAL verhaal 79,124 RUG
 # De hoofdstukken: titel onderaan, en de vlag die het afsluit ("Hoofdstuk n voltooid")
 HOOFDSTUK 1 "Dawnhaven" hoofdstuk1_klaar
 HOOFDSTUK 2 "Duisterwoud" hoofdstuk2_klaar
+HOOFDSTUK 3 "Zee van Vergetelheid" hoofdstuk3_klaar
+HOOFDSTUK 4 "Rotskloof" hoofdstuk4_klaar
+HOOFDSTUK 5 "IJstop" hoofdstuk5_klaar
 # Tot waar het spel nu speelbaar is (de compiler controleert dat dit te halen is)
-DOEL hoofdstuk2_klaar
+DOEL hoofdstuk5_klaar
 
 # Wat Eldric bij zich heeft (en wat later bij hem komt)
 VOORWERP zonnesteen "zonnesteen" BIJ eldric
@@ -23,15 +26,65 @@ VOORWERP vuursteen "vuursteen" NERGENS
     ZEG eldric "Een vuursteen van Bram. Voor als het licht uitgaat."
 
 VOORWERP lantaarn "lantaarn" NERGENS
+  # standen: 0 leeg, 1 olie, 2 brandt, 3 lek en uit (hoofdstuk 4), 4 zwak licht (gloeischub), 5 fel (lichtzwam),
+  # 6 fel maar het luikje dicht (de aardstad)
   BEKIJK:
+    ALS STAND lantaarn 0
+      ZEG eldric "Een lege lantaarn van Bram."
+    EINDE
+    ALS STAND lantaarn 1
+      ZEG eldric "De lantaarn zit vol olie. Nu nog vuur."
+    EINDE
     ALS STAND lantaarn 2
       ZEG eldric "De lantaarn brandt. Het licht van de zon, in het klein."
+    EINDE
+    ALS STAND lantaarn 3
+      ZEG eldric "Leeg. Er zit een gaatje in de bodem. Iemand met een mes."
+      ZEG mira "Een gloeiend ding zou ook licht geven. Al is het weinig."
+    EINDE
+    ALS STAND lantaarn 4
+      ZEG eldric "Zwak licht van de gloeischub. Net genoeg."
+    EINDE
+    ALS STAND lantaarn 5
+      ZEG eldric "De lichtzwam brandt fel in de lantaarn."
+    EINDE
+    ALS STAND lantaarn 6
+      ZEG eldric "Het luikje is dicht. Binnenin gloeit de lichtzwam."
+    EINDE
+  GEBRUIK gloeischub:
+    ALS STAND lantaarn 3
+      ZEG eldric "Ik houd de gloeischub in de lantaarn. Zwak licht, maar licht."
+      STAND lantaarn 4
+      PUNTEN 10
     ANDERS
-      ALS STAND lantaarn 1
-        ZEG eldric "De lantaarn zit vol olie. Nu nog vuur."
+      ZEG eldric "Daar heeft de lantaarn nu niets aan."
+    EINDE
+  GEBRUIK lichtzwammen:
+    ALS STAND lantaarn 5
+      ZEG eldric "Hij brandt al fel."
+    ANDERS
+      ALS STAND lichtzwammen 2
+        ZEG eldric "Ik stop een lichtzwam in de lantaarn. Wauw. Fel!"
+        STAND lantaarn 5
+        STAND lichtzwammen 1
+        PUNTEN 10
       ANDERS
-        ZEG eldric "Een lege lantaarn van Bram."
+        ZEG eldric "Die laatste lichtzwam bewaar ik."
       EINDE
+    EINDE
+  SLUIT:
+    ALS STAND lantaarn 5
+      ZEG eldric "Ik schuif het luikje dicht. Nu schijnt hij niet meer naar buiten."
+      STAND lantaarn 6
+    ANDERS
+      ZEG eldric "Daar valt niets aan dicht te doen."
+    EINDE
+  OPEN:
+    ALS STAND lantaarn 6
+      ZEG eldric "Ik schuif het luikje weer open."
+      STAND lantaarn 5
+    ANDERS
+      ZEG eldric "Hij heeft alleen een luikje. Dat is open."
     EINDE
   GEBRUIK kruik:
     ALS NIET STAND lantaarn 0
@@ -69,6 +122,48 @@ VOORWERP fluisterkever "fluisterkever" NERGENS
     ZEG eldric "Een kevertje in een koker. Als het zoemt, hoor ik woorden."
     ZEG mira "Een fluisterkever. De aardmannetjes praten ermee. Hij vertaalt."
 
+VOORWERP sterrenkaart "sterrenkaart" NERGENS
+  BEKIJK:
+    ZEG eldric "Een kaart vol sterren en lijnen. Gangen onder de kloof, zegt Nul."
+  LEES:
+    ZEG eldric "Sterren als wegwijzers. Onder de grond. Daar snap ik nog niets van."
+
+VOORWERP lichtzwammen "lichtzwammen" NERGENS
+  BEKIJK:
+    ALS STAND lichtzwammen 2
+      ZEG eldric "Twee lichtzwammen van Pad. Eén keer fel licht per stuk."
+    ANDERS
+      ZEG eldric "Nog één lichtzwam over. Die bewaar ik."
+    EINDE
+
+VOORWERP trilkristal "trilkristal" NERGENS
+  BEKIJK:
+    ZEG eldric "Een kristal dat trilt in mijn hand. Het wil iets."
+
+VOORWERP bakenkristal "bakenkristal" NERGENS
+  BEKIJK:
+    ALS STAND bakenkristal 1
+      ZEG eldric "Het bakenkristal, veilig in oma's want."
+    ANDERS
+      ZEG eldric "Het kristal trilt niet meer. Het zingt. Voor het zonnebaken."
+    EINDE
+  GEBRUIK want:
+    ALS STAND bakenkristal 1
+      ZEG eldric "Ik heb het al vast, met de want."
+    ANDERS
+      ZEG eldric "Ik trek oma's want aan en pak het kristal vast. Het voelt warm, niet heet."
+      STAND bakenkristal 1
+      PUNTEN 5
+    EINDE
+
+VOORWERP sleutelschub "sleutelschub" NERGENS
+  BEKIJK:
+    ZEG eldric "Een schub van Moeder Aard. Hij opent de poort van het kasteel."
+
+VOORWERP want "wollen want" NERGENS
+  BEKIJK:
+    ZEG eldric "Een wollen want van oma. Voor het baken. Het bijt, zei ze."
+
 VOORWERP gloeischub "gloeischub" NERGENS
   BEKIJK:
     ZEG eldric "Een schub die zacht gloeit. Een klein beetje licht, van een aardmannetje."
@@ -81,6 +176,10 @@ SPREKER grom lichtgroen
 SPREKER tik wit
 SPREKER kever lichtblauw
 SPREKER aardmannetje roze
+SPREKER olm grijs
+SPREKER nul groen
+SPREKER pad lichtgroen
+SPREKER oma roze
 
 # Figuren die overal mee kunnen (geen KAMER): Tik verschijnt bij een dood, Mira loopt mee vanaf hoofdstuk 2
 ACTOR tik KOSTUUM tik OP 120,40 VERBORGEN

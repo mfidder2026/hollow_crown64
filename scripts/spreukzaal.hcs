@@ -1,0 +1,83 @@
+# spreukzaal.hcs — hoofdstuk 4: de zaal waar Grom de Schemerspreuk weefde (data/plaatjes/spreukzaal.png, met de hand
+# getekend: tools/teken_kloof.py). Het spreukenboek (lezen met Nuls sterrenkaart: patch boek_open), de kring (het
+# trilkristal wordt een bakenkristal; zonder het boek: Tik), de lege nis waar de Holle Kroon stond. Einde hoofdstuk 4.
+KAMER spreukzaal
+  LOOPKLEUREN grijs donkergrijs zwart lichtgrijs
+  LOOPVAK 4,110 156,122
+  BINNENKOMST:
+    MUZIEK kelder
+    ALS vlag boek_gelezen
+      PATCH boek_open
+    EINDE
+
+VOORWERP boek "spreukenboek" VAK 22,78 24,12 LOOP 46,114 LINKS
+  BEKIJK:
+    ZEG eldric "Een dik boek op een lessenaar, met een rode band."
+  LEES:
+    ALS HEEFT sterrenkaart
+      TUSSENSCENE
+      PATCH boek_open
+      ZET boek_gelezen
+      ZEG eldric "Sterren en strepen... met Nuls kaart kan ik het lezen!"
+      ZEG eldric "'De Schemerspreuk. Twee manen vast voor de zon, gebonden aan een kroon.'"
+      ZEG eldric "'Neem een maansteen uit de kroon, en die maan schuift door.'"
+      ZEG eldric "'Maar het licht dat wachtte, komt in één golf. Het moet ergens heen.'"
+      ZEG eldric "'Naar het oude zonnebaken op de IJstop.'"
+      ZEG mira "De IJstop. Daar woont je oma, Eldric."
+      PUNTEN 15
+      EINDE_TUSSENSCENE
+    ANDERS
+      ZEG eldric "Een schrift van sterren en strepen. Ik kan er niets van maken."
+    EINDE
+  OPEN:
+    ZEG eldric "Het staat open op een bladzijde vol sterren. Lezen dan maar."
+
+VOORWERP kring "kring" VAK 44,88 72,34 LOOP 80,114 RUG
+  BEKIJK:
+    ZEG eldric "Hier stond Grom. De vloer is nog zwart."
+  GEBRUIK trilkristal:
+    ALS vlag boek_gelezen
+      TUSSENSCENE
+      ZEG eldric "Ik leg het kristal in het midden en zeg de woorden uit het boek."
+      KLEUR 44,88 72,32 zwart lichtblauw
+      WACHT 6
+      KLEUR 44,88 72,32 lichtblauw zwart
+      NEEM trilkristal
+      GEEF bakenkristal
+      ZEG eldric "Het trilt niet meer. Het zingt. Een bakenkristal."
+      ZEG mira "Naar de IJstop, Eldric. Naar je oma."
+      PUNTEN 20
+      ZET hoofdstuk4_klaar
+      EINDE_TUSSENSCENE
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Een spreuk? Iets met... abracadabra?"
+      VERBERG mira_mee
+      VERBERG eldric
+      WACHT 20
+      TOON tik
+      ZEG tik "Eldric sprak een spreuk die hij niet kende. De spreuk kende hem wel."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    EINDE
+
+VOORWERP nis "nis" VAK 66,28 28,44 LOOP 80,114 RUG
+  BEKIJK:
+    ZEG eldric "Hier stond de kroon. Er staan manen omheen gekrast."
+
+VOORWERP gang_zaal "gang" VAK 0,56 12,28 LOOP 8,114 LINKS
+  BEKIJK:
+    ALS vlag hoofdstuk4_klaar
+      ZEG eldric "De gang gaat omhoog. Naar boven. Naar de IJstop."
+    ANDERS
+      ZEG eldric "Terug naar de aardstad."
+    EINDE
+  GA_NAAR:
+    ALS vlag hoofdstuk4_klaar
+      ALS NIET vlag hoofdstuk5_begonnen
+        ZET hoofdstuk5_begonnen
+        HOOFDSTUK 5
+      EINDE
+      KAMER bergpad 10,114 RECHTS
+    EINDE
+    KAMER aardstad 146,104 LINKS

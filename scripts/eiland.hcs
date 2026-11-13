@@ -1,0 +1,105 @@
+# eiland.hcs — hoofdstuk 3: het vuurtoreneiland (data/plaatjes/eiland.png, met de hand getekend: tools/teken_zee.py).
+# De deur zit op slot; de meeuwen op de rots pikken aan de sleutel. Honing: ze storten zich erop en laten hem vallen.
+KAMER eiland
+  LOOPKLEUREN donkergrijs grijs zwart groen
+  LOOPVAK 4,106 96,122                   # rotsen en gras voor de toren
+  BINNENKOMST:
+    MUZIEK zee
+    ALS vlag deur_open
+      PATCH toren_open
+    EINDE
+    ALS vlag meeuwen_honing
+      PATCH honing
+    EINDE
+    ALS vlag sleutel_gepakt
+      PATCH geen_sleutel
+    EINDE
+
+VOORWERP torendeur "deur" VAK 54,68 16,36 LOOP 62,110 RUG
+  BEKIJK:
+    ALS vlag deur_open
+      ZEG eldric "De deur staat open. Een trap naar boven, in het donker."
+    ANDERS
+      ZEG eldric "Een zware deur met ijzeren banden. Op slot."
+    EINDE
+  OPEN:
+    ALS vlag deur_open
+      ZEG eldric "Hij is al open."
+    ANDERS
+      ALS HEEFT sleutel
+        ZEG eldric "Klik. De sleutel van de meeuwen past. Ik laat hem in het slot."
+        GELUID deur
+        PATCH toren_open
+        ZET deur_open
+        NEEM sleutel
+        PUNTEN 5
+      ANDERS
+        ZEG eldric "Op slot. Ik heb een sleutel nodig."
+      EINDE
+    EINDE
+  GEBRUIK sleutel:
+    ALS vlag deur_open
+      ZEG eldric "Hij is al open."
+    ANDERS
+      ZEG eldric "Klik. De sleutel van de meeuwen past. Ik laat hem in het slot."
+      GELUID deur
+      PATCH toren_open
+      ZET deur_open
+      NEEM sleutel
+      PUNTEN 5
+    EINDE
+  GA_NAAR:
+    ALS vlag deur_open
+      KAMER vuurtoren 44,100 RECHTS
+    ANDERS
+      ZEG eldric "De deur zit op slot."
+    EINDE
+
+# (de meeuwen en de sleutel staan voor de rots: bij overlappende vakken wint de eerste)
+VOORWERP meeuwen "meeuwen" VAK 112,48 26,14 LOOP 92,110 RECHTS
+  BEKIJK:
+    ALS vlag meeuwen_honing
+      ZEG eldric "Ze zitten aan de honing. Ze zijn de sleutel al vergeten."
+    ANDERS
+      ZEG eldric "Meeuwen. Ze pikken aan iets glimmends bovenop de rots."
+      ZEG mira "Meeuwen houden van zoet. Meer nog dan van glimmend."
+    EINDE
+  PAK:
+    ZEG eldric "Au! Ze pikken terug."
+
+VOORWERP sleutel "sleutel" VAK 128,104 12,8 LOOP 96,114 RECHTS NERGENS
+  BEKIJK:
+    ZEG eldric "Een koperen sleutel. Wat moeten meeuwen met een sleutel?"
+  PAK:
+    ZEG eldric "Een sleutel! Die is vast van de vuurtoren."
+    GEEF sleutel
+    ZET sleutel_gepakt
+    PATCH geen_sleutel
+    PUNTEN 5
+
+VOORWERP rots "rots" VAK 98,58 54,46 LOOP 92,110 RECHTS
+  BEKIJK:
+    ZEG eldric "Een rots vol meeuwenpoep. Bovenop glimt iets."
+  GEBRUIK honingpot:
+    ALS vlag meeuwen_honing
+      ZEG eldric "Ze zitten er al aan."
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Ik smeer wat honing op de rots..."
+      PATCH honing
+      ZET meeuwen_honing
+      PLAATS sleutel eiland
+      ZEG eldric "Daar komen ze! En ze laten iets vallen!"
+      PUNTEN 10
+      EINDE_TUSSENSCENE
+    EINDE
+
+VOORWERP eiland_boot "boot" VAK 112,110 46,14 LOOP 96,118 RECHTS
+  BEKIJK:
+    ZEG eldric "Olm wacht in de boot. Hij weet nog hoe hij heet, hoop ik."
+  GA_NAAR:
+    KAMER boot 80,110 RUG
+
+VOORWERP toren "vuurtoren" VAK 44,1 36,66 LOOP 62,110 RUG
+  BEKIJK:
+    ZEG eldric "De vuurtoren. Donker, alsof iemand hem uitblies."

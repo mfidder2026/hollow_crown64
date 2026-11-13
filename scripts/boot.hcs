@@ -1,0 +1,83 @@
+# boot.hcs — hoofdstuk 3: in de boot op zee, in de mist (data/plaatjes/boot.png, met de hand getekend:
+# tools/teken_zee.py). MIST: elke halve minuut vergeet Eldric een naam ("???"); Bekijk geeft hem terug. Als de
+# vuurtoren brandt, is de mist weg en weet hij alles weer.
+# Patch straal: de vuurtoren brandt (scripts/vuurtoren.hcs), en Olm kan de straal volgen: einde hoofdstuk 3.
+KAMER boot
+  MIST TOT vuurtoren_brandt              # de straal van de vuurtoren verdrijft de mist
+  LOOPKLEUREN bruin donkergrijs oranje zwart
+  LOOPVAK 40,104 120,122                 # de bodem van de boot
+  FLAKKER 0,40 160,8 lichtgrijs grijs    # de mist schuift
+  BINNENKOMST:
+    MUZIEK zee
+    ALS vlag vuurtoren_brandt
+      PATCH straal
+    EINDE
+
+VOORWERP olm_roeit "Olm" VAK 62,52 36,36 LOOP 80,106 RUG
+  BEKIJK:
+    ALS vlag vuurtoren_brandt
+      ZEG eldric "Olm roeit, en kijkt naar de straal van de vuurtoren."
+    ANDERS
+      ZEG eldric "Olm roeit. Rondjes, denk ik. Hij weet niet waarheen."
+    EINDE
+  PRAAT:
+    PRAAT olm_boot
+
+VOORWERP vuurtoren_mist "vuurtoren" VAK 12,20 30,36 LOOP 50,108 LINKS
+  BEKIJK:
+    ALS vlag vuurtoren_brandt
+      ZEG eldric "De vuurtoren brandt! De straal wijst over de zee."
+    ANDERS
+      ZEG eldric "Een vuurtoren, half in de mist. Hij brandt niet."
+    EINDE
+
+VOORWERP zee_boot "zee" VAK 100,56 60,30 LOOP 116,108 RECHTS
+  BEKIJK:
+    ZEG eldric "Grijs water. Als ik er te lang naar kijk, vergeet ik waarom."
+  GA_NAAR:
+    ZEG eldric "Zwemmen? Hier? In de Zee van Vergetelheid? Nee."
+  PAK:
+    TUSSENSCENE
+    ZEG eldric "Even een slokje. Ik heb zo'n dorst."
+    VERBERG mira_mee
+    VERBERG eldric
+    ZEG verteller "Het water smaakt naar niets. Naar vergeten."
+    TOON tik
+    ZEG tik "Eldric dronk de zee, en vergat hoe ademen werkt."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  GEBRUIK kruik:
+    ALS STAND kruik 2
+      ZEG eldric "Er zit al zeewater in."
+    ANDERS
+      ZEG eldric "Ik schep de kruik vol zeewater. Waarom ook alweer? Ach."
+      STAND kruik 2
+    EINDE
+
+GESPREK olm_boot
+  KEUZE "Naar de vuurtoren, Olm!" ALS NIET vlag vuurtoren_brandt
+    ZEG olm "Welke vuurtoren? Ik zie geen licht. Zonder licht roei ik rondjes."
+  KEUZE "Mira, zie jij iets?" ALS NIET vlag vuurtoren_brandt
+    ZEG mira "Ik zie het pad niet. Het water heeft geen pad."
+    ZEG mira "Maar de steen trekt naar links."
+    ZET mira_links
+  KEUZE "Links, Olm." ALS vlag mira_links EINDE
+    ZEG olm "Links. Links is goed. Links was altijd al goed."
+    KAMER eiland 30,112 RECHTS
+  KEUZE "Volg de straal!" ALS vlag vuurtoren_brandt EINDE
+    TUSSENSCENE
+    ZEG olm "De straal! Nu weet ik weer waar de overkant is."
+    ZEG mira "De Rotskloof. Daar wonen ze, Eldric. Onder de grond."
+    ZEG eldric "Dan gaan we naar beneden. Licht mee."
+    PUNTEN 20
+    ZET hoofdstuk3_klaar
+    EINDE_TUSSENSCENE
+  KEUZE "Aan land, Olm." ALS vlag hoofdstuk3_klaar EINDE
+    ZEG olm "Aan land. De kloof. Ik wacht hier. Denk ik."
+    ALS NIET vlag hoofdstuk4_begonnen
+      ZET hoofdstuk4_begonnen
+      KAMER grot 140,116 VOOR            # eerst de grot van Grom (scripts/grot.hcs, het tweede deel): die begint hoofdstuk 4
+    EINDE
+    KAMER kloof 80,120 RUG
+  KEUZE "Laat maar." EINDE
+    ZEG olm "Wat zei je? Ach, laat maar."

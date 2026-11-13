@@ -24,7 +24,7 @@ inv_bijwerken: {
         ldy #0
 lus:    cpx #AANTAL_VW
         beq klaar
-        lda st_eigenaar,x
+        jsr eigenaar_van                // status.asm
         cmp #EIGENAAR_ELDRIC
         bne !+
         txa
@@ -62,10 +62,7 @@ lus:    lda vak
         tax
         lda inv_items,x
         tax
-        lda vw_naam_lo,x
-        sta zp_ptr
-        lda vw_naam_hi,x
-        sta zp_ptr + 1
+        jsr naam_ptr                    // mist.asm: de naam, of "???"
         lda vak
         lsr
         clc

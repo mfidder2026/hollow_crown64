@@ -1,0 +1,66 @@
+# ijsbrug.hcs — hoofdstuk 5: een gebarsten brug van ijs (data/plaatjes/ijsbrug.png, met de hand getekend:
+# tools/teken_ijs.py). Diep beneden de rijmwurm, die licht eet. Met een brandende lantaarn de brug op: Tik. Gooi de
+# laatste lichtzwam in de kloof: de wurm duikt erachteraan (patch wurm_weg) en je steekt over.
+KAMER ijsbrug
+  LOOPKLEUREN wit lichtblauw zwart
+  LOOPVAK 2,100 38,122                   # links
+  LOOPVAK 122,94 157,122                 # rechts
+  LOOPVAK 30,84 128,88                   # de brug (alleen bij het oversteken)
+  LOOPVAK 30,84 40,104                   # de aanloop naar de brug, links en rechts
+  LOOPVAK 120,84 128,100
+  VRIJ 30,84 128,104                     # (de brug is dun: een rand van ijs)
+  BINNENKOMST:
+    MUZIEK woud
+    ALS vlag wurm_weg
+      PATCH wurm_weg
+    EINDE
+
+VOORWERP brug_ijs "brug" VAK 36,78 88,10 LOOP 34,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Een brug van ijs. Gebarsten. Eronder de kloof."
+  GA_NAAR:
+    ALS vlag wurm_weg
+      KAMER baken 10,112 RECHTS
+    EINDE
+    ALS STAND lantaarn 5
+      TUSSENSCENE
+      ZEG eldric "Snel eroverheen, met licht..."
+      LOOP eldric 60,86
+      ZEG verteller "Diep beneden gaan twee rode ogen open."
+      VERBERG mira_mee
+      VERBERG eldric
+      TOON tik
+      ZEG tik "De wurm hield van licht. En van jongens."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+      STOP
+    EINDE
+    ZEG eldric "Die wurm slaapt licht. Als ik eroverheen loop, wordt hij wakker."
+    ZEG mira "Hij eet licht, zei je oma. Geef hem iets anders om achteraan te gaan."
+
+VOORWERP rijmwurm "rijmwurm" VAK 50,90 66,30 LOOP 34,104 RECHTS
+  BEKIJK:
+    ALS vlag wurm_weg
+      ZEG eldric "Weg. Hij dook achter de lichtzwam aan, de diepte in."
+    ANDERS
+      ZEG eldric "Een reuzenwurm, opgerold in de diepte. Hij eet licht, zei oma."
+    EINDE
+  GEBRUIK lichtzwammen:
+    ALS STAND lichtzwammen 1
+      TUSSENSCENE
+      ZEG eldric "Ik gooi de laatste lichtzwam in de kloof..."
+      NEEM lichtzwammen
+      PATCH wurm_weg
+      ZET wurm_weg
+      ZEG mira "Hij duikt erachteraan! Nu, Eldric. Snel!"
+      PUNTEN 15
+      LOOP eldric 40,104
+      EINDE_TUSSENSCENE
+      KAMER baken 10,112 RECHTS
+    ANDERS
+      ZEG eldric "Ik heb niets meer dat licht geeft om te gooien."
+    EINDE
+
+VOORWERP terug_hut "hut" VAK 0,96 4,26 LOOP 4,110 LINKS
+  GA_NAAR:
+    KAMER hut 150,104 LINKS

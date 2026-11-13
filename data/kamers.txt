@@ -8,7 +8,21 @@ titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.
 kelder   data/flux/kelder.png     boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=honingpot_weg:140,40,16,16:data/flux/kelder_zonder_honingpot.png
 verhaal  data/plaatjes/toneel.png    boven=0  exact=1  sterkte=0   # de verhaalanimatie (met de hand getekend: tools/teken_toneel.py)
 bospad   data/plaatjes/bospad.png   boven=0  exact=1  sterkte=0   # hoofdstuk 2 (met de hand getekend: tools/teken_bospad.py)
-spookbrug data/plaatjes/spookbrug.png  boven=0  exact=1  sterkte=0  patch=harnas_helm:24,96,24,16:data/plaatjes/spookbrug_harnas_helm.png  patch=harnas:24,96,24,16:data/plaatjes/spookbrug_harnas.png  patch=pot_kever:12,96,12,16:data/plaatjes/spookbrug_pot_kever.png  patch=pot:12,96,12,16:data/plaatjes/spookbrug_pot.png   # hoofdstuk 2 (met de hand getekend: tools/teken_spookbrug.py)
+spookbrug data/plaatjes/spookbrug.png  boven=0  exact=1  sterkte=0  patch=harnas_helm:24,96,24,16:data/plaatjes/spookbrug_harnas_helm.png  patch=harnas:24,96,24,16:data/plaatjes/spookbrug_harnas.png  patch=pot_kever:12,96,12,16:data/plaatjes/spookbrug_pot_kever.png  patch=geen_pot:12,96,12,16:data/plaatjes/spookbrug.png   # hoofdstuk 2 (met de hand getekend: tools/teken_spookbrug.py)
 jachthut data/plaatjes/jachthut.png   boven=0  exact=1  sterkte=0  patch=vuur_uit:68,56,28,24:data/plaatjes/jachthut_vuur_uit.png  patch=kooi_open:108,40,36,56:data/plaatjes/jachthut_kooi_open.png   # hoofdstuk 2 (tools/teken_jachthut.py)
 oever    data/plaatjes/oever.png      boven=0  exact=1  sterkte=0  patch=boot:20,48,28,16:data/plaatjes/oever_boot.png   # hoofdstuk 2 (tools/teken_oever.py)
-grot     data/plaatjes/grot.png       boven=0  exact=1  sterkte=0   # tussenscène na hoofdstuk 1: de grot van Grom (tools/teken_grot.py)
+grot     data/plaatjes/grot.png       boven=0  exact=1  sterkte=0  schijf=beide   # tussenscène na hoofdstuk 1: de grot van Grom (tools/teken_grot.py)
+veerman  data/plaatjes/veerman.png    boven=0  exact=1  sterkte=0   # tussenscène na hoofdstuk 2: de veerman (tools/teken_zee.py)
+steiger  data/plaatjes/steiger.png    boven=0  exact=1  sterkte=0   # hoofdstuk 3 (tools/teken_zee.py)
+boot     data/plaatjes/boot.png       boven=0  exact=1  sterkte=0  patch=straal:0,16,72,40:data/plaatjes/boot_straal.png
+eiland   data/plaatjes/eiland.png     boven=0  exact=1  sterkte=0  patch=toren_open:52,64,20,40:data/plaatjes/eiland_deur_open.png  patch=honing:96,48,44,64:data/plaatjes/eiland_honing.png  patch=geen_sleutel:128,104,12,8:data/plaatjes/eiland_honing_leeg.png
+vuurtoren data/plaatjes/vuurtoren.png boven=0  exact=1  sterkte=0  patch=nul_om:104,40,40,72:data/plaatjes/vuurtoren_nul_om.png  patch=lamp_aan:56,24,40,48:data/plaatjes/vuurtoren_lamp_aan.png
+kloof    data/plaatjes/kloof.png      boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4 (tools/teken_kloof.py)
+donker   data/plaatjes/donker.png     boven=0  exact=1  sterkte=0  patch=pad1:0,80,160,16:data/plaatjes/donker_pad.png  patch=pad2:0,96,160,16:data/plaatjes/donker_pad.png  patch=pad3:0,112,160,16:data/plaatjes/donker_pad.png  schijf=2
+zwamgrot data/plaatjes/zwamgrot.png   boven=0  exact=1  sterkte=0  schijf=2
+aardstad data/plaatjes/aardstad.png   boven=0  exact=1  sterkte=0  patch=ei:124,48,24,24:data/plaatjes/aardstad_ei.png  schijf=2
+spreukzaal data/plaatjes/spreukzaal.png boven=0 exact=1  sterkte=0  patch=boek_open:20,72,28,24:data/plaatjes/spreukzaal_boek.png  schijf=2
+bergpad  data/plaatjes/bergpad.png    boven=0  exact=1  sterkte=0  patch=lawine:100,32,48,64:data/plaatjes/bergpad_lawine.png  schijf=2   # hoofdstuk 5 (tools/teken_ijs.py)
+hut      data/plaatjes/hut.png        boven=0  exact=1  sterkte=0  schijf=2
+ijsbrug  data/plaatjes/ijsbrug.png    boven=0  exact=1  sterkte=0  patch=wurm_weg:40,88,80,32:data/plaatjes/ijsbrug_leeg.png  schijf=2
+baken    data/plaatjes/baken.png      boven=0  exact=1  sterkte=0  patch=baken_aan:56,0,48,64:data/plaatjes/baken_aan.png  schijf=2

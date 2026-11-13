@@ -1,0 +1,88 @@
+# zwamgrot.hcs — hoofdstuk 4: de zwamgrot (data/plaatjes/zwamgrot.png, met de hand getekend: tools/teken_kloof.py).
+# Pad de zwamhoeder ruilt lichtzwammen voor iets dat naar de zon ruikt: de honingpot. De zwarte zwam: Tik.
+# Verder naar de aardstad alleen met het luikje van de lantaarn dicht (de stad slaapt).
+KAMER zwamgrot
+  LOOPKLEUREN donkergrijs blauw zwart lichtgrijs
+  LOOPVAK 4,104 156,122
+  FLAKKER 0,88 48,16 cyaan lichtgroen roze    # de paddenstoelen gloeien
+  FLAKKER 116,88 44,16 cyaan lichtgroen roze
+  BINNENKOMST:
+    MUZIEK kelder
+
+VOORWERP pad_padde "Pad" VAK 92,54 40,42 LOOP 84,112 RECHTS
+  BEKIJK:
+    ZEG eldric "Een padde zo groot als een koe, op een stronk."
+    ZEG eldric "Een handelaar, zo te zien."
+  PRAAT:
+    PRAAT pad_praat
+  GEEF honingpot:
+    ALS HEEFT lichtzwammen
+      ZEG pad "We hebben al gehandeld, kleine."
+    ANDERS
+      ZEG pad "Wat ruik ik daar? Zon! Zon in een pot!"
+      NEEM honingpot
+      GEEF lichtzwammen
+      STAND lichtzwammen 2
+      ZEG pad "Twee lichtzwammen. Eén keer fel licht per stuk. Geen ruil, geen spijt."
+      PUNTEN 15
+    EINDE
+
+VOORWERP mand "mand" VAK 56,86 22,14 LOOP 66,110 RUG
+  BEKIJK:
+    ZEG eldric "Een mand vol lichtzwammen. Ze gloeien geel."
+  PAK:
+    ZEG pad "Ho ho! Eerst betalen, kleine."
+
+VOORWERP zwarte_zwam "zwarte zwam" VAK 64,100 12,14 LOOP 68,116 RUG
+  BEKIJK:
+    ZEG eldric "Een zwarte zwam met een rood stipje. Hij ziet er heerlijk uit. Verdacht heerlijk."
+  PAK:
+    TUSSENSCENE
+    ZEG eldric "Eén hapje kan geen kwaad."
+    VERBERG mira_mee
+    VERBERG eldric
+    WACHT 20
+    TOON tik
+    ZEG tik "Dit was de verkeerde zwam. Het was ook de laatste."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+
+VOORWERP zwammen "paddenstoelen" VAK 0,78 48,24 LOOP 30,110 LINKS
+  BEKIJK:
+    ZEG eldric "Ze geven licht. Blauw, groen en roze. Niet genoeg voor een lantaarn."
+
+VOORWERP gang_aard "gang" VAK 150,104 10,20 LOOP 154,114 RECHTS
+  BEKIJK:
+    ZEG eldric "Een gang, dieper de aarde in. Ik hoor gesnurk."
+  GA_NAAR:
+    ALS NIET HEEFT lichtzwammen
+      ZEG mira "Zonder licht verder? Ik zou eerst met die padde praten."
+      STOP
+    EINDE
+    ALS STAND lantaarn 5
+      ALS NIET vlag mira_waarschuwt
+        ZEG mira "Wacht. Daar slapen ze. Maak je klein. Maak je donker."
+        ZET mira_waarschuwt
+        STOP
+      EINDE
+      TUSSENSCENE
+      ZEG verteller "Eldric loopt de stad in, met de lantaarn wijd open."
+      VERBERG mira_mee
+      VERBERG eldric
+      WACHT 20
+      TOON tik
+      ZEG tik "Je hebt een stad gewekt. Niet beleefd."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+      STOP
+    EINDE
+    KAMER aardstad 10,108 RECHTS
+
+GESPREK pad_praat
+  KEUZE "Wie bent u?"
+    ZEG pad "Pad. Zwamhoeder. Handelaar in licht. Zwammen voor elke gelegenheid."
+  KEUZE "Ik wil licht kopen."
+    ZEG pad "Licht? Ik verkoop licht. Lichtzwammen. Wat geef je ervoor?"
+    ZEG pad "Iets dat naar de zon ruikt. Dat zou mooi zijn."
+  KEUZE "Tot ziens." EINDE
+    ZEG pad "Kwaak. Ik bedoel: tot ziens."

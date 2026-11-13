@@ -18,6 +18,7 @@
 .const GEEN_VOORWERP   = $ff
 .const WW_GA_NAAR      = 0
 .const WW_GEBRUIK      = 2
+.const WW_BEKIJK       = 4
 .const WW_GEEF         = 6
 .const WW_WAT_IS       = 11
 .const KLEUR_GEKOZEN   = 7              // geel: het gekozen werkwoord
@@ -41,7 +42,7 @@ voorwerp_onder: {
         ldx #0
 lus:    cpx #AANTAL_VW
         beq klaar
-        lda st_eigenaar,x
+        jsr eigenaar_van                // status.asm
         cmp st_kamer
         bne volgende
         lda vw_heeft_vak,x
@@ -198,10 +199,7 @@ klaar:  rts
 
 // naam van voorwerp X erbij (met een spatie ervoor)
 naam_erbij:
-        lda vw_naam_lo,x
-        sta zp_ptr
-        lda vw_naam_hi,x
-        sta zp_ptr + 1
+        jsr naam_ptr                    // mist.asm: de naam, of "???"
 spatie_erbij:
         lda #$20
         sta zin_buf,y
@@ -269,7 +267,7 @@ laatst_geldig: {
         ldx vw_laatst
         cpx #GEEN_VOORWERP
         beq nee
-        lda st_eigenaar,x
+        jsr eigenaar_van                // status.asm
         ldy vw_laatst_inv
         beq kamer
         cmp #EIGENAAR_ELDRIC
@@ -483,6 +481,11 @@ actie_beeld: {
         bne !+
         lda vw_richting,x
         sta act_richting
+!:      lda actie_ww
+        cmp #WW_BEKIJK                  // Bekijk: weet hij de naam weer (mist.asm)
+        bne !+
+        jsr vergeten_weg
+        ldx actie_vw
 !:      lda actie_ww
         cmp #WW_WAT_IS
         beq klaar

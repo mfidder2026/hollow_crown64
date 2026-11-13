@@ -107,9 +107,7 @@ def lees_band(pad):
                 if not re.fullmatch(r"[A-Za-z0-9_-]+", arg):
                     raise ValueError
                 namen.append(arg)
-                if len(namen) > 255:
-                    raise Fout("%s:%d: te veel screenshots" % (pad, nr))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "cursor":
                 x, y = (int(v) for v in arg.split(","))
                 data += bytes([OP_CURSOR, x & 0xFF, x >> 8, y])
@@ -139,13 +137,13 @@ def lees_band(pad):
                 if len(d) != 2 or d[0] not in ("0", "1"):
                     raise ValueError
                 namen.append(("SLOT", int(d[0]), d[1]))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "verwacht_logo" and not arg:
                 namen.append(("LOGO", None))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "verwacht_muziek" and not arg:
                 namen.append(("MUZIEK", None))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "wacht_op_script" and not arg:
                 data += bytes([OP_WACHT_VM])
             elif cmd in ("onthoud_kleur", "verwacht_kleur_volgend"):
@@ -154,16 +152,16 @@ def lees_band(pad):
                     raise ValueError
                 rij, kol = (int(v) for v in d[1].split(","))
                 namen.append((cmd.upper(), d[0], rij, kol, d[2].split(",") if len(d) == 3 else None))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "verwacht_kamer" and re.fullmatch(r"\w+", arg):
                 namen.append(("VERWACHT_KAMER", arg))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd in ("verwacht_vlag", "verwacht_eigenaar", "verwacht_stand"):
                 d = arg.split()
                 if len(d) != 2:
                     raise ValueError
                 namen.append((cmd.upper(), d[0], d[1]))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "wacht_tot_stil" and not arg:
                 data += bytes([OP_WACHT_STIL])
             elif cmd == "verwacht_tekst":
@@ -171,17 +169,13 @@ def lees_band(pad):
                 if not m or not 0 <= int(m.group(1)) < 25:
                     raise ValueError
                 namen.append(("TEKST", int(m.group(1)), m.group(2)))
-                if len(namen) > 255:
-                    raise Fout("%s:%d: te veel markeringen" % (pad, nr))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "verwacht":
                 r = verwacht_regel(arg)
                 if not r:
                     raise ValueError
                 namen.append(r)
-                if len(namen) > 255:
-                    raise Fout("%s:%d: te veel markeringen" % (pad, nr))
-                data += bytes([OP_MARKEER, len(namen)])
+                data += bytes([OP_MARKEER, (len(namen) - 1) % 255 + 1])
             elif cmd == "muis":
                 dx, dy = (int(v) for v in arg.split(","))
                 if not (-31 <= dx <= 31 and -31 <= dy <= 31):
@@ -659,6 +653,9 @@ def draai(bandpad, args):
     t0 = time.time()
     d64 = os.path.join(TESTUIT, naam + ".d64")         # een eigen kopie: opslaan (F5) schrijft op de diskette
     shutil.copyfile(os.path.join(BUILD, "hollowcrown.d64"), d64)
+    diskettes = {1: d64, 2: os.path.join(TESTUIT, naam + "_2.d64")}   # diskette 2 (build.sh: schijf=2 in kamers.txt)
+    if os.path.exists(os.path.join(BUILD, "hollowcrown_2.d64")):
+        shutil.copyfile(os.path.join(BUILD, "hollowcrown_2.d64"), diskettes[2])
     vice = Vice(d64, warp=not args.geen_warp,
                 echte_drive=args.echte_drive, zichtbaar_houden=args.houd_open)
     try:
@@ -685,14 +682,24 @@ def draai(bandpad, args):
 
         # 3. de band volgen: markeringen afhandelen tot hij klaar is
         schermfouten = 0
+        volgende = 0
         eind = time.time() + args.max_tijd
         while True:
             time.sleep(0.05)
             status, markering = vice.lees(sym["band_status"])[0], vice.lees(sym["band_markering"])[0]
+            nodig = vice.lees(sym["schijf_nodig"])[0] if "schijf_nodig" in sym else 0
+            if nodig:                                 # het spel vraagt om een andere diskette: erin stoppen
+                if nodig not in diskettes or not os.path.exists(diskettes[nodig]):
+                    raise Fout("het spel vraagt diskette %d, en die is er niet" % nodig)
+                vice.cmd('attach "%s" 8' % diskettes[nodig])
+                print("[test]   diskette %d erin" % nodig)
+                vice.schrijf(sym["schijf_nodig"], [0])
             if markering:
-                if markering > len(shots):
-                    raise Fout("onbekende markering %d" % markering)
-                m = shots[markering - 1]
+                # de markeringen tellen rond (1..255): de volgende in de rij is aan de beurt
+                if volgende >= len(shots) or markering != volgende % 255 + 1:
+                    raise Fout("onverwachte markering %d (verwacht %d)" % (markering, volgende % 255 + 1))
+                m = shots[volgende]
+                volgende += 1
                 if isinstance(m, tuple):              # tussencontrole
                     ok, tekst = controleer(vice, sym, m, spel)
                     schermfouten += 0 if ok else 1

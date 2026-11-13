@@ -1,0 +1,216 @@
+# hoofdstuk5_stappen.txt — de stappen van hoofdstuk 5, vanuit de spreukzaal met hoofdstuk 4 klaar (voeg_in vanuit
+# hoofdstuk5.band en hele_spel.band).
+cursor 156,180
+vuur
+wacht 3
+cursor 156,180
+vuur
+wacht 3
+cursor 12,86
+wacht 2
+verwacht_tekst 18 "Ga naar gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bergpad
+verwacht st_hoofdstuk = 4
+screenshot bergpad
+
+# onder het sneeuwveld door (dood), dan ertegen roepen
+cursor 308,94
+wacht 2
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+verwacht act_zichtbaar = 1
+cursor 100,164
+vuur
+cursor 250,66
+wacht 2
+verwacht_tekst 18 "Praat met sneeuwveld"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag lawine_gevallen 1
+screenshot lawine
+cursor 308,94
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer hut
+screenshot hut
+
+# Oma: de want
+cursor 100,164
+vuur
+cursor 184,103
+wacht 2
+verwacht_tekst 18 "Praat met Oma Rijm"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 19 "Oma!"
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht_tekst 21 "Ik moet naar het zonnebaken."
+cursor 20,172
+vuur
+wacht_op_script
+wacht 3
+verwacht_eigenaar want eldric
+verwacht_tekst 22 "Tot straks, oma."
+cursor 20,180
+vuur
+wacht_op_script
+wacht 3
+cursor 304,77
+wacht 2
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer ijsbrug
+screenshot ijsbrug
+verwacht_tekst 23 "lichtzwammen       ↓  bakenkristal"
+
+# met het luikje open de brug op (dood), dan de lichtzwam voor de wurm
+cursor 260,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Open lantaarn"
+vuur
+wacht_op_script
+verwacht_stand lantaarn 5
+cursor 160,99
+wacht 2
+verwacht_tekst 18 "Ga naar brug"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+verwacht_stand lantaarn 6
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik lichtzwammen"
+vuur
+wacht 2
+cursor 120,126
+wacht 2
+verwacht_tekst 18 "Gebruik lichtzwammen met rijmwurm"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer baken
+verwacht_vlag wurm_weg 1
+screenshot baken
+
+# het kristal met blote handen (dood), dan met de want
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik bakenkristal"
+vuur
+wacht 2
+cursor 160,56
+wacht 2
+verwacht_tekst 18 "Gebruik bakenkristal met houder"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik bakenkristal"
+vuur
+wacht 2
+cursor 156,188
+vuur
+wacht 3
+cursor 156,188
+vuur
+wacht 3
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "sleutelschub       ↑  wollen want"
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik bakenkristal met wollen want"
+vuur
+wacht_op_script
+verwacht_stand bakenkristal 1
+cursor 156,180
+vuur
+wacht 3
+cursor 156,180
+vuur
+wacht 3
+cursor 156,180
+vuur
+wacht 3
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik bakenkristal"
+vuur
+wacht 2
+cursor 160,56
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_vlag baken_brandt 1
+verwacht_vlag hoofdstuk5_klaar 1
+verwacht voltooid = 1
+verwacht_tekst 24 "          Hoofdstuk 5 voltooid"
+screenshot baken_aan
+
+# naar beneden: de spookridders komen; de derde grotscène
+cursor 6,125
+wacht 2
+verwacht_tekst 18 "Ga naar trap"
+vuur
+wacht_tot_stil
+wacht 400
+verwacht_kamer grot
+screenshot grot3
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3

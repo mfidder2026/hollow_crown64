@@ -148,7 +148,7 @@ verwacht_slot 0 mira_mee
 # 9. het aardmannetje, met de fluisterkever
 cursor 180,156
 vuur
-cursor 200,180
+cursor 20,188                          # honingpot zonnesteen / fluisterkever helm
 verwacht_tekst 18 "Gebruik fluisterkever"
 vuur
 wacht 2
@@ -162,7 +162,7 @@ verwacht_vlag jong_gesproken 1
 # 10. de helm dooft het vuur, dan de kooi open: de gloeischub
 cursor 180,156
 vuur
-cursor 20,188
+cursor 200,188
 verwacht_tekst 18 "Gebruik helm"
 vuur
 wacht 2

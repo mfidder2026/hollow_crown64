@@ -10,6 +10,45 @@ KAMER grot
   FLAKKER 72,32 16,8 lichtblauw wit cyaan   # de maanstenen in de kroon pulseren
   ACTOR hol_grot KOSTUUM hol OP 150,114 VERBORGEN      # een aardmannetje uit de gang rechts
   BINNENKOMST:
+    ALS vlag hoofdstuk5_klaar              # het derde bezoek, na hoofdstuk 5: het baken brandt
+      TUSSENSCENE
+      MUZIEK grot
+      WACHT 40
+      ZEG verteller "Een witte bundel licht steekt boven de schemer uit."
+      KLEUR 72,48 16,8 rood geel
+      ZEG grom "Het baken! Wie... de jongen. De jongen met het stukje zon."
+      KLEUR 72,48 16,8 geel rood
+      TOON hol_grot
+      LOOP hol_grot 132,116
+      ZEG aardmannetje "Meester, hij heeft de vrouw met de steen bij zich."
+      ZEG grom "Spookridders! Haal hem hier. En haal die vrouw."
+      ZEG grom "Dan zal ik eens zien wat zo'n jongen te zeggen heeft."
+      LOOP hol_grot 150,114
+      VERBERG hol_grot
+      WACHT 40
+      EINDE_TUSSENSCENE
+      KAMER baken 80,110 VOOR            # TIJDELIJK: hoofdstuk 6 (de kerker) komt hierna
+    EINDE
+    ALS vlag hoofdstuk3_klaar              # het tweede bezoek, na hoofdstuk 3: de vuurtoren brandt
+      TUSSENSCENE
+      MUZIEK grot
+      WACHT 40
+      ZEG verteller "Diep onder de berg ziet Grom een licht over de zee."
+      ZEG grom "De vuurtoren brandt. Wie heeft hem aangestoken?"
+      TOON hol_grot
+      LOOP hol_grot 132,116
+      ZEG aardmannetje "De jongen, meester. Met het stukje zon. En Nul hielp hem."
+      KLEUR 72,48 16,8 rood geel
+      ZEG grom "NUL!"
+      KLEUR 72,48 16,8 geel rood
+      ZEG grom "Wolven! Naar de kloof. Laat niemand naar beneden."
+      LOOP hol_grot 150,114
+      VERBERG hol_grot
+      WACHT 40
+      EINDE_TUSSENSCENE
+      HOOFDSTUK 4
+      KAMER kloof 80,120 RUG
+    EINDE
     TUSSENSCENE
     MUZIEK grot
     WACHT 40

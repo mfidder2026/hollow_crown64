@@ -1,0 +1,9 @@
+# hoofdstuk3.band — de oplossing van hoofdstuk 3 (Zee van Vergetelheid): de veerman, Olm zijn naam, de mist in de boot,
+# de meeuwen en de sleutel, Kapitein Nul en de lamp; drie keer Tik (verkeerde naam, zeewater, de lantaarn in de lamp).
+wacht 3
+start_script proef_hfst3
+wacht_op_script
+wacht 3
+verwacht_kamer oever
+
+voeg_in hoofdstuk3_stappen.txt

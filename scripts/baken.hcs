@@ -1,0 +1,69 @@
+# baken.hcs — hoofdstuk 5: het zonnebaken op de top (data/plaatjes/baken.png, met de hand getekend:
+# tools/teken_ijs.py). Het bakenkristal in de houder: met blote handen bijt het (Tik); met oma's want lukt het (patch
+# baken_aan): een witte bundel boven de schemer uit. Einde hoofdstuk 5. Naar beneden: de spookridders komen.
+KAMER baken
+  LOOPKLEUREN lichtgrijs grijs wit zwart
+  LOOPVAK 2,104 157,122
+  BINNENKOMST:
+    MUZIEK thema
+    ALS vlag baken_brandt
+      PATCH baken_aan
+    EINDE
+
+VOORWERP houder "houder" VAK 72,32 16,16 LOOP 80,106 RUG
+  BEKIJK:
+    ALS vlag baken_brandt
+      ZEG eldric "Het kristal brandt in de houder. Wit, zo wit."
+    ANDERS
+      ZEG eldric "Een lege houder tussen vier spiegels. Daar past iets in."
+    EINDE
+  GEBRUIK bakenkristal:
+    ALS vlag baken_brandt
+      ZEG eldric "Het brandt al."
+      STOP
+    EINDE
+    ALS STAND bakenkristal 1
+      TUSSENSCENE
+      ZEG eldric "Met oma's want zet ik het kristal in de houder."
+      NEEM bakenkristal
+      GELUID vuur
+      PATCH baken_aan
+      ZET baken_brandt
+      ZEG eldric "De spiegels draaien! Een witte bundel, boven de schemer uit!"
+      ZEG mira "Oma ziet het, Eldric. Iedereen ziet het."
+      PUNTEN 20
+      ZET hoofdstuk5_klaar
+      EINDE_TUSSENSCENE
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Ik zet het kristal in de houder..."
+      ZEG eldric "AU!"
+      VERBERG mira_mee
+      VERBERG eldric
+      TOON tik
+      ZEG tik "Het baken bijt. Oma zei het nog."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    EINDE
+
+VOORWERP spiegels "spiegels" VAK 56,20 48,40 LOOP 80,106 RUG
+  BEKIJK:
+    ZEG eldric "Vier ronde spiegels. Oud, maar ze glanzen nog."
+
+VOORWERP zon_baken "zon" VAK 112,4 40,30 LOOP 120,106 RUG
+  BEKIJK:
+    ZEG eldric "De zon. Zwart, met twee manen ervoor. Zo dichtbij was ik nog nooit."
+
+VOORWERP wolken "wolken" VAK 0,72 56,22 LOOP 30,106 LINKS
+  BEKIJK:
+    ZEG eldric "Onder mij ligt de schemer, als een deken over het land."
+
+VOORWERP terug_brug "trap" VAK 0,96 6,26 LOOP 4,110 LINKS
+  BEKIJK:
+    ZEG eldric "De weg naar beneden."
+  GA_NAAR:
+    ALS vlag hoofdstuk5_klaar
+      ZEG mira "Eldric... ik hoor harnassen. Op de trap. Ze komen ons halen."
+      KAMER grot 140,116 VOOR             # de derde grotscène: Grom ziet het baken (en dan het kasteel)
+    EINDE
+    KAMER ijsbrug 150,100 LINKS

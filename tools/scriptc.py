@@ -28,6 +28,9 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     BINNENKOMST:                      script als Eldric de kamer binnenkomt
     FLAKKER x,y b,h kleur kleur ...   een kleine animatie (hoofdstuk 8): in die vakjes (x, b veelvoud van 4; y, h van 8)
                                       schuiven deze kleuren rond (bv. vuur: rood oranje geel). Hooguit 2 per kamer.
+    MIST [TOT vlag]                   de Zee van Vergetelheid: elke 30 s vergeet Eldric een naam ("???"); Bekijk
+                                      geeft hem terug. Met TOT vlag: zodra die vlag staat, is de mist weg en weet
+                                      hij alles weer
     TONEEL                            een toneel (de verhaalanimatie): geen Eldric (tot TOON eldric), geen cursor,
                                       geen balk; alleen het plaatje en de tekst van de verteller
     ACTOR naam KOSTUUM k OP x,y [VERBORGEN] [VOLGT]
@@ -307,7 +310,7 @@ def lees(bestanden):
                         raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
                     continue                   # in een ander bestand: verder met dezelfde kamer
                 spel.kamers[kamer] = {"bestand": pad, "flakker": [], "naam": kamer, "vakken": [], "waar": waar, "schaal": [], "kleuren": None,
-                                      "vrij": [], "achter": None, "toneel": False}
+                                      "vrij": [], "achter": None, "toneel": False, "mist": False}
                 spel.kamer_volgorde.append(kamer)
             elif kop == "VOORWERP":
                 voorwerp = lees_voorwerp(spel, w, kamer, waar)
@@ -341,6 +344,10 @@ def lees(bestanden):
                 k["flakker"].append((x, y, b, h, [c64beeld.NAMEN.index(kl) for kl in w[3:]], waar))
                 if len(k["flakker"]) > 2:
                     raise Fout("%s: hooguit 2 keer FLAKKER per kamer" % waar)
+            elif kop == "MIST":
+                if kamer is None or len(w) not in (1, 3) or (len(w) == 3 and w[1] != "TOT"):
+                    raise Fout("%s: MIST  of  MIST TOT vlag (binnen een KAMER)" % waar)
+                spel.kamers[kamer]["mist"] = w[2] if len(w) == 3 else True
             elif kop == "TONEEL":
                 if kamer is None or len(w) != 1:
                     raise Fout("%s: TONEEL (binnen een KAMER, zonder meer)" % waar)
@@ -784,8 +791,8 @@ def controleer_scripts(spel):
             raise Fout("%s: vlag %s wordt getest maar nergens gezet (ZET %s)" % (waar, vlag, vlag))
     if len(gezet) > MAX_VLAGGEN:
         raise Fout("meer dan %d vlaggen" % MAX_VLAGGEN)
-    if len(spel.voorwerpen) > MAX_VOORWERPEN:
-        raise Fout("meer dan %d voorwerpen" % MAX_VOORWERPEN)
+    if len(spel.voorwerpen) > 250:
+        raise Fout("meer dan 250 voorwerpen")
     if spel.doel and spel.doel[0] not in gezet:
         raise Fout("%s: DOEL %s wordt nergens gezet" % (spel.doel[1], spel.doel[0]))
 
@@ -1096,6 +1103,8 @@ def schrijf(spel, pad, json_pad):
         u.L.append("        .byte $ff")
     u.zet("Data")
     L.append(".const AANTAL_VW = %d" % len(spel.vw_volgorde))
+    L.append(".const AANTAL_DYN = %d    // de eerste zoveel kunnen verhuizen (st_eigenaar); de rest is vast decor"
+             % getattr(spel, "aantal_dyn", len(spel.vw_volgorde)))
     for naam in spel.vw_volgorde:
         L.append(".const VW_%s = %d" % (naam.upper(), vw[naam]))
     vs = [spel.voorwerpen[x] for x in spel.vw_volgorde]
@@ -1174,8 +1183,18 @@ def schrijf(spel, pad, json_pad):
     L.append("kamer_sbestand_lo: .byte %s" % ", ".join("<sbestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_sbestand_hi: .byte %s" % ", ".join(">sbestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_sbestand_len: .byte %s" % ", ".join(str(len(n) + 2) for n in spel.kamer_volgorde))
+    import kamer as kamermod
+    schijven = {n: int(o["schijf"]) % 3 or 1 for n, _, o, _ in      # (beide = 3: staat overal, de vraag komt nooit)
+                kamermod.lees_lijst(os.path.join(WORTEL, "data", "kamers.txt"))}
+    L.append("kamer_schijf: .byte %s    // op welke diskette de kamer staat (data/kamers.txt: schijf=)" % ", ".join(
+        str(schijven.get(n, 1)) for n in spel.kamer_volgorde))
     L.append("kamer_toneel: .byte %s    // 1: TONEEL (geen Eldric, cursor en balk)" % ", ".join(
         "1" if spel.kamers[n]["toneel"] else "0" for n in spel.kamer_volgorde))
+    def mist(n):
+        m = spel.kamers[n]["mist"]
+        return "0" if not m else "$ff" if m is True else str(u.vlag(m) + 1)
+    L.append("kamer_mist: .byte %s    // 0 geen mist, $ff altijd, anders vlag + 1: mist tot die vlag staat (mist.asm)"
+             % ", ".join(mist(n) for n in spel.kamer_volgorde))
     L.append("kamer_binnen_lo: .byte %s" % ", ".join(
         "<binnen_%s" % n if "binnenkomst" in spel.kamers[n] else "0" for n in spel.kamer_volgorde))
     L.append("kamer_binnen_hi: .byte %s" % ", ".join(
@@ -1233,18 +1252,28 @@ def schrijf(spel, pad, json_pad):
 
 
 def stand_vooraan(spel):
-    """Alleen de eerste MAX_MET_STAND voorwerpen hebben een stand in de spelstatus (zo passen er meer voorwerpen in
-    één pagina). Zet de voorwerpen die STAND gebruiken (opdracht, ALS STAND, of een beginstand) dus vooraan."""
+    """De nummering van de voorwerpen, zo dat de spelstatus in één pagina past:
+      eerst de voorwerpen met een stand (STAND, ALS STAND of een beginstand): alleen die hebben st_stand;
+      dan de andere voorwerpen die kunnen verhuizen (GEEF, NEEM, PLAATS, of ze beginnen niet in een kamer);
+      dan het vaste decor: dat ligt altijd in zijn kamer en staat niet in de spelstatus (eigenaar_van in status.asm).
+    Zet spel.aantal_dyn."""
     met = {n for n, v in spel.voorwerpen.items() if v["stand"]}
+    verhuist = {n for n, v in spel.voorwerpen.items() if v["eigenaar"] != v["kamer"] or v["kamer"] is None}
     for script, *_ in alle_scripts(spel):
         for o in script:
             if o[0] == "STAND":
                 met.add(o[1])
             elif o[0] == "ALS" and o[2][0] == "stand":
                 met.add(o[2][1])
+            elif o[0] in ("GEEF", "NEEM", "PLAATS"):
+                verhuist.add(o[1])
     if len(met) > MAX_MET_STAND:
         raise Fout("meer dan %d voorwerpen met een stand: %s" % (MAX_MET_STAND, ", ".join(sorted(met))))
-    spel.vw_volgorde.sort(key=lambda n: n not in met)      # (sort is stabiel: verder de volgorde van de scripts)
+    dyn = met | verhuist
+    if len(dyn) > MAX_VOORWERPEN:
+        raise Fout("meer dan %d voorwerpen die kunnen verhuizen" % MAX_VOORWERPEN)
+    spel.vw_volgorde.sort(key=lambda n: 0 if n in met else 1 if n in verhuist else 2)   # (stabiel)
+    spel.aantal_dyn = len(dyn)
 
 
 def compileer(mappen, uitmap, kleurcontrole=True):

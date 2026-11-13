@@ -32,6 +32,7 @@ Regels (§6.2 en de naden van §6.3):
     - de achtergrondkleur ($d021) is zwart, voor de hele kamer en voor het hele scherm;
     - de bovenste pixelrij en de onderste 2 pixelrijen zijn zwart (de naden met tekst erboven en de balk eronder).
 """
+PATCH_GROOTTE = 1024     # gelijk aan PATCH_GROOTTE in src/kamer.asm
 import os, sys
 import numpy as np
 from PIL import Image
@@ -59,7 +60,7 @@ def lees_lijst(pad):
         if len(regel) < 2:
             raise SystemExit("%s:%d: naam en plaatje nodig" % (pad, nr))
         opties = {"boven": 0, "kleur": 1.5, "licht": 1.0, "sterkte": 0.5, "voorgrond": None, "patches": [],
-                  "exact": 0}
+                  "exact": 0, "schijf": 1}
         for o in regel[2:]:
             k, _, v = o.partition("=")
             if k == "patch":
@@ -75,6 +76,11 @@ def lees_lijst(pad):
                 continue
             if k not in opties:
                 raise SystemExit("%s:%d: onbekende optie %s" % (pad, nr, k))
+            if k == "schijf":                            # 1, 2, of beide (een tussenscène die in elk deel komt)
+                if v not in ("1", "2", "beide"):
+                    raise SystemExit("%s:%d: schijf=1, schijf=2 of schijf=beide" % (pad, nr))
+                opties[k] = 3 if v == "beide" else int(v)
+                continue
             opties[k] = v if k == "voorgrond" else float(v)
         kamers.append((regel[0], regel[1], opties, nr))
     return kamers
@@ -242,6 +248,9 @@ def controle_png(bron, pix, pad):
 
 
 def main():
+    if len(sys.argv) == 4 and sys.argv[1] == "--schijf":       # welke kamers op diskette N staan (voor build.sh)
+        print(" ".join(n for n, _, o, _ in lees_lijst(sys.argv[3]) if int(o["schijf"]) in (int(sys.argv[2]), 3)))
+        return
     if len(sys.argv) != 3:
         raise SystemExit(__doc__)
     lijst, uitmap = sys.argv[1], sys.argv[2]
@@ -274,6 +283,10 @@ def main():
                 raise SystemExit("%s:%d: patch %s: plaatje %s bestaat niet" % (lijst, nr, pnaam, plaatje))
             _, pklein = strook(laad_bron(pbron, o), o["boven"])
             pb, ps, pk, _ = omzetten(pklein, o["sterkte"], vg, vkleur)
+            ongepakt = (b // 4) * (h // 8) * 10          # per vakje 8 bytes bitmap, 1 scherm, 1 kleur
+            if ongepakt > PATCH_GROOTTE:
+                raise SystemExit("%s:%d: patch %s is uitgepakt %d bytes; patch_buf (src/kamer.asm) is %d. Splits hem."
+                                 % (lijst, nr, pnaam, ongepakt, PATCH_GROOTTE))
             patches.append(patch_data(pb, ps, pk, x, y, b, h))
         assert (pix[0] == ACHTER).all() and (pix[-ZWART_ONDER:] == ACHTER).all()
         data = inpak.pak(bitmap) + inpak.pak(scherm) + inpak.pak(kleur)

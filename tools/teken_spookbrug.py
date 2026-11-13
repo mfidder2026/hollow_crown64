@@ -189,7 +189,6 @@ PATCHES = {                       # naam: tekening (de vakken staan in data/kame
     "spookbrug_harnas_helm": lambda dk: harnas(dk, True),
     "spookbrug_harnas": lambda dk: harnas(dk, False),
     "spookbrug_pot_kever": lambda dk: pot(dk, True),
-    "spookbrug_pot": lambda dk: pot(dk, False),
 }
 
 

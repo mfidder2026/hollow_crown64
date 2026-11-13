@@ -1,0 +1,73 @@
+# bergpad.hcs — hoofdstuk 5: een besneeuwd bergpad naar de IJstop (data/plaatjes/bergpad.png, met de hand getekend:
+# tools/teken_ijs.py). Boven het pad hangt een sneeuwveld: eronderdoor lopen is een lawine (Tik). Roep er iets tegen
+# (Praat met sneeuwveld) en hij valt vóór je: patch lawine, het pad is vrij.
+KAMER bergpad
+  LOOPKLEUREN lichtgrijs wit grijs zwart lichtblauw
+  SCHAAL 104 92
+  LOOPVAK 2,104 40,120                   # het pad, van linksonder schuin omhoog naar rechts
+  LOOPVAK 36,98 84,110
+  LOOPVAK 80,90 120,104
+  LOOPVAK 116,83 156,96
+  BINNENKOMST:
+    MUZIEK woud
+    ALS vlag lawine_gevallen
+      PATCH lawine
+    EINDE
+
+VOORWERP sneeuwveld "sneeuwveld" VAK 102,34 46,32 LOOP 100,98 RECHTS
+  BEKIJK:
+    ALS vlag lawine_gevallen
+      ZEG eldric "Een berg sneeuw naast het pad. Het pad is vrij."
+    ANDERS
+      ZEG eldric "Een sneeuwveld, over het pad. Het hangt. Als iemand roept, valt het."
+    EINDE
+  PRAAT:
+    ALS vlag lawine_gevallen
+      ZEG eldric "Hallo, berg sneeuw."
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "HALLOOO!"
+      GELUID wolf
+      PATCH lawine
+      ZET lawine_gevallen
+      ZEG eldric "Het valt! Vlak voor ons, op het pad."
+      ZEG mira "Goed geschreeuwd. Nu is het pad vrij."
+      PUNTEN 10
+      EINDE_TUSSENSCENE
+    EINDE
+  GA_NAAR:
+    ALS NIET vlag lawine_gevallen
+      TUSSENSCENE
+      ZEG eldric "Even snel eronderdoor..."
+      VERBERG mira_mee
+      VERBERG eldric
+      GELUID wolf
+      ZEG verteller "Kraak."
+      TOON tik
+      ZEG tik "Sneeuw. Veel sneeuw."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    EINDE
+
+VOORWERP pad_ijstop "pad" VAK 148,70 12,16 LOOP 152,88 RECHTS
+  BEKIJK:
+    ZEG eldric "Het pad naar boven, onder het sneeuwveld door."
+  GA_NAAR:
+    ALS vlag lawine_gevallen
+      KAMER hut 10,112 RECHTS
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Even snel eronderdoor..."
+      VERBERG mira_mee
+      VERBERG eldric
+      GELUID wolf
+      ZEG verteller "Kraak."
+      TOON tik
+      ZEG tik "Sneeuw. Veel sneeuw."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    EINDE
+
+VOORWERP bergen "bergen" VAK 0,26 96,40 LOOP 20,110 LINKS
+  BEKIJK:
+    ZEG eldric "De IJstop. Ergens daarboven woont oma."

@@ -118,3 +118,79 @@ SCRIPT proef_hfst2_open:
   TOON mira_mee
   HOOFDSTUK 2
   KAMER bosrand 80,94 RUG
+
+# ---- hoofdstuk 3: op de oever, de boot is geroepen, met wat hoofdstuk 1 en 2 opleverden (tests/hoofdstuk3.band) ----
+SCRIPT proef_hfst3:
+  ZET wolven_weg
+  ZET hoofdstuk1_klaar
+  ZET hoofdstuk2_begonnen
+  ZET ridder_weg
+  ZET kever_gevangen
+  ZET helm_gepakt
+  ZET vuur_uit
+  ZET kooi_open
+  ZET boot_geroepen
+  ZET hoofdstuk2_klaar
+  GEEF kruik
+  GEEF lantaarn
+  STAND lantaarn 2
+  GEEF honingpot
+  GEEF fluisterkever
+  GEEF helm
+  GEEF gloeischub
+  PLAATS oever_boot oever
+  TOON mira_mee
+  HOOFDSTUK 2
+  KAMER oever 100,80 LINKS
+
+# ---- hoofdstuk 4: in de boot, hoofdstuk 3 net klaar (tests/hoofdstuk4.band) ----
+SCRIPT proef_hfst4:
+  ZET wolven_weg
+  ZET hoofdstuk1_klaar
+  ZET hoofdstuk2_begonnen
+  ZET hoofdstuk2_klaar
+  ZET hoofdstuk3_begonnen
+  ZET mira_links
+  ZET vuurtoren_brandt
+  ZET hoofdstuk3_klaar
+  GEEF kruik
+  STAND kruik 2
+  GEEF lantaarn
+  STAND lantaarn 2
+  GEEF honingpot
+  GEEF fluisterkever
+  GEEF helm
+  GEEF gloeischub
+  GEEF sterrenkaart
+  TOON mira_mee
+  HOOFDSTUK 3
+  KAMER boot 80,110 RUG
+
+# ---- hoofdstuk 5: in de spreukzaal, hoofdstuk 4 net klaar (tests/hoofdstuk5.band) ----
+SCRIPT proef_hfst5:
+  ZET wolven_weg
+  ZET hoofdstuk1_klaar
+  ZET hoofdstuk2_begonnen
+  ZET hoofdstuk2_klaar
+  ZET hoofdstuk3_begonnen
+  ZET hoofdstuk3_klaar
+  ZET hoofdstuk4_begonnen
+  ZET boek_gelezen
+  ZET moeder_gesproken
+  ZET hoofdstuk4_klaar
+  GEEF kruik
+  STAND kruik 2
+  GEEF lantaarn
+  STAND lantaarn 6
+  GEEF fluisterkever
+  GEEF helm
+  GEEF gloeischub
+  GEEF sterrenkaart
+  GEEF lichtzwammen
+  STAND lichtzwammen 1
+  GEEF bakenkristal
+  GEEF sleutelschub
+  TOON mira_mee
+  HOOFDSTUK 4
+  KAMER spreukzaal 80,114 VOOR
+

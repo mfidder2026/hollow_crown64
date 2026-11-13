@@ -1,0 +1,7 @@
+# hoofdstuk4.band — de oplossing van hoofdstuk 4 (Rotskloof), met de tweede grotscène en vijf keer Tik.
+wacht 3
+start_script proef_hfst4
+wacht_op_script
+wacht 3
+verwacht_kamer boot
+voeg_in hoofdstuk4_stappen.txt

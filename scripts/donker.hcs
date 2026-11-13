@@ -1,0 +1,69 @@
+# donker.hcs — hoofdstuk 4: de donkere grot (data/plaatjes/donker.png: bijna zwart, tools/teken_kloof.py). Elke stap
+# zelf is de afgrond. Praat met Mira: zij ziet met haar steen het pad (patches pad1-3) en leidt Eldric erdoor; onderweg ligt
+# het trilkristal.
+KAMER donker
+  LOOPKLEUREN zwart donkergrijs groen lichtgroen blauw
+  LOOPVAK 4,104 20,116                   # 0 waar Eldric binnenkomt
+  LOOPVAK 18,100 64,112                  # 1-4: het pad (alleen voor de tussenscène met Mira)
+  LOOPVAK 58,96 104,112
+  LOOPVAK 98,96 144,112
+  LOOPVAK 138,88 156,100
+  VRIJ 18,88 156,116                     # (het pad is in het donker zwart: pas met Mira's steen gloeit het)
+  BINNENKOMST:
+    MUZIEK kelder
+    ZEG mira "Eldric? Het is hier zo donker dat zelfs jij niets ziet."
+    ZEG mira "Praat met me. Ik ben vlak naast je."
+
+# (Mira staat voor de duisternis: bij overlappende vakken wint de eerste)
+VOORWERP mira_hand "Mira" VAK 0,86 14,34 LOOP 12,110 LINKS
+  BEKIJK:
+    ZEG eldric "Mira. Ik zie alleen haar steen, een heel klein beetje."
+  PRAAT:
+    PRAAT mira_donker
+
+VOORWERP duisternis "duisternis" VAK 14,0 146,126 LOOP 12,110 RECHTS
+  BEKIJK:
+    ZEG eldric "Zwart. Alleen maar zwart. Ik hoor water, heel diep beneden."
+  GA_NAAR:
+    TUSSENSCENE
+    ZEG eldric "Eén stap. Nog één stap..."
+    VERBERG mira_mee
+    VERBERG eldric
+    ZEG verteller "Er was geen volgende stap."
+    TOON tik
+    ZEG tik "Eldric vond de afgrond. De afgrond vond Eldric."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+
+GESPREK mira_donker
+  KEUZE "Ik zie niks, maar ik loop gewoon." EINDE
+    TUSSENSCENE
+    ZEG eldric "Eén stap. Nog één stap..."
+    VERBERG mira_mee
+    VERBERG eldric
+    ZEG verteller "Er was geen volgende stap."
+    TOON tik
+    ZEG tik "Eldric vond de afgrond. De afgrond vond Eldric."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  KEUZE "Mira, wil jij mij leiden?" EINDE
+    TUSSENSCENE
+    ZEG mira "Geef me je hand. De steen ziet wat ik niet zie."
+    PATCH pad1                         # (drie stukken: een patch past in 1 KB)
+    PATCH pad2
+    PATCH pad3
+    ZET mira_hand
+    LOOP eldric 24,108
+    LOOP eldric 40,104
+    LOOP eldric 60,102
+    LOOP eldric 80,104
+    LOOP eldric 98,106
+    ZEG mira "Wacht. Hier ligt iets dat niet stil wil liggen."
+    GEEF trilkristal
+    PUNTEN 10
+    ZEG eldric "Een kristal. Het trilt in mijn hand."
+    LOOP eldric 120,104
+    LOOP eldric 140,98
+    LOOP eldric 152,94
+    EINDE_TUSSENSCENE
+    KAMER zwamgrot 10,112 RECHTS

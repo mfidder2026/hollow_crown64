@@ -135,6 +135,7 @@ hoofdlus:
         jsr npc_beweeg
         jsr npc_sprites
         jsr flakker_beeld
+        jsr mist_beeld                  // mist.asm
         jsr voorgrond_bij
         jsr cursor_plaatsen
         jsr functietoetsen              // F5 opslaan, F7 laden (opslaan.asm)
@@ -174,6 +175,7 @@ kamer_nu: .byte 0
 #import "intro.asm"
 #import "toneel.asm"
 #import "terug.asm"
+#import "mist.asm"
 #import "menu.asm"
 #import "baas.asm"
 #import "basic.asm"

@@ -1,0 +1,120 @@
+# vuurtoren.hcs — hoofdstuk 3: de lampkamer bovenin de vuurtoren (data/plaatjes/vuurtoren.png, met de hand getekend:
+# tools/teken_zee.py). Kapitein Nul staat met zijn rug naar je toe; met de fluisterkever draait hij zich om: een
+# aardmannetje (patch nul_om). Oma's steentje in de lenshouder: de lamp brandt (patch lamp_aan).
+KAMER vuurtoren
+  LOOPKLEUREN grijs donkergrijs
+  LOOPVAK 36,114 156,122                 # 0 voor
+  LOOPVAK 4,96 60,106                    # 1 links, achter het trapgat langs
+  LOOPVAK 36,96 60,122                   # 2 links van de lamp
+  LOOPVAK 92,96 110,122                  # 3 tussen de lamp en Nul
+  BINNENKOMST:
+    MUZIEK zee
+    ALS vlag nul_om
+      PATCH nul_om
+    EINDE
+    ALS vlag vuurtoren_brandt
+      PATCH lamp_aan
+    EINDE
+
+VOORWERP trap_vt "trap" VAK 4,108 28,16 LOOP 20,100 LINKS
+  BEKIJK:
+    ZEG eldric "De trap naar beneden."
+  GA_NAAR:
+    ALS vlag vuurtoren_brandt
+      ALS NIET HEEFT zonnesteen
+        ZEG eldric "Oma's steentje laat ik hier niet achter."
+        STOP
+      EINDE
+    EINDE
+    KAMER eiland 62,110 VOOR
+
+VOORWERP nul "Nul" VAK 112,40 26,72 LOOP 104,110 RECHTS
+  BEKIJK:
+    ALS vlag nul_om
+      ZEG eldric "Kapitein Nul. Een aardmannetje in een kapiteinsjas."
+    ANDERS
+      ZEG eldric "Een kapitein met zijn rug naar me toe. Zijn jas sleept over de vloer."
+    EINDE
+  PRAAT:
+    ALS vlag nul_om
+      ALS vlag vuurtoren_brandt
+        ZEG nul "De kloof wacht, jongen. Volg de straal."
+      ANDERS
+        ZEG nul "Breng licht in mijn lamp. Dan wijs ik je de weg."
+      EINDE
+    ANDERS
+      ZEG eldric "Goedenavond, kapitein?"
+      ZEG nul "Hmmrrm. Grrmmh."
+      ZEG eldric "Dat is geen taal die ik spreek."
+    EINDE
+  GEBRUIK fluisterkever:
+    ALS vlag nul_om
+      ZEG eldric "Hij praat al met me."
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Kever, vertaal jij eens."
+      PATCH nul_om
+      ZET nul_om
+      ZEG nul "Een jongen met een kever. En met een stukje zon, zie ik."
+      ZEG nul "Grom zegt dat jullie licht ons doodt. Maar ik woon al jaren naast deze lamp."
+      ZEG nul "Een beetje licht doet geen pijn. Alleen te veel."
+      ZEG eldric "Dus jullie kunnen wel in het licht leven?"
+      ZEG nul "Breng licht in mijn lamp, en ik wijs je de weg naar de kloof."
+      PUNTEN 15
+      EINDE_TUSSENSCENE
+    EINDE
+
+VOORWERP lamp "lamp" VAK 60,26 32,86 LOOP 58,108 RECHTS
+  BEKIJK:
+    ALS vlag vuurtoren_brandt
+      ZEG eldric "De lamp brandt. Het licht gaat over de hele zee."
+    ANDERS
+      ZEG eldric "Een grote lamp. In het midden een lege koperen ring: de lenshouder."
+    EINDE
+  PAK:
+    ALS vlag vuurtoren_brandt
+      ALS HEEFT zonnesteen
+        ZEG eldric "Het steentje heb ik al terug."
+      ANDERS
+        ZEG eldric "Ik pak oma's steentje terug. De lamp blijft branden op wat het achterliet."
+        GEEF zonnesteen
+      EINDE
+    ANDERS
+      ZEG eldric "Veel te groot."
+    EINDE
+  GEBRUIK zonnesteen:
+    ALS vlag vuurtoren_brandt
+      ZEG eldric "Hij brandt al."
+    ANDERS
+      ALS vlag nul_om
+        TUSSENSCENE
+        ZEG eldric "Oma's steentje past precies in de ring..."
+        NEEM zonnesteen
+        GELUID vuur
+        PATCH lamp_aan
+        ZET vuurtoren_brandt
+        ZEG eldric "De lamp vangt het op! Het licht schiet over de zee!"
+        ZEG nul "Daar! Zie je waar de straal heen wijst? De Rotskloof."
+        ZEG nul "Neem dit mee. Mijn sterrenkaart. Voor de gangen onder de kloof."
+        GEEF sterrenkaart
+        PUNTEN 20
+        EINDE_TUSSENSCENE
+      ANDERS
+        ZEG nul "HMMRRM!"
+        ZEG eldric "Hij wil niet dat ik aan zijn lamp kom."
+      EINDE
+    EINDE
+  GEBRUIK lantaarn:
+    TUSSENSCENE
+    ZEG eldric "Mijn lantaarn in de lamp. Dat moet ook kunnen."
+    NEEM lantaarn
+    PATCH lamp_aan
+    VERBERG mira_mee
+    TOON tik
+    ZEG tik "Je lantaarn in een vuurtoren. Wie verlicht straks jouw weg in de kloof?"
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+
+VOORWERP ramen "ramen" VAK 4,6 44,76 LOOP 40,100 RUG
+  BEKIJK:
+    ZEG eldric "Rondom ramen. Zee, mist, en de zwarte zon."

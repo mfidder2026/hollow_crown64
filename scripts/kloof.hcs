@@ -1,0 +1,78 @@
+# kloof.hcs — hoofdstuk 4: de ingang van de Rotskloof (data/plaatjes/kloof.png, met de hand getekend:
+# tools/teken_kloof.py). Groms wolven bij de grot. De lantaarn jaagt ze weg, maar lekt leeg (stand 3); met de
+# gloeischub geeft hij zwak licht (stand 4): genoeg. Zonder licht de grot in: Tik.
+KAMER kloof
+  LOOPKLEUREN bruin oranje donkergrijs zwart grijs lichtgrijs
+  LOOPVAK 4,106 156,122                  # 0 de bodem
+  LOOPVAK 66,100 94,122                  # 1 het pad naar de grot
+  ACTOR wolf_kloof KOSTUUM wolf OP 70,102   # een schaduwwolf voor de grot
+  BINNENKOMST:
+    MUZIEK bosrand
+    ALS vlag wolven_kloof_weg
+      VERBERG wolf_kloof
+    EINDE
+
+VOORWERP wolven_kloof "wolven" VAK 58,82 44,20 LOOP 80,114 RUG
+  BEKIJK:
+    ALS vlag wolven_kloof_weg
+      ZEG eldric "Ze houden afstand. Mijn lichtje is klein, maar het is licht."
+    ANDERS
+      ZEG eldric "Schaduwwolven. Grom heeft ze gestuurd. Ze bewaken de grot."
+    EINDE
+  PRAAT:
+    ZEG eldric "Brave... nee. Geen brave hondjes. Nog steeds niet."
+  GEBRUIK lantaarn:
+    ALS vlag wolven_kloof_weg
+      ZEG eldric "Ze blijven al weg."
+      STOP
+    EINDE
+    ALS STAND lantaarn 2
+      TUSSENSCENE
+      ZEG eldric "Weg jullie! Licht!"
+      GELUID wolf
+      LOOP wolf_kloof 76,92
+      VERBERG wolf_kloof
+      ZEG eldric "Ze wijken... maar de lantaarn flakkert. En gaat uit."
+      STAND lantaarn 3
+      TOON wolf_kloof
+      LOOP wolf_kloof 70,102
+      ZEG eldric "En daar zijn ze weer."
+      ZEG mira "Bekijk je lantaarn eens, Eldric. Er is iets mis mee."
+      EINDE_TUSSENSCENE
+      STOP
+    EINDE
+    ALS STAND lantaarn 4
+      TUSSENSCENE
+      ZEG eldric "Een klein lichtje. Maar het is licht."
+      LOOP wolf_kloof 150,104
+      VERBERG wolf_kloof
+      ZET wolven_kloof_weg
+      PUNTEN 15
+      ZEG mira "Ze blijven op afstand. Snel, de grot in."
+      EINDE_TUSSENSCENE
+      STOP
+    EINDE
+    ZEG eldric "Mijn lantaarn geeft geen licht."
+
+VOORWERP grotmond "grot" VAK 66,60 30,38 LOOP 80,102 RUG
+  BEKIJK:
+    ZEG eldric "De mond van de grot. Ogen in het donker."
+  GA_NAAR:
+    ALS vlag wolven_kloof_weg
+      KAMER donker 10,110 RECHTS
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Ik ren er gewoon langs!"
+      VERBERG mira_mee
+      VERBERG eldric
+      GELUID wolf
+      WACHT 30
+      TOON tik
+      ZEG tik "De wolven waren niet bang in het donker. Jij wel."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    EINDE
+
+VOORWERP kloofwand "rotswand" VAK 0,4 50,90 LOOP 30,110 LINKS
+  BEKIJK:
+    ZEG eldric "Steil. Hier klim je niet. Alleen naar beneden, de grot in."

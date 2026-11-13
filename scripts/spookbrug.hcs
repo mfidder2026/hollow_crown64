@@ -14,9 +14,7 @@ KAMER spookbrug
       ANDERS
         PATCH harnas_helm
       EINDE
-      ALS vlag kever_gevangen
-        PATCH pot
-      ANDERS
+      ALS NIET vlag kever_gevangen         # (daarna heeft Eldric de pot weer: het plaatje zelf is zonder pot)
         PATCH pot_kever
       EINDE
     EINDE
@@ -92,7 +90,11 @@ VOORWERP spookridder "spookridder" VAK 40,66 14,29 LOOP 30,108 RECHTS   # (boven
 
 VOORWERP helm "helm" VAK 32,94 12,10 LOOP 30,110 RECHTS NERGENS
   BEKIJK:
-    ZEG eldric "Een lege helm. Hij is zwaar, en hij past op niets."
+    ALS STAND helm 1
+      ZEG eldric "De helm van de spookridder, met de Holle Kroon erin."
+    ANDERS
+      ZEG eldric "Een lege helm. Hij is zwaar, en hij past op niets."
+    EINDE
   PAK:
     ZEG eldric "Een lege helm. Wie weet waar hij goed voor is."
     GEEF helm
@@ -113,6 +115,8 @@ VOORWERP kever "kever" VAK 12,94 12,10 LOOP 22,112 LINKS NERGENS
     NEEM koker
     GEEF fluisterkever
     ZET kever_gevangen
-    PATCH pot
+    PATCH geen_pot
+    GEEF honingpot                       # de pot gaat weer mee: de meeuwen en Pad willen hem nog
     PUNTEN 10
     ZEG eldric "Hij zoemt. En in dat zoemen... hoor ik woorden?"
+    ZEG eldric "De honingpot neem ik ook weer mee. Er zit nog wat in."

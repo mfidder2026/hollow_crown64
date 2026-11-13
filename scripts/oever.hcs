@@ -43,6 +43,7 @@ VOORWERP bel "bel" VAK 104,46 16,28 LOOP 100,80 RECHTS
       WACHT 50
       PATCH boot
       ZET boot_geroepen
+      PLAATS oever_boot oever
       ZEG mira "Daar. Een lampje op het water."
       ZEG eldric "Een boot! Iemand heeft ons gehoord."
       ZEG mira "Op naar de zee, Eldric. Naar de vuurtoren."
@@ -62,3 +63,13 @@ VOORWERP zee "zee" VAK 112,64 47,30 LOOP 88,96 RECHTS   # (rechts van de steiger
     ZEG eldric "De zee. Ik heb de zee nog nooit gezien. Ze is groter dan ik dacht."
   GA_NAAR:
     ZEG eldric "Zwemmen? In de schemer? Liever niet."
+
+VOORWERP oever_boot "boot" VAK 20,48 28,16 LOOP 100,80 RECHTS NERGENS   # de boot die op de bel afkomt
+  BEKIJK:
+    ZEG eldric "Een bootje met een lampje. Er zit iemand aan de riemen."
+  GA_NAAR:
+    ALS NIET vlag hoofdstuk3_begonnen
+      ZET hoofdstuk3_begonnen
+      KAMER veerman 140,106 VOOR           # eerst de tussenscène (scripts/veerman.hcs): die begint hoofdstuk 3
+    EINDE
+    KAMER steiger 8,110 RECHTS

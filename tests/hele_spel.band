@@ -1,5 +1,6 @@
 # hele_spel.band — het hele spel in één keer: hoofdstuk 1 (de stappen van oplossing.band), en dan hoofdstuk 2 met
-# wat Eldric echt bij zich heeft (kruik, lantaarn, honingpot, zonnesteen), met drie doden en terugdraaien.
+# wat Eldric echt bij zich heeft (kruik, lantaarn, honingpot, zonnesteen), met drie doden en terugdraaien, en dan
+# hoofdstuk 3, 4 en 5 (de stappen van hoofdstuk3.band, hoofdstuk4.band en hoofdstuk5.band).
 voeg_in oplossing.band
 
 # ---- hoofdstuk 2 ----
@@ -134,9 +135,14 @@ vuur
 wacht_op_script
 wacht 3
 verwacht terug_teller = 3
+# kruik lantaarn / honingpot zonnesteen: eerst een rij naar beneden (honingpot zonnesteen / fluisterkever helm)
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "honingpot          ↑  zonnesteen"
 cursor 180,156
 vuur
-cursor 200,188
+cursor 20,188
 wacht 2
 verwacht_tekst 18 "Gebruik fluisterkever"
 vuur
@@ -148,14 +154,9 @@ vuur
 wacht_tot_stil
 wacht_op_script
 verwacht_vlag jong_gesproken 1
-# de helm staat onder in de inventaris: eerst een rij naar beneden schuiven
-cursor 156,188
-vuur
-wacht 3
-verwacht_tekst 22 "zonnesteen         ↑  fluisterkever"
 cursor 180,156
 vuur
-cursor 20,188
+cursor 200,188
 wacht 2
 verwacht_tekst 18 "Gebruik helm"
 vuur
@@ -195,3 +196,15 @@ verwacht_vlag hoofdstuk2_klaar 1
 verwacht voltooid = 1
 verwacht_tekst 24 "          Hoofdstuk 2 voltooid"
 screenshot einde
+
+# ---- hoofdstuk 3 ----
+wacht 150
+voeg_in hoofdstuk3_stappen.txt
+
+# ---- hoofdstuk 4 ----
+wacht 150
+voeg_in hoofdstuk4_stappen.txt
+
+# ---- hoofdstuk 5 ----
+wacht 150
+voeg_in hoofdstuk5_stappen.txt

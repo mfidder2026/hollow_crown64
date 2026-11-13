@@ -832,3 +832,87 @@ komt in één golf terug (het zonnebaken vangt het op); de andere maan blijft st
   is nog een figuur.
 
 **Getest:** 23/23 compiler, 24/24 banden.
+
+## 2026-11-13 (nacht) — Hoofdstuk 3 en 4: de Zee van Vergetelheid en de Rotskloof
+
+Op verzoek van de gebruiker werk ik zelfstandig door ("maak er wat moois van"). De plaatjes keurde ik zelf; zie de
+lijst onderaan om morgen samen naar te kijken.
+
+**Ruimte**
+- Eldric ingepakt: zijn 60 poses staan per pose RLE-ingepakt (`tools/costume.py`) en `actor_pose` pakt een pose uit als
+  hij verandert. 7,5 KB → 4 KB. Hoofdprogramma nu ruim 6 KB onder $A000 vrij.
+- Testbanden mogen 4 KB zijn; de markeringen tellen rond (1..255), zodat één band het hele spel kan spelen.
+
+**Motor**
+- `src/mist.asm`: `MIST [TOT vlag]` in een kamer. Elke 30 seconden vergeet Eldric de naam van een voorwerp: in de
+  inventaris en op de zinregel staat "???". Bekijk geeft de naam terug. Met TOT vlag verdwijnt de mist zodra die vlag
+  staat (de straal van de vuurtoren) en weet hij alles weer. `st_vergeten` (een bit per voorwerp) staat in de
+  spelstatus (STATUS_VERSIE 5).
+- Fout gevonden: `naam_ptr` gebruikte Y, maar de zinregel houdt daar zijn lengte in ("Ga naa boot"). Nu bewaard.
+- Fout gevonden: een patch breder dan 31 vakjes (meer dan 255 bytes per rij) werd verkeerd gekopieerd; het pad in de
+  donkere grot (de volle breedte) bleef onzichtbaar. `patch_zetten` telt nu in 16 bits.
+- Fout gevonden: de patchbuffer is 1 KB; een patch van de halve kamer liep erover heen (de testband raakte stuk).
+  `tools/kamer.py` weigert nu een patch die uitgepakt groter is; het pad is in drie stukken gezet.
+
+**Hoofdstuk 2, bijgewerkt**: de honingpot gaat weer mee als Eldric de kever vangt (de meeuwen en Pad willen hem nog).
+
+**Hoofdstuk 3, Zee van Vergetelheid** (`tools/teken_zee.py`, scripts veerman/steiger/boot/eiland/vuurtoren):
+- Tussenscène *de veerman*: Olm roeit door de mist ("Wie ben ik eigenlijk?"). Daarna de steiger: OLM staat op de boot
+  (Lees boot), "Je heet Olm." ☠ "Je heet Bram." → de Rots van de Zekere Dood.
+- De boot in de mist (MIST TOT vuurtoren_brandt): Mira voelt dat de steen naar links trekt; zeewater in de kruik
+  (nodig in hoofdstuk 6); ☠ Pak zee (drinken).
+- Het eiland: honing op de rots, de meeuwen laten de sleutel vallen; de deur (de sleutel blijft in het slot).
+- De vuurtoren: Kapitein Nul draait zich om met de fluisterkever (een aardmannetje: "een beetje licht doet geen pijn");
+  oma's steentje in de lenshouder → de lamp brandt, de sterrenkaart; Pak lamp → het steentje terug. ⛔ De lantaarn in
+  de lamp: Tik meteen ("wie verlicht straks jouw weg in de kloof?").
+- Terug in de boot: "Volg de straal!" → hoofdstuk 3 voltooid; "Aan land, Olm." → hoofdstuk 4.
+
+**Hoofdstuk 4, Rotskloof** (`tools/teken_kloof.py`, scripts kloof/donker/zwamgrot/aardstad/spreukzaal):
+- Tweede grotscène (hetzelfde plaatje, een tweede BINNENKOMST): Grom ziet de vuurtoren branden, "NUL!", stuurt zijn
+  wolven naar de kloof.
+- Kloofingang: de lantaarn jaagt de wolven weg maar lekt leeg (stand 3); de gloeischub erin: zwak licht (4), genoeg.
+  ☠ zonder licht de grot in.
+- Donkere grot: alles zwart, elke stap zelf is de afgrond ☠. Praat met Mira → zij leidt (het pad gloeit op: patches
+  pad1-3), onderweg het trilkristal.
+- Zwamgrot: Pad de zwamhoeder ruilt twee lichtzwammen voor de honingpot. ☠ de zwarte zwam. Een lichtzwam in de
+  lantaarn (5: fel). Naar de stad: Mira waarschuwt ("maak je klein, maak je donker"), Sluit lantaarn (6) — anders ☠.
+- Aardstad: Moeder Aard (met de kever) vertelt hoe het echt zit, het laatste ei gloeit (zoals Mira's steen), de
+  sleutelschub. "Praat met Grom. Niet vechten. Praten."
+- Spreukzaal: Lees spreukenboek (met de sterrenkaart): een maansteen uit de kroon, en het licht moet naar het zonnebaken
+  op de IJstop. Het trilkristal in de kring → bakenkristal → hoofdstuk 4 voltooid. ☠ zonder het boek.
+
+**Getest:** `tests/hoofdstuk3.band`, `tests/hoofdstuk4.band` (met alle doden), `tests/hele_spel.band` speelt nu
+hoofdstuk 1 t/m 4 achter elkaar; `alle_voorwerpen.band` wijst 124 voorwerpen aan in 18 kamers.
+
+**Om morgen samen te bekijken (zelf gekozen):** de plaatjes van hoofdstuk 3 en 4 (Olm, Nul, Pad als vriendelijke
+reuzenpadde, Moeder Aard, de stenen kring); het dodenspoor in de donkere grot (elke klik in het donker is dood: streng,
+maar Mira zegt het meteen); de mist (verdwijnt als de vuurtoren brandt).
+
+## 2026-11-13 (nacht) — Twee diskettes, decor buiten de spelstatus, hoofdstuk 5: de IJstop
+
+**Twee diskettes**: in `data/kamers.txt` heeft een kamer `schijf=2` (of `schijf=beide`: de grot, die tussen elk
+hoofdstuk terugkomt). `build.sh` maakt `hollowcrown.d64` (het spel, hoofdstuk 1-3) en `hollowcrown_2.d64` (hoofdstuk
+4-6). Kan `laad_kamer` een kamer niet vinden, dan staat onderaan "Plaats diskette N en druk op vuur." (vuur, spatie
+of muisknop) en probeert hij opnieuw. In de testbuild wacht hij tot `tools/vicetest.py` de goede diskette in VICE stopt
+(de monitor: `attach`), dus de tests wisselen zelf.
+
+**Ruimte**
+- Voorwerpen: het spel heeft er nu meer dan 128. Alleen voorwerpen die kunnen verhuizen (GEEF/NEEM/PLAATS, of met een
+  stand) staan in de spelstatus; vast decor heeft altijd zijn eigen kamer (`eigenaar_van` in `status.asm`).
+  STATUS_VERSIE 6. Gevonden: de mist-bits liepen voor decor (nummer > 128) buiten hun tabel ("Pak ???"); nu
+  overgeslagen.
+- De patchbuffer, het ankerpunt en de opslagbuffer staan nu in $C800-$CFFF (segment Hoog: vrij sinds het lettertype
+  op $F800 staat). Daarmee past de testbuild weer.
+
+**Hoofdstuk 5, IJstop** (`tools/teken_ijs.py`; scripts bergpad, hut, ijsbrug, baken):
+- Bergpad: het sneeuwveld hangt boven het pad. ☠ eronderdoor. Praat met sneeuwveld ("HALLOOO!") → de lawine valt
+  vóór je.
+- Hut: Oma Rijm ("Mijn gewone jongen"), de nacht van het steentje, "omdat jij lief bent", de wollen want.
+- IJsbrug: de rijmwurm eet licht. ☠ met de lantaarn open de brug op. De laatste lichtzwam in de kloof → hij duikt
+  erachteraan, je steekt over.
+- Zonnebaken: ☠ het kristal met blote handen ("het baken bijt"). Gebruik want met bakenkristal, dan in de houder:
+  een witte bundel boven de schemer. Hoofdstuk 5 voltooid. Op de trap: de derde grotscène (Grom ziet het baken,
+  stuurt de spookridders).
+- De spreukzaal leidt na hoofdstuk 4 omhoog naar de IJstop.
+
+**Getest:** 27/27 banden (`hoofdstuk5.band`; `hele_spel.band` speelt nu hoofdstuk 1 t/m 5, met de diskettewissel).

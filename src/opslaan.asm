@@ -259,4 +259,6 @@ ft_vorig:      .byte 0
 melding_wacht: .word 0
 
 .segment Buffers
+.segment Hoog                           // $C800-$CFFF (geheugen.asm)
 opslag_buf:    .fill 256, 0                // (de spelstatus past in 1 pagina: status.asm)
+.segment Buffers

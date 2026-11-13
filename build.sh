@@ -115,13 +115,29 @@ mv -f "$UIT/main.vs" "$UIT/$NAAM.vs"; mv -f "$UIT/main.sym" "$UIT/$NAAM.sym"   #
 stap "4/4 diskette"
 D64="$UIT/$NAAM.d64"
 rm -f "$D64"
-KAMERS=()                                   # de kamerbestanden (tools/kamer.py), naam = de kamer
-for k in build/gen/kamer_*.prg; do KAMERS+=(-write "$k" "${${k:t:r}#kamer_}"); done
-for s in "$UIT"/scr_*.prg; do KAMERS+=(-write "$s" "${${s:t:r}#scr_}.s"); done   # de scripts per kamer: <kamer>.s
-"$VICE_BIN/c1541" -format "$SCHIJFNAAM" d64 "$D64" -write "$UIT/$NAAM.prg" "$NAAM" ${KAMERS[@]} >/dev/null 2>"$UIT/c1541.log" \
-  || { cat "$UIT/c1541.log" >&2; fout "c1541"; }
-[[ -f "$D64" ]] || fout "geen D64 gemaakt"
-"$VICE_BIN/c1541" -attach "$D64" -list 2>/dev/null | grep -E '^[0-9]+ ' | sed 's/^/[build]   /'
+# De kamers staan op twee diskettes (data/kamers.txt: schijf=2). Diskette 1: het spel en de kamers van schijf 1;
+# diskette 2: de rest. Een kamer = het plaatje (<kamer>) en zijn scripts (<kamer>.s, als hij scripts heeft).
+D64_2="$UIT/${NAAM}_2.d64"
+rm -f "$D64_2"
+for schijf in 1 2; do
+  KAMERS=()
+  for kamer in $("$PYTHON" tools/kamer.py --schijf $schijf data/kamers.txt); do
+    [[ -f "build/gen/kamer_$kamer.prg" ]] && KAMERS+=(-write "build/gen/kamer_$kamer.prg" "$kamer")
+    [[ -f "$UIT/scr_$kamer.prg" ]] && KAMERS+=(-write "$UIT/scr_$kamer.prg" "$kamer.s")
+  done
+  if (( schijf == 1 )); then
+    "$VICE_BIN/c1541" -format "$SCHIJFNAAM" d64 "$D64" -write "$UIT/$NAAM.prg" "$NAAM" ${KAMERS[@]} \
+      >/dev/null 2>"$UIT/c1541.log" || { cat "$UIT/c1541.log" >&2; fout "c1541"; }
+  else
+    "$VICE_BIN/c1541" -format "${SCHIJFNAAM%%,*} 2,${SCHIJFNAAM##*,}" d64 "$D64_2" ${KAMERS[@]} \
+      >/dev/null 2>>"$UIT/c1541.log" || { cat "$UIT/c1541.log" >&2; fout "c1541 (diskette 2)"; }
+  fi
+done
+[[ -f "$D64" && -f "$D64_2" ]] || fout "geen D64 gemaakt"
+for d in "$D64" "$D64_2"; do
+  print "[build]   ${d#$ROOT/}:"
+  "$VICE_BIN/c1541" -attach "$d" -list 2>/dev/null | grep -E '^[0-9]+ ' | sed 's/^/[build]     /'
+done
 
 print "[build] OK: ${D64#$ROOT/}"
 

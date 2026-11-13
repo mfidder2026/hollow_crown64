@@ -1,19 +1,46 @@
 # proef_kamers.hcs — gemaakt door tools/maak_testbanden.py: per kamer een script dat Eldric erin zet.
 
+SCRIPT proef_kamer_aardstad:
+  KAMER aardstad 80,111 VOOR
+
+SCRIPT proef_kamer_baken:
+  KAMER baken 79,113 VOOR
+
+SCRIPT proef_kamer_bergpad:
+  KAMER bergpad 21,112 VOOR
+
+SCRIPT proef_kamer_boot:
+  KAMER boot 80,113 VOOR
+
 SCRIPT proef_kamer_bospad:
   KAMER bospad 112,114 VOOR
 
 SCRIPT proef_kamer_bosrand:
   KAMER bosrand 79,118 VOOR
 
+SCRIPT proef_kamer_donker:
+  KAMER donker 12,110 VOOR
+
+SCRIPT proef_kamer_eiland:
+  KAMER eiland 50,114 VOOR
+
 SCRIPT proef_kamer_herberg:
   KAMER herberg 43,105 VOOR
+
+SCRIPT proef_kamer_hut:
+  KAMER hut 79,116 VOOR
+
+SCRIPT proef_kamer_ijsbrug:
+  KAMER ijsbrug 20,111 VOOR
 
 SCRIPT proef_kamer_jachthut:
   KAMER jachthut 79,116 VOOR
 
 SCRIPT proef_kamer_kelder:
   KAMER kelder 35,111 VOOR
+
+SCRIPT proef_kamer_kloof:
+  KAMER kloof 80,114 VOOR
 
 SCRIPT proef_kamer_oever:
   KAMER oever 30,114 VOOR
@@ -26,4 +53,16 @@ SCRIPT proef_kamer_smit:
 
 SCRIPT proef_kamer_spookbrug:
   KAMER spookbrug 24,109 VOOR
+
+SCRIPT proef_kamer_spreukzaal:
+  KAMER spreukzaal 80,116 VOOR
+
+SCRIPT proef_kamer_steiger:
+  KAMER steiger 55,111 VOOR
+
+SCRIPT proef_kamer_vuurtoren:
+  KAMER vuurtoren 96,118 VOOR
+
+SCRIPT proef_kamer_zwamgrot:
+  KAMER zwamgrot 80,113 VOOR
 

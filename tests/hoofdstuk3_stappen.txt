@@ -1,0 +1,330 @@
+# hoofdstuk3_stappen.txt — de stappen van hoofdstuk 3, vanaf de oever met de boot geroepen (voeg_in vanuit
+# hoofdstuk3.band en hele_spel.band). Geen eigen band: geen .band-extensie, dus alles.sh draait hem niet los.
+# de inventaris bovenaan (in het hele spel stond hij een rij omlaag)
+cursor 156,180
+vuur
+wacht 3
+cursor 156,180
+vuur
+wacht 3
+cursor 68,72
+wacht 2
+verwacht_tekst 18 "Ga naar boot"
+vuur
+wacht_tot_stil
+wacht 100
+verwacht_kamer veerman
+screenshot veerman
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer steiger
+verwacht st_hoofdstuk = 2
+verwacht_tekst 24 "   Hoofdstuk 3: Zee van Vergetelheid"
+screenshot steiger
+
+# de verkeerde naam (dood 1)
+cursor 100,164
+vuur
+cursor 258,83
+wacht 2
+verwacht_tekst 18 "Praat met Olm"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht gs_actief = 1
+verwacht_tekst 20 "Je heet Bram."
+cursor 20,164
+vuur
+wacht_op_script
+wacht 3
+verwacht_slot 0 tik
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0                 # (terug: het gesprek met Tik is voorbij)
+verwacht act_zichtbaar = 1
+verwacht_kamer steiger
+
+# de naam staat op de boot
+cursor 180,172
+vuur
+cursor 180,106
+wacht 2
+verwacht_tekst 18 "Lees boot"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag boot_gelezen 1
+cursor 100,164
+vuur
+cursor 258,83
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 20 "Je heet Olm."
+cursor 20,164
+vuur
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer boot
+verwacht_vlag olm_weet_naam 1
+screenshot boot
+
+# zeewater drinken (dood 2)
+cursor 100,156
+vuur
+cursor 260,87
+wacht 2
+verwacht_tekst 18 "Pak zee"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0                 # (terug: het gesprek met Tik is voorbij)
+verwacht act_zichtbaar = 1
+
+# de mist: na een halve minuut is een naam weg; Bekijk geeft hem terug
+wacht 1520
+verwacht mist_teller = 1
+screenshot mist
+verwacht_tekst 22 "???                ↑  lantaarn"
+cursor 20,164
+vuur
+cursor 20,180
+wacht 2
+verwacht_tekst 18 "Bekijk ???"
+vuur
+wacht_op_script
+wacht 3
+verwacht_tekst 22 "kruik              ↑  lantaarn"
+
+# zeewater in de kruik (nodig in hoofdstuk 6)
+cursor 180,156
+vuur
+cursor 20,180
+wacht 2
+verwacht_tekst 18 "Gebruik kruik"
+vuur
+wacht 2
+cursor 260,87
+wacht 2
+verwacht_tekst 18 "Gebruik kruik met zee"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_stand kruik 2
+
+# Mira voelt de weg: links
+cursor 100,164
+vuur
+cursor 160,86
+wacht 2
+verwacht_tekst 18 "Praat met Olm"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 20 "Mira, zie jij iets?"
+cursor 20,164
+vuur
+wacht_op_script
+wacht 3
+verwacht_vlag mira_links 1
+verwacht_tekst 21 "Links, Olm."
+cursor 20,172
+vuur
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer eiland
+screenshot eiland
+
+# honing voor de meeuwen: de sleutel
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik honingpot"
+vuur
+wacht 2
+cursor 280,106
+wacht 2
+verwacht_tekst 18 "Gebruik honingpot met rots"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag meeuwen_honing 1
+cursor 100,156
+vuur
+cursor 268,124
+wacht 2
+verwacht_tekst 18 "Pak sleutel"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar sleutel eldric
+screenshot honing
+cursor 260,156
+vuur
+cursor 124,102
+wacht 2
+verwacht_tekst 18 "Open deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag deur_open 1
+verwacht_eigenaar sleutel nergens
+cursor 124,102
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer vuurtoren
+screenshot vuurtoren
+
+# in de boot vergat Eldric ook de lantaarn: eerst bekijken
+verwacht_tekst 22 "kruik              ↑  ???"
+cursor 20,164
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Bekijk ???"
+vuur
+wacht_op_script
+wacht 3
+# de lantaarn in de lamp (doodlopend: Tik)
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn"
+vuur
+wacht 2
+cursor 152,76
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn met lamp"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0                 # (terug: het gesprek met Tik is voorbij)
+verwacht act_zichtbaar = 1
+verwacht_eigenaar lantaarn eldric
+
+# Nul, de kever, het steentje in de lamp (de inventaris een rij naar beneden schuiven)
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "honingpot          ↑  zonnesteen"
+verwacht_tekst 23 "fluisterkever      ↓  gloeischub"
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen"
+vuur
+wacht 2
+cursor 152,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag vuurtoren_brandt 0         # Nul laat je niet aan zijn lamp
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever"
+vuur
+wacht 2
+cursor 250,92
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever met Nul"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag nul_om 1
+screenshot nul
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen"
+vuur
+wacht 2
+cursor 152,76
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen met lamp"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag vuurtoren_brandt 1
+verwacht_eigenaar sterrenkaart eldric
+verwacht_eigenaar zonnesteen nergens
+screenshot lamp
+
+# zonder oma's steentje gaat hij niet weg; hij pakt het terug (de lamp blijft branden)
+cursor 36,132
+wacht 2
+verwacht_tekst 18 "Ga naar trap"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_kamer vuurtoren
+cursor 100,156
+vuur
+cursor 152,76
+wacht 2
+verwacht_tekst 18 "Pak lamp"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar zonnesteen eldric
+cursor 36,132
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer eiland
+cursor 270,133
+wacht 2
+verwacht_tekst 18 "Ga naar boot"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer boot
+
+# de straal volgen: einde hoofdstuk 3
+cursor 100,164
+vuur
+cursor 160,86
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 20 "Volg de straal!"
+cursor 20,164
+vuur
+wacht_op_script
+wacht 3
+verwacht_vlag hoofdstuk3_klaar 1
+verwacht voltooid = 1
+verwacht_tekst 24 "          Hoofdstuk 3 voltooid"
+screenshot einde

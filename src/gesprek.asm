@@ -165,8 +165,9 @@ uit:    ldx soort
         eor #1                          // NIET (A is 0 of de bit; maak er 0/1 van)
 !:      jmp uitkomst
 heeft:  tax                             // HEEFT: 1 als het voorwerp bij Eldric is
+        jsr eigenaar_van                // status.asm (X blijft)
+        tay
         lda #0
-        ldy st_eigenaar,x
         cpy #EIGENAAR_ELDRIC
         bne !+
         lda #1

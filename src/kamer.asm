@@ -160,23 +160,40 @@ bm:     lda r
         lda zp_ptr2 + 1
         adc bitmap_rij_hi,x
         sta zp_ptr2 + 1
-        lda breed                       // breed * 8 bytes
+        lda #0                          // breed * 8 bytes: tot 320 (de volle breedte), dus 16 bits
+        sta n_hi
+        lda breed
         asl
+        rol n_hi
         asl
+        rol n_hi
         asl
+        rol n_hi
         sta n
+        lda n_hi                        // eerst een hele pagina (256 bytes) als het er meer dan 255 zijn
+        beq !++
+        ldy #0
+!:      lda (zp_ptr),y
+        sta (zp_ptr2),y
+        iny
+        bne !-
+        inc zp_ptr + 1
+        inc zp_ptr2 + 1
+!:      lda n                           // dan de rest
+        beq !++
         ldy #0
 !:      lda (zp_ptr),y
         sta (zp_ptr2),y
         iny
         cpy n
         bne !-
-        jsr bron_n
+!:      jsr bron_n
         inc r
         lda r
         cmp hoog
-        bne bm
-        // scherm-RAM en kleur-RAM: per rij breed bytes
+        beq !+
+        jmp bm
+!:      // scherm-RAM en kleur-RAM: per rij breed bytes
         lda #0
         sta wat
 sk:     lda #0
@@ -231,6 +248,7 @@ breed:  .byte 0
 hoog:   .byte 0
 r:      .byte 0
 n:      .byte 0
+n_hi:   .byte 0
 wat:    .byte 0
 }
 
@@ -242,4 +260,6 @@ bitmap_rij_lo: .fill KAMER_RIJEN, <(KAMER_BITMAP + i * 320)
 bitmap_rij_hi: .fill KAMER_RIJEN, >(KAMER_BITMAP + i * 320)
 
 .segment Buffers
+.segment Hoog                           // $C800-$CFFF (geheugen.asm)
 patch_buf:    .fill PATCH_GROOTTE, 0
+.segment Buffers

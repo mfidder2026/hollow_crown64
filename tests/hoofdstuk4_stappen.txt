@@ -1,0 +1,316 @@
+# hoofdstuk4_stappen.txt — de stappen van hoofdstuk 4, vanuit de boot met hoofdstuk 3 klaar (voeg_in vanuit
+# hoofdstuk4.band en hele_spel.band).
+cursor 156,180
+vuur
+wacht 3
+cursor 100,164
+vuur
+cursor 160,86
+wacht 2
+verwacht_tekst 18 "Praat met Olm"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 21 "Aan land, Olm."
+cursor 20,172
+vuur
+wacht 400
+verwacht_kamer grot
+verwacht vm_scene = 1
+screenshot grot2
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer kloof
+verwacht st_hoofdstuk = 3
+verwacht_slot 0 wolf_kloof
+screenshot kloof
+
+# zonder licht de grot in (dood)
+cursor 162,86
+wacht 2
+verwacht_tekst 18 "Ga naar grot"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+verwacht act_zichtbaar = 1
+
+# de lantaarn: de wolven wijken, maar hij lekt leeg
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn"
+vuur
+wacht 2
+cursor 160,108
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn met wolven"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_stand lantaarn 3
+verwacht_slot 0 wolf_kloof
+# de gloeischub in de lantaarn: zwak licht. Gebruik lantaarn, dan de inventaris 2 rijen omlaag, dan de gloeischub
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn"
+vuur
+wacht 2
+cursor 156,188
+vuur
+wacht 3
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "fluisterkever      ↑  sterrenkaart"
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn met gloeischub"
+vuur
+wacht_op_script
+verwacht_stand lantaarn 4
+cursor 156,180
+vuur
+wacht 3
+cursor 156,180
+vuur
+wacht 3
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn"
+vuur
+wacht 2
+cursor 160,108
+wacht 2
+verwacht_tekst 18 "Gebruik lantaarn met wolven"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag wolven_kloof_weg 1
+cursor 162,86
+wacht 2
+verwacht_tekst 18 "Ga naar grot"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer donker
+screenshot donker
+
+# in het donker zelf lopen (dood), dan Mira laten leiden
+wacht_op_script
+cursor 100,164
+vuur
+cursor 14,119
+wacht 2
+verwacht_tekst 18 "Praat met Mira"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 19 "Ik zie niks, maar ik loop gewoon."
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+wacht_op_script
+verwacht gs_actief = 0
+verwacht act_zichtbaar = 1
+cursor 100,164
+vuur
+cursor 14,119
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 20 "Mira, wil jij mij leiden?"
+cursor 20,164
+vuur
+wacht 330
+screenshot pad
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer zwamgrot
+verwacht_eigenaar trilkristal eldric
+screenshot zwamgrot
+
+# de zwarte zwam (dood)
+cursor 100,156
+vuur
+cursor 140,123
+wacht 2
+verwacht_tekst 18 "Pak zwarte zwam"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+
+# de honingpot voor Pad: twee lichtzwammen
+cursor 180,164
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Geef honingpot"
+vuur
+wacht 2
+cursor 224,91
+wacht 2
+verwacht_tekst 18 "Geef honingpot aan Pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar lichtzwammen eldric
+verwacht_stand lichtzwammen 2
+verwacht_tekst 23 "lichtzwammen       ↓  zonnesteen"
+
+# een lichtzwam in de lantaarn (fel), maar de stad slaapt: eerst waarschuwt Mira, dan het luikje dicht
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik lichtzwammen"
+vuur
+wacht 2
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik lichtzwammen met lantaarn"
+vuur
+wacht_op_script
+verwacht_stand lantaarn 5
+verwacht_stand lichtzwammen 1
+cursor 310,130
+wacht 2
+verwacht_tekst 18 "Ga naar gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_kamer zwamgrot
+verwacht_vlag mira_waarschuwt 1
+cursor 260,164
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Sluit lantaarn"
+vuur
+wacht_op_script
+verwacht_stand lantaarn 6
+cursor 310,130
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer aardstad
+screenshot aardstad
+
+# Moeder Aard, met de fluisterkever: het ei, de sleutelschub
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 23 "fluisterkever      ↓  sterrenkaart"
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever"
+vuur
+wacht 2
+cursor 156,84
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever met Moeder Aard"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 60                               # (Mira loopt nog naar haar plek)
+screenshot ei
+verwacht_vlag moeder_gesproken 1
+verwacht_eigenaar sleutelschub eldric
+cursor 310,103
+wacht 2
+verwacht_tekst 18 "Ga naar gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spreukzaal
+screenshot spreukzaal
+
+# de spreuk zonder het boek (dood), dan het boek met de sterrenkaart, dan het kristal in de kring
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "fluisterkever      ↑  sterrenkaart"
+verwacht_tekst 23 "trilkristal        ↓  sleutelschub"
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik trilkristal"
+vuur
+wacht 2
+cursor 160,126
+wacht 2
+verwacht_tekst 18 "Gebruik trilkristal met kring"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+verwacht_eigenaar trilkristal eldric
+cursor 180,172
+vuur
+cursor 68,100
+wacht 2
+verwacht_tekst 18 "Lees spreukenboek"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag boek_gelezen 1
+screenshot boek
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik trilkristal"
+vuur
+wacht 2
+cursor 160,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_eigenaar bakenkristal eldric
+verwacht_vlag hoofdstuk4_klaar 1
+verwacht voltooid = 1
+verwacht_tekst 24 "          Hoofdstuk 4 voltooid"
+screenshot einde

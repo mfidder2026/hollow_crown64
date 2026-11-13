@@ -87,6 +87,7 @@ tien:   .byte 0
 laad_kamer: {
         stx kamer
         jsr laden_begin
+opnieuw:
         jsr tod_lezen
         lda tod_nu
         sta begin
@@ -108,10 +109,12 @@ laad_kamer: {
         ldx #<KAMER_BUF
         ldy #>KAMER_BUF
         jsr LOAD
-        lda #0
         bcc !+
-        lda #1                          // (A bevat de Kernal-fout; 0 kan niet bij een fout)
-!:      sta laad_fout
+        ldx kamer                       // niet gevonden: de verkeerde diskette? Vraag om de goede en probeer opnieuw
+        jsr diskette_vragen
+        jmp opnieuw
+!:      lda #0
+        sta laad_fout
         ldx kamer                       // de scripts van de kamer (<KAMER>.S) erachter, op KAMER_SCRIPTS
         lda kamer_sbestand_len,x
         pha
@@ -145,6 +148,73 @@ laad_kamer: {
         jmp laden_einde
 kamer:  .byte 0
 begin:  .word 0
+}
+
+// diskette_vragen: "Plaats diskette N en druk op vuur." (N = de diskette van kamer X) en wachten. In de testbuild
+// wacht hij tot tools/vicetest.py de goede diskette in VICE heeft gestopt (die zet schijf_nodig weer op 0).
+diskette_vragen: {
+        lda kamer_schijf,x
+        sta schijf_nodig
+        clc
+        adc #'0'
+        sta tekst_diskette_nr
+        inc diskette_teller
+        ldy #RIJ_ONDER
+        lda #KLEUR_HOOFDSTUK
+        jsr rij_wissen
+        lda #<tekst_diskette
+        sta zp_ptr
+        lda #>tekst_diskette
+        sta zp_ptr + 1
+        ldx #(40 - tekst_diskette_lengte) / 2
+        ldy #RIJ_ONDER
+        lda #KLEUR_HOOFDSTUK
+        jsr tekst_schrijf
+#if AUTOTEST
+!:      lda schijf_nodig                // vicetest stopt de diskette erin
+        bne !-
+#else
+!:      jsr vuur_nu                     // eerst loslaten, dan indrukken
+        bne !-
+!:      jsr vuur_nu
+        beq !-
+!:      jsr vuur_nu
+        bne !-
+        lda #0
+        sta schijf_nodig
+#endif
+        ldy #RIJ_ONDER
+        lda #KLEUR_HOOFDSTUK
+        jsr rij_wissen
+        lda #<tekst_laden
+        sta zp_ptr
+        lda #>tekst_laden
+        sta zp_ptr + 1
+        ldx #(40 - tekst_laden_lengte) / 2
+        ldy #RIJ_ONDER
+        lda #KLEUR_HOOFDSTUK
+        jmp tekst_schrijf
+}
+
+// vuur_nu: A != 0 als vuur (joystick 2), spatie of de linker muisknop nu ingedrukt is (zonder IRQ's: direct uit de CIA)
+vuur_nu: {
+        lda #$7f                        // rij 7 van het toetsenbord: spatie is bit 4
+        sta $dc00
+        lda $dc01
+        and #$10
+        beq ja
+        lda #$ff                        // geen toetsen: dan is $dc00 de joystick in poort 2 (vuur = bit 4)
+        sta $dc00
+        lda $dc00
+        and #$10
+        beq ja
+        lda $dc01                       // poort 1: de muisknop (links = bit 4)
+        and #$10
+        beq ja
+        lda #0
+        rts
+ja:     lda #1
+        rts
 }
 
 // laden_begin: raster-IRQ's uit, tekstmodus, kamer leeg, sprites uit, "Laden..."
@@ -221,4 +291,11 @@ tod_nu:      .word 0
 laadtijd:    .word 0                    // tienden van seconden (de laatste keer)
 laad_fout:   .byte 0
 laad_teller: .byte 0                    // hoe vaak er geladen is (voor de tests)
+schijf_nodig: .byte 0                   // welke diskette het spel nu vraagt (0: geen); tools/vicetest.py leest dit
+diskette_teller: .byte 0                // hoe vaak er om een diskette gevraagd is (voor de tests)
+.encoding "screencode_mixed"
+tekst_diskette: .text "Plaats diskette "
+tekst_diskette_nr: .text "2 en druk op vuur."
+.label tekst_diskette_lengte = * - tekst_diskette
+        .byte 0
 sprites_aan: .byte 0

@@ -176,7 +176,7 @@ op_als_heeft:
         ldy #1
         lda (zp_vm),y
         tax
-        lda st_eigenaar,x
+        jsr eigenaar_van                // status.asm
         cmp #EIGENAAR_ELDRIC
         bne spring_3
         lda #4
@@ -185,7 +185,7 @@ op_als_niet_heeft:
         ldy #1
         lda (zp_vm),y
         tax
-        lda st_eigenaar,x
+        jsr eigenaar_van                // status.asm
         cmp #EIGENAAR_ELDRIC
         beq spring_3
         lda #4
