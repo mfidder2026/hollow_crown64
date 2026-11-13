@@ -45,6 +45,7 @@ RIJEN, KOL = H // 8, B // 4
 ACHTER = 0               # zwart
 ZWART_BOVEN, ZWART_ONDER = 1, 2
 MAX_INGEPAKT = 6400      # alleen het plaatje (ongepakt is het 5120 + 640 + 640)
+MAX_BESTAND = 0x1400     # het hele kamerbestand: $A000-$B3FF; daarboven komen de scripts van de kamer (KAMER_SCRIPTS)
 KAMER_BUF = 0xA000       # gelijk houden met src/geheugen.asm
 KAMER_BUF_GROOTTE = 0x2000
 
@@ -297,8 +298,9 @@ def main():
             bestand += inpak.pak(pdata)
             bestand[tabel + 1 + 6 * i:tabel + 7 + 6 * i] = bytes([k0, r0, kb, kh, plek & 255, plek >> 8])
         bestand[0:4] = bytes([vg_plek & 255, vg_plek >> 8, tabel & 255, tabel >> 8])
-        if len(bestand) > KAMER_BUF_GROOTTE:
-            raise SystemExit("%s:%d: kamer %s is %d bytes, de kamerbuffer %d" % (lijst, nr, naam, len(bestand), KAMER_BUF_GROOTTE))
+        if len(bestand) > MAX_BESTAND:
+            raise SystemExit("%s:%d: kamer %s is %d bytes; met de patches mag het hooguit %d ($A000-$B3FF: daarboven "
+                             "staan de scripts van de kamer)" % (lijst, nr, naam, len(bestand), MAX_BESTAND))
         open(prg, "wb").write(bytes([KAMER_BUF & 255, KAMER_BUF >> 8]) + bestand)
         controle_png(Image.fromarray(np.asarray(bron)), pix, os.path.join(uitmap, "kamer_%s.png" % naam))
         print("[kamer]   %s: %d bytes ingepakt (ongepakt %d), kamerbestand %d bytes, %d patches" % (

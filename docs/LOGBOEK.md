@@ -721,3 +721,23 @@ is het onthouden voorwerp vergeten (`src/zin.asm`: onthouden, laatst_geldig, ver
 **Getest:** `tests/slim.band` (Bekijk fontein via het onthouden voorwerp, een ander voorwerp gaat voor, Gebruik
 zonnesteen met fontein); `tests/bekijk.band` aangepast (na het kiezen van Bekijk staat de fontein er al achter).
 23/23 compiler, 18/18 banden.
+
+## 2026-11-13 — Scripts per kamer van de diskette (ruimte voor hoofdstuk 2 en verder)
+
+Het geheugen onder de kamerbuffer was op (nog ~800 bytes vrij in de testversie); alleen de scripts en teksten van
+hoofdstuk 1 waren al ruim 9 KB. Nu werkt het zoals de oude avonturen: **de scripts van een kamer worden met die kamer
+van de diskette geladen**, als tweede bestand `<kamer>.s`, op `KAMER_SCRIPTS` ($B400-$BFFF). Het plaatje van een
+kamer (met patches) moet daarom onder $B400 blijven (5 KB; tools/kamer.py controleert dat).
+
+- `tools/scriptc.py` verdeelt alles over segmenten: een voorwerp dat in een kamer begint en nooit verplaatst wordt
+  (geen GEEF/NEEM/PLAATS), hoort bij die kamer: zijn naam, scripts en teksten gaan in segment `Kamer_<naam>`. Ook
+  BINNENKOMST, en een gesprek dat alleen vanuit één kamer begint. Wat je kunt meenemen, standaardantwoorden en losse
+  scripts blijven vast in het geheugen. Kick Assembler schrijft elk segment naar `scr_<kamer>.prg`; build.sh zet die
+  op de diskette als `<kamer>.s`.
+- `src/schijf.asm` laadt na het plaatje het scriptbestand (laad_fout = 2 als het ontbreekt).
+- Resultaat: het hoofdprogramma van 137 naar 109 blokken; vrij onder $A000 nu ~10 KB in plaats van 0,8 KB.
+
+Later, als de diskette vol raakt (rond 25 kamers): meerdere diskettes ("Plaats diskette 2"); met elke kamer en zijn
+scripts als eigen bestanden is dat eenvoudig.
+
+**Getest:** 23/23 compiler, 18/18 banden (de oplossingsband speelt alle kamers met hun scripts van de diskette).

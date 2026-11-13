@@ -843,11 +843,30 @@ def uitspeelbaar(spel):
 # Schrijven
 # ---------------------------------------------------------------------------------------------------
 class Uitvoer:
+    """Schrijft de bytecode. Elk script en elke tekst komt in een segment: "Data" (vast in het geheugen) of
+    "Kamer_<naam>" (de scripts van die kamer: met de kamer van de diskette geladen op KAMER_SCRIPTS)."""
     def __init__(self, spel):
-        self.spel, self.L, self.teksten, self.vlaggen, self.nummer = spel, [], [], {}, 0
+        self.spel, self.vlaggen, self.nummer = spel, {}, 0
+        self.seg = "Data"
+        self.segmenten = {"Data": ([], [])}          # segment -> (regels, teksten)
         self.vw = {n: i for i, n in enumerate(spel.vw_volgorde)}
         self.km = {n: i for i, n in enumerate(spel.kamer_volgorde)}
         self.patches = patches_van_kamers()
+
+    @property
+    def L(self):
+        return self.segmenten.setdefault(self.seg, ([], []))[0]
+
+    @property
+    def teksten(self):
+        return self.segmenten.setdefault(self.seg, ([], []))[1]
+
+    def zet(self, seg):
+        self.seg = seg
+
+    def tekstlabel(self):
+        self.nummer += 1
+        return "t_%d" % self.nummer
 
     def vlag(self, naam):
         if naam not in self.vlaggen:
@@ -866,7 +885,7 @@ class Uitvoer:
             k = o[0]
             if k == "ZEG":
                 codes, n = tekst_codes(o[2], o[3])
-                t = "t_%d" % len(self.teksten)
+                t = self.tekstlabel()
                 self.teksten.append((t, codes, o[2]))
                 duur = min(65535, 50 + (n * 5 + 1) // 2)        # 1 s + 1 s per 20 tekens
                 L.append("        .byte $%02x, %d, <%s, >%s, %d, %d    // ZEG %s" % (
@@ -940,12 +959,51 @@ class Uitvoer:
         L.append("        .byte $%02x    // einde" % OP["STOP"])
 
 
+def kamer_segmenten(spel):
+    """Welke voorwerpen en gesprekken horen bij één kamer (hun scripts en teksten worden met die kamer geladen)?
+    Een voorwerp is van een kamer als het daar begint en nooit verplaatst wordt (geen GEEF/NEEM/PLAATS); wat je kunt
+    meenemen, kan overal opduiken en blijft vast in het geheugen. Een gesprek is van een kamer als het alleen vanuit
+    scripts van die kamer begint."""
+    bewogen = set()
+    for scr, _, _, _ in alle_scripts(spel):
+        for o in scr:
+            if o[0] in ("GEEF", "NEEM", "PLAATS"):
+                bewogen.add(o[1])
+    vw_seg = {}
+    for n, v in spel.voorwerpen.items():
+        e = v["eigenaar"]
+        vw_seg[n] = "Kamer_%s" % e if e not in ("eldric", None) and n not in bewogen else "Data"
+    plekken = {}
+    for k in spel.kamers.values():
+        for o in k.get("binnenkomst", []):
+            if o[0] == "PRAAT":
+                plekken.setdefault(o[1], set()).add("Kamer_%s" % k["naam"])
+    for n, v in spel.voorwerpen.items():
+        for scr in list(v["scripts"].values()) + list(v["paren"].values()):
+            for o in scr:
+                if o[0] == "PRAAT":
+                    plekken.setdefault(o[1], set()).add(vw_seg[n])
+    for scr, _, _, _ in alle_scripts(spel):            # vanuit vaste scripts (standaard, los, gesprekken): Data
+        pass
+    gs_seg = {}
+    for g in spel.gesprekken:
+        p = plekken.get(g, {"Data"})
+        gs_seg[g] = p.pop() if len(p) == 1 else "Data"
+    return vw_seg, gs_seg
+
+
 def schrijf(spel, pad, json_pad):
     import c64beeld
     u = Uitvoer(spel)
     L, vw, km = u.L, u.vw, u.km
+    vw_seg, gs_seg = kamer_segmenten(spel)
     L += ["// spel.asm — gemaakt door tools/scriptc.py uit scripts/*.hcs; niet met de hand wijzigen",
-          ".segment Data"]
+          "// De scripts van elke kamer staan in een eigen segment: dat wordt een eigen bestand op de diskette",
+          "// (<kamer>.S) en wordt met de kamer geladen op KAMER_SCRIPTS (schijf.asm). Zo blijft het geheugen vrij."]
+    for n in spel.kamer_volgorde:
+        L.append(".segmentdef Kamer_%s [start=KAMER_SCRIPTS, max=KAMER_SCRIPTS_EIND]" % n)
+        L.append('.file [name="scr_%s.prg", segments="Kamer_%s"]' % (n, n))
+    L.append(".segment Data")
     for i, sp in enumerate(spel.sprekers):
         L.append(".const SPREKER_%s = %d" % (sp.upper(), i))
     L.append("spreker_kleur: .byte %s" % ", ".join(str(c64beeld.NAMEN.index(k)) for k, _ in spel.sprekers.values()))
@@ -959,11 +1017,12 @@ def schrijf(spel, pad, json_pad):
     # gesprekken: aantal keuzes; per keuze: einde, soort voorwaarde, argument, tekst (lo, hi), script (lo, hi)
     #   soort: 0 geen, 1 vlag, 2 NIET vlag, 3 HEEFT, 4 NIET HEEFT
     for g in spel.gesprekken.values():
+        u.zet(gs_seg[g["naam"]])
         for i, k in enumerate(g["keuzes"]):
             codes, _ = tekst_codes(k["tekst"], k["waar"], 1)
-            L.append("kz_%s_%d: .byte %s, 0    // %s" % (g["naam"], i, ", ".join("$%02x" % c for c in codes), k["tekst"]))
+            u.L.append("kz_%s_%d: .byte %s, 0    // %s" % (g["naam"], i, ", ".join("$%02x" % c for c in codes), k["tekst"]))
             u.script("ks_%s_%d" % (g["naam"], i), k["script"])
-        L.append("gesprek_%s: .byte %d" % (g["naam"], len(g["keuzes"])))
+        u.L.append("gesprek_%s: .byte %d" % (g["naam"], len(g["keuzes"])))
         for i, k in enumerate(g["keuzes"]):
             soort, arg = 0, 0
             if k["cond"]:
@@ -972,8 +1031,9 @@ def schrijf(spel, pad, json_pad):
                     soort, arg = (2 if niet else 1), u.vlag(c[1])
                 else:
                     soort, arg = (4 if niet else 3), vw[c[1]]
-            L.append("        .byte %d, %d, %d, <kz_%s_%d, >kz_%s_%d, <ks_%s_%d, >ks_%s_%d" % (
+            u.L.append("        .byte %d, %d, %d, <kz_%s_%d, >kz_%s_%d, <ks_%s_%d, >ks_%s_%d" % (
                 1 if k["einde"] else 0, soort, arg, g["naam"], i, g["naam"], i, g["naam"], i, g["naam"], i))
+    u.zet("Data")
     # figuren (NPC's)
     import json
     kostuums = json.load(open(os.path.join(WORTEL, "build", "gen", "kostuums.json")))
@@ -998,18 +1058,20 @@ def schrijf(spel, pad, json_pad):
     # per voorwerp: 12 scripts (werkwoorden), dan paren (werkwoord, ander voorwerp, script), $ff
     for naam in spel.vw_volgorde:
         v = spel.voorwerpen[naam]
+        u.zet(vw_seg[naam])
         codes, _ = tekst_codes(v["tekst"], v["waar"], 1)
-        L.append("naam_%s: .byte %s, 0    // %s" % (naam, ", ".join("$%02x" % c for c in codes), v["tekst"]))
+        u.L.append("naam_%s: .byte %s, 0    // %s" % (naam, ", ".join("$%02x" % c for c in codes), v["tekst"]))
         for ww, s in v["scripts"].items():
             u.script("s_%s_%s" % (naam, ww.lower()), s)
         for (ww, ander), s in v["paren"].items():
             u.script("p_%s_%s_%s" % (naam, ww.lower(), ander), s)
-        L.append("scripts_%s: .word %s" % (naam, ", ".join(
+        u.L.append("scripts_%s: .word %s" % (naam, ", ".join(
             "s_%s_%s" % (naam, ww.lower()) if ww in v["scripts"] else "0" for ww in WERKWOORDEN)))
         for (ww, ander) in v["paren"]:
-            L.append("        .byte %d, %d, <p_%s_%s_%s, >p_%s_%s_%s    // %s %s" % (
+            u.L.append("        .byte %d, %d, <p_%s_%s_%s, >p_%s_%s_%s    // %s %s" % (
                 WERKWOORDEN.index(ww), vw[ander], naam, ww.lower(), ander, naam, ww.lower(), ander, ww, ander))
-        L.append("        .byte $ff")
+        u.L.append("        .byte $ff")
+    u.zet("Data")
     L.append(".const AANTAL_VW = %d" % len(spel.vw_volgorde))
     for naam in spel.vw_volgorde:
         L.append(".const VW_%s = %d" % (naam.upper(), vw[naam]))
@@ -1071,7 +1133,9 @@ def schrijf(spel, pad, json_pad):
                 tabel[kl] = kleuren[(i + 1) % len(kleuren)]
             L.append("        .byte %d, %d, %d, %d, %s" % (x // 4, y // 8, b // 4, h // 8, ", ".join(str(t) for t in tabel)))
         if "binnenkomst" in k:
+            u.zet("Kamer_%s" % naam)
             u.script("binnen_%s" % naam, k["binnenkomst"])
+            u.zet("Data")
     L.append(".const AANTAL_KAMERS = %d" % len(spel.kamer_volgorde))
     for veld in ("loopvakken", "achter", "schaal", "flakker"):
         L.append("kamer_%s_lo: .byte %s" % (veld, ", ".join("<%s_%s" % (veld, n) for n in spel.kamer_volgorde)))
@@ -1081,6 +1145,11 @@ def schrijf(spel, pad, json_pad):
     L.append("kamer_bestand_lo: .byte %s" % ", ".join("<bestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_bestand_hi: .byte %s" % ", ".join(">bestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_bestand_len: .byte %s" % ", ".join(str(len(n)) for n in spel.kamer_volgorde))
+    for n in spel.kamer_volgorde:            # de scripts van de kamer: <KAMER>.S
+        L.append("sbestand_%s: .byte %s    // %s.s" % (n, ", ".join("$%02x" % ord(c) for c in n.upper() + ".S"), n))
+    L.append("kamer_sbestand_lo: .byte %s" % ", ".join("<sbestand_%s" % n for n in spel.kamer_volgorde))
+    L.append("kamer_sbestand_hi: .byte %s" % ", ".join(">sbestand_%s" % n for n in spel.kamer_volgorde))
+    L.append("kamer_sbestand_len: .byte %s" % ", ".join(str(len(n) + 2) for n in spel.kamer_volgorde))
     L.append("kamer_toneel: .byte %s    // 1: TONEEL (geen Eldric, cursor en balk)" % ", ".join(
         "1" if spel.kamers[n]["toneel"] else "0" for n in spel.kamer_volgorde))
     L.append("kamer_binnen_lo: .byte %s" % ", ".join(
@@ -1099,8 +1168,20 @@ def schrijf(spel, pad, json_pad):
     L.append(".const DOEL_VLAG = %d    // %s" % ((u.vlag(spel.doel[0]), spel.doel[0]) if spel.doel else (255, "geen")))
     L.append(".const AANTAL_VLAGGEN = %d" % len(u.vlaggen))
     L.append("// teksten (schermcodes; $%02x = tweede regel, 0 = einde)" % NIEUWE_REGEL)
+    u.zet("Data")
     for t, codes, tekst in u.teksten:
         L.append("%s: .byte %s, 0    // %s" % (t, ", ".join("$%02x" % c for c in codes), tekst[:60]))
+    # de segmenten van de kamers: scripts, namen en teksten die alleen in die kamer nodig zijn
+    grootte = {}
+    for n in spel.kamer_volgorde:
+        regels, teksten = u.segmenten.get("Kamer_%s" % n, ([], []))
+        L.append(".segment Kamer_%s" % n)
+        L.append("kamerscripts_%s:" % n)
+        L.extend(regels)
+        for t, codes, tekst in teksten:
+            L.append("%s: .byte %s, 0    // %s" % (t, ", ".join("$%02x" % c for c in codes), tekst[:60]))
+        L.append("        .byte 0    // (nooit een leeg bestand)")
+    L.append(".segment Data")
     open(pad, "w").write("\n".join(L) + "\n")
     json.dump({"vlaggen": u.vlaggen, "voorwerpen": vw, "kamers": km, "figuren": spel.actor_volgorde,
                "eigenaar": {"eldric": EIGENAAR_ELDRIC, "nergens": EIGENAAR_NERGENS},

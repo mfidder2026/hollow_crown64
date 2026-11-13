@@ -112,6 +112,26 @@ laad_kamer: {
         bcc !+
         lda #1                          // (A bevat de Kernal-fout; 0 kan niet bij een fout)
 !:      sta laad_fout
+        ldx kamer                       // de scripts van de kamer (<KAMER>.S) erachter, op KAMER_SCRIPTS
+        lda kamer_sbestand_len,x
+        pha
+        ldy kamer_sbestand_hi,x
+        lda kamer_sbestand_lo,x
+        tax
+        pla
+        jsr SETNAM
+        lda #1
+        ldx #8
+        ldy #0
+        jsr SETLFS
+        lda #0
+        ldx #<KAMER_SCRIPTS
+        ldy #>KAMER_SCRIPTS
+        jsr LOAD
+        bcc !+
+        lda #2                          // 2: het scriptbestand ontbreekt
+        sta laad_fout
+!:
         jsr tod_lezen                   // laadtijd in tienden
         lda tod_nu
         sec

@@ -84,6 +84,7 @@ done
 DEFINES=()
 (( AUTOTEST )) && DEFINES=(-define AUTOTEST)
 LOG="$UIT/kickass.log"
+rm -f "$UIT"/scr_*.prg                       # (geen oude scriptbestanden van kamers die er niet meer zijn)
 "$JAVA" -jar "$KICKASS" "$HOOFD" -odir "$UIT" -symbolfiledir "$UIT" -vicesymbols -showmem \
         ${DEFINES[@]} > "$LOG" 2>&1
 RC=$?
@@ -116,6 +117,7 @@ D64="$UIT/$NAAM.d64"
 rm -f "$D64"
 KAMERS=()                                   # de kamerbestanden (tools/kamer.py), naam = de kamer
 for k in build/gen/kamer_*.prg; do KAMERS+=(-write "$k" "${${k:t:r}#kamer_}"); done
+for s in "$UIT"/scr_*.prg; do KAMERS+=(-write "$s" "${${s:t:r}#scr_}.s"); done   # de scripts per kamer: <kamer>.s
 "$VICE_BIN/c1541" -format "$SCHIJFNAAM" d64 "$D64" -write "$UIT/$NAAM.prg" "$NAAM" ${KAMERS[@]} >/dev/null 2>"$UIT/c1541.log" \
   || { cat "$UIT/c1541.log" >&2; fout "c1541"; }
 [[ -f "$D64" ]] || fout "geen D64 gemaakt"
