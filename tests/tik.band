@@ -34,5 +34,5 @@ vuur
 wacht_tot_stil
 wacht 60
 verwacht act_richting = 2              # hij liep naar rechts ...
-verwacht npc_py+7 = 104                # ... en Mira (figuur 7, zie build/gen/spel.json) staat op zijn hoogte
+verwacht npc_py+@mira_mee = 104        # ... en Mira staat op zijn hoogte (@naam: het nummer van de figuur)
 screenshot mira_mee

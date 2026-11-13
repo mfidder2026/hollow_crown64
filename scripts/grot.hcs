@@ -1,0 +1,35 @@
+# grot.hcs — tussenscène na hoofdstuk 1: "Ondertussen, diep onder de berg..." De grot van Grom met de Holle Kroon.
+# Een toneel (data/plaatjes/grot.png, met de hand getekend: tools/teken_grot.py): geen Eldric, geen werkwoorden; Grom en
+# een aardmannetje zijn figuren. Daarna begint hoofdstuk 2 op het bospad. Vuur of spatie slaat de scène over.
+KAMER grot
+  TONEEL
+  LOOPKLEUREN bruin oranje donkergrijs geel zwart
+  LOOPVAK 4,110 156,122                  # de vloer (alleen voor de figuren)
+  FLAKKER 68,48 24,24 geel wit oranje    # het gevangen zonlicht in de kroon flakkert
+  ACTOR grom_grot KOSTUUM grom OP 4,116 VERBORGEN      # Grom komt uit de gang links
+  ACTOR hol_grot KOSTUUM hol OP 150,114 VERBORGEN      # een aardmannetje uit de gang rechts
+  BINNENKOMST:
+    TUSSENSCENE
+    MUZIEK grot
+    WACHT 40
+    ZEG verteller "Ondertussen, diep onder de berg..."
+    TOON grom_grot
+    LOOP grom_grot 54,116
+    WACHT 20
+    ZEG grom "Mijn kroon. Mijn zon. Hier hoort ze: in het donker, veilig."
+    ZEG grom "Zolang zij hier gloeit, blijft het daarboven schemer."
+    TOON hol_grot
+    LOOP hol_grot 112,116
+    ZEG aardmannetje "Meester... wij hebben honger. In de schemer groeit niets."
+    ZEG grom "Stil! Liever honger in het donker dan branden in het licht."
+    ZEG aardmannetje "Er is een jongen, meester. Met een stukje zon in zijn hand."
+    ZEG grom "Ik weet het. Ik heb hem gezien, bij de wolven."
+    ZEG grom "Laat de ridder de brug bewaken. En de vuurtoren blijft donker."
+    LOOP hol_grot 150,114
+    VERBERG hol_grot
+    LOOP grom_grot 64,116
+    ZEG grom "Niemand neemt mij mijn zon af. Niemand."
+    WACHT 50
+    EINDE_TUSSENSCENE
+    HOOFDSTUK 2
+    KAMER bospad 92,122 RUG

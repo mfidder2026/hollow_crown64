@@ -1,0 +1,48 @@
+# grot.band — de tussenscène na hoofdstuk 1: "Ondertussen, diep onder de berg..." (scripts/grot.hcs).
+# De eerste keer het bos in: eerst de grot van Grom (een toneel), dan begint hoofdstuk 2 op het bospad.
+wacht 3
+start_script proef_hfst2
+wacht_op_script
+wacht 3
+cursor 160,84
+wacht 2
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht 120
+verwacht_kamer grot
+verwacht act_zichtbaar = 0             # een toneel: geen Eldric
+verwacht muz_lied = 8                  # LIED_GROT
+verwacht_muziek
+verwacht vm_scene = 1
+verwacht_slot 0 geen                   # Mira (een figuur die overal mee kan) staat niet op het toneel
+wacht 300
+verwacht_tekst 0 "Mijn kroon. Mijn zon. Hier hoort ze: in"
+verwacht_slot 0 grom_grot
+screenshot grom_kroon
+wacht 500
+verwacht_slot 1 hol_grot
+screenshot aardmannetje
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer bospad
+verwacht st_hoofdstuk = 1
+verwacht act_zichtbaar = 1
+verwacht_slot 0 mira_mee
+verwacht_tekst 24 "        Hoofdstuk 2: Duisterwoud"
+
+# de tweede keer het bos in: geen tussenscène meer
+cursor 184,138
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bosrand
+cursor 160,84
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bospad

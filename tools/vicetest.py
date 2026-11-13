@@ -202,7 +202,19 @@ def lees_band(pad):
 VERWACHT_RE = r"([A-Za-z_]\w*)(?:\+(\d+))?(\.w)?\s*(=|!=|<=|>=|<|>)\s*(\$[0-9A-Fa-f]+|\d+)"
 
 
+def figuur_nummers(regel):
+    """'npc_py+@mira_mee' -> 'npc_py+9': het nummer van een figuur bij naam (build/gen/spel.json), zodat een test niet
+    breekt als er figuren bijkomen"""
+    def nummer(m):
+        figuren = json.load(open(os.path.join(ROOT, "build", "gen", "spel.json")))["figuren"]
+        if m.group(1) not in figuren:
+            raise Fout("onbekende figuur @%s" % m.group(1))
+        return str(figuren.index(m.group(1)))
+    return re.sub(r"@(\w+)", nummer, regel)
+
+
 def verwacht_regel(regel):
+    regel = figuur_nummers(regel)
     m = re.fullmatch(VERWACHT_RE, regel)
     if not m:
         return None

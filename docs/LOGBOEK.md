@@ -801,3 +801,16 @@ voorwerpen, muziek en "Hoofdstuk 2 voltooid". 23/23 compiler, 20/20 banden.
   - Het vak van de zee lag over het eind van de steiger: klikken om daar te lopen werd "Ga naar zee". Nu rechts ervan.
 
 **Getest:** 23/23 compiler, 23/23 banden.
+
+## 2026-11-13 — Tussenscène: de grot van Grom
+
+- Na hoofdstuk 1, de eerste keer het bos in: *"Ondertussen, diep onder de berg..."*. Een toneel (`scripts/grot.hcs`,
+  plaatje `tools/teken_grot.py`): de Holle Kroon op een stenen zuil, het gevangen zonlicht flakkert (FLAKKER geel wit
+  oranje) en kleurt de rotsen warm, naar de randen donker. Grom komt uit de gang links, een aardmannetje uit de gang
+  rechts ("Meester... wij hebben honger."). Grom weet van de jongen met het stukje zon en laat de brug en de vuurtoren
+  bewaken. Daarna begint hoofdstuk 2 op het bospad. Vuur of spatie slaat de scène over.
+- Nieuw muziekstuk `grot` (D-mineur, zwaar: een stampende bas als trollenstappen). Nieuwe spreker `aardmannetje` (roze).
+- vicetest: `npc_py+@mira_mee` — het nummer van een figuur bij naam (de nummers verschuiven als er figuren bijkomen).
+
+**Getest:** `tests/grot.band` (de scène, de muziek, de figuren, geen Eldric; daarna hoofdstuk 2 op het bospad; de
+tweede keer geen scène meer). 23/23 compiler, 24/24 banden.

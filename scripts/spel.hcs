@@ -80,6 +80,7 @@ SPREKER mira cyaan
 SPREKER grom lichtgroen
 SPREKER tik wit
 SPREKER kever lichtblauw
+SPREKER aardmannetje roze
 
 # Figuren die overal mee kunnen (geen KAMER): Tik verschijnt bij een dood, Mira loopt mee vanaf hoofdstuk 2
 ACTOR tik KOSTUUM tik OP 120,40 VERBORGEN

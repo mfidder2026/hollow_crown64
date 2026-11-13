@@ -71,7 +71,8 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     PRAAT gesprek                     een gesprek beginnen (de werkwoorden maken plaats voor de keuzes)
     TOON naam / VERBERG naam          een figuur (ACTOR) tonen of weghalen; ook TOON eldric / VERBERG eldric
     KLEUR x,y b,h van naar            in die vakjes (zoals FLAKKER) kleur van -> naar (bv. de lucht donkerder)
-    MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand woud zee) of stil;
+    MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand woud zee grot)
+                                      of stil;
                                       bij het laden van een kamer stopt het (zet MUZIEK dus in BINNENKOMST).
                                       F1 zet de muziek voor de speler uit.
     TERUG                             terug naar het ankerpunt: zoals bij binnenkomst van deze kamer (Tik)

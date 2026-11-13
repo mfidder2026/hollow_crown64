@@ -157,6 +157,16 @@ LIEDEREN["zee"] = dict(
     bas=bas_patroon(_s, [("g", 3), ("k", 3)]),
     klank=[(0x10, 0x1a, 0x8a, 0), (0x10, 0x0c, 0x6a, 0), (0x40, 0x00, 0x40, 0x0300)])
 
+# De grot van Grom (tussenscène): D-mineur, zwaar en traag; een stampende lage bas als de stappen van een trol, een
+# dreigende melodie laag in een pulsgolf, en het gloeien van de kroon als hoge, trillende akkoorden.
+_s = ["Dm", "Dm", "Bb", "A", "Dm", "Gm", "A", "Dm"]
+LIEDEREN["grot"] = dict(
+    tel=30, stem3="akkoord", schema=_s,
+    melodie="""D4:2 -:1 F4:1 | E4:2 D4:1 C#4:1 | D4:3 F4:1 | E4:4 | A4:2 G4:1 F4:1 | G4:2 Bb4:2 | A4:1 G4:1 F4:1 E4:1
+               D4:3 -:1""",
+    bas=bas_patroon(_s, [("g", 1), ("-", 1), ("g", 1), ("k", 1)], octaaf=1),
+    klank=[(0x40, 0x2a, 0x9a, 0x0300), (0x20, 0x06, 0x80, 0), (0x40, 0x00, 0x30, 0x0600)])
+
 LIEDNAMEN = list(LIEDEREN)
 
 
