@@ -7,6 +7,7 @@ KAMER kelder
   LOOPVAK 8,113 126,124                  # 1 voor het vat langs
   LOOPVAK 104,98 126,124                 # 2 rechts van het vat, bij de planken
   BINNENKOMST:
+    MUZIEK kelder                      # geheimzinnig, met druppels
     ALS vlag honingpot_gepakt
       PATCH honingpot_weg
     EINDE

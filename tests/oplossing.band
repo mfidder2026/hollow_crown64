@@ -48,6 +48,8 @@ wacht_tot_stil
 wacht_op_script
 wacht 3
 verwacht_kamer kelder
+verwacht muz_lied = 3                  # LIED_KELDER
+verwacht_muziek
 cursor 180,156
 vuur
 cursor 20,180
@@ -92,6 +94,8 @@ wacht_op_script
 wacht 3
 verwacht_kamer smit
 verwacht_slot 0 bram                   # Bram is een figuur, niet meer in het plaatje
+verwacht muz_lied = 4                  # LIED_SMIT
+verwacht_muziek
 screenshot smit_koud
 
 # 4. het smidsvuur aan met het zwaard: Bram geeft de lantaarn
@@ -149,6 +153,8 @@ wacht_op_script
 wacht 3
 verwacht_kamer bosrand
 verwacht voltooid = 0
+verwacht muz_lied = 5                  # LIED_BOSRAND
+verwacht_muziek
 screenshot bosrand_wolf
 
 # 7. de finale: de lantaarn verjaagt de wolven, Vex verschijnt en verdwijnt het bos in

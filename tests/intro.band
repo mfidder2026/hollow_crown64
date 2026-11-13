@@ -51,9 +51,7 @@ vuur
 wacht 10
 verwacht_kamer plein
 verwacht toneel_aan = 0
-verwacht muz_aan = 0                   # laden van het plein: de muziek stopt
-verwacht muz_ctrl = 0                  # geen gate meer aan: geen hangende toon
-verwacht muz_ctrl+1 = 0
-verwacht muz_ctrl+2 = 0
+verwacht muz_lied = 1                  # het plein heeft zijn eigen deuntje (LIED_PLEIN)
+verwacht_muziek                        # en dat klopt noot voor noot (het thema hangt niet na)
 verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
 screenshot spel

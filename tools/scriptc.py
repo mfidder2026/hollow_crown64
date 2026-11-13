@@ -67,8 +67,9 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     PRAAT gesprek                     een gesprek beginnen (de werkwoorden maken plaats voor de keuzes)
     TOON naam / VERBERG naam          een figuur (ACTOR) tonen of weghalen; ook TOON eldric / VERBERG eldric
     KLEUR x,y b,h van naar            in die vakjes (zoals FLAKKER) kleur van -> naar (bv. de lucht donkerder)
-    MUZIEK thema / MUZIEK stil        het thema (tools/thema.py) aan of uit; bij het laden van een kamer stopt het
-                                      (zet MUZIEK thema dus in BINNENKOMST). F1 zet de muziek voor de speler uit.
+    MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand) of stil;
+                                      bij het laden van een kamer stopt het (zet MUZIEK dus in BINNENKOMST).
+                                      F1 zet de muziek voor de speler uit.
     GELUID naam                       een geluidseffect op stem 3 (deur munt vuur wolf klaar klik); wacht niet
     LOOP naam x,y                     een figuur in een rechte lijn laten lopen (wacht tot hij er is)
     TUSSENSCENE / EINDE_TUSSENSCENE   geen invoer daartussen; vuur of spatie slaat over
@@ -505,9 +506,10 @@ def opdracht(blok, kop, w, waar):
         L.append(("KLEUR", x // 4, y // 8, b // 4, h // 8, c64beeld.NAMEN.index(w[3]), c64beeld.NAMEN.index(w[4]),
                   waar))
     elif kop == "MUZIEK":
-        if n != 2 or w[1] not in ("thema", "stil"):
-            raise Fout("%s: MUZIEK thema  of  MUZIEK stil" % waar)
-        L.append(("MUZIEK", 1 if w[1] == "thema" else 0, waar))
+        import thema
+        if n != 2 or w[1] not in thema.LIEDNAMEN + ["stil"]:
+            raise Fout("%s: MUZIEK naam  of  MUZIEK stil  (de stukken: %s)" % (waar, " ".join(thema.LIEDNAMEN)))
+        L.append(("MUZIEK", 0 if w[1] == "stil" else thema.LIEDNAMEN.index(w[1]) + 1, waar))
     elif kop == "GELUID":
         if n != 2 or w[1] not in GELUIDEN:
             raise Fout("%s: GELUID naam  (een van: %s)" % (waar, " ".join(GELUIDEN)))
@@ -903,7 +905,7 @@ class Uitvoer:
             elif k == "KLEUR":
                 L.append("        .byte $%02x, %d, %d, %d, %d, %d, %d    // KLEUR" % ((OP[k],) + tuple(o[1:7])))
             elif k == "MUZIEK":
-                L.append("        .byte $%02x, %d    // MUZIEK %s" % (OP[k], o[1], "thema" if o[1] else "stil"))
+                L.append("        .byte $%02x, %d    // MUZIEK %s" % (OP[k], o[1], o[1] or "stil"))
             elif k == "GELUID":
                 L.append("        .byte $%02x, %d    // GELUID %s" % (OP[k], o[1], GELUIDEN[o[1]]))
             elif k == "KIJK":

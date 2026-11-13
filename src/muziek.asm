@@ -1,11 +1,13 @@
-// muziek.asm — een eigen kleine SID-speler voor het thema (§9). De noten komen uit tools/thema.py.
+// muziek.asm — een eigen kleine SID-speler (§9). De stukken komen uit tools/thema.py: één per plek (het thema bij de
+// titel en het verhaal, het plein, de herberg, de kelder, de smit, de bosrand). Per stuk de klank van elke stem, en of
+// stem 3 akkoorden als arpeggio speelt of gewone noten.
 //
 // muziek_beeld draait 50 keer per seconde in de IRQ op de onderrand (irq.asm). Per stem: (noot, beelden)-paren;
 // in het laatste beeld van een noot gaat de gate uit, zodat de volgende opnieuw aanslaat. Stem 3 speelt het
 // akkoord als arpeggio (elke 2 beelden de volgende toon) en wijkt voor een geluidseffect (geluid.asm).
 // Alles wat de speler naar de SID schrijft, staat ook in muz_* (de SID kun je niet teruglezen): de tests lezen die.
 //
-//   muziek_start  het thema van voren af aan (als de muziek mag: F1)
+//   muziek_start  stuk A van voren af aan (als de muziek mag: F1)
 //   muziek_stop   stil; de gates uit (geen hangende toon)
 //   muz_gevraagd  1: deze kamer (of het intro) wil muziek; F1 zet hem dan weer aan
 
@@ -13,6 +15,7 @@
 
 .segment Code
 muziek_start: {
+        sta muz_lied
         lda #1
         sta muz_gevraagd
         lda muz_mag
@@ -22,11 +25,32 @@ muziek_start: {
         sta muz_aan                     // de IRQ even niet
         sta muz_beelden
         sta muz_beelden + 1
+        ldy muz_lied                    // de klank van dit stuk: lied * 3 + stem
+        lda lied_arp,y
+        sta muz_arp_aan
+        tya
+        asl
+        adc muz_lied
+        sta hulp
         ldx #2
-lus:    lda stem_begin_lo,x
+lus:    txa
+        clc
+        adc hulp
+        tay
+        lda lied_begin_lo,y
+        sta stem_begin_lo,x
         sta muz_ptr_lo,x
-        lda stem_begin_hi,x
+        lda lied_begin_hi,y
+        sta stem_begin_hi,x
         sta muz_ptr_hi,x
+        lda lied_golf,y
+        sta stem_golf,x
+        lda lied_ad,y
+        sta stem_ad,x
+        lda lied_sr,y
+        sta stem_sr,x
+        lda lied_pw_hi,y
+        sta stem_pw,x
         lda #1                          // het eerste beeld haalt de eerste noot
         sta muz_teller,x
         lda #0
@@ -43,6 +67,7 @@ lus:    lda stem_begin_lo,x
         lda #1
         sta muz_aan
         rts
+hulp:   .byte 0
 }
 
 muziek_stop: {
@@ -73,6 +98,7 @@ muziek_f1:
         beq muziek_uit
         lda muz_gevraagd
         beq !+
+        lda muz_lied
         jmp muziek_start
 !:      rts
 
@@ -106,7 +132,9 @@ nieuw:  jsr volgende_noot
 verder: inx
         cpx #3
         bne stem
-        // stem 3: arpeggio (elke 2 beelden de volgende toon van het akkoord)
+        // stem 3: arpeggio (elke 2 beelden de volgende toon van het akkoord), als dit stuk akkoorden speelt
+        lda muz_arp_aan
+        beq pwm
         lda muz_noot + 2
         beq pwm
         inc muz_arp
@@ -117,8 +145,12 @@ verder: inx
         sta muz_arp
 !:      ldx #2
         jsr arp_freq
-        // stem 1: langzame pulsbreedte-modulatie (de melodie "ademt")
-pwm:    lda muz_pw
+        // stem 1: langzame pulsbreedte-modulatie (de melodie "ademt"), als die een pulsgolf heeft
+pwm:    lda stem_golf
+        and #$40
+        bne !+
+        rts
+!:      lda muz_pw
         clc
         adc #$10
         sta muz_pw
@@ -169,6 +201,8 @@ volgende_noot:
         jmp ctrl_schrijven
 aan:    cpx #2
         bne !+
+        lda muz_arp_aan                 // stem 3 met gewone noten: zoals de andere stemmen
+        beq !+
         lda #0                          // nieuw akkoord: bij de eerste toon beginnen
         sta muz_arp
         jsr arp_freq
@@ -194,7 +228,7 @@ gate:   lda stem_golf,x
         sta $d406,y
         lda #$00
         sta $d402,y
-        lda #$08
+        lda stem_pw,x
         sta $d403,y
         jmp ctrl_schrijven
 klaar:  rts
@@ -242,16 +276,19 @@ hulp:   .byte 0
 }
 
 .segment Data
-//              melodie     bas          arpeggio
-stem_begin_lo: .byte <muz_stem1, <muz_stem2, <muz_stem3
-stem_begin_hi: .byte >muz_stem1, >muz_stem2, >muz_stem3
-stem_golf:     .byte $40,        $20,        $40
-stem_ad:       .byte $29,        $08,        $00
-stem_sr:       .byte $a9,        $a6,        $70
+// de klank van het stuk dat speelt (muziek_start kopieert hem uit de lied_-tabellen van tools/thema.py)
+stem_begin_lo: .fill 3, 0
+stem_begin_hi: .fill 3, 0
+stem_golf:     .fill 3, 0
+stem_ad:       .fill 3, 0
+stem_sr:       .fill 3, 0
+stem_pw:       .fill 3, 0
 sid_stem:      .byte 0,          7,          14
 arp_toon:      .byte 0, 0, 1, 1, 2, 2
 
 muz_aan:      .byte 0                   // 1: de speler loopt
+muz_lied:     .byte 0                   // het stuk (LIED_THEMA, LIED_PLEIN, ...)
+muz_arp_aan:  .byte 0                   // 1: stem 3 speelt akkoorden als arpeggio
 muz_mag:      .byte 1                   // F1: 0 = muziek uit
 muz_gevraagd: .byte 0
 muz_beelden:  .word 0                   // beelden sinds muziek_start (voor de tests)

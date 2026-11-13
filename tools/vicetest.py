@@ -472,9 +472,11 @@ def muziek_klopt(vice, sym):
     schrijven maar niet terug te lezen) moet kloppen met de noten van tools/thema.py op dit beeld (muz_beelden).
     Melodie en bas: precies die noot, gate uit in het laatste beeld en in rusten. Arpeggio: de juiste toon van het
     akkoord (elke 2 beelden de volgende)."""
-    m = json.load(open(os.path.join(ROOT, "build", "gen", "muziek.json")))
+    alles = json.load(open(os.path.join(ROOT, "build", "gen", "muziek.json")))
     if not vice.lees(sym["muz_aan"])[0]:
         return False, "muziek: de speler loopt niet (muz_aan = 0)"
+    m = alles["stukken"][vice.lees(sym["muz_lied"])[0]]
+    m["akkoorden"], m["freq"] = alles["akkoorden"], alles["freq"]
     b = vice.lees(sym["muz_beelden"], 2)
     f = b[0] | b[1] << 8
     t = (f - 1) % m["lengte"]
@@ -490,7 +492,7 @@ def muziek_klopt(vice, sym):
         echt_f = flo[v] | fhi[v] << 8
         if noot == 0:
             verwacht_f, naam = None, "rust"
-        elif v == 2:
+        elif v == 2 and m["arp"]:
             c = t - begin
             midi_n = m["akkoorden"][noot - 1][((c + 1) % 6) // 2]
             verwacht_f, naam = m["freq"][midi_n], "akkoord %d toon %d" % (noot, ((c + 1) % 6) // 2)
@@ -500,7 +502,7 @@ def muziek_klopt(vice, sym):
         uitleg.append("stem %d %s%s" % (v + 1, naam, "" if ok else " (freq $%04x, gate %d)" % (echt_f, ctrl[v] & 1)))
         if not ok:
             fouten.append(v + 1)
-    return not fouten, "muziek op beeld %d (tel %.2f): %s" % (f, t / m["tel"], "; ".join(uitleg))
+    return not fouten, "muziek %s op beeld %d (tel %.2f): %s" % (m["naam"], f, t / m["tel"], "; ".join(uitleg))
 
 
 def vergelijk(op, a, b):

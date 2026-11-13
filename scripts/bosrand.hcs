@@ -8,6 +8,7 @@ KAMER bosrand
   LOOPVAK 126,92 157,124                 # 2 rechts van de wegwijzer
   ACTOR wolf KOSTUUM wolf OP 80,90       # de derde schaduwwolf, waar het pad het bos in gaat
   BINNENKOMST:
+    MUZIEK bosrand                     # spannend
     ALS vlag wolven_weg
       PATCH wolven_weg
     EINDE

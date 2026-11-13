@@ -20,6 +20,7 @@ KAMER plein
   LOOPVAK 84,64 94,71        # 7 bovenaan rechts
 
 BINNENKOMST:
+  MUZIEK plein                         # een vrolijk dorpsdeuntje
   ALS vlag herbergdeur_open
     PATCH deur_open
   EINDE

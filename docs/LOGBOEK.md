@@ -620,3 +620,20 @@ rij 18 blijft leeg.
 - LOOPKLEUREN smit: ook geel, grijs, donkergrijs (stro, steentjes, een hoefijzer op de vloer: je loopt eroverheen).
 
 **Getest:** de oplossingsband maakt nu screenshots in de smit (koud en met vuur), pixel voor pixel met Bram. 23/23, 14/14.
+
+## 2026-11-13 — Muziek per plek
+
+`tools/thema.py` is nu een muziekboekje met zes eigen stukken; aan de muziek hoor je waar je bent:
+- **thema** (titel, verhaal): episch, D-mineur (zoals eerst).
+- **plein**: vrolijk dorpsdeuntje, G-groot, 6/8, een fluitje (driehoek), 16 maten.
+- **herberg**: zachte, speelse wals in F-groot: bas op 1, "pah-pah" op 2 en 3, lage sustain (zachter).
+- **kelder**: geheimzinnig, A-mineur, langzaam; af en toe een hoge "druppel".
+- **smit**: stoer en ritmisch, D-dorisch; hamerslagen met ruis op 1 en 3.
+- **bosrand**: spannend, E-mineur; een kloppende lage bas, een trillend akkoord, een trage dreigende melodie.
+
+De speler (`src/muziek.asm`) neemt per stuk de klank van elke stem over (golfvorm, ADSR, pulsbreedte) en weet of
+stem 3 akkoorden als arpeggio speelt of gewone noten. `MUZIEK naam` in BINNENKOMST van elke kamer (opcode $1B: 0 =
+stil, n = stuk n-1). vicetest `verwacht_muziek` leest welk stuk speelt (muz_lied) en controleert dat noot voor noot.
+
+**Getest:** in elke kamer het juiste stuk, noot voor noot (kamers, oplossing, intro). Nog niet met oren beluisterd
+(de WAV-opname werkt alleen zonder warp en het titelscherm wacht op een toets).

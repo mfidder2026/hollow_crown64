@@ -9,6 +9,7 @@ KAMER smit
   ACTOR bram KOSTUUM bram OP 32,100      # Bram de smit, naast zijn blaasbalg
 
 BINNENKOMST:
+  MUZIEK smit                          # stoer, met hamerslagen
   ALS vlag smidsvuur_aan
     PATCH vuur_aan
   EINDE

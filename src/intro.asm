@@ -124,6 +124,7 @@ intro: {
         jsr kleuren_loop
         lda #1
         sta intro_actief                // de IRQ zet nu ook de scroll-split (irq.asm)
+        lda #LIED_THEMA
         jsr muziek_start
 
 lus:    lda beelden

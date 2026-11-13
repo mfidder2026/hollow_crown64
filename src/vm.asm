@@ -22,7 +22,7 @@
 //   $19 figuur x(2) y             LOOP figuur (rechte lijn; wacht tot hij er is)
 //   $16 gesprek(2) PRAAT   $17 n TOON   $18 n VERBERG   $19 n x(2) y NPC_LOOP (gesprek.asm, npc.asm)
 //   $1A effect                    GELUID: een effect op stem 3 (geluid.asm); wacht niet
-//   $1B n                         MUZIEK: 1 = het thema, 0 = stil (muziek.asm)
+//   $1B n                         MUZIEK: 0 = stil, n = stuk n-1 (LIED_THEMA, LIED_PLEIN, ...: tools/thema.py)
 //   $1C kol rij b h van naar      KLEUR: kleur van -> naar in die vakjes (toneel.asm)
 // TOON / VERBERG met figuur 255: Eldric zelf.
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
@@ -405,6 +405,8 @@ op_muziek:
         ldy #1
         lda (zp_vm),y
         beq !+
+        sec                             // 1.. = stuk 0..
+        sbc #1
         jsr muziek_start
         jmp !++
 !:      jsr muziek_stop

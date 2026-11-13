@@ -28,7 +28,8 @@ verwacht act_x.w = 90
 verwacht act_y = 86
 verwacht act_richting = 0
 verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
-verwacht muz_aan = 1                   # het thema keert terug in de herberg (BINNENKOMST: MUZIEK thema)
+verwacht muz_aan = 1                   # de herberg heeft zijn eigen muziek (BINNENKOMST: MUZIEK herberg)
+verwacht muz_lied = 2                  # LIED_HERBERG
 verwacht_muziek
 screenshot herberg
 
@@ -54,8 +55,8 @@ wacht_tot_stil
 wacht_op_script
 wacht 3
 verwacht_kamer plein
-verwacht muz_aan = 0                   # laden van een kamer: de muziek stopt
-verwacht muz_ctrl = 0
+verwacht muz_lied = 1                  # terug op het plein: het dorpsdeuntje (LIED_PLEIN)
+verwacht_muziek
 verwacht laad_teller = 3
 verwacht act_x.w = 244
 verwacht act_y = 90
