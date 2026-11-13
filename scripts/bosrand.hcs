@@ -32,7 +32,11 @@ VOORWERP bospad "pad" VAK 68,58 24,22 LOOP 80,94 RUG
     ZEG eldric "Het pad het Duisterwoud in. Daar komen de aardmannetjes vandaan."
   GA_NAAR:
     ALS vlag wolven_weg
-      ZEG eldric "Het Duisterwoud in. Achter Grom aan. Maar dat is voor hoofdstuk 2."
+      ALS NIET vlag hoofdstuk2_begonnen
+        ZET hoofdstuk2_begonnen
+        HOOFDSTUK 2
+      EINDE
+      KAMER bospad 92,122 RUG
     ANDERS
       ZEG eldric "Daar ga ik niet zomaar in. Nog niet."
     EINDE

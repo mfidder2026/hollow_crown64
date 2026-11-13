@@ -54,7 +54,9 @@ not monsters to be hit.
 
 **Chapters:** Dawnhaven → Darkwood → Sea of Oblivion → Rock Gorge → Ice Peak → The Forgotten Castle.
 
-Chapter 1 (*Dawnhaven*) comes first: four rooms, one chain of puzzles, no dead ends and no deaths.
+Chapter 1 (*Dawnhaven*) comes first: four rooms, one chain of puzzles, no dead ends and no deaths. Chapter 2
+(*Darkwood*) adds four hand-drawn rooms and the first deaths: Tik, a little white time-keeper, offers to rewind to
+the moment you entered the room.
 
 ---
 
@@ -157,8 +159,7 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-Chapter 1 is playable from the title screen to "Chapter 1 complete". The art for the inn, the smithy and the
-forest edge is still placeholder (generated, not FLUX). The build makes a D64; automated tests boot it in VICE,
+Chapters 1 and 2 are playable from the title screen to "Chapter 2 complete". The build makes a D64; automated tests boot it in VICE,
 play input tapes (one of them plays the whole chapter, another saves, loads and carries on), check the game state and
 compare every screenshot pixel by pixel with the screen as memory says it should be, sprites included. The engine is being built
 in this order:
@@ -174,6 +175,7 @@ in this order:
 - [x] 8. Foreground masking and small animations (flickering fire)
 - [x] 9. Chapter 1, fully playable (sound effects, save/load with F5/F7, finale)
 - [x] 10. Title screen with original SID music (own theme in D minor, checked note by note against the SID)
+- [x] 11. Chapter 2, *Darkwood*: chapters, deaths and rewinding (Tik), Mira follows Eldric, scripts per room on disk
 
 Progress notes are in [`docs/LOGBOEK.md`](docs/LOGBOEK.md) (in Dutch).
 

@@ -1,0 +1,138 @@
+# jachthut.hcs — Groms jachthut (hoofdstuk 2). Plaatje: data/plaatjes/jachthut.png, met de hand getekend
+# (tools/teken_jachthut.py); patches: vuur_uit (de helm dooft de haard) en kooi_open (het aardmannetje is weg).
+KAMER jachthut
+  LOOPKLEUREN bruin donkergrijs oranje
+  # (geen SCHAAL: binnen blijft Eldric overal even groot, de grootste maat)
+  LOOPVAK 2,108 157,124                  # 0 voor
+  LOOPVAK 2,86 24,124                    # 1 bij de deur naar de brug
+  LOOPVAK 68,84 108,124                  # 2 voor de haard
+  LOOPVAK 140,86 157,124                 # 3 bij de achterdeur
+  FLAKKER 68,56 28,24 rood oranje geel   # het haardvuur
+  ACTOR grom_hut KOSTUUM grom OP 150,104 VERBORGEN   # Grom komt binnen als het misgaat
+  BINNENKOMST:
+    MUZIEK kelder
+    ALS vlag vuur_uit
+      PATCH vuur_uit
+    EINDE
+    ALS vlag kooi_open
+      PATCH kooi_open
+    EINDE
+
+VOORWERP deur_brug "deur" VAK 6,30 21,52 LOOP 14,96 LINKS
+  GA_NAAR:
+    KAMER spookbrug 40,108 LINKS
+  BEKIJK:
+    ZEG eldric "De deur naar de brug."
+
+VOORWERP achterdeur "achterdeur" VAK 146,30 13,52 LOOP 150,96 RECHTS
+  GA_NAAR:
+    ALS HEEFT gloeischub
+      KAMER oever 20,118 RECHTS
+    ANDERS
+      ZEG eldric "Ik laat dat kleintje niet in die kooi zitten."
+    EINDE
+  BEKIJK:
+    ZEG eldric "Een achterdeur. Ik ruik zout water."
+
+VOORWERP kaart "kaart" VAK 30,16 29,23 LOOP 44,110 RUG
+  BEKIJK:
+    ZEG eldric "Een kaart van de kust, met de zee en een vuurtoren. Er staat iets bij geschreven."
+  LEES:
+    ZEG eldric "De vuurtoren is zwart gemaakt. Eronder: 'Olm vaart alleen bij licht.'"
+    ZET kaart_gelezen
+
+VOORWERP gewei "gewei" VAK 66,8 34,14 LOOP 82,96 RUG
+  BEKIJK:
+    ZEG eldric "Een gewei. Groot genoeg om je jas aan op te hangen. Als je een trol bent."
+
+VOORWERP hut_haard "haard" VAK 62,24 40,57 LOOP 82,92 RUG
+  BEKIJK:
+    ALS vlag vuur_uit
+      ZEG eldric "Rook en as. Het is meteen kouder."
+    ANDERS
+      ZEG eldric "Een flink vuur. Het licht valt precies op de kooi."
+    EINDE
+  GEBRUIK helm:
+    ALS vlag vuur_uit
+      ZEG eldric "Het is al uit."
+    ANDERS
+      ZEG eldric "Ik schep as met de helm over het vuur. Psssst."
+      GELUID vuur
+      PATCH vuur_uit
+      ZET vuur_uit
+      PUNTEN 10
+      ZEG eldric "Het aardmannetje kijkt op. Zijn oogjes zijn groter in het donker."
+    EINDE
+  GEBRUIK zonnesteen:
+    ZEG eldric "Meer vuur is wel het laatste wat hier nodig is."
+
+# (het aardmannetje en de brief staan voor de kooi en de tafel: bij overlappende vakken wint de eerste)
+VOORWERP aardmannetje "aardmannetje" VAK 114,58 22,34 LOOP 104,100 RECHTS
+  BEKIJK:
+    ZEG eldric "Een aardmannetje. Een jong nog. Het rilt en knippert tegen het licht."
+  PRAAT:
+    ZEG eldric "Hallo. Ik ben Eldric. Ik doe je niets."
+    ZEG eldric "Het antwoordt. Het klinkt als knerpende kiezels. Geen woord van verstaan."
+  GEBRUIK fluisterkever:
+    ZEG eldric "Hier, kever. Vertaal eens."
+    ZEG kever "Wij hebben honger. In het donker groeit niets."
+    ZEG kever "Maar de meester zegt dat het licht ons doodt."
+    ALS NIET vlag jong_gesproken
+      ZET jong_gesproken
+      PUNTEN 10
+    EINDE
+    ZEG eldric "Buiten kraken takken. Het zegt niets meer."
+
+VOORWERP kooi "kooi" VAK 108,38 34,58 LOOP 104,100 RECHTS
+  BEKIJK:
+    ALS vlag kooi_open
+      ZEG eldric "Een lege kooi. Zo hoort een kooi eruit te zien."
+    ANDERS
+      ZEG eldric "Een kooi van ijzer en takken. Het slot is een houten pin."
+    EINDE
+  OPEN:
+    ALS vlag kooi_open
+      ZEG eldric "Hij staat al open."
+    ANDERS
+      ALS vlag vuur_uit
+        ZEG eldric "Ik trek de pin eruit. Rustig maar, kleintje."
+        GELUID deur
+        PATCH kooi_open
+        ZET kooi_open
+        NEEM aardmannetje
+        ZEG eldric "Het kijkt me aan. En weg is het, de achterdeur uit, het donker in."
+        ZEG eldric "Het liet iets achter: een schub die zacht gloeit."
+        GEEF gloeischub
+        PUNTEN 15
+        ZEG mira "Een geschenk. Aardmannetjes vergeten niets."
+      ANDERS
+        TUSSENSCENE
+        ZEG eldric "Ik trek de pin eruit. Kom maar, kleintje."
+        ZEG eldric "Het gilt! Het licht van de haard brandt in zijn ogen."
+        VERBERG mira_mee
+        TOON grom_hut
+        GELUID wolf
+        ZEG grom "WIE ZIT ER AAN MIJN KOOI?"
+        VERBERG eldric
+        WACHT 20
+        VERBERG grom_hut
+        TOON tik
+        ZEG tik "Aardmannetjes en haardvuur. Daar had je over na kunnen denken."
+        EINDE_TUSSENSCENE
+        PRAAT tik_vraag
+      EINDE
+    EINDE
+
+VOORWERP brief "brief" VAK 36,86 10,5 LOOP 42,112 RUG
+  BEKIJK:
+    ZEG eldric "Een brief in grote, hoekige letters."
+  LEES:
+    ZEG eldric "'Nog even, kleintjes. Laat de vuurtoren donker.'"
+    ZEG eldric "'Dan vindt niemand de weg naar de kloof. G.'"
+    ZET brief_gelezen
+  PAK:
+    ZEG eldric "Die laat ik liggen. Grom mag niet weten dat ik hier was."
+
+VOORWERP hut_tafel "tafel" VAK 26,84 40,12 LOOP 46,112 RUG
+  BEKIJK:
+    ZEG eldric "Kaarten, papieren, een kaarsstompje. En een brief."

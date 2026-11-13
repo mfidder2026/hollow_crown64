@@ -43,6 +43,8 @@ terug_naar_anker: {
         sta act_y
         lda anker_richting
         sta act_richting
+        lda #1
+        sta act_zichtbaar               // (een dood kan hem verborgen hebben: VERBERG eldric)
         lda #0
         sta act_lopen
         sta actie_bezig

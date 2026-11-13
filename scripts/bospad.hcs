@@ -1,0 +1,66 @@
+# bospad.hcs — het bospad in het Duisterwoud (hoofdstuk 2). Plaatje: data/plaatjes/bospad.png, met de hand getekend
+# (tools/teken_bospad.py). Links het moeras: daar gaat Eldric voor het eerst dood, en Tik legt uit hoe terugdraaien werkt.
+KAMER bospad
+  LOOPKLEUREN donkergrijs groen lichtgroen oranje bruin rood lichtgrijs zwart   # zwart: de randen van het pad (het moeras valt buiten de loopvakken)
+  SCHAAL 104
+  LOOPVAK 68,104 157,124                 # 0 voor, rechts van het moeras
+  LOOPVAK 100,94 157,124                 # 1 rechts, waar het pad het bos in gaat
+  BINNENKOMST:
+    MUZIEK woud
+    ALS NIET vlag bospad_gezien
+      ZET bospad_gezien
+      ZEG mira "Blijf op het pad, Eldric. Het Duisterwoud houdt van verdwalers."
+    EINDE
+
+VOORWERP terug_bosrand "bosrand" VAK 74,118 36,8 LOOP 92,124 VOOR
+  GA_NAAR:
+    KAMER bosrand 80,94 VOOR
+  BEKIJK:
+    ZEG eldric "Terug naar de rand van het bos."
+
+VOORWERP pad_verder "pad" VAK 144,82 15,14 LOOP 154,96 RECHTS
+  GA_NAAR:
+    KAMER spookbrug 6,110 RECHTS
+  BEKIJK:
+    ZEG eldric "Het pad loopt verder het bos in. Ik hoor water. Diep beneden."
+
+VOORWERP moeras "moeras" VAK 0,88 58,36 LOOP 70,110 LINKS
+  BEKIJK:
+    ZEG eldric "Een moeras. Het borrelt. Het ruikt naar oude sokken."
+  GA_NAAR:
+    TUSSENSCENE
+    ZEG eldric "Dat groene spul ziet er best stevig uit."
+    VERBERG eldric
+    GELUID klik
+    WACHT 30
+    VERBERG mira_mee
+    TOON tik
+    ZEG tik "Moerassen zijn geen loopvakken. Dat had je kunnen weten."
+    ZEG tik "Ik ben Tik. Ik draai de tijd terug. Een beetje maar."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  PAK:
+    ZEG eldric "Een handje moeras? Nee, dank je."
+
+VOORWERP kokers "kokers" VAK 70,24 54,26 LOOP 104,100 RUG
+  BEKIJK:
+    ZEG eldric "Er hangen holle kokers aan de takken. Iets heeft hier gegeten."
+  PAK:
+    ALS vlag koker_gepakt
+      ZEG eldric "Eén koker is genoeg."
+    ANDERS
+      ZEG eldric "Ik spring... en pluk er eentje los."
+      GEEF koker
+      ZET koker_gepakt
+      PUNTEN 5
+    EINDE
+
+VOORWERP bomen "bomen" VAK 132,4 18,84 LOOP 140,100 RUG
+  BEKIJK:
+    ZEG eldric "Oude bomen met holle stammen. Aan de takken hangen kokers."
+
+VOORWERP paddenstoelen "paddenstoelen" VAK 118,104 34,14 LOOP 130,112 VOOR
+  BEKIJK:
+    ZEG eldric "Rode paddenstoelen met witte stippen."
+  PAK:
+    ZEG mira "Niet doen. Die zijn voor de kabouters. En voor de begrafenis."

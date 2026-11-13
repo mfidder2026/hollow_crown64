@@ -71,7 +71,7 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     PRAAT gesprek                     een gesprek beginnen (de werkwoorden maken plaats voor de keuzes)
     TOON naam / VERBERG naam          een figuur (ACTOR) tonen of weghalen; ook TOON eldric / VERBERG eldric
     KLEUR x,y b,h van naar            in die vakjes (zoals FLAKKER) kleur van -> naar (bv. de lucht donkerder)
-    MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand) of stil;
+    MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand woud zee) of stil;
                                       bij het laden van een kamer stopt het (zet MUZIEK dus in BINNENKOMST).
                                       F1 zet de muziek voor de speler uit.
     TERUG                             terug naar het ankerpunt: zoals bij binnenkomst van deze kamer (Tik)
@@ -94,7 +94,8 @@ WORTEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KAMER_B, KAMER_H = 160, 128
 MAX_VAKKEN = 16
 MAX_SCHAAL = 4           # grenzen; de motor heeft MATEN = 5 maten (tools/costume.py)
-MAX_VOORWERPEN = 64      # in het hele spel (src/status.asm)
+MAX_VOORWERPEN = 128     # in het hele spel (src/status.asm: een eigenaar per voorwerp)
+MAX_MET_STAND = 32       # voorwerpen met een stand (STAND): die komen vooraan, alleen zij hebben st_stand
 MAX_VLAGGEN = 256
 MAX_NAAM = 13            # "Gebruik <naam> met <naam>" moet op de zinregel passen
 RICHTINGEN = {"VOOR": 0, "RUG": 1, "RECHTS": 2, "LINKS": 3}
@@ -1106,7 +1107,8 @@ def schrijf(spel, pad, json_pad):
         L.append("%s: .byte %s" % (label, ", ".join(waarden) if waarden else "0"))
     leeg = (0, 0, 0, 0)
     rij("vw_eigenaar_begin", [str(eigenaar(v)) for v in vs])
-    rij("vw_stand_begin", [str(v["stand"]) for v in vs])
+    rij("vw_stand_begin", [str(v["stand"]) for v in vs[:MAX_MET_STAND]])
+    L.append(".const AANTAL_MET_STAND = %d" % min(len(vs), MAX_MET_STAND))
     rij("vw_x1_lo", ["$%02x" % (((v["vak"] or leeg)[0] * 2) & 255) for v in vs])
     rij("vw_x1_hi", ["$%02x" % (((v["vak"] or leeg)[0] * 2) >> 8) for v in vs])
     rij("vw_x2_lo", ["$%02x" % ((v["vak"][2] * 2 + 1) & 255) if v["vak"] else "0" for v in vs])
@@ -1229,6 +1231,21 @@ def schrijf(spel, pad, json_pad):
               open(json_pad, "w"), indent=1)
 
 
+def stand_vooraan(spel):
+    """Alleen de eerste MAX_MET_STAND voorwerpen hebben een stand in de spelstatus (zo passen er meer voorwerpen in
+    één pagina). Zet de voorwerpen die STAND gebruiken (opdracht, ALS STAND, of een beginstand) dus vooraan."""
+    met = {n for n, v in spel.voorwerpen.items() if v["stand"]}
+    for script, *_ in alle_scripts(spel):
+        for o in script:
+            if o[0] == "STAND":
+                met.add(o[1])
+            elif o[0] == "ALS" and o[2][0] == "stand":
+                met.add(o[2][1])
+    if len(met) > MAX_MET_STAND:
+        raise Fout("meer dan %d voorwerpen met een stand: %s" % (MAX_MET_STAND, ", ".join(sorted(met))))
+    spel.vw_volgorde.sort(key=lambda n: n not in met)      # (sort is stabiel: verder de volgorde van de scripts)
+
+
 def compileer(mappen, uitmap, kleurcontrole=True):
     bestanden = []
     for m in mappen:
@@ -1236,6 +1253,7 @@ def compileer(mappen, uitmap, kleurcontrole=True):
     spel = lees(bestanden)
     controleer_kamers(spel, kleurcontrole)
     controleer_scripts(spel)
+    stand_vooraan(spel)
     gehaald, stappen = uitspeelbaar(spel)
     if not gehaald:
         raise Fout("%s: DOEL %s is niet te halen. Wel te krijgen:\n  %s" % (

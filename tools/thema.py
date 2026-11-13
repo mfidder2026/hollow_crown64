@@ -135,6 +135,28 @@ LIEDEREN["bosrand"] = dict(
     bas=bas_patroon(_s, [("g", 1)] * 8),
     klank=[(0x20, 0x4a, 0x7a, 0), (0x40, 0x04, 0x20, 0x0400), (0x40, 0x00, 0x30, 0x0200)])
 
+# Het Duisterwoud (bospad, spookbrug): G-mineur, traag en mistig; een fluit die dwaalt, een lage bas, en af en toe
+# een uil (hoge tonen op stem 3).
+AKKOORDEN["Cm"], AKKOORDEN["Eb"] = ["C4", "Eb4", "G4"], ["Eb4", "G4", "Bb4"]
+GRONDTOON["Cm"], KWINT["Cm"], GRONDTOON["Eb"], KWINT["Eb"] = "C", "G", "Eb", "Bb"
+_s = ["Gm", "Gm", "Eb", "D", "Gm", "Cm", "D", "D"]
+LIEDEREN["woud"] = dict(
+    tel=26, stem3="noten", schema=_s,
+    melodie="""D5:3 Eb5:1 | D5:2 Bb4:2 | G4:2 Bb4:1 C5:1 | A4:4 | Bb4:1 D5:1 G5:2 | Eb5:2 C5:2
+               D5:1 C5:1 Bb4:1 A4:1 | D5:3 -:1""",
+    bas=bas_patroon(_s, [("g", 2), ("k", 2)]),
+    stem3_noten="""-:3 D6:0.5 -:0.5 | -:4 | -:4 | -:2 D6:0.5 -:0.5 Bb5:1 | -:4 | -:4 | -:3 D6:0.5 -:0.5 | -:4""",
+    klank=[(0x10, 0x2a, 0x7a, 0), (0x10, 0x0a, 0x8a, 0), (0x10, 0x03, 0x00, 0)])
+
+# De oever: D-groot in 6/8, rustig en hoopvol; golven in de bas, een trillend akkoord, de zee na het donkere bos.
+_s = ["D", "G", "D", "A", "G", "D", "Em", "A"]
+LIEDEREN["zee"] = dict(
+    tel=12, stem3="akkoord", schema=_s,
+    melodie="""A4:3 D5:3 | B4:2 D5:1 G5:3 | F#5:3 E5:2 D5:1 | C#5:6 | B4:2 D5:1 G5:3 | F#5:2 E5:1 D5:3
+               E5:2 G5:1 B5:3 | A5:6""",
+    bas=bas_patroon(_s, [("g", 3), ("k", 3)]),
+    klank=[(0x10, 0x1a, 0x8a, 0), (0x10, 0x0c, 0x6a, 0), (0x40, 0x00, 0x40, 0x0300)])
+
 LIEDNAMEN = list(LIEDEREN)
 
 

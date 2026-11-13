@@ -1,0 +1,64 @@
+# oever.hcs — de oever aan het eind van het Duisterwoud (hoofdstuk 2). Plaatje: data/plaatjes/oever.png, met de hand
+# getekend (tools/teken_oever.py); de patch boot: na de bel komt er in de verte een bootje aan. Einde hoofdstuk 2.
+KAMER oever
+  LOOPKLEUREN bruin oranje grijs lichtgrijs donkergrijs groen
+  SCHAAL 110 96 84
+  LOOPVAK 4,104 56,124                   # 0 de oever
+  LOOPVAK 50,116 64,124                  # 1 naar de steiger
+  LOOPVAK 61,116 92,123                  # 2 de steiger, voor
+  LOOPVAK 68,108 94,118                  # 3
+  LOOPVAK 75,100 97,110                  # 4
+  LOOPVAK 82,92 100,102                  # 5
+  LOOPVAK 89,84 103,94                   # 6
+  LOOPVAK 95,77 106,86                   # 7 het eind van de steiger, bij de bel
+  BINNENKOMST:
+    MUZIEK zee
+    ALS vlag boot_geroepen
+      PATCH boot
+    EINDE
+
+VOORWERP bos_terug "bos" VAK 0,12 30,50 LOOP 10,110 LINKS
+  GA_NAAR:
+    KAMER jachthut 150,100 LINKS
+  BEKIJK:
+    ZEG eldric "Het Duisterwoud. Daar ligt de jachthut."
+
+VOORWERP oever_steiger "steiger" VAK 60,96 36,26 LOOP 80,112 RUG
+  BEKIJK:
+    ZEG eldric "Een steiger. Een bel. Geen boot."
+
+VOORWERP bel "bel" VAK 104,46 16,28 LOOP 100,80 RECHTS
+  BEKIJK:
+    ZEG eldric "Een scheepsbel aan een paal. Er hangt een touw aan."
+  PAK:
+    ZEG eldric "Hij zit vast. Maar aan het touw kan ik trekken."
+  TREK:
+    ALS vlag boot_geroepen
+      GELUID munt
+      ZEG eldric "Klang. Ze komen al."
+    ANDERS
+      TUSSENSCENE
+      GELUID munt
+      ZEG eldric "Klang! Klang! Klang!"
+      WACHT 50
+      PATCH boot
+      ZET boot_geroepen
+      ZEG mira "Daar. Een lampje op het water."
+      ZEG eldric "Een boot! Iemand heeft ons gehoord."
+      ZEG mira "Op naar de zee, Eldric. Naar de vuurtoren."
+      PUNTEN 20
+      ZET hoofdstuk2_klaar
+      EINDE_TUSSENSCENE
+    EINDE
+  GEBRUIK zonnesteen:
+    ZEG eldric "Een bel luid je met een touw, niet met een steentje."
+
+VOORWERP oever_toren "vuurtoren" VAK 136,20 12,30 LOOP 100,80 RECHTS
+  BEKIJK:
+    ZEG eldric "Een vuurtoren op een eiland. Donker. Daar hoort licht te branden."
+
+VOORWERP zee "zee" VAK 100,64 59,30 LOOP 88,96 RECHTS
+  BEKIJK:
+    ZEG eldric "De zee. Ik heb de zee nog nooit gezien. Ze is groter dan ik dacht."
+  GA_NAAR:
+    ZEG eldric "Zwemmen? In de schemer? Liever niet."

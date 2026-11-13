@@ -1,9 +1,10 @@
 // status.asm — de spelstatus in één blok (§6.4). Opslaan = dit blok naar de diskette schrijven.
 // tools/vicetest.py leest deze labels via build/.../hollowcrown.vs; hernoem ze dus niet zomaar.
 
-.const STATUS_VERSIE   = 3              // 2: met de score (lichtpunten); 3: met het hoofdstuk
+.const STATUS_VERSIE   = 4              // 2: met de score (lichtpunten); 3: met het hoofdstuk; 4: 128 voorwerpen
 .const MAX_VLAGGEN     = 256            // bits
-.const MAX_VOORWERPEN  = 64
+.const MAX_VOORWERPEN  = 128
+.const MAX_MET_STAND   = 32             // alleen de eerste 32 voorwerpen hebben een stand (scriptc.py zet ze vooraan)
 .const MAX_NPC         = 16
 
 .segment Data
@@ -15,7 +16,7 @@ st_x:         .word 0                  // positie van Eldric (schermpixels)
 st_y:         .byte 0
 st_vlaggen:   .fill MAX_VLAGGEN / 8, 0
 st_eigenaar:  .fill MAX_VOORWERPEN, 0  // per voorwerp: kamer, of $ff = inventaris
-st_stand:     .fill MAX_VOORWERPEN, 0  // per voorwerp: stand (bv. open/dicht)
+st_stand:     .fill MAX_MET_STAND, 0   // per voorwerp met een stand: stand (bv. open/dicht)
 st_npc:       .fill MAX_NPC, 0         // per figuur: 1 = zichtbaar
 st_score:     .byte 0                  // lichtpunten (hooguit SCORE_MAX)
 st_hoofdstuk: .byte 0                  // het hoofdstuk van nu (0 = hoofdstuk 1)
@@ -37,7 +38,10 @@ status_begin:
         ldx #AANTAL_VW - 1
 !:      lda vw_eigenaar_begin,x
         sta st_eigenaar,x
-        lda vw_stand_begin,x
+        dex
+        bpl !-
+        ldx #AANTAL_MET_STAND - 1
+!:      lda vw_stand_begin,x
         sta st_stand,x
         dex
         bpl !-

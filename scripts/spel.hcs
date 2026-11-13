@@ -7,7 +7,7 @@ VERHAAL verhaal 79,124 RUG
 HOOFDSTUK 1 "Dawnhaven" hoofdstuk1_klaar
 HOOFDSTUK 2 "Duisterwoud" hoofdstuk2_klaar
 # Tot waar het spel nu speelbaar is (de compiler controleert dat dit te halen is)
-DOEL hoofdstuk1_klaar
+DOEL hoofdstuk2_klaar
 
 # Wat Eldric bij zich heeft (en wat later bij hem komt)
 VOORWERP zonnesteen "zonnesteen" BIJ eldric
@@ -59,12 +59,27 @@ VOORWERP lantaarn "lantaarn" NERGENS
       EINDE
     EINDE
 
+# Hoofdstuk 2: wat Eldric in het Duisterwoud vindt
+VOORWERP koker "koker" NERGENS
+  BEKIJK:
+    ZEG eldric "Een holle koker van schors. Iets heeft hem leeggegeten."
+
+VOORWERP fluisterkever "fluisterkever" NERGENS
+  BEKIJK:
+    ZEG eldric "Een kevertje in een koker. Als het zoemt, hoor ik woorden."
+    ZEG mira "Een fluisterkever. De aardmannetjes praten ermee. Hij vertaalt."
+
+VOORWERP gloeischub "gloeischub" NERGENS
+  BEKIJK:
+    ZEG eldric "Een schub die zacht gloeit. Een klein beetje licht, van een aardmannetje."
+
 # Wie praat, in welke kleur (berichten bovenaan, op rij 0-1)
 SPREKER eldric geel
 SPREKER bram oranje
 SPREKER mira cyaan
 SPREKER grom lichtgroen
 SPREKER tik wit
+SPREKER kever lichtblauw
 
 # Figuren die overal mee kunnen (geen KAMER): Tik verschijnt bij een dood, Mira loopt mee vanaf hoofdstuk 2
 ACTOR tik KOSTUUM tik OP 120,40 VERBORGEN

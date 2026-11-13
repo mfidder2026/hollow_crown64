@@ -112,7 +112,8 @@ wacht_op_script
 verwacht_vlag smidsvuur_aan 1
 screenshot smit_vuur
 verwacht_eigenaar lantaarn eldric
-verwacht_tekst 23 "zonnesteen         ↓  lantaarn"
+verwacht_tekst 22 "kruik              ↑  lantaarn"
+verwacht_tekst 23 "honingpot          ↓  zonnesteen"
 
 # 5. olie in de lantaarn, en aansteken met de zonnesteen
 cursor 180,156
@@ -120,7 +121,7 @@ vuur
 cursor 20,180
 vuur
 wacht 2
-cursor 200,188
+cursor 200,180
 verwacht_tekst 18 "Gebruik kruik met lantaarn"
 vuur
 wacht_op_script
@@ -128,10 +129,10 @@ verwacht_stand lantaarn 1
 verwacht_stand kruik 0
 cursor 180,156
 vuur
-cursor 20,188
+cursor 200,188
 vuur
 wacht 2
-cursor 200,188
+cursor 200,180
 verwacht_tekst 18 "Gebruik zonnesteen met lantaarn"
 vuur
 wacht_op_script
@@ -160,7 +161,7 @@ screenshot bosrand_wolf
 # 7. de finale: de lantaarn verjaagt de wolven, Grom verschijnt tussen de bomen en verdwijnt, Mira komt erbij
 cursor 180,156
 vuur
-cursor 200,188
+cursor 200,180
 verwacht_tekst 18 "Gebruik lantaarn"
 vuur
 wacht 2

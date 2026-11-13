@@ -1,0 +1,118 @@
+# spookbrug.hcs — de touwbrug over de kloof (hoofdstuk 2), met de spookridder. Plaatje: data/plaatjes/spookbrug.png,
+# met de hand getekend (tools/teken_spookbrug.py); de patches leggen het harnas in stukken en de honingpot neer.
+KAMER spookbrug
+  LOOPKLEUREN donkergrijs groen lichtgroen oranje bruin grijs lichtgrijs
+  SCHAAL 108
+  LOOPVAK 2,100 46,118                   # 0 het pad en de bosgrond, tot de rotsen aan de kloof
+  ACTOR spookridder KOSTUUM spook OP 46,102   # een leeg harnas voor de brug
+  BINNENKOMST:
+    MUZIEK woud
+    ALS vlag ridder_weg
+      VERBERG spookridder
+      ALS vlag helm_gepakt
+        PATCH harnas
+      ANDERS
+        PATCH harnas_helm
+      EINDE
+      ALS vlag kever_gevangen
+        PATCH pot
+      ANDERS
+        PATCH pot_kever
+      EINDE
+    EINDE
+
+VOORWERP terug_bospad "bospad" VAK 0,90 6,34 LOOP 4,110 LINKS
+  GA_NAAR:
+    KAMER bospad 150,96 LINKS
+  BEKIJK:
+    ZEG eldric "Terug over het bospad."
+
+VOORWERP brug "brug" VAK 62,56 97,44 LOOP 44,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Een touwbrug over de kloof. Hij kraakt al als je ernaar kijkt."
+  GA_NAAR:
+    ALS vlag ridder_weg
+      ZEG eldric "Niet naar beneden kijken. Niet naar beneden kijken."
+      KAMER jachthut 16,104 RECHTS
+    ANDERS
+      ZEG eldric "De ridder heft zijn zwaard. Hier kom ik niet langs."
+    EINDE
+
+VOORWERP kloof "kloof" VAK 76,96 83,28 LOOP 44,108 RECHTS
+  BEKIJK:
+    ZEG eldric "Diep. Heel diep. Beneden stroomt een beek tussen scherpe rotsen."
+
+VOORWERP spookridder "spookridder" VAK 40,66 14,29 LOOP 30,108 RECHTS   # (boven de helm en de kever: die liggen op y 94-104)
+  BEKIJK:
+    ALS vlag ridder_weg
+      ZEG eldric "Een hoop oud ijzer. Zonder kever is het maar een harnas."
+    ANDERS
+      ZEG eldric "Het harnas is leeg. Er zoemt iets in de helm."
+      ZEG mira "Spoken hebben geen honger. Kevers wel."
+    EINDE
+  PRAAT:
+    ALS vlag ridder_weg
+      ZEG eldric "Er zit niemand meer in. Er zat nooit iemand in."
+    ANDERS
+      ZEG eldric "Goedenavond, meneer de ridder. Mag ik erlangs?"
+      ZEG eldric "Zoemmm. Dat is geen ja."
+    EINDE
+  GEBRUIK zonnesteen:
+    ALS NIET vlag ridder_weg
+      TUSSENSCENE
+      ZEG eldric "Wijk, spook! Ik heb het licht van de zon!"
+      VERBERG eldric
+      GELUID wolf
+      WACHT 30
+      VERBERG mira_mee
+      TOON tik
+      ZEG tik "Een harnas zonder man. Een jongen zonder harnas. Kort gevecht."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    ANDERS
+      ZEG eldric "Het is al voorbij."
+    EINDE
+  GEBRUIK honingpot:
+    ALS NIET vlag ridder_weg
+      TUSSENSCENE
+      ZEG eldric "Ik zet de honingpot voor de ridder neer."
+      ZEG eldric "Het zoemen houdt op. Een kevertje kruipt uit de helm, naar de honing..."
+      NEEM honingpot
+      VERBERG spookridder
+      GELUID deur
+      PATCH harnas_helm
+      PATCH pot_kever
+      ZET ridder_weg
+      PLAATS helm spookbrug
+      PLAATS kever spookbrug
+      PUNTEN 15
+      ZEG eldric "...en het harnas valt in stukken. Er zat echt niemand in."
+      EINDE_TUSSENSCENE
+    EINDE
+
+VOORWERP helm "helm" VAK 32,94 12,10 LOOP 30,110 RECHTS NERGENS
+  BEKIJK:
+    ZEG eldric "Een lege helm. Hij is zwaar, en hij past op niets."
+  PAK:
+    ZEG eldric "Een lege helm. Wie weet waar hij goed voor is."
+    GEEF helm
+    ZET helm_gepakt
+    PATCH harnas
+    PUNTEN 5
+
+VOORWERP kever "kever" VAK 12,94 12,10 LOOP 22,112 LINKS NERGENS
+  BEKIJK:
+    ZEG eldric "Een kevertje op de honingpot. Het smakt. Kevers kunnen smakken, blijkt."
+  PAK:
+    ZEG eldric "Hij zoemt boos en vliegt een rondje. Ik heb iets nodig om hem in te doen."
+  PRAAT:
+    ZEG eldric "Hallo, kever. Zzz, zegt hij. Ik versta het bijna."
+  GEBRUIK koker:
+    ZEG eldric "Ik houd de koker bij de honing... hup, erin."
+    NEEM kever
+    NEEM koker
+    GEEF fluisterkever
+    ZET kever_gevangen
+    PATCH pot
+    PUNTEN 10
+    ZEG eldric "Hij zoemt. En in dat zoemen... hoor ik woorden?"

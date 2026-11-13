@@ -757,3 +757,29 @@ scripts als eigen bestanden is dat eenvoudig.
 
 **Getest:** `tests/tik.band` (dood met Tik, terugdraaien: vlag en munt terug, Eldric op zijn plek van binnenkomst;
 Mira verschijnt en loopt mee). 23/23 compiler, 19/19 banden.
+
+## 2026-11-13 — Hoofdstuk 2: het Duisterwoud
+
+- **Vier kamers, met de hand getekend** (elk plaatje los goedgekeurd): `tools/teken_bospad.py` (moeras links, holle
+  kokers aan de takken, het pad naar rechts), `teken_spookbrug.py` (touwbrug over een kloof, maan, dennen aan de
+  overkant; patches: het harnas in stukken met/zonder helm, de honingpot met/zonder kever), `teken_jachthut.py`
+  (blokhut met kaart, gewei, haard, kooi met aardmannetje, tafel met brief; patches vuur_uit en kooi_open) en
+  `teken_oever.py` (steiger met bel, donkere vuurtoren op een eiland; patch: een bootje met een lampje).
+  `teken_bospad.kleuren_per_vakje` houdt elk vakje op 3 kleuren + zwart, zodat de omzetter niets verandert.
+- **Scripts** `scripts/bospad.hcs`, `spookbrug.hcs`, `jachthut.hcs`, `oever.hcs` volgens het scenario: Ga naar moeras
+  ☠ (eerste dood, Tik legt het uit), Pak kokers, Gebruik honingpot met spookridder (het harnas valt in stukken),
+  Gebruik koker met kever → fluisterkever, Pak helm, Lees brief, Open kooi bij brandend vuur ☠ (Grom komt binnen),
+  Gebruik fluisterkever met aardmannetje, Gebruik helm met haard, Open kooi → gloeischub, Trek bel → een boot:
+  hoofdstuk 2 voltooid. Het pad op de bosrand begint hoofdstuk 2. De spookridder is een figuur (kostuum `spook`).
+- Bij een dood verbergt het script Mira even (er zijn maar 2 figuurslots: spookridder of Grom, plus Tik); TERUG zet
+  haar terug, en maakt Eldric weer zichtbaar (`act_zichtbaar`).
+- **Meer voorwerpen**: hoofdstuk 2 bracht het spel op 64 voorwerpen, het maximum. Nu 128: elk voorwerp heeft een
+  eigenaar, maar alleen de eerste 32 een stand. `scriptc.py` zet de voorwerpen die STAND gebruiken vooraan
+  (STATUS_VERSIE 4; de spelstatus blijft binnen één pagina). Gevolg: de volgorde in de inventaris veranderde.
+- Bij overlappende vakken wint het voorwerp dat eerst staat: het aardmannetje staat dus voor de kooi, de brief voor de
+  tafel; het vak van de spookridder ligt boven de helm en de kever.
+- **Muziek**: twee nieuwe stukken in `tools/thema.py`: `woud` (G-mineur, traag, een dwalende fluit en een uil) voor het
+  bospad en de spookbrug, en `zee` (D-groot in 6/8, hoopvol) voor de oever. De jachthut gebruikt de kelder.
+
+**Getest:** `tests/hoofdstuk2.band` speelt het hele hoofdstuk, met beide doden en terugdraaien, en controleert vlaggen,
+voorwerpen, muziek en "Hoofdstuk 2 voltooid". 23/23 compiler, 20/20 banden.

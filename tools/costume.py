@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sprites_hc as hc   # noqa: E402
 
 RICHTINGEN = ["voor", "rug", "rechts", "links"]
-NPCS = [("mira", 0), ("wolf", 1), ("maan", 0), ("hol", 0), ("bram", 0), ("grom", 0), ("tik", 0)]          # (naam, vorm) — zie hieronder
+NPCS = [("mira", 0), ("wolf", 1), ("maan", 0), ("hol", 0), ("bram", 0), ("grom", 0), ("tik", 0), ("spook", 0)]          # (naam, vorm) — zie hieronder
 # hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
 # het plein: achteraan ~14-16 hoog, de smidse ~20, de herberg ~26 (zie docs/LOGBOEK.md).
 MATEN = [None, 26, 20, 14, 10]   # 10: helemaal bovenaan het dorp

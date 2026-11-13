@@ -1,0 +1,208 @@
+# hoofdstuk2.band — de oplossing van hoofdstuk 2 (Duisterwoud), met twee doden en terugdraaien (Tik).
+# Begint op de bosrand met wat hoofdstuk 1 opleverde (proef_hfst2: wolven weg, honingpot, Mira loopt mee).
+wacht 3
+start_script proef_hfst2
+wacht_op_script
+wacht 3
+verwacht_kamer bosrand
+
+# 1. het pad het Duisterwoud in: hoofdstuk 2 begint
+cursor 160,84
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bospad
+verwacht st_hoofdstuk = 1
+verwacht muz_lied = 6                  # LIED_WOUD
+verwacht_muziek
+verwacht_tekst 24 "        Hoofdstuk 2: Duisterwoud"
+wacht_op_script
+screenshot bospad
+
+# 2. het moeras: de eerste dood, Tik draait terug
+cursor 40,120
+verwacht_tekst 18 "Ga naar moeras"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+verwacht_slot 0 tik
+verwacht_tekst 19 "Ja, terugdraaien."
+screenshot moeras_tik
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht terug_teller = 1
+verwacht act_zichtbaar = 1
+verwacht_slot 0 mira_mee
+verwacht_kamer bospad
+
+# 3. een holle koker
+cursor 100,156
+vuur
+cursor 200,52
+verwacht_tekst 18 "Pak kokers"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar koker eldric
+
+# 4. verder, naar de spookbrug
+cursor 300,104
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+screenshot spookbrug
+cursor 200,90
+verwacht_tekst 18 "Ga naar brug"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_kamer spookbrug               # de ridder laat niemand door
+
+# 5. honing voor de kever in de helm: het harnas valt in stukken
+cursor 180,156
+vuur
+cursor 20,180
+verwacht_tekst 18 "Gebruik honingpot"
+vuur
+wacht 2
+cursor 92,100
+verwacht_tekst 18 "Gebruik honingpot met spookridder"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag ridder_weg 1
+verwacht_eigenaar honingpot nergens
+verwacht_eigenaar helm spookbrug
+screenshot harnas
+
+# 6. de kever in de koker: een fluisterkever; en de helm
+cursor 180,156
+vuur
+cursor 200,180
+verwacht_tekst 18 "Gebruik koker"
+vuur
+wacht 2
+cursor 36,115
+verwacht_tekst 18 "Gebruik koker met kever"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar fluisterkever eldric
+verwacht_eigenaar koker nergens
+cursor 100,156
+vuur
+cursor 76,115
+verwacht_tekst 18 "Pak helm"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar helm eldric
+screenshot stukken
+
+# 7. over de brug naar Groms jachthut
+cursor 200,90
+verwacht_tekst 18 "Ga naar brug"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer jachthut
+screenshot jachthut
+cursor 180,172
+vuur
+cursor 82,104
+verwacht_tekst 18 "Lees brief"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag brief_gelezen 1
+
+# 8. de kooi open terwijl het vuur brandt: Grom komt binnen, Tik draait terug
+cursor 260,156
+vuur
+cursor 232,60
+verwacht_tekst 18 "Open kooi"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+screenshot kooi_tik
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht terug_teller = 2
+verwacht_vlag kooi_open 0
+verwacht_slot 0 mira_mee
+
+# 9. het aardmannetje, met de fluisterkever
+cursor 180,156
+vuur
+cursor 200,180
+verwacht_tekst 18 "Gebruik fluisterkever"
+vuur
+wacht 2
+cursor 250,100
+verwacht_tekst 18 "Gebruik fluisterkever met aardmannetje"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag jong_gesproken 1
+
+# 10. de helm dooft het vuur, dan de kooi open: de gloeischub
+cursor 180,156
+vuur
+cursor 20,188
+verwacht_tekst 18 "Gebruik helm"
+vuur
+wacht 2
+cursor 164,60
+verwacht_tekst 18 "Gebruik helm met haard"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag vuur_uit 1
+cursor 260,156
+vuur
+cursor 232,60
+verwacht_tekst 18 "Open kooi"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag kooi_open 1
+verwacht_eigenaar gloeischub eldric
+screenshot kooi_open
+
+# 11. door de achterdeur naar de oever; de bel: in de verte een boot
+cursor 304,76
+verwacht_tekst 18 "Ga naar achterdeur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer oever
+verwacht muz_lied = 7                  # LIED_ZEE
+verwacht_muziek
+screenshot oever
+cursor 100,172
+vuur
+cursor 224,72
+verwacht_tekst 18 "Trek bel"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_vlag hoofdstuk2_klaar 1
+verwacht voltooid = 1
+verwacht_tekst 24 "          Hoofdstuk 2 voltooid"
+screenshot boot

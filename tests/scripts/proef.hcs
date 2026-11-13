@@ -94,3 +94,11 @@ SCRIPT proef_dood:                     # een dood met Tik (hoofdstuk 2 en verder
 
 SCRIPT proef_mira:                     # Mira loopt mee
   TOON mira_mee
+
+# ---- hoofdstuk 2: meteen naar de bosrand, met wat hoofdstuk 1 opleverde (tests/hoofdstuk2.band) ----
+SCRIPT proef_hfst2:
+  ZET wolven_weg
+  ZET hoofdstuk1_klaar
+  GEEF honingpot
+  TOON mira_mee
+  KAMER bosrand 80,94 RUG
