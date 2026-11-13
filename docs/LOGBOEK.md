@@ -814,3 +814,21 @@ voorwerpen, muziek en "Hoofdstuk 2 voltooid". 23/23 compiler, 20/20 banden.
 
 **Getest:** `tests/grot.band` (de scène, de muziek, de figuren, geen Eldric; daarna hoofdstuk 2 op het bospad; de
 tweede keer geen scène meer). 23/23 compiler, 24/24 banden.
+
+## 2026-11-13 — De grot opnieuw: Grom als reus, de Holle Kroon met maanstenen
+
+Feedback: Grom zag eruit als een lief poppetje, en "de zon in een kom" gelooft niemand: het is donker door de
+maansverduistering. Nieuw (ook in het scenario): de **Schemerspreuk zet de twee manen vast vóór de zon**. De spreuk zit
+in de **Holle Kroon**, een zwarte ijzeren kroon met twee **maanstenen** (één per maan; in het midden hol). Zolang Grom
+haar draagt, staan de manen stil. Het einde: Grom neemt één maansteen uit de kroon, die maan schuift door en het licht
+komt in één golf terug (het zonnebaken vangt het op); de andere maan blijft staan boven het dal van de aardmannetjes.
+"Zonnekamer" heet nu "Maankamer".
+
+- `tools/teken_grot.py`: Grom staat nu in het plaatje zelf (een sprite is te klein): een reus voorovergebogen op zijn
+  vuisten, donkergrijs met koud randlicht, rode ogen, slagtanden, de kroon met twee lichtblauwe maanstenen (die
+  pulseren: FLAKKER). Door een gat in het gewelf: de zwarte zon met een stralenkrans en de twee manen ervoor. Alleen
+  blauw en zwart in de achtergrond, zodat hij loskomt. Zijn ogen vlammen geel op als hij "Stil!" brult (KLEUR).
+- `scripts/grot.hcs`: nieuwe teksten ("Twee manen voor de zon. Mijn kroon houdt ze vast."); alleen het aardmannetje
+  is nog een figuur.
+
+**Getest:** 23/23 compiler, 24/24 banden.

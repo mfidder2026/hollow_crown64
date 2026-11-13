@@ -34,7 +34,7 @@ VOORWERP bospad "pad" VAK 68,58 24,22 LOOP 80,94 RUG
     ALS vlag wolven_weg
       ALS NIET vlag hoofdstuk2_begonnen
         ZET hoofdstuk2_begonnen
-        KAMER grot 80,116 VOOR             # eerst de tussenscène (scripts/grot.hcs): die begint hoofdstuk 2
+        KAMER grot 140,116 VOOR             # eerst de tussenscène (scripts/grot.hcs): die begint hoofdstuk 2
       EINDE
       KAMER bospad 92,122 RUG
     ANDERS

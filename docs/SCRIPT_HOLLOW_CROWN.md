@@ -10,20 +10,22 @@ met gloeiende ogen, die in het licht uitdrogen als blad in de zon. Ze leefden in
 boven: naar wind, bomen, sterren. Hun meester en beschermer is **Grom, de tovertrol**: oud, groot, met een huid als steen
 en een staf van zwart hout. Grom is niet slecht om het slecht zijn. Hij wil een thuis voor zijn volk, boven de grond.
 
-In de nacht van de **dubbele maansverduistering**, toen het licht het zwakst was, sprak Grom de **Schemerspreuk**. Hij
-ving het licht van de zon in een holle kroon van steen, de **Holle Kroon**, en droeg die naar zijn burcht: het Vergeten
-Kasteel. Sindsdien hangt er een eeuwige schemer over het land. De aardmannetjes kwamen naar boven. Het land van de mensen
+In de nacht van de **dubbele maansverduistering**, toen de twee manen samen voor de zon schoven, sprak Grom de
+**Schemerspreuk**: hij zette de manen vast, precies vóór de zon. De spreuk zit in de **Holle Kroon**, een zwarte ijzeren
+kroon met twee **maanstenen**, één voor elke maan (in het midden is ze hol: daar zat ooit een derde steen). Zolang Grom
+de kroon draagt, of zolang ze op haar plek staat, kunnen de manen niet verder. Hij nam haar mee naar zijn burcht: het
+Vergeten Kasteel. Sindsdien hangt er een eeuwige schemer over het land: een zwarte zon met een dunne stralenkrans. De aardmannetjes kwamen naar boven. Het land van de mensen
 werd grauw en koud: het graan groeit niet, het vuur wil niet branden, de mensen raken hun moed kwijt.
 
 Wat niemand weet: ook de aardmannetjes worden niet gelukkig. In de schemer groeit niets; ze hebben honger, en ze zijn
 bang voor de mensen. Grom ziet het, maar hij durft de spreuk niet te breken: dan moet zijn volk terug onder de grond.
 
 **Eldric** is een gewone jongen uit Dawnhaven, met een goed hart. Geen held, geen ridder. Hij heeft één bijzonder ding:
-de **zonnesteen** van zijn oma, een warm steentje waar nog een beetje van de oude zon in zit (een splinter die van de
-zon afbrak toen Grom haar ving; Oma Rijm vond hem die nacht in haar tuin). Eldric weet niet wat het is. In hoofdstuk 1
+de **zonnesteen** van zijn oma, een warm steentje waar nog een beetje van de oude zon in zit (het laatste zonlicht van die
+nacht, dat als een gloeiend steentje in haar tuin viel net voordat de manen dichtschoven; Oma Rijm raapte het op). Eldric weet niet wat het is. In hoofdstuk 1
 helpt hij gewoon de mensen om hem heen. Gaandeweg groeit hij: hij leert luisteren, ook naar de aardmannetjes. Aan het
-eind breekt hij de spreuk niet met geweld, maar door Grom te laten zien dat er een andere weg is: de zon komt terug, en
-de aardmannetjes krijgen een eigen dal waar de schemer blijft. Dat is het einde van het spel.
+eind breekt hij de spreuk niet met geweld, maar door Grom te laten zien dat er een andere weg is: Grom laat één maan
+gaan en de zon komt terug, en de andere maan blijft staan boven één dal, waar de aardmannetjes hun schemer houden. Dat is het einde van het spel.
 
 ## 2. Spelregels en vernieuwingen
 
@@ -60,7 +62,7 @@ de aardmannetjes krijgen een eigen dal waar de schemer blijft. Dat is het einde 
 | **Pad** | Zwamhoeder in de Rotskloof | Een pad zo groot als een koe, handelt in paddenstoelen. |
 | **Moeder Aard** | Oudste van de aardmannetjes | Vertelt hoe het echt zit: haar volk lijdt ook onder de schemer. |
 | **Oma Rijm** | Kluizenaar op de IJstop | Eldrics oma. Vond de zonnesteen in de nacht van de spreuk en trok de bergen in om uit te zoeken wat er gebeurd was. |
-| **Grom** | De tovertrol | Draagt de Holle Kroon met het zonlicht. Wil een thuis voor zijn volk. Wordt aan het eind geen vijand maar bondgenoot. |
+| **Grom** | De tovertrol | Een reus met een huid als steen en rode ogen. Draagt de Holle Kroon met de twee maanstenen: zolang hij die draagt, staan de manen voor de zon. Wil een thuis voor zijn volk. Wordt aan het eind geen vijand maar bondgenoot. |
 | **de aardmannetjes** | Groms volk | Klein, hol, gloeiende ogen; verdragen geen daglicht. |
 
 **Hindernissen** (geen gevechten): schaduwwolven (bang voor licht), spookridders (lege harnassen met een kever erin),
@@ -178,8 +180,9 @@ weefde: een kring van stenen, een spreukenboek, een lege nis waar de Holle Kroon
    na. Mira's ziensteen begint te gloeien. Moeder Aard: "Dat ei is van ons. Het wil nog niet uit. Het wacht ergens op."
    Ze geeft de *sleutelschub* (opent de kasteelpoort) en vraagt: "Praat met Grom. Niet vechten. Praten."
 6. *De Spreukzaal.* **Lees spreukenboek** (met de sterrenkaart van Nul als sleutel tot het schrift): de Schemerspreuk kan
-   alleen gebroken worden door de Holle Kroon te openen, en dan moet er een plek klaar zijn waar het licht heen kan: het
-   oude zonnebaken op de IJstop. **Bekijk kring**: "Hier stond Grom. Het gras is nog zwart." ☠ **Gebruik trilkristal met
+   alleen gebroken worden door een maansteen uit de Holle Kroon te nemen; dan schuift die maan door. Maar het licht dat
+   zo lang tegengehouden is, komt in één golf terug: er moet een plek klaar zijn die het opvangt, anders verbrandt het
+   alles. Dat is het oude zonnebaken op de IJstop. **Bekijk kring**: "Hier stond Grom. Het gras is nog zwart." ☠ **Gebruik trilkristal met
    kring** zonder het boek: "Eldric sprak een spreuk die hij niet kende. De spreuk kende hem wel." ↩ Met het boek: het
    trilkristal laadt op → *bakenkristal*. **Bekijk nis**: "Hier stond de kroon. Zo groot als een fontein." **Einde
    hoofdstuk 4.**
@@ -211,8 +214,8 @@ rijmwurm eronder), Het Zonnebaken (een oude spiegeltoren boven de schemer: hier 
 ## 9. Hoofdstuk 6 — Het Vergeten Kasteel (5 kamers)
 
 **Kamers:** Kerker (Eldric wakker, zonnesteen weg, Tik erbij), Poort (vier spookridders), Troonzaal (Grom met de Holle
-Kroon, Mira, aardmannetjes langs de muren), Zonnekamer (de Holle Kroon op een sokkel in een kooi van spiegels: het
-gevangen zonlicht), Het Dak (de slotscène).
+Kroon, Mira, aardmannetjes langs de muren), Maankamer (de Holle Kroon op een sokkel onder een open koepel, in een kooi
+van spiegels: de maanstenen vangen het licht van de manen en maken het kil en verblindend), Het Dak (de slotscène).
 
 **Walkthrough**
 1. *Kerker.* Zonnesteen weg, lantaarn weg. Inventaris: kever, schub, kruik, helm, want, sleutelschub. Tik: "Dit is het
@@ -226,20 +229,21 @@ gevangen zonlicht), Het Dak (de slotscène).
    wordt boos, de schaduwketens slaan om Eldric heen: Tik: "Nee. Dat draai ik terug. Zo praat je niet met een trol." ↩
    Keuze "Ik wil dat iedereen kan leven" → Grom aarzelt: "Woorden. Laat me iets zien." "Waar is mijn steentje?" → "Bij
    de kroon. Haal het maar. Als je kunt kijken."
-4. *Zonnekamer.* De Holle Kroon staat in een kooi van spiegels die het gevangen licht door het hele kasteel sturen: te fel
-   om te zien, het scherm is wit. **Gebruik ziensteen** → Mira is er niet, maar de steen gloeit zelf en Eldric "ziet"
+4. *Maankamer.* De Holle Kroon staat onder de open koepel in een kooi van spiegels; de maanstenen sturen een kil, wit
+   licht door het hele kasteel: te fel om te zien, het scherm is wit. **Gebruik ziensteen** → Mira is er niet, maar de steen gloeit zelf en Eldric "ziet"
    even als Mira: het pad gloeit, de rest blijft wit. Loop naar de sokkel. **Pak zonnesteen**. **Gebruik kruik met
    spiegel** → de kruik (nog nat van de zee) beslaat de spiegel; de kooi wordt dof, het scherm normaal. ☠ **Pak Holle
-   Kroon**: "Eldric pakte de zon met blote handen. Hij deed het maar één keer." ↩ **Gebruik helm met Holle Kroon** → de
+   Kroon**: "Eldric pakte de maanstenen met blote handen. Kouder dan de nacht. Hij deed het maar één keer." ↩ **Gebruik helm met Holle Kroon** → de
    kroon zit in de helm van de spookridder; het steentje zingt ernaast.
 5. *Troonzaal.* Eldric zet de helm met de kroon voor Grom neer. **Gebruik fluisterkever met aardmannetjes** → ze zeggen
    het zelf, voor het eerst tegen Grom: "We hebben honger, meester. In de schemer groeit niets." **Geef gloeischub aan
    Grom** → het jong uit de kooi komt tevoorschijn; de schub is van hem: "Een beetje licht doet geen pijn." Grom kijkt
-   lang naar de jongen. Eldric (de laatste keuze): "Open de kroon. Het baken vangt het licht. En de schemer mag blijven
-   in één dal: jullie dal." ☠ Keuze "Geef de kroon of ik breek hem": "Een jongen tegen een trol. Kort verhaal." ↩
-   Grom opent de Holle Kroon. **Slotscène begint.**
-6. *Het Dak.* Tussenscène: een bundel licht schiet uit de kroon naar het zonnebaken op de IJstop, en vandaar de hemel in.
-   De schemer trekt weg over het land, behalve boven één dal achter de bergen, waar de aardmannetjes heen trekken, met
+   lang naar de jongen. Eldric (de laatste keuze): "Laat één maan gaan. Het baken vangt het licht. En laat de andere
+   staan, boven één dal: jullie dal." ☠ Keuze "Geef de kroon of ik breek hem": "Een jongen tegen een trol. Kort
+   verhaal." ↩ Grom neemt één maansteen uit de Holle Kroon. **Slotscène begint.**
+6. *Het Dak.* Tussenscène: de eerste maan schuift opzij. Het licht dat zo lang wachtte stort in één golf over de bergen;
+   het zonnebaken op de IJstop vangt het en kaatst het zacht over het land. De schemer trekt weg, behalve boven één dal
+   achter de bergen, waar de tweede maan blijft staan en waar de aardmannetjes heen trekken, met
    Grom voorop. Dan wordt de hemel donkerblauw. Dan rood. Dan goud. Eldric: "Mira. De zon komt terug." Mira: "Ik weet
    het. Het ei zegt het." De ziensteen barst; er komt een eitje uit met één oog. Tik, naast hem: "Hallo, ik." Tik
    verdwijnt. Het kleine Tik knippert. Mira: "Dus daarom wist hij alles." Oma Rijm in de verte, op de IJstop, met de zon
@@ -252,7 +256,7 @@ gevangen zonlicht), Het Dak (de slotscène).
 | zonnesteen | start (van oma) | smidsvuur, lantaarn, vuurtorenlens |
 | gouden munt | fontein | vuursteen van Bram |
 | vuursteen | Bram | reservevuur in hfst 4 |
-| ziensteen | herberg | Mira; donkere grot; zonnekamer; slot |
+| ziensteen | herberg | Mira; donkere grot; maankamer; slot |
 | kruik | herberg | olie; beslagen spiegel (nat van de zee) |
 | lantaarn | Bram | wolven ×2, licht overal; mag nooit "weg" |
 | honingpot | kelder | spookridder, meeuwen, Pad |
@@ -286,7 +290,7 @@ gevangen zonlicht), Het Dak (de slotscène).
 | 5 | Zonnebaken | zonder want | "Het baken bijt." |
 | 6 | Poort | zonder kever | "Rekensom." |
 | 6 | Troonzaal | Grom dreigen | "Zo praat je niet met een trol." |
-| 6 | Zonnekamer | kroon pakken | "Hij deed het maar één keer." |
+| 6 | Maankamer | kroon pakken | "Hij deed het maar één keer." |
 | 6 | Troonzaal | de kroon opeisen | "Kort verhaal." |
 
 **Ankerpunten:** begin van elke kamer; bij ⛔ het begin van het hoofdstuk. Opslaan (F5 of het menu) kan altijd, ook na

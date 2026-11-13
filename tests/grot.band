@@ -17,11 +17,10 @@ verwacht_muziek
 verwacht vm_scene = 1
 verwacht_slot 0 geen                   # Mira (een figuur die overal mee kan) staat niet op het toneel
 wacht 300
-verwacht_tekst 0 "Mijn kroon. Mijn zon. Hier hoort ze: in"
-verwacht_slot 0 grom_grot
-screenshot grom_kroon
+verwacht_tekst 0 "Zolang ik haar draag, staan ze stil. En"
+screenshot grom
 wacht 500
-verwacht_slot 1 hol_grot
+verwacht_slot 0 hol_grot
 screenshot aardmannetje
 wacht_op_script
 wacht 3
