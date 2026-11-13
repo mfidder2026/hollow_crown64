@@ -1,4 +1,4 @@
-// schijf.asm — laden van de diskette (§6.7). Eén laadroutine, via de Kernal; een snellader kan later.
+// schijf.asm — laden van de diskette (§6.7). Eerst de eigen snellader (turbo.asm), anders via de Kernal.
 //
 // Tijdens het laden: de raster-IRQ's uit (de Kernal zet de IRQ's tijdens elke byte toch uit, en dan
 // verspringen de naden), het hele scherm in tekstmodus, de kamer leeg (zwart), de sprites uit en "Laden..."
@@ -93,7 +93,30 @@ opnieuw:
         sta begin
         lda tod_nu + 1
         sta begin + 1
-        ldx kamer
+        ldx kamer                       // eerst de snellader (turbo.asm); lukt dat niet, dan de Kernal
+        lda kamer_bestand_lo,x
+        sta zp_ptr3
+        lda kamer_bestand_hi,x
+        sta zp_ptr3 + 1
+        lda kamer_bestand_len,x
+        ldx #<KAMER_BUF
+        ldy #>KAMER_BUF
+        jsr turbo_laden
+        bcs kernal
+        ldx kamer                       // het plaatje kwam met de turbo: de scripts ook
+        lda kamer_sbestand_lo,x
+        sta zp_ptr3
+        lda kamer_sbestand_hi,x
+        sta zp_ptr3 + 1
+        lda kamer_sbestand_len,x
+        ldx #<KAMER_SCRIPTS
+        ldy #>KAMER_SCRIPTS
+        jsr turbo_laden
+        bcs kernal
+        lda #0
+        sta laad_fout
+        jmp geladen
+kernal: ldx kamer
         lda kamer_bestand_len,x
         pha
         ldy kamer_bestand_hi,x
@@ -108,6 +131,7 @@ opnieuw:
         lda #0                          // 0 = laden (niet vergelijken)
         ldx #<KAMER_BUF
         ldy #>KAMER_BUF
+        jsr turbo_vergeet               // (turbo.asm: de drive gebruikt nu zijn buffers)
         jsr LOAD
         bcc !+
         ldx kamer                       // niet gevonden: de verkeerde diskette? Vraag om de goede en probeer opnieuw
@@ -130,11 +154,13 @@ opnieuw:
         lda #0
         ldx #<KAMER_SCRIPTS
         ldy #>KAMER_SCRIPTS
+        jsr turbo_vergeet               // (turbo.asm: de drive gebruikt nu zijn buffers)
         jsr LOAD
         bcc !+
         lda #2                          // 2: het scriptbestand ontbreekt
         sta laad_fout
 !:
+geladen:
         jsr tod_lezen                   // laadtijd in tienden
         lda tod_nu
         sec

@@ -37,8 +37,8 @@
 
 .const KAMER_BUF     = $a000            // het kamerbestand (tools/kamer.py: zelfde adres)
 .const KAMER_BUF_GROOTTE = $2000
-.const KAMER_SCRIPTS = $b400            // de scripts van de kamer (<KAMER>.S, tools/scriptc.py): $B400-$BFFF
-.const KAMER_SCRIPTS_EIND = KAMER_BUF + KAMER_BUF_GROOTTE - 1   // het plaatje van de kamer blijft dus onder $B400
+.const KAMER_SCRIPTS = $b600            // de scripts van de kamer (<KAMER>.S, tools/scriptc.py): $B600-$BFFF (2,5 KB)
+.const KAMER_SCRIPTS_EIND = KAMER_BUF + KAMER_BUF_GROOTTE - 1   // het plaatje van de kamer blijft dus onder $B600
 .const PRG_EIND      = KAMER_BUF        // het programma (ook buffers) moet hieronder blijven
 
 // De schermindeling (§4), in tekenrijen

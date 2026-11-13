@@ -194,3 +194,28 @@ SCRIPT proef_hfst5:
   HOOFDSTUK 4
   KAMER spreukzaal 80,114 VOOR
 
+# ---- hoofdstuk 6: meteen naar de kerker, met wat hoofdstuk 1-5 opleverden (tests/hoofdstuk6.band) ----
+SCRIPT proef_hfst6:
+  ZET wolven_weg
+  ZET hoofdstuk1_klaar
+  ZET hoofdstuk2_begonnen
+  ZET hoofdstuk2_klaar
+  ZET hoofdstuk3_begonnen
+  ZET hoofdstuk3_klaar
+  ZET hoofdstuk4_begonnen
+  ZET hoofdstuk4_klaar
+  ZET hoofdstuk5_begonnen
+  ZET hoofdstuk5_klaar
+  GEEF kruik
+  STAND kruik 2
+  GEEF lantaarn
+  STAND lantaarn 6
+  GEEF fluisterkever
+  GEEF helm
+  GEEF gloeischub
+  GEEF sterrenkaart
+  GEEF want
+  GEEF sleutelschub
+  TOON mira_mee
+  HOOFDSTUK 6
+  KAMER kerker 60,112 VOOR

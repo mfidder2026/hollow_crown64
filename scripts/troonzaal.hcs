@@ -1,0 +1,132 @@
+# troonzaal.hcs — hoofdstuk 6: Grom op zijn troon (data/plaatjes/troonzaal.png: Grom in het plaatje, zoals in de
+# grot; tools/teken_kasteel.py). Mira staat bij hem, ongedeerd. Praten, niet vechten. Drie dingen laten hem zien dat het
+# anders kan: zijn kroon terug (in de helm), zijn volk dat het zelf zegt (de kever), en het jong met de gloeischub.
+# Dan de laatste keuze: "Laat één maan gaan." De slotscène (scripts/dak.hcs).
+KAMER troonzaal
+  LOOPKLEUREN donkergrijs zwart
+  LOOPVAK 2,116 157,123
+  ACTOR mira_troon KOSTUUM mira OP 138,120   # Mira, naast de zuil
+  BINNENKOMST:
+    MUZIEK grot
+    ALS NIET vlag troon_begroet
+      ZET troon_begroet
+      ZEG grom "Jongen. Je hebt mijn baken aangestoken."
+      ZEG grom "Wil je mijn volk terug onder de grond jagen?"
+    EINDE
+
+VOORWERP grom_troon "Grom" VAK 36,30 88,82 LOOP 80,120 RUG
+  BEKIJK:
+    ZEG eldric "Grom. Van dichtbij nog groter. En hij kijkt moe."
+  PRAAT:
+    PRAAT grom_praat
+  GEEF helm:
+    ALS vlag kroon_in_helm
+      TUSSENSCENE
+      ZEG eldric "Hier. Je kroon. In de helm van een spookridder: zo bijt hij niet."
+      NEEM helm
+      ZET kroon_terug
+      ZEG grom "Mijn kroon... Je had hem kunnen breken. Je bracht hem terug."
+      PUNTEN 15
+      ALS vlag aard_gesproken
+        ALS vlag schub_terug
+          ZET slot_klaar
+          ZEG mira "Nu, Eldric. Zeg het hem."
+        EINDE
+      EINDE
+      EINDE_TUSSENSCENE
+    ANDERS
+      ZEG grom "Een lege helm? Wat moet ik daarmee, jongen?"
+    EINDE
+  GEEF gloeischub:
+    TUSSENSCENE
+    ZEG eldric "Dit gaf een van jouw kleintjes me. In je jachthut, in een kooi."
+    NEEM gloeischub
+    ZEG verteller "Achter de troon piept iets. Het jong uit de kooi."
+    ZEG aardmannetje "Een beetje licht doet geen pijn, meester. Echt niet."
+    ZET schub_terug
+    ZEG grom "...Kleintje."
+    PUNTEN 15
+    ALS vlag aard_gesproken
+      ALS vlag kroon_terug
+        ZET slot_klaar
+        ZEG mira "Nu, Eldric. Zeg het hem."
+      EINDE
+    EINDE
+    EINDE_TUSSENSCENE
+
+VOORWERP aardmannetjes_t "aardmannetjes" VAK 18,42 16,40 LOOP 30,120 LINKS
+  BEKIJK:
+    ZEG eldric "Aardmannetjes, in de nissen. Ze kijken naar Grom. En naar mij."
+  GEBRUIK fluisterkever:
+    TUSSENSCENE
+    ZEG kever "We hebben honger, meester. In de schemer groeit niets."
+    ZEG kever "We willen niet terug onder de grond. Maar ook niet branden."
+    ZEG kever "Een dal met schaduw, meester. Dat is genoeg."
+    ZET aard_gesproken
+    ZEG grom "Waarom zeggen jullie dat nu pas?"
+    PUNTEN 10
+    ALS vlag kroon_terug
+      ALS vlag schub_terug
+        ZET slot_klaar
+        ZEG mira "Nu, Eldric. Zeg het hem."
+      EINDE
+    EINDE
+    EINDE_TUSSENSCENE
+
+VOORWERP mira_t "Mira" VAK 132,84 16,38 LOOP 126,120 RECHTS
+  BEKIJK:
+    ZEG eldric "Mira. Ze is ongedeerd. Ze knikt naar me."
+  PRAAT:
+    ZEG mira "Praat met hem, Eldric. Niet vechten. Hij is moe, niet slecht."
+
+VOORWERP gang_maan "gang" VAK 0,60 6,52 LOOP 4,120 LINKS
+  BEKIJK:
+    ZEG eldric "Een gang achter de zuil, naar boven."
+  GA_NAAR:
+    ALS vlag maankamer_open
+      KAMER maankamer 18,118 RECHTS
+    ANDERS
+      ZEG eldric "Grom kijkt me na. Ik kan nu niet zomaar weglopen."
+    EINDE
+
+GESPREK grom_praat
+  KEUZE "Ja. Het licht moet terug." ALS NIET vlag grom_luistert EINDE
+    TUSSENSCENE
+    ZEG grom "Dan ben je mijn vijand, jongen."
+    VERBERG mira_troon
+    VERBERG eldric
+    ZEG verteller "Schaduwen slaan als kettingen om Eldric heen."
+    TOON tik
+    ZEG tik "Nee. Dat draai ik terug. Zo praat je niet met een trol."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  KEUZE "Ik wil dat iedereen kan leven." ALS NIET vlag grom_luistert
+    ZEG grom "Iedereen? Ook mijn volk?"
+    ZEG eldric "Ook jouw volk. Moeder Aard zei: een dal met schaduw is genoeg."
+    ZEG grom "Woorden. Laat me iets zien."
+    ZET grom_luistert
+  KEUZE "Waar is mijn steentje?" ALS vlag grom_luistert
+    ZEG grom "Bij de kroon. In de maankamer, achter de zuil."
+    ZEG grom "Haal het maar. Als je kunt kijken."
+    ZET maankamer_open
+  KEUZE "Laat één maan gaan." ALS vlag slot_klaar EINDE
+    TUSSENSCENE
+    ZEG eldric "Laat één maan gaan. Het baken vangt het licht."
+    ZEG eldric "En laat de andere staan, boven één dal: jullie dal."
+    WACHT 50
+    ZEG grom "Eén dal. Met schaduw. Voor mijn volk."
+    ZEG grom "Goed, jongen met het stukje zon. Goed."
+    PUNTEN 20
+    EINDE_TUSSENSCENE
+    KAMER dak 80,112 VOOR
+  KEUZE "Geef de kroon, of ik breek hem!" ALS vlag slot_klaar EINDE
+    TUSSENSCENE
+    ZEG grom "Breken? Mijn kroon?"
+    VERBERG mira_troon
+    VERBERG eldric
+    TOON tik
+    ZEG tik "Een jongen tegen een trol. Kort verhaal."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  KEUZE "Tot straks." EINDE
+    ZEG grom "Hm."

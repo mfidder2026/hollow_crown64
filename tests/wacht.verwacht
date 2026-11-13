@@ -1,7 +1,7 @@
 # Verwachte status na tests/wacht.band
 st_magic = $48          # 'H'
 st_magic+1 = $43        # 'C'
-st_versie = 6
+st_versie = 7
 
 band_status = 2         # band helemaal afgespeeld
 band_fout = 0

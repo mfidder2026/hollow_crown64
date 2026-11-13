@@ -119,18 +119,18 @@ rm -f "$D64"
 # diskette 2: de rest. Een kamer = het plaatje (<kamer>) en zijn scripts (<kamer>.s, als hij scripts heeft).
 D64_2="$UIT/${NAAM}_2.d64"
 rm -f "$D64_2"
+# tools/d64.py zet de sectoren van elk bestand 3 sectoren uit elkaar (gemeten het snelst met de snellader).
 for schijf in 1 2; do
-  KAMERS=()
+  BESTANDEN=()
+  (( schijf == 1 )) && BESTANDEN+=("$UIT/$NAAM.prg:$NAAM")
   for kamer in $("$PYTHON" tools/kamer.py --schijf $schijf data/kamers.txt); do
-    [[ -f "build/gen/kamer_$kamer.prg" ]] && KAMERS+=(-write "build/gen/kamer_$kamer.prg" "$kamer")
-    [[ -f "$UIT/scr_$kamer.prg" ]] && KAMERS+=(-write "$UIT/scr_$kamer.prg" "$kamer.s")
+    [[ -f "build/gen/kamer_$kamer.prg" ]] && BESTANDEN+=("build/gen/kamer_$kamer.prg:$kamer")
+    [[ -f "$UIT/scr_$kamer.prg" ]] && BESTANDEN+=("$UIT/scr_$kamer.prg:$kamer.s")
   done
   if (( schijf == 1 )); then
-    "$VICE_BIN/c1541" -format "$SCHIJFNAAM" d64 "$D64" -write "$UIT/$NAAM.prg" "$NAAM" ${KAMERS[@]} \
-      >/dev/null 2>"$UIT/c1541.log" || { cat "$UIT/c1541.log" >&2; fout "c1541"; }
+    "$PYTHON" tools/d64.py "$D64" "$SCHIJFNAAM" ${BESTANDEN[@]} || fout "tools/d64.py"
   else
-    "$VICE_BIN/c1541" -format "${SCHIJFNAAM%%,*} 2,${SCHIJFNAAM##*,}" d64 "$D64_2" ${KAMERS[@]} \
-      >/dev/null 2>>"$UIT/c1541.log" || { cat "$UIT/c1541.log" >&2; fout "c1541 (diskette 2)"; }
+    "$PYTHON" tools/d64.py "$D64_2" "${SCHIJFNAAM%%,*} 2,${SCHIJFNAAM##*,}" ${BESTANDEN[@]} || fout "tools/d64.py (diskette 2)"
   fi
 done
 [[ -f "$D64" && -f "$D64_2" ]] || fout "geen D64 gemaakt"

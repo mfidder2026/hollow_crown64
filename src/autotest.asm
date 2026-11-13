@@ -23,7 +23,8 @@
 
 #if AUTOTEST
 
-.const BAND_GROOTTE   = 4096
+.const BAND_GROOTTE   = 1536            // een ring: tools/vicetest.py vult achter de leeskop bij
+.const BAND_SPIEGEL   = 16              // de eerste 16 bytes staan ook achter het einde (een opdracht over de rand heen)
 .const BAND_WACHT     = 0               // band_status: wacht tot vicetest de band heeft geladen
 .const BAND_LOOPT     = 1
 .const BAND_KLAAR     = 2
@@ -322,6 +323,12 @@ verder: clc                             // zp_band += A (bij VUUR: A = 1)
         sta zp_band
         bcc !+
         inc zp_band + 1
+        lda zp_band + 1                 // voorbij het einde van de ring: terug naar het begin
+        cmp #>(band + BAND_GROOTTE)
+        bcc !+
+        sec
+        sbc #>BAND_GROOTTE
+        sta zp_band + 1
 !:      rts
 }
 
@@ -342,6 +349,7 @@ band_buiten:     .word 0                // beelden waarin Eldric buiten alle loo
 ruw_doel_waarden: .fill 6, 0
 
 .segment Buffers
-band:           .fill BAND_GROOTTE, 0
+        .align $100                     // (de ring begint op een pagina: dan is terugspringen alleen de hoge byte)
+band:           .fill BAND_GROOTTE + BAND_SPIEGEL, 0
 
 #endif

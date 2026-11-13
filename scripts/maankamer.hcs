@@ -1,0 +1,104 @@
+# maankamer.hcs — hoofdstuk 6: de Holle Kroon onder de open koepel (data/plaatjes/maankamer.png, met de hand
+# getekend: tools/teken_kasteel.py). Het licht van de maanstenen in de spiegels is verblindend: alles wit (KLEUR).
+# Het zeewater uit de kruik beslaat een spiegel: dan zie je weer. Pak oma's steentje; de kroon in de helm (met blote
+# handen: Tik).
+KAMER maankamer
+  LOOPKLEUREN grijs donkergrijs lichtgrijs wit
+  LOOPVAK 2,112 157,122
+  BINNENKOMST:
+    MUZIEK kelder
+    ALS NIET vlag spiegels_dof              # verblindend: alles wordt wit
+      KLEUR 0,0 160,128 grijs wit
+      KLEUR 0,0 160,128 donkergrijs lichtgrijs
+      KLEUR 0,0 160,128 lichtblauw wit
+      KLEUR 0,0 160,128 paars lichtgrijs
+      KLEUR 0,0 160,128 geel wit
+      KLEUR 0,0 160,128 oranje wit
+      ZEG eldric "Au! Wit! Alles is wit! Ik zie bijna niets."
+    EINDE
+    ALS vlag kroon_gepakt
+      PATCH kroon_weg
+    EINDE
+    ALS vlag steen_gepakt
+      PATCH oma_steen_weg
+    EINDE
+
+VOORWERP deur_troon "deur" VAK 0,86 12,24 LOOP 6,116 LINKS
+  GA_NAAR:
+    KAMER troonzaal 8,120 RECHTS
+
+VOORWERP spiegel "spiegels" VAK 8,46 48,50 LOOP 30,116 LINKS
+  BEKIJK:
+    ALS vlag spiegels_dof
+      ZEG eldric "Beslagen. Nu kan ik weer kijken."
+    ANDERS
+      ZEG eldric "Spiegels. Het licht van de maanstenen kaatst van de een naar de ander."
+    EINDE
+  GEBRUIK kruik:
+    ALS vlag spiegels_dof
+      ZEG eldric "Ze zijn al beslagen."
+    ANDERS
+      ALS STAND kruik 2
+        ZEG eldric "Ik giet het zeewater uit de kruik over de spiegels... ze beslaan!"
+        ZET spiegels_dof
+        PUNTEN 15
+        KAMER maankamer 18,118 RECHTS
+      ANDERS
+        ZEG eldric "Een lege kruik. Daar beslaat niets van."
+      EINDE
+    EINDE
+
+VOORWERP holle_kroon "Holle Kroon" VAK 68,56 24,16 LOOP 80,114 RUG
+  BEKIJK:
+    ALS vlag spiegels_dof
+      ZEG eldric "De Holle Kroon. Zwart ijzer, twee maanstenen. Ze zijn ijskoud."
+    ANDERS
+      ZEG eldric "Te fel. Ik zie alleen wit."
+    EINDE
+  PAK:
+    ALS NIET vlag spiegels_dof
+      ZEG eldric "Ik zie hem niet eens. Alles is wit."
+      STOP
+    EINDE
+    TUSSENSCENE
+    ZEG eldric "Gewoon pakken..."
+    VERBERG eldric
+    TOON tik
+    ZEG tik "Eldric pakte de maanstenen met blote handen. Kouder dan de nacht."
+    ZEG tik "Hij deed het maar één keer."
+    EINDE_TUSSENSCENE
+    PRAAT tik_vraag
+  GEBRUIK helm:
+    ALS NIET vlag spiegels_dof
+      ZEG eldric "Ik zie hem niet eens. Alles is wit."
+      STOP
+    EINDE
+    ZEG eldric "Ik schep de kroon in de helm van de spookridder. Zo raak ik hem niet aan."
+    NEEM holle_kroon
+    ZET kroon_in_helm
+    PATCH kroon_weg
+    ZET kroon_gepakt
+    PUNTEN 10
+
+VOORWERP steentje "steentje" VAK 92,62 10,10 LOOP 96,114 RUG
+  BEKIJK:
+    ALS vlag spiegels_dof
+      ZEG eldric "Oma's steentje! Het gloeit nog."
+    ANDERS
+      ZEG eldric "Te fel. Ik zie alleen wit."
+    EINDE
+  PAK:
+    ALS NIET vlag spiegels_dof
+      ZEG eldric "Ik zie niets. Ik tast in het wit."
+      STOP
+    EINDE
+    ZEG eldric "Mijn steentje. Warm, zoals altijd."
+    NEEM steentje
+    GEEF zonnesteen
+    PATCH oma_steen_weg
+    ZET steen_gepakt
+    PUNTEN 10
+
+VOORWERP koepel "koepel" VAK 40,0 80,36 LOOP 80,114 RUG
+  BEKIJK:
+    ZEG eldric "Een open koepel. De zwarte zon, recht boven de kroon."

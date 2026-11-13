@@ -55,7 +55,8 @@ TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), 
          "f1": (0, 0x10), "f5": (0, 0x40), "f7": (0, 0x08)}
 MUISKNOP = {"links": 0x10, "rechts": 0x01}
 BAND_WACHT, BAND_LOOPT, BAND_KLAAR, BAND_FOUT = 0, 1, 2, 0xFF
-BAND_GROOTTE = 4096
+BAND_GROOTTE = 1536          # de ring in src/autotest.asm; een band mag langer zijn: hij wordt bijgevuld
+BAND_SPIEGEL = 16
 
 
 class Fout(Exception):
@@ -97,6 +98,8 @@ def lees_band(pad):
             continue
         woorden = regel.split(None, 1)
         cmd, arg = woorden[0].lower(), (woorden[1].strip() if len(woorden) > 1 else "")
+        if cmd == "echte_drive" and not arg:              # (voor draai(): deze band met de 1541-emulatie)
+            continue
         try:
             if cmd == "wacht":
                 n = int(arg)
@@ -188,8 +191,6 @@ def lees_band(pad):
         except (ValueError, KeyError):
             raise Fout("%s:%d: onbekende of foute stap: %s" % (pad, nr, regel))
     data.append(OP_EINDE)
-    if len(data) > BAND_GROOTTE:
-        raise Fout("%s: band is %d bytes, de buffer %d" % (pad, len(data), BAND_GROOTTE))
     return data, namen, starts
 
 
@@ -656,14 +657,20 @@ def draai(bandpad, args):
     diskettes = {1: d64, 2: os.path.join(TESTUIT, naam + "_2.d64")}   # diskette 2 (build.sh: schijf=2 in kamers.txt)
     if os.path.exists(os.path.join(BUILD, "hollowcrown_2.d64")):
         shutil.copyfile(os.path.join(BUILD, "hollowcrown_2.d64"), diskettes[2])
+    # een band met de regel "echte_drive" draait altijd met de 1541-emulatie (voor de snellader: turbo.asm)
+    echte_drive = args.echte_drive or any(r.split("#", 1)[0].strip() == "echte_drive" for r in open(bandpad))
     vice = Vice(d64, warp=not args.geen_warp,
-                echte_drive=args.echte_drive, zichtbaar_houden=args.houd_open)
+                echte_drive=echte_drive, zichtbaar_houden=args.houd_open)
     try:
         # 1. wachten tot het spel draait: magic "HC" staat er en de band wacht op ons
         eind = time.time() + args.starttijd
         while True:
             if vice.lees(sym["st_magic"], 2) == [0x48, 0x43] and vice.lees(sym["band_status"])[0] == BAND_WACHT:
-                break
+                # (met de echte drive laadt het programma langzaam: "HC" staat al in de prg, dus ook halverwege het
+                #  laden. Pas als de processor in het spel zelf staat, niet in de Kernal, is het echt gestart.)
+                pc = int(re.search(r";([0-9a-f]{4})", vice.cmd("r")).group(1), 16)
+                if pc < 0xa000:
+                    break
             vice.verder()
             if time.time() > eind:
                 raise Fout("het spel startte niet binnen %d s" % args.starttijd)
@@ -673,10 +680,31 @@ def draai(bandpad, args):
             raise Fout("de eerste kamer laadde niet van de diskette (laad_fout = %d, Kernal-status $%02x)"
                        % (vice.lees(sym["laad_fout"])[0], vice.lees(0x90)[0]))
 
-        # 2. band laden en starten
-        vice.schrijf(sym["band"], band)
-        if bytes(vice.lees(sym["band"], len(band))) != band:
+        # 2. band laden en starten. De band in het spel is een ring van BAND_GROOTTE bytes: eerst het begin, daarna
+        #    vult de lus hieronder achter de leeskop (zp_band, $06) bij. De eerste BAND_SPIEGEL bytes van de ring staan
+        #    ook achter het einde, zodat een opdracht die over de rand loopt in één keer te lezen is.
+        def ring_schrijven(van, tot):
+            for p in range(van, tot, 256):
+                stuk = band[p:min(tot, p + 256)]
+                plek = p % BAND_GROOTTE
+                if plek + len(stuk) > BAND_GROOTTE:            # over de rand: in twee delen
+                    n = BAND_GROOTTE - plek
+                    ring_schrijven_stuk(plek, stuk[:n])
+                    ring_schrijven_stuk(0, stuk[n:])
+                else:
+                    ring_schrijven_stuk(plek, stuk)
+
+        def ring_schrijven_stuk(plek, stuk):
+            vice.schrijf(sym["band"] + plek, stuk)
+            if plek < BAND_SPIEGEL:                          # de spiegel achter het einde
+                vice.schrijf(sym["band"] + BAND_GROOTTE + plek, stuk[:BAND_SPIEGEL - plek])
+
+        voorruimte = BAND_GROOTTE - 256                      # zoveel mag er vóór de leeskop klaarstaan
+        geschreven = min(len(band), voorruimte)
+        ring_schrijven(0, geschreven)
+        if bytes(vice.lees(sym["band"], min(geschreven, 256))) != band[:min(geschreven, 256)]:
             raise Fout("de band staat niet goed in het geheugen")
+        rondes, vorige_plek = 0, 0
         vice.schrijf(sym["band_status"], [BAND_LOOPT])
         vice.verder()
 
@@ -687,6 +715,17 @@ def draai(bandpad, args):
         while True:
             time.sleep(0.05)
             status, markering = vice.lees(sym["band_status"])[0], vice.lees(sym["band_markering"])[0]
+            if geschreven < len(band):                       # de ring bijvullen achter de leeskop
+                lo, hi = vice.lees(0x06, 2)
+                plek = (lo | hi << 8) - sym["band"]
+                if plek < vorige_plek:
+                    rondes += 1
+                vorige_plek = plek
+                gelezen = rondes * BAND_GROOTTE + plek
+                tot = min(len(band), gelezen + voorruimte)
+                if tot > geschreven:
+                    ring_schrijven(geschreven, tot)
+                    geschreven = tot
             nodig = vice.lees(sym["schijf_nodig"])[0] if "schijf_nodig" in sym else 0
             if nodig:                                 # het spel vraagt om een andere diskette: erin stoppen
                 if nodig not in diskettes or not os.path.exists(diskettes[nodig]):
@@ -722,7 +761,14 @@ def draai(bandpad, args):
                 raise Fout("het spel kent bandopcode $%02x niet (nog niet gebouwd?)" % vice.lees(sym["band_fout"])[0])
             vice.verder()
             if time.time() > eind:
-                raise Fout("band niet klaar binnen %d s" % args.max_tijd)
+                regs = vice.cmd("r").strip().splitlines()[-1]
+                pc = int(re.search(r";([0-9a-f]{4})", regs).group(1), 16)
+                labels = sorted((a, n) for n, a in sym.items() if a <= pc)
+                waar = "%s+%d" % (labels[-1][1], pc - labels[-1][0]) if labels else "?"
+                extra = ", ".join("%s=%d" % (n, vice.lees(sym[n])[0]) for n in
+                                  ("turbo_uit", "turbo_teller", "laad_teller", "laad_fout", "schijf_nodig") if n in sym)
+                raise Fout("band niet klaar binnen %d s (de C64 staat op $%04x: %s; %s)"
+                           % (args.max_tijd, pc, waar, extra))
 
         # 4. de status vergelijken (de C64 staat stil in de monitor)
         goed = schermfouten == 0
@@ -760,7 +806,7 @@ def main():
     p.add_argument("--echte-drive", action="store_true", help="echte 1541-emulatie (traag laden)")
     p.add_argument("--houd-open", action="store_true", help="VICE niet afsluiten na de test")
     p.add_argument("--starttijd", type=int, default=90, help="seconden om te laden en te starten")
-    p.add_argument("--max-tijd", type=int, default=120, help="seconden voor de hele band")
+    p.add_argument("--max-tijd", type=int, default=600, help="seconden voor de hele band")
     args = p.parse_args()
     if not args.geen_build:
         if subprocess.call([os.path.join(ROOT, "build.sh"), "--autotest"]) != 0:

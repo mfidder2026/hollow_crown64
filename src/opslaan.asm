@@ -34,6 +34,7 @@ opslaan: {
         lda #15
         jsr CLOSE
         // SAVE "HCSAVE",8: van spelstatus tot spelstatus_eind
+        jsr turbo_vergeet               // (turbo.asm: de drive gebruikt nu zijn buffers; verandert A/X/Y)
         lda #naam_opslag_lengte
         ldx #<naam_opslag
         ldy #>naam_opslag
@@ -71,6 +72,7 @@ laden_spel: {
         ldx #>tekst_spel_laden
         ldy #tekst_spel_laden_lengte
         jsr schijf_begin
+        jsr turbo_vergeet               // (turbo.asm: de drive gebruikt nu zijn buffers; verandert A/X/Y)
         lda #naam_opslag_lengte
         ldx #<naam_opslag
         ldy #>naam_opslag

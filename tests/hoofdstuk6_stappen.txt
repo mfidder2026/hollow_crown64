@@ -1,0 +1,341 @@
+# hoofdstuk6_stappen.txt — de stappen van hoofdstuk 6, vanaf het wakker worden in de kerker (voeg_in vanuit
+# hoofdstuk6.band en hele_spel.band).
+wacht_op_script
+wacht 3
+verwacht_kamer kerker
+verwacht st_hoofdstuk = 5
+verwacht_eigenaar zonnesteen nergens
+verwacht_eigenaar lantaarn nergens
+screenshot kerker
+cursor 156,180
+vuur
+wacht 3
+cursor 156,180
+vuur
+wacht 3
+verwacht_tekst 22 "kruik              ↑  fluisterkever"
+verwacht_tekst 23 "sterrenkaart       ↓  sleutelschub"
+
+# de fluisterkever neuriet de tralies los
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever"
+vuur
+wacht 2
+cursor 264,79
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever met tralies"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag tralies_los 1
+cursor 264,79
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer poort
+screenshot poort
+
+# langs de ridders lopen (dood), dan de kever, dan de sleutelschub
+cursor 160,46
+wacht 2
+verwacht_tekst 18 "Ga naar poort"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+vuur
+wacht 2
+cursor 80,106
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever met spookridders"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag ridders_weg 1
+cursor 180,156
+vuur
+cursor 200,188
+wacht 2
+verwacht_tekst 18 "Gebruik sleutelschub"
+vuur
+wacht 2
+cursor 160,46
+wacht 2
+verwacht_tekst 18 "Gebruik sleutelschub met poort"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag poort_open 1
+screenshot poort_open
+cursor 160,46
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer troonzaal
+screenshot troonzaal
+
+# Grom dreigen (dood), dan praten
+cursor 100,164
+vuur
+cursor 160,76
+wacht 2
+verwacht_tekst 18 "Praat met Grom"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 19 "Ja. Het licht moet terug."
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+cursor 100,164
+vuur
+cursor 160,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 20 "Ik wil dat iedereen kan leven."
+cursor 20,164
+vuur
+wacht_op_script
+wacht 3
+verwacht_vlag grom_luistert 1
+verwacht_tekst 19 "Waar is mijn steentje?"
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht_vlag maankamer_open 1
+verwacht_tekst 20 "Tot straks."
+cursor 20,164
+vuur
+wacht_op_script
+wacht 3
+
+# de aardmannetjes zeggen het zelf
+cursor 180,156
+vuur
+cursor 200,180
+wacht 2
+vuur
+wacht 2
+cursor 52,78
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever met aardmannetjes"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag aard_gesproken 1
+cursor 6,102
+wacht 2
+verwacht_tekst 18 "Ga naar gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+wacht_op_script
+verwacht_kamer maankamer
+screenshot verblind
+
+# de natte kruik beslaat de spiegels
+cursor 180,156
+vuur
+cursor 20,180
+wacht 2
+verwacht_tekst 18 "Gebruik kruik"
+vuur
+wacht 2
+cursor 64,86
+wacht 2
+verwacht_tekst 18 "Gebruik kruik met spiegels"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+wacht_op_script
+verwacht_vlag spiegels_dof 1
+screenshot maankamer
+
+# de kroon met blote handen (dood); oma's steentje; de kroon in de helm
+cursor 100,156
+vuur
+cursor 160,80
+wacht 2
+verwacht_tekst 18 "Pak Holle Kroon"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+cursor 100,156
+vuur
+cursor 194,83
+wacht 2
+verwacht_tekst 18 "Pak steentje"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar zonnesteen eldric
+verwacht_tekst 22 "kruik              ↑  zonnesteen"
+cursor 156,188
+vuur
+wacht 3
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "wollen want        ↑  gloeischub"
+verwacht_tekst 23 "helm               ↓"
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik helm"
+vuur
+wacht 2
+cursor 160,80
+wacht 2
+verwacht_tekst 18 "Gebruik helm met Holle Kroon"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag kroon_in_helm 1
+screenshot kroon_weg
+cursor 12,114
+wacht 2
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+wacht_op_script
+verwacht_kamer troonzaal
+
+# de kroon terug (in de helm), het jong met de gloeischub: dan de laatste keuze
+cursor 180,164
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Geef helm"
+vuur
+wacht 2
+cursor 160,76
+wacht 2
+verwacht_tekst 18 "Geef helm aan Grom"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag kroon_terug 1
+cursor 180,164
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Geef gloeischub"
+vuur
+wacht 2
+cursor 160,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag schub_terug 1
+verwacht_vlag slot_klaar 1
+
+# de kroon opeisen (dood): terug naar het begin van de zaal, dus de kroon en de schub opnieuw
+cursor 100,164
+vuur
+cursor 160,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 21 "Geef de kroon, of ik breek hem!"
+cursor 20,172
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht gs_actief = 0
+verwacht_vlag slot_klaar 0
+cursor 180,164
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Geef helm"
+vuur
+wacht 2
+cursor 160,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+cursor 180,164
+vuur
+cursor 200,180
+wacht 2
+verwacht_tekst 18 "Geef gloeischub"
+vuur
+wacht 2
+cursor 160,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag slot_klaar 1
+
+# "Laat één maan gaan." De slotscène op het dak.
+cursor 100,164
+vuur
+cursor 160,76
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_tekst 20 "Laat één maan gaan."
+cursor 20,164
+vuur
+wacht 900
+verwacht_kamer dak
+screenshot dak_maan
+wacht 900
+screenshot dak_ochtend
+wacht_op_script
+wacht 3
+verwacht_vlag spel_klaar 1
+verwacht voltooid = 1
+verwacht_tekst 24 "          Hoofdstuk 6 voltooid"
+screenshot einde

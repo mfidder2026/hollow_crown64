@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from teken_toneel import (Doek, rgb, te_veel_kleuren, golf, dither, ZWART, WIT, ROOD, CYAAN, PAARS, GROEN,   # noqa: E402
                           BLAUW, GEEL, ORANJE, BRUIN, ROZE, DGRIJS, GRIJS, LGROEN, LBLAUW, LGRIJS, B, H)
 from teken_bospad import kleuren_per_vakje   # noqa: E402
+import rijk   # noqa: E402
 
 WORTEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -201,7 +202,7 @@ def steiger(met=None):
     return dk.im
 
 
-STRAAL = (0, 16, 72, 40)        # patch boot_straal: de vuurtoren brandt en er schiet een straal door de mist
+STRAAL = (24, 16, 48, 16)       # patch boot_straal: de vuurtoren brandt en er schiet een straal door de mist
 
 
 def boot(brandt=False):
@@ -238,10 +239,16 @@ def boot(brandt=False):
     dk.rect(56, 84, 104, 88, BRUIN)
     dk.lijn([(56, 84), (104, 84)], ORANJE)
     dk.lijn([(56, 88), (104, 88)], ZWART)
-    olm(dk, 80, 84, 1.7, roeit=False)
+    olm_rijk(dk, 80, 84, 1.7, random.Random(52), licht_van=1)
     for r in (-1, 1):
         dk.lijn([(80 + r * 8, 74), (80 + r * 56, 92)], BRUIN, 2)
         dk.ovaal(80 + r * 9 - 2, 72, 80 + r * 9 + 2, 76, ROZE, ZWART)
+    lantaarn_paal(dk, 104, 86, 20)                               # een stallantaarn aan de achtersteven
+    for x in range(56, 104, 7):                                  # een kist en een opgerold touw op de bodem
+        dk.px(x, 96, LGRIJS)
+    dk.ovaal(112, 110, 128, 118, BRUIN, ZWART)
+    dk.ovaal(116, 112, 124, 116, DGRIJS, DGRIJS)
+    rijk.verrijk(dk, 51, lichten=[(108, 70, 56, 40, 0.8, None)], sluit=(PAARS,), textuur_=False)   # (past anders niet)
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
@@ -322,14 +329,18 @@ def eiland(stand="dicht"):
             dk.lijn([(132, 108), (137, 108)], GEEL)              # de sleutel, gevallen aan de voet van de rots
             dk.ovaal(129, 106, 132, 110, None, GEEL)
             dk.px(136, 109, GEEL)
-    # de boot van Olm, aan de kant rechtsonder
+    # de boot van Olm, aan de kant rechtsonder, met een lantaarn
     roeiboot(dk, 112, 112, 46, 10)
+    lantaarn_paal(dk, 150, 112, 16)
+    for x in range(0, 44, 4):                                    # aangespoeld wier langs de waterlijn
+        dk.px(x + 2, 99 - (x % 8 == 0), GROEN)
+    rijk.verrijk(dk, 61, lichten=[(154, 98, 40, 26, 0.85, None)], sluit=(PAARS,), textuur_=0.0)
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
 
 
-NUL = (104, 40, 40, 72)          # patch nul_om: Kapitein Nul heeft zich omgedraaid
+NUL = (108, 40, 32, 72)          # patch nul_om: Kapitein Nul heeft zich omgedraaid
 LAMP = (56, 24, 40, 48)          # patch lamp_aan: de zonnesteen in de lenshouder, de lamp brandt
 
 
@@ -400,12 +411,168 @@ def vuurtoren(nul_om=False, aan=False):
     else:
         dk.ovaal(nx - 6, 48, nx + 6, 57, BLAUW, ZWART)           # de rug: alleen kraag en pet
         dk.lijn([(nx, 62), (nx, 110)], ZWART)                    # de naad in de rug
+    for x in range(8, B, 20):                                    # klinknagels op de vloerplaten
+        for y in (99, 106, 113, 120):
+            dk.px(x + (y % 14), y, LGRIJS)
+    lichten = [(130, 30, 60, 50, 0.35, {GRIJS: LGRIJS, DGRIJS: GRIJS})]   # koud licht van de ramen
+    if aan:                                                      # de lamp: warm, binnen het vak van de patch
+        lichten.append((76, 48, 19, 23, 0.9, None))
+    rijk.verrijk(dk, 71, lichten=lichten, sluit=(PAARS,), textuur_=0.0)
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
 
 
-PLAATJES = {"veerman": veerman, "steiger": steiger, "boot": boot, "boot_straal": lambda: boot(True),
+
+# ---- rijk: de kamers opnieuw, met textuur, licht en schaduw (tools/rijk.py) ----------------------------------------
+def olm_rijk(dk, x, y, g, rnd, licht_van=1):
+    """Olm: een oude veerman in een versleten kap met plooien, een lange baard die het lantaarnlicht vangt, een
+    knobbelneus en kleine pientere oogjes. x, y = midden van zijn heupen; licht_van = 1 (licht van rechts) of -1"""
+    # de mantel: wijd, met plooien en een gerafelde zoom
+    mantel = [(x - 10 * g, y), (x - 9 * g, y - 12 * g), (x - 6 * g, y - 20 * g), (x - 3 * g, y - 24 * g),
+              (x + 3 * g, y - 24 * g), (x + 6 * g, y - 20 * g), (x + 9 * g, y - 12 * g), (x + 10 * g, y)]
+    dk.poly(mantel, DGRIJS, ZWART)
+    for i in range(-3, 4):                                       # plooien: donkere en lichte streken
+        px = x + i * 2.6 * g
+        dk.lijn([(px, y - 15 * g + abs(i) * g), (px + i * 0.6 * g, y - 1)], ZWART if i % 2 else GRIJS)
+    for zx in range(int(x - 10 * g), int(x + 10 * g), 3):        # de gerafelde zoom
+        dk.px(zx, y + 1, DGRIJS)
+    rijk.licht(dk, x + licht_van * 9 * g, y - 12 * g, 7 * g, 14 * g, {DGRIJS: GRIJS, GRIJS: LGRIJS}, rnd, 0.9)
+    # de kap, met de punt naar achteren
+    kap = [(x - 7 * g, y - 19 * g), (x - 5 * g, y - 27 * g), (x - 1 * g, y - 31 * g), (x + 6 * g, y - 29 * g),
+           (x + 7 * g, y - 22 * g), (x + 6 * g, y - 18 * g)]
+    dk.poly(kap, DGRIJS, ZWART)
+    dk.lijn([(x - 5 * g, y - 26 * g), (x - 1 * g, y - 30 * g), (x + 5 * g, y - 28 * g)], GRIJS)
+    # het gezicht in de schaduw van de kap
+    dk.ovaal(x - 4 * g, y - 25 * g, x + 4 * g, y - 18 * g, ROZE, ZWART)
+    for r in (-1, 1):                                            # oogjes onder borstelige witte wenkbrauwen
+        dk.lijn([(x + r * 1 * g, y - 23.5 * g), (x + r * 3.5 * g, y - 24 * g)], WIT)
+        dk.px(x + r * 2 * g, y - 22 * g, ZWART)
+    dk.ovaal(x - 1 * g, y - 22 * g, x + 1.5 * g, y - 19 * g, ROOD, ZWART)        # een knobbelneus, rood van de kou
+    # de baard: lang, met strengen
+    baard = [(x - 4 * g, y - 19 * g), (x + 4 * g, y - 19 * g), (x + 3 * g, y - 10 * g), (x + 1 * g, y - 5 * g),
+             (x, y - 3 * g), (x - 1 * g, y - 5 * g), (x - 3 * g, y - 10 * g)]
+    dk.poly(baard, LGRIJS, GRIJS)
+    for i in range(-2, 3):
+        dk.lijn([(x + i * 1.2 * g, y - 18 * g), (x + i * 0.6 * g, y - 7 * g)], GRIJS if i % 2 else WIT)
+
+
+def steiger_rijk():
+    """het eind van de steiger van dichtbij, bij nacht: de lantaarn op de boot werpt warm licht op Olm, de boot en de
+    planken; de zee en de verte zijn koud. Dezelfde indeling als steiger() (de loopvakken en vakken in
+    scripts/steiger.hcs passen)."""
+    rnd = random.Random(41)
+    dk = Doek()
+    rijk.lucht_met_wolken(dk, rnd, 52, kleuren=(ZWART, PAARS, PAARS, BLAUW), wolk=(DGRIJS, GRIJS), sterren=14, wolken=5)
+    verduisterde_zon(dk, 104, 14)
+    for a in range(0, 360, 30):                                  # de stralenkrans van de zwarte zon, vaag
+        r = math.radians(a)
+        for d in (11, 13):
+            if rnd.random() < 0.6:
+                dk.px(104 + d * 1.5 * math.cos(r), 14 + d * 0.9 * math.sin(r), GEEL if d == 11 else ORANJE)
+    rijk.golven(dk, 0, 50, B - 1, 125, rnd)
+    rijk.verloop(dk, 0, 50, B - 1, 56, [GRIJS, BLAUW], rnd)       # mist op de kim
+    vuurtoren_ver(dk, 44, 50)
+    rijk.weerschijn(dk, 150, 98, 124, [GEEL, ORANJE, GEEL], rnd, 0.6)  # het lantaarnlicht op het water
+    mist(dk, rnd, 42, 62, 0.25)
+    # de boot: planken met nerven, de naam, een zeilrol en een emmer
+    roeiboot(dk, 70, 80, 88, 16, naam=True)
+    rijk.textuur(dk, BRUIN, [DGRIJS], rnd, 0.08, "nerf", (70, 80, 158, 96))
+    for x in range(78, 150, 9):                                  # klinknagels langs de rand
+        dk.px(x, 82, LGRIJS)
+    dk.ovaal(96, 74, 112, 81, LGRIJS, ZWART)                     # een opgerold zeil
+    dk.lijn([(98, 77), (110, 77)], GRIJS)
+    dk.rect(142, 74, 147, 80, DGRIJS)                            # een emmer
+    dk.lijn([(142, 74), (147, 74)], LGRIJS)
+    olm_rijk(dk, 128, 82, 1.35, rnd)
+    for r in (-1, 1):                                            # handen op zijn knieën
+        dk.ovaal(128 + r * 8 - 2, 78, 128 + r * 8 + 2, 82, ROZE, ZWART)
+    dk.lijn([(116, 74), (152, 64)], BRUIN, 2)                    # de riemen rusten op de rand
+    dk.lijn([(116, 73), (152, 63)], ORANJE)
+    lantaarn_paal(dk, 146, 80, 26)                               # (FLAKKER 148,48 8,16 in scripts/steiger.hcs)
+    rijk.gloed(dk, 151, 57, 9, [GEEL, ORANJE, ORANJE], rnd)
+    lantaarn_paal(dk, 146, 80, 26)
+    rijk.licht(dk, 150, 60, 50, 36, {DGRIJS: GRIJS, BRUIN: ORANJE, GRIJS: LGRIJS, BLAUW: PAARS}, rnd, 0.8,
+               (96, 26, 159, 98))
+    # de steiger: dikke planken met nerven, naden en spijkers; aan de rand zeewier en mos
+    rijk.planken_vloer(dk, [(0, 96), (110, 96), (118, 124), (0, 124)], rnd)
+    rijk.licht(dk, 120, 98, 60, 18, {BRUIN: ORANJE}, rnd, 0.7, (60, 96, 118, 124))
+    for x in range(0, 112, 3):                                   # de voorrand: mos en druppels
+        if rnd.random() < 0.6:
+            dk.px(x, 125, GROEN)
+    for x, y in ((8, 124), (60, 124), (112, 124)):               # palen met zeepokken
+        dk.rect(x, y - 30, x + 3, y, DGRIJS)
+        dk.lijn([(x, y - 30), (x, y)], ZWART)
+        dk.lijn([(x + 2, y - 30), (x + 2, y)], GRIJS)
+        for _ in range(4):
+            dk.px(x + rnd.randint(0, 3), y - rnd.randint(2, 20), LGRIJS)
+    # rekwisieten: een kist, een opgerold touw, een visnet over de rand
+    dk.rect(14, 98, 32, 112, ORANJE)                             # een kist: licht hout, donkere banden
+    dk.lijn([(14, 98), (32, 98)], GEEL)
+    for yy in (102, 108):
+        dk.lijn([(14, yy), (32, yy)], BRUIN)
+    dk.lijn([(23, 98), (23, 112)], BRUIN)
+    dk.lijn([(14, 98), (14, 112), (32, 112), (32, 98), (14, 98)], ZWART)
+    rijk.schaduw(dk, [(32, 100), (38, 103), (38, 113), (32, 112)], {BRUIN: DGRIJS, ORANJE: BRUIN}, rnd)
+    dk.ovaal(36, 106, 48, 112, BRUIN, ZWART)                     # touw, opgerold
+    dk.ovaal(39, 108, 45, 110, DGRIJS, DGRIJS)
+    rijk.touw(dk, [(44, 107), (54, 100)])
+    for i in range(6):                                           # het net
+        dk.lijn([(56 + i * 3, 97), (54 + i * 3, 104)], GRIJS)
+    dk.lijn([(54, 100), (72, 100)], GRIJS)
+    # de paal met de bel
+    dk.rect(92, 52, 95, 96, BRUIN)
+    dk.lijn([(91, 52), (91, 96)], ZWART)
+    dk.lijn([(96, 52), (96, 96)], ZWART)
+    dk.lijn([(94, 53), (94, 95)], ORANJE)
+    rijk.textuur(dk, BRUIN, [DGRIJS], rnd, 0.2, "staand", (92, 52, 95, 96))
+    dk.lijn([(92, 54), (102, 54)], BRUIN, 2)
+    dk.poly([(97, 64), (98, 58), (102, 58), (103, 64)], GEEL, ZWART)
+    dk.lijn([(98, 59), (98, 63)], WIT)                           # glans op het koper
+    dk.lijn([(102, 59), (102, 63)], ORANJE)
+    rijk.touw(dk, [(100, 64), (98, 80)], LGRIJS, GRIJS)
+    rijk.touw(dk, [(70, 84), (90, 92)])                          # het touw van de boot aan de paal
+    rand(dk)
+    kleuren_per_vakje(dk.im)
+    return dk.im
+
+
+def veerman_rijk():
+    """tussenscène: Olm roeit zijn boot door de mist, groot in beeld; de lantaarn aan de boeg is het enige warme licht"""
+    rnd = random.Random(31)
+    dk = Doek()
+    rijk.lucht_met_wolken(dk, rnd, 58, kleuren=(ZWART, PAARS, PAARS, BLAUW), sterren=16, wolken=6)
+    verduisterde_zon(dk, 124, 18)
+    rijk.golven(dk, 0, 58, B - 1, 125, rnd)
+    rijk.verloop(dk, 0, 56, B - 1, 64, [GRIJS, BLAUW], rnd)
+    vuurtoren_ver(dk, 140, 58)
+    mist(dk, rnd, 44, 72, 0.4)
+    rijk.weerschijn(dk, 22, 96, 124, [GEEL, ORANJE, GEEL], rnd, 0.9)
+    # de boot, groot, de boeg links omhoog met de lantaarn
+    roeiboot(dk, 24, 92, 96, 18, naam=True)
+    dk.poly([(24, 92), (14, 84), (20, 92)], BRUIN, ZWART)
+    rijk.textuur(dk, BRUIN, [DGRIJS], rnd, 0.1, "nerf", (14, 84, 120, 110))
+    for x in range(30, 116, 8):
+        dk.px(x, 94, LGRIJS)
+    lantaarn_paal(dk, 18, 86, 22)
+    rijk.gloed(dk, 23, 67, 11, [GEEL, ORANJE, ORANJE, ROOD], rnd)
+    lantaarn_paal(dk, 18, 86, 22)
+    olm_rijk(dk, 84, 92, 1.8, rnd, licht_van=-1)
+    for r in (-1, 1):                                            # handen aan de riemen
+        dk.ovaal(84 + r * 12 - 3, 76, 84 + r * 12 + 3, 82, ROZE, ZWART)
+    dk.lijn([(70, 78), (40, 112)], BRUIN, 2)                     # de riemen, schuin het water in
+    dk.lijn([(98, 78), (128, 116)], BRUIN, 2)
+    dk.ovaal(122, 112, 136, 120, LBLAUW, None)                   # rimpels waar de riem het water raakt
+    dk.ovaal(32, 108, 46, 116, LBLAUW, None)
+    rijk.licht(dk, 22, 70, 70, 44, {DGRIJS: GRIJS, BRUIN: ORANJE, GRIJS: LGRIJS, BLAUW: PAARS}, rnd, 0.75,
+               (0, 30, 100, 112))
+    mist(dk, rnd, 104, 126, 0.3)
+    rand(dk)
+    kleuren_per_vakje(dk.im)
+    return dk.im
+
+
+PLAATJES = {"veerman": veerman_rijk, "steiger": steiger_rijk, "boot": boot, "boot_straal": lambda: boot(True),
             "eiland": eiland, "eiland_deur_open": lambda: eiland("open"), "eiland_honing": lambda: eiland("honing"),
             "eiland_honing_leeg": lambda: eiland("honing_leeg"),
             "vuurtoren": vuurtoren, "vuurtoren_nul_om": lambda: vuurtoren(nul_om=True),

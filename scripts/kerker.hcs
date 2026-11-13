@@ -1,0 +1,64 @@
+# kerker.hcs — hoofdstuk 6: een cel in het Vergeten Kasteel (data/plaatjes/kerker.png, met de hand getekend:
+# tools/teken_kasteel.py). Eldric wordt wakker: zijn steentje en zijn lantaarn zijn weg, Mira ook. De fluisterkever
+# neuriet, en de tralies van oud aard-ijzer rammelen uit hun sponning (patch tralies_open).
+KAMER kerker
+  LOOPKLEUREN bruin geel oranje
+  LOOPVAK 4,92 106,122
+  BINNENKOMST:
+    MUZIEK kelder
+    ALS vlag tralies_los
+      PATCH tralies_open
+    EINDE
+    ALS NIET vlag kerker_wakker
+      ZET kerker_wakker
+      NEEM zonnesteen
+      NEEM lantaarn
+      VERBERG mira_mee
+      TUSSENSCENE
+      ZEG eldric "Waar... waar ben ik? Mijn steentje is weg. Mijn lantaarn ook."
+      ZEG eldric "En Mira! Waar is Mira?"
+      TOON tik
+      ZEG tik "Dit is het laatste stuk, jongen. Ik ben er nog, als het misgaat."
+      VERBERG tik
+      EINDE_TUSSENSCENE
+    EINDE
+
+VOORWERP tralies "tralies" VAK 112,26 40,74 LOOP 104,104 RECHTS
+  BEKIJK:
+    ALS vlag tralies_los
+      ZEG eldric "De tralies liggen op de vloer. De gang is vrij."
+    ANDERS
+      ZEG eldric "Oud ijzer uit de aarde. Het trilt als ik neurie."
+    EINDE
+  OPEN:
+    ZEG eldric "Op slot. Maar ze trillen een beetje in hun gaten."
+  TREK:
+    ZEG eldric "Ze zitten vast. Maar als ik neurie, rammelen ze."
+  GEBRUIK fluisterkever:
+    ALS vlag tralies_los
+      ZEG eldric "Ze liggen er al."
+    ANDERS
+      TUSSENSCENE
+      ZEG eldric "Neurie maar, kevertje. Zo hard als je kunt."
+      ZEG kever "Zzzmmmmmmmm..."
+      GELUID deur
+      PATCH tralies_open
+      ZET tralies_los
+      ZEG eldric "Ze rammelen los! Aard-ijzer luistert naar een aard-kever."
+      PUNTEN 15
+      EINDE_TUSSENSCENE
+    EINDE
+  GA_NAAR:
+    ALS vlag tralies_los
+      KAMER poort 12,114 RECHTS
+    ANDERS
+      ZEG eldric "De tralies zitten dicht."
+    EINDE
+
+VOORWERP raampje_k "raampje" VAK 24,12 20,18 LOOP 34,100 RUG
+  BEKIJK:
+    ZEG eldric "Een raampje, hoog in de muur. De zwarte zon. Ik ben in Groms kasteel."
+
+VOORWERP ketting "ketting" VAK 6,38 12,28 LOOP 14,100 LINKS
+  BEKIJK:
+    ZEG eldric "Een roestige ketting. Gelukkig niet om mijn voet."

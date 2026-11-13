@@ -27,7 +27,8 @@ KAMER grot
       VERBERG hol_grot
       WACHT 40
       EINDE_TUSSENSCENE
-      KAMER baken 80,110 VOOR            # TIJDELIJK: hoofdstuk 6 (de kerker) komt hierna
+      HOOFDSTUK 6
+      KAMER kerker 60,112 VOOR
     EINDE
     ALS vlag hoofdstuk3_klaar              # het tweede bezoek, na hoofdstuk 3: de vuurtoren brandt
       TUSSENSCENE

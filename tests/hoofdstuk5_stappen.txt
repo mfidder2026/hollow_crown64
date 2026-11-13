@@ -11,6 +11,11 @@ wacht 2
 verwacht_tekst 18 "Ga naar gang"
 vuur
 wacht_tot_stil
+wacht 300
+verwacht_kamer oma                     # de tussenscène: Oma Rijm ziet een lichtje
+screenshot oma
+wacht_op_script
+wacht 3
 wacht_op_script
 wacht 3
 verwacht_kamer bergpad

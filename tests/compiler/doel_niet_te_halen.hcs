@@ -1,7 +1,7 @@
 # verwacht: is niet te halen
-DOEL kroon_terug
-VOORWERP kroon "kroon" NERGENS
+DOEL proef_onhaalbaar
+VOORWERP proef_kroon "kroon" NERGENS
 SCRIPT x:
-  ALS HEEFT kroon
-    ZET kroon_terug
+  ALS HEEFT proef_kroon
+    ZET proef_onhaalbaar
   EINDE

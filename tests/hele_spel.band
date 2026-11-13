@@ -1,6 +1,6 @@
 # hele_spel.band — het hele spel in één keer: hoofdstuk 1 (de stappen van oplossing.band), en dan hoofdstuk 2 met
 # wat Eldric echt bij zich heeft (kruik, lantaarn, honingpot, zonnesteen), met drie doden en terugdraaien, en dan
-# hoofdstuk 3, 4 en 5 (de stappen van hoofdstuk3.band, hoofdstuk4.band en hoofdstuk5.band).
+# hoofdstuk 3 t/m 6 (de stappen van hoofdstuk3.band ... hoofdstuk6.band): het hele spel, tot de slotscène.
 voeg_in oplossing.band
 
 # ---- hoofdstuk 2 ----
@@ -208,3 +208,6 @@ voeg_in hoofdstuk4_stappen.txt
 # ---- hoofdstuk 5 ----
 wacht 150
 voeg_in hoofdstuk5_stappen.txt
+
+# ---- hoofdstuk 6: van het baken naar de kerker (de derde grotscène was het eind van hoofdstuk 5) ----
+voeg_in hoofdstuk6_stappen.txt

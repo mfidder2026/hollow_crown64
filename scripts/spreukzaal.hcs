@@ -76,7 +76,7 @@ VOORWERP gang_zaal "gang" VAK 0,56 12,28 LOOP 8,114 LINKS
     ALS vlag hoofdstuk4_klaar
       ALS NIET vlag hoofdstuk5_begonnen
         ZET hoofdstuk5_begonnen
-        HOOFDSTUK 5
+        KAMER oma 40,116 VOOR             # eerst de tussenscène (scripts/oma.hcs): die begint hoofdstuk 5
       EINDE
       KAMER bergpad 10,114 RECHTS
     EINDE

@@ -916,3 +916,75 @@ of muisknop) en probeert hij opnieuw. In de testbuild wacht hij tot `tools/vicet
 - De spreukzaal leidt na hoofdstuk 4 omhoog naar de IJstop.
 
 **Getest:** 27/27 banden (`hoofdstuk5.band`; `hele_spel.band` speelt nu hoofdstuk 1 t/m 5, met de diskettewissel).
+
+## 2026-11-14 (nacht) — Hoofdstuk 6: het Vergeten Kasteel, de slotscène; rijkere plaatjes; Oma's tussenscène
+
+**Hoofdstuk 6** (`tools/teken_kasteel.py`; scripts kerker, poort, troonzaal, maankamer, dak). Het spel is nu helemaal
+uit te spelen, tot "Dawnhaven. De eerste ochtend."
+- Kerker: Eldric wordt wakker zonder steentje, lantaarn en Mira. De fluisterkever neuriet de tralies los.
+- Poort: vier spookridders (de kever praat met de kevers in de helmen: ze vallen uiteen); ☠ erlangs zonder; de
+  sleutelschub opent de poort.
+- Troonzaal: Grom op zijn troon (groot in het plaatje, zoals in de grot), Mira naast hem. ☠ "Ja, het licht moet terug".
+  "Ik wil dat iedereen kan leven" → "Woorden. Laat me iets zien." Drie dingen: de kroon terug (in de helm), de
+  aardmannetjes die het zelf zeggen (de kever), het jong met de gloeischub. Dan: "Laat één maan gaan." ☠ "Geef de
+  kroon, of ik breek hem!"
+- Maankamer: verblindend wit (KLEUR: alle kleuren naar wit) tot de natte kruik de spiegels beslaat (de kamer laadt
+  opnieuw, zonder schittering). Oma's steentje terug; ☠ de kroon met blote handen; de kroon in de helm.
+- Het dak (slotscène, een toneel): de manen zijn figuren voor de zon in het plaatje. De eerste maan schuift opzij, de
+  lucht wordt blauw, rood, oranje, lichtblauw; de tweede blijft staan boven het dal van de aardmannetjes. Mira's steen
+  barst: Tik ("Hallo, ik."). Einde.
+
+**Plaatjes**: de gebruiker vond de nieuwe kamers "veel te clinisch". Zelf opnieuw getekend, rijker (geen FLUX):
+- `tools/rijk.py`: verloop, textuur, licht, schaduw, planken, stenen muren, golven, weerschijn, gloed; en `verrijk()`
+  die elk plaatje afwerkt: textuur per materiaal, randlicht (volume) en lichtpoelen. De ruis hangt af van de plek
+  (een hash), niet van een toevalsreeks: zo blijven een plaatje en zijn patches gelijk buiten het vak.
+- Steiger en veerman helemaal opnieuw (Olm met plooien en baard, lantaarnlicht op planken en water); de andere kamers
+  van hoofdstuk 3-6 afgewerkt met eigen lichtbronnen; bergen met schaduwvlakken en dennen; een nieuwe rijmwurm; de
+  spreukzaal met een stenen muur, kaarsen, een sterrenkaart en runen.
+- Textuur pakt slecht in (RLE): per kamer is de dichtheid afgestemd zodat hij past. De kamerbuffer is anders
+  verdeeld: plaatje tot $B5FF (5,5 KB), scripts van de kamer $B600-$BFFF (2,5 KB; de troonzaal is de grootste, 2,3 KB).
+
+**Tussenscène na hoofdstuk 4** (`oma`): Oma Rijm in de deur van haar hut op de IJstop, met een lantaarn; ver beneden
+een klein lichtje: "Dat is het steentje. Dat is mijn jongen." Nu zit er tussen elk hoofdstuk een tussenscène.
+
+**Testen**: de testband is een ring van 2 KB die `tools/vicetest.py` achter de leeskop bijvult (een band mag nu zo lang
+zijn als het hele spel); de standaard tijdslimiet is 10 minuten. 24 figuren in de spelstatus (STATUS_VERSIE 7).
+`tests/hoofdstuk6.band` speelt het laatste hoofdstuk met vijf doden; `hele_spel.band` het hele spel.
+
+## 2026-11-14 (nacht) — Een eigen snellader (turboloader)
+
+`src/turbo.asm`, met eigen code (geen bestaande loader nagebouwd):
+- Het spel stuurt een klein programma naar de 1541 (M-W in stukjes van 32 bytes, één keer: daarna blijft het in de
+  drive staan tot er een gewone Kernal-schijfactie is: opslaan, laden of terugvallen) en start het per bestand met
+  M-W van de naam en M-E. Het drive-programma zoekt de naam in de directory (spoor 18), leest de sectoren met de
+  jobqueue van de DOS en stuurt elke byte in 4 stappen van 2 bits: het eerste bit op DATA, het tweede op CLK.
+- De C64 bepaalt het tempo met ATN: hij wisselt ATN, wacht even, leest DATA en CLK. Een badline of sprite kan de C64
+  alleen vertragen, dus het werkt met het scherm aan. De drive zet ATNA steeds gelijk aan ATN (anders trekt de 1541
+  zelf DATA laag), en wist de ATN-vlag van de VIA voordat hij de interrupts weer aanzet (de DOS mag ons protocol niet
+  als een busopdracht zien).
+- Per sector: de drive meldt "klaar" (DATA laag), stuurt een lengtebyte (0 = niet gevonden of leesfout), de bytes, en
+  of er nog een sector komt; de C64 bevestigt met nog een ATN-wissel.
+- Terugvallen: komt er binnen ~5 s geen "klaar" (geen echte drive, zoals de virtuele drive van VICE in de tests), dan
+  laadt het spel via de Kernal en blijft de turbo uit. Niet gevonden: ook via de Kernal (die vraagt dan om de andere
+  diskette).
+
+Fouten onderweg: het drive-programma was soms al klaar voordat de C64 ging wachten (dan wachtte de C64 eerst op een
+"los" dat nooit kwam); het vooraf uitrekenen van vier bitparen duurde zo lang dat de C64 al twee keer van ATN wisselde
+(twee wissels heffen elkaar op: drive en C64 liepen uit de pas). Nu rekent de drive per stap één paar uit, vóór hij
+wacht. En in de tests: met de echte drive laadt VICE het hoofdprogramma langzaam, terwijl "HC" al in de prg staat;
+vicetest wacht nu tot de processor echt in het spel staat.
+
+**Diskettes**: `tools/d64.py` maakt de D64's zelf (BAM, directory, bestanden) met een tussenruimte naar keuze; c1541
+valideert ze zonder iets te veranderen. Gemeten (een kamer, VICE met echte 1541): de Kernal 16,1 s; de snellader 8,0 s
+bij tussenruimte 2-3 (die is nu standaard). Dat een grotere tussenruimte niet helpt, wijst op een vaste vertraging
+per sector in de jobqueue van de DOS: een eigen sectorlezer in de drive (zonder jobqueue) kan later nog sneller.
+
+**Testen**: `tests/turbo.band` (met de regel `echte_drive`: die band draait altijd met de 1541-emulatie) laadt
+kamers met de snellader en vergelijkt het scherm pixel voor pixel met het geheugen. De andere banden draaien zonder
+echte drive: daar valt de turbo terug op de Kernal, en zo is dat pad ook getest. Bij een time-out meldt vicetest nu
+waar de processor staat (met het dichtstbijzijnde label) en de tellers van de turbo. De testband is een ring van 1,5 KB.
+
+Laatste fout voor de commit: `turbo_vergeet` stond in opslaan.asm tussen het klaarzetten van de registers en de
+Kernal-SAVE, en maakte A nul. Daardoor las SAVE het beginadres uit $00/$01 en schreef 77 blokken onzin (een goed
+opslagbestand is 1 blok); laden daarvan liet het spel hangen. Nu staat de aanroep vóór SETNAM. Daarna: 29 van 29
+banden geslaagd, compiler 23 van 23.

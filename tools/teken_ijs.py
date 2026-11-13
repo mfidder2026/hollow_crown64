@@ -16,6 +16,7 @@ from teken_toneel import (Doek, rgb, te_veel_kleuren, golf, dither, ZWART, WIT, 
                           BLAUW, GEEL, ORANJE, BRUIN, ROZE, DGRIJS, GRIJS, LGROEN, LBLAUW, LGRIJS, B, H)
 from teken_bospad import kleuren_per_vakje   # noqa: E402
 from teken_zee import nachtlucht, verduisterde_zon, rand   # noqa: E402
+import rijk   # noqa: E402
 
 WORTEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,13 +28,42 @@ def sneeuw(dk, rnd, n, y1, y2):
             dk.px(x, y, WIT)
 
 
-def berg(dk, pts, licht=WIT, schaduw=LBLAUW, rots=DGRIJS):
-    """een besneeuwde berg: wit, de schaduwkant lichtblauw, onderaan rots"""
-    dk.poly(pts, licht, ZWART)
-    top = min(pts, key=lambda p: p[1])
-    rechts = [p for p in pts if p[0] >= top[0]]
-    dk.poly([top] + rechts[1:] + [(top[0] + 2, max(p[1] for p in pts))], schaduw, None)
-    dk.lijn(pts, ZWART)
+def berg(dk, pts, licht=WIT, schaduw=LBLAUW, rots=DGRIJS, zaad=1):
+    """een besneeuwde berg: de kam grillig gemaakt, per piek een schaduwvlak naar rechts, rotsribben die door de
+    sneeuw steken, en een zwarte rand"""
+    rnd = random.Random(zaad)
+    kam = []
+    for (xa, ya), (xb, yb) in zip(pts, pts[1:]):                # de kam: tussenpunten met wat toeval
+        n = max(1, int(abs(xb - xa) / 4))
+        for i in range(n):
+            t = i / n
+            kam.append((xa + (xb - xa) * t, ya + (yb - ya) * t + (rnd.uniform(-1.5, 1.5) if 0 < i else 0)))
+    kam.append(pts[-1])
+    dk.poly(kam, licht, licht)
+    bodem = max(p[1] for p in pts)
+    for i in range(1, len(pts) - 1):                            # schaduwvlakken rechts van elke piek
+        (xp, yp), (xn, yn) = pts[i], pts[i + 1]
+        if yp < pts[i - 1][1] and yp < yn:
+            dk.poly([(xp, yp), (xn, yn), (xn - 2, bodem), (xp + 3, bodem)], schaduw, None)
+            for k in range(3):                                   # rotsribben in de schaduw
+                rx = xp + 3 + k * (xn - xp) / 3
+                dk.lijn([(rx, yp + 6 + k * 3), (rx - 2, yp + 14 + k * 4)], rots)
+    for _ in range(int(len(kam) * 1.5)):                         # rots die door de sneeuw steekt
+        x = rnd.uniform(min(p[0] for p in pts) + 3, max(p[0] for p in pts) - 3)
+        y = rnd.uniform(min(p[1] for p in pts) + 8, bodem - 3)
+        if 0 <= x < B and 0 <= y < H and dk.im.getpixel((int(x), int(y))) in (licht, schaduw):
+            dk.lijn([(x, y), (x + rnd.choice((-2, 2)), y + rnd.randint(2, 4))], rots)
+    dk.lijn(kam, ZWART)
+
+
+def den(dk, x, y, h):
+    """een kleine den met sneeuw op de takken"""
+    for i in range(3):
+        b = (3 - i) * h / 6
+        yy = y - i * h / 3
+        dk.poly([(x - b, yy), (x, yy - h / 2.2), (x + b, yy)], DGRIJS, ZWART)   # (donker: 's nachts)
+        dk.lijn([(x - b + 1, yy - 1), (x - 1, yy - h / 2.6)], WIT)
+    dk.rect(x - 0.5, y, x + 0.5, y + 2, BRUIN)
 
 
 # ---- het bergpad --------------------------------------------------------------------------------------------------
@@ -67,8 +97,12 @@ def bergpad(gevallen=False):
         for x, y in ((116, 76), (132, 74), (126, 70)):
             dk.ovaal(x - 2, y - 1, x + 2, y + 1, WIT, ZWART)
     # het pad: van linksonder schuin omhoog naar rechts, onder het sneeuwveld door
-    dk.poly([(0, 126), (0, 100), (40, 96), (80, 92), (110, 84), (159, 76), (159, 90), (120, 98), (84, 108), (40, 116),
-             (20, 126)], LGRIJS, ZWART)
+    boven = golf(0, 159, 0, 1.5, random.Random(5), stap=4, freq=0.5)
+    onder = golf(0, 159, 0, 1.5, random.Random(6), stap=4, freq=0.5)
+    def y_boven(x): return 100 - x * 24 / 159
+    def y_onder(x): return 126 - x * 36 / 159 if x > 20 else 126
+    dk.poly([(x, y_boven(x) + dy) for x, dy in boven] + [(x, y_onder(x) + dy) for x, dy in reversed(onder)],
+            LGRIJS, ZWART)
     for _ in range(40):
         x, y = rnd.randint(0, 158), rnd.randint(78, 124)
         if dk.im.getpixel((x, y)) == LGRIJS:
@@ -76,7 +110,12 @@ def bergpad(gevallen=False):
     dk.poly([(0, 126), (20, 126), (40, 116), (84, 108), (120, 98), (159, 90), (159, 126)], WIT, ZWART)   # sneeuw vooraan
     for x in range(4, 80, 9):                                    # voetstappen in de sneeuw (van Oma?)
         dk.px(x, 106 - x // 10, GRIJS)
+    for x, y, h in ((14, 88, 13), (30, 86, 10), (48, 89, 12), (66, 86, 9), (84, 88, 11)):   # dennen op de vlakte
+        den(dk, x, y, h)
     sneeuw(dk, rnd, 40, 2, 68)
+    dk.rect(152, 64, 155, 67, GEEL)                              # ver weg, boven aan het pad: een raampje met licht
+    rijk.verrijk(dk, 131, lichten=[(154, 66, 16, 12, 0.7, {DGRIJS: BRUIN, GRIJS: ORANJE, LGRIJS: GEEL, WIT: GEEL})],
+                 sluit=(PAARS,))
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
@@ -148,6 +187,8 @@ def hut():
         dk.lijn([(x0, 40), (x0, 81)], ZWART)
         dk.lijn([(x1, 40), (x1, 81)], ZWART)
         dk.lijn([(x0, 40), (x1, 40)], ZWART)
+    rijk.verrijk(dk, 141, lichten=[(122, 70, 70, 50, 0.85, {BRUIN: ORANJE, DGRIJS: BRUIN, GRIJS: LGRIJS, ROOD: ORANJE,
+                                                          PAARS: ROZE})])
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
@@ -171,16 +212,20 @@ def ijsbrug(wurm=True):
             if rnd.random() < max(0.0, 0.5 - (y - 40) / 120):
                 dk.px(x, y, BLAUW)
     if wurm:                                                     # de rijmwurm, opgerold in de diepte
-        for i in range(9):
-            a = i * 0.7
-            x, y = 80 + 26 * math.cos(a) * (1 - i * 0.06), 106 + 9 * math.sin(a)
-            dk.ovaal(x - 7, y - 6, x + 7, y + 6, ROZE, ZWART)
-            dk.lijn([(x - 4, y - 4), (x + 4, y - 4)], WIT)
-            dk.lijn([(x - 6, y + 2), (x + 6, y + 2)], BRUIN)      # ringen
-        dk.ovaal(94, 90, 114, 106, ROZE, ZWART)                  # de kop
-        dk.rect(100, 96, 102, 97, ROOD)                          # oogjes: hij slaapt licht
-        dk.rect(106, 96, 108, 97, ROOD)
-        dk.lijn([(99, 101), (109, 101)], ZWART)
+        for i in range(14, -1, -1):                              # van de staart (achter) naar de kop (voor)
+            a = i * 0.55
+            r = 24 - i * 0.9
+            x, y = 76 + r * math.cos(a), 108 + r * 0.32 * math.sin(a)
+            dk.ovaal(x - 6, y - 5, x + 6, y + 5, ROZE, ZWART)
+            dk.lijn([(x - 3, y - 4), (x + 2, y - 4)], WIT)        # glans
+            dk.lijn([(x - 5, y + 2), (x + 5, y + 2)], ROOD)       # een ring
+        dk.ovaal(92, 88, 114, 106, ROZE, ZWART)                  # de kop
+        dk.lijn([(96, 90), (108, 90)], WIT)
+        dk.rect(99, 94, 101, 95, ROOD)                           # oogjes: hij slaapt licht
+        dk.rect(105, 94, 107, 95, ROOD)
+        dk.lijn([(96, 101), (110, 101)], ZWART)                  # de bek, met tandjes
+        for tx in range(97, 110, 3):
+            dk.px(tx, 100, WIT)
     # de brug van ijs: dun, gebarsten
     dk.poly([(36, 84), (124, 80), (124, 86), (36, 90)], WIT, ZWART)
     dk.lijn([(36, 89), (124, 85)], LBLAUW)
@@ -194,6 +239,7 @@ def ijsbrug(wurm=True):
     dk.poly([(116, 126), (120, 88), (159, 86), (159, 126)], WIT, ZWART)
     for x, y in ((10, 110), (24, 120), (132, 104), (146, 116)):
         dk.lijn([(x, y), (x + 4, y)], LBLAUW)
+    rijk.verrijk(dk, 151, lichten=[(104, 97, 18, 10, 0.6, {ROZE: ROOD, LGRIJS: ROZE})] if wurm else [], sluit=(PAARS,))
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
@@ -243,12 +289,83 @@ def baken(aan=False):
         dk.lijn([(83, 0), (83, 35)], GEEL)
     else:
         dk.ovaal(77, 37, 83, 43, ZWART, ZWART)
+    rijk.verrijk(dk, 161, lichten=[(132, 20, 46, 30, 0.6, {PAARS: ROZE, BLAUW: PAARS})], sluit=(WIT,))
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
 
 
-PLAATJES = {"bergpad": bergpad, "bergpad_lawine": lambda: bergpad(True), "hut": hut,
+# ---- tussenscène: Oma Rijm ziet een lichtje -----------------------------------------------------------------------
+def oma():
+    """tussenscène tussen hoofdstuk 4 en 5: de hut van Oma Rijm op de IJstop, buiten in de sneeuw. Warm licht uit de
+    deur en het raam, rook uit de schoorsteen; Oma in de deuropening met een lantaarn; ver beneden in het dal een
+    heel klein lichtje (Eldric, met de lantaarn)."""
+    rnd = random.Random(171)
+    dk = Doek()
+    rijk.lucht_met_wolken(dk, rnd, 70, kleuren=(ZWART, PAARS, PAARS, BLAUW), sterren=22, wolken=3)
+    verduisterde_zon(dk, 40, 16, 6)
+    # het dal beneden: blauwe bergkammen in de schemer, met één lichtje
+    berg(dk, [(0, 80), (18, 66), (34, 74), (52, 62), (70, 76), (84, 70), (96, 80)], licht=LBLAUW, schaduw=BLAUW,
+         rots=DGRIJS, zaad=3)
+    rijk.verloop(dk, 0, 80, 96, 92, [BLAUW, ZWART], rnd)
+    dk.px(30, 88, GEEL)                                          # Eldric, met zijn lantaarn
+    dk.px(31, 88, ORANJE)
+    # de top waar de hut staat: sneeuw, van rechts naar links aflopend
+    dk.poly([(0, 126), (0, 96), (40, 92), (80, 84), (120, 80), (159, 78), (159, 126)], WIT, ZWART)
+    rijk.verloop(dk, 0, 110, 159, 125, [WIT, LBLAUW], rnd)
+    for x, y, h in ((10, 100, 14), (24, 98, 10), (62, 92, 12)):
+        den(dk, x, y, h)
+    # de hut: liggende balken, een sneeuwdak, een schoorsteen
+    hx1, hx2, hy1, hy2 = 88, 150, 52, 92
+    for y in range(hy1, hy2, 6):
+        dk.rect(hx1, y, hx2, y + 5, BRUIN)
+        dk.lijn([(hx1, y + 1), (hx2, y + 1)], ORANJE)
+        dk.lijn([(hx1, y + 5), (hx2, y + 5)], ZWART)
+    for y in range(hy1, hy2, 6):                                 # balkkoppen
+        dk.ovaal(hx1 - 3, y, hx1 + 2, y + 5, ORANJE, ZWART)
+    dk.poly([(82, 54), (119, 30), (156, 54), (150, 58), (119, 36), (88, 58)], WIT, ZWART)   # het dak, met sneeuw
+    dk.poly([(119, 36), (150, 58), (156, 54), (119, 30)], LBLAUW, None)
+    for x in range(90, 150, 6):                                  # ijspegels aan de dakrand
+        dk.poly([(x, 57), (x + 2, 57), (x + 1, 61)], LBLAUW, None)
+    dk.rect(132, 24, 140, 40, GRIJS)                             # de schoorsteen, en rook
+    dk.lijn([(132, 24), (140, 24)], WIT)
+    for i, (x, y) in enumerate(((136, 18), (139, 12), (135, 6), (140, 2))):
+        dk.ovaal(x - 3 - i, y - 2, x + 3 + i, y + 2, LGRIJS, None)
+    # het raam: warm licht
+    dk.rect(130, 64, 144, 78, ZWART)
+    dk.rect(131, 65, 143, 77, GEEL)
+    dk.lijn([(137, 65), (137, 77)], BRUIN)
+    dk.lijn([(131, 71), (143, 71)], BRUIN)
+    dk.rect(131, 76, 143, 77, WIT)                               # sneeuw op de vensterbank
+    # de deur open, Oma in het licht
+    dk.rect(98, 62, 116, 92, ZWART)
+    dk.rect(99, 63, 115, 92, ORANJE)
+    rijk.verloop(dk, 99, 63, 115, 92, [GEEL, ORANJE], rnd)
+    ox, oy = 107, 92
+    dk.poly([(ox - 6, oy), (ox - 5, oy - 16), (ox + 5, oy - 16), (ox + 6, oy)], PAARS, ZWART)      # haar jurk
+    dk.poly([(ox - 7, oy - 12), (ox, oy - 18), (ox + 7, oy - 12), (ox + 5, oy - 9), (ox - 5, oy - 9)], ROZE, ZWART)
+    dk.ovaal(ox - 4, oy - 25, ox + 4, oy - 17, ROZE, ZWART)
+    dk.ovaal(ox - 5, oy - 28, ox + 5, oy - 22, LGRIJS, ZWART)
+    dk.ovaal(ox - 2, oy - 31, ox + 2, oy - 27, LGRIJS, ZWART)
+    dk.lijn([(ox - 3, oy - 21), (ox - 1, oy - 21)], ZWART)       # het brilletje
+    dk.lijn([(ox + 1, oy - 21), (ox + 3, oy - 21)], ZWART)
+    dk.lijn([(ox - 6, oy - 14), (ox - 12, oy - 20)], ROZE, 2)    # de arm omhoog, met de lantaarn
+    dk.rect(ox - 15, oy - 25, ox - 11, oy - 20, GEEL)
+    dk.lijn([(ox - 15, oy - 25), (ox - 11, oy - 25)], ZWART)
+    # het licht uit de deur op de sneeuw, en voetstappen naar beneden
+    dk.poly([(99, 93), (115, 93), (128, 110), (86, 110)], GEEL, None)
+    for x in range(40, 98, 6):
+        dk.px(x, 96 + (98 - x) // 8, LGRIJS)
+    sneeuw(dk, rnd, 50, 2, 70)
+    rijk.verrijk(dk, 172, lichten=[(107, 82, 34, 26, 0.75, {WIT: GEEL, LBLAUW: GEEL, BRUIN: ORANJE, DGRIJS: BRUIN}),
+                                   (94, 70, 12, 10, 0.9, None), (137, 72, 16, 12, 0.7, {BRUIN: ORANJE, WIT: GEEL})],
+                 sluit=(PAARS,))
+    rand(dk)
+    kleuren_per_vakje(dk.im)
+    return dk.im
+
+
+PLAATJES = {"oma": oma, "bergpad": bergpad, "bergpad_lawine": lambda: bergpad(True), "hut": hut,
             "ijsbrug": ijsbrug, "ijsbrug_leeg": lambda: ijsbrug(False),
             "baken": baken, "baken_aan": lambda: baken(True)}
 PATCHES = {"bergpad_lawine": ("bergpad", LAWINE), "ijsbrug_leeg": ("ijsbrug", WURM), "baken_aan": ("baken", BAKEN)}

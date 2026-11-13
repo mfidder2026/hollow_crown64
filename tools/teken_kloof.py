@@ -17,6 +17,7 @@ from teken_toneel import (Doek, rgb, te_veel_kleuren, golf, dither, ZWART, WIT, 
                           BLAUW, GEEL, ORANJE, BRUIN, ROZE, DGRIJS, GRIJS, LGROEN, LBLAUW, LGRIJS, B, H)
 from teken_bospad import kleuren_per_vakje   # noqa: E402
 from teken_zee import verduisterde_zon, rand   # noqa: E402
+import rijk   # noqa: E402
 
 WORTEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,6 +66,7 @@ def kloof(stand=None):
     for x, y, r in ((14, 110, 9), (140, 112, 10), (34, 120, 6)):  # rotsblokken
         dk.ovaal(x - r, y - r * 0.7, x + r, y + r * 0.7, GRIJS, ZWART)
         dk.lijn([(x - r + 2, y - r * 0.5), (x, y - r * 0.7 + 1)], LGRIJS)
+    rijk.verrijk(dk, 81, lichten=[(80, 10, 50, 50, 0.45, {DGRIJS: GRIJS, GRIJS: LGRIJS, BRUIN: ORANJE})], sluit=(PAARS,))
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
@@ -157,6 +159,9 @@ def zwamgrot(stand=None):
     dk.poly([(56, 100), (58, 92), (76, 92), (78, 100)], ORANJE, ZWART)
     for x in (62, 67, 72):
         zwam(dk, x, 92, 2, GEEL, WIT)
+    rijk.verrijk(dk, 101, lichten=[(18, 90, 30, 22, 0.8, {BLAUW: CYAAN, DGRIJS: GRIJS, ZWART: BLAUW}),
+                                    (142, 92, 30, 22, 0.8, {BLAUW: CYAAN, DGRIJS: GRIJS, ZWART: BLAUW}),
+                                    (66, 94, 18, 12, 0.7, {BLAUW: GEEL, DGRIJS: BRUIN})])
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
@@ -213,23 +218,21 @@ def aardstad(ei_gloeit=False):
     # een gang naar rechts (naar de spreukzaal) en een naar links (terug)
     dk.poly([(150, 96), (150, 82), (156, 78), (159, 78), (159, 96)], ZWART, ZWART)
     dk.poly([(0, 96), (0, 80), (4, 78), (10, 82), (10, 96)], ZWART, ZWART)
+    rijk.verrijk(dk, 111, lichten=[(78, 70, 40, 30, 0.6, {BRUIN: ORANJE, ZWART: BRUIN, GRIJS: LGRIJS})])
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im
 
 
 # ---- de spreukzaal ------------------------------------------------------------------------------------------------
-BOEK = (20, 72, 28, 24)          # patch boek_open: het spreukenboek opengeslagen, een gloed erboven
+BOEK = (16, 64, 36, 32)          # patch boek_open: het spreukenboek opengeslagen, een gloed erboven
 
 
 def spreukzaal(boek_open=False):
     rnd = random.Random(121)
     dk = Doek()
-    dk.rect(0, 1, B - 1, 125, DGRIJS)
-    for y in range(1, 90):
-        for x in range((y % 2), B, 2):
-            if rnd.random() < max(0.0, 0.8 - y / 90):
-                dk.px(x, y, ZWART)
+    rijk.stenen_muur(dk, 0, 1, B - 1, 84, random.Random(7), basis=DGRIJS, donker=ZWART, licht_=GRIJS, hoog=8, breed=14)
+    rijk.verloop(dk, 0, 1, B - 1, 10, [ZWART, ZWART], rnd)          # het plafond in het donker
     # de achterwand met de lege nis waar de Holle Kroon stond, en maantekens eromheen
     dk.poly([(66, 72), (66, 40), (70, 32), (80, 28), (90, 32), (94, 40), (94, 72)], ZWART, GRIJS)
     for x, y in ((60, 36), (100, 36)):
@@ -266,6 +269,37 @@ def spreukzaal(boek_open=False):
         dk.lijn([(29, 84), (39, 84)], GEEL)
     # een gang terug, links achter
     dk.poly([(0, 84), (0, 60), (6, 56), (12, 60), (12, 84)], ZWART, GRIJS)
+    # een sterrenkaart op de achterwand: sterren en lijnen (hier keek Grom naar de manen)
+    for (ax, ay), (bx, by) in (((22, 20), (34, 14)), ((34, 14), (44, 24)), ((44, 24), (40, 36)), ((112, 18), (124, 26)),
+                               ((124, 26), (138, 16)), ((138, 16), (146, 30))):
+        dk.lijn([(ax, ay), (bx, by)], BLAUW)
+    for x, y in ((22, 20), (34, 14), (44, 24), (40, 36), (112, 18), (124, 26), (138, 16), (146, 30), (30, 30), (130, 36)):
+        dk.px(x, y, WIT)
+        dk.px(x + 1, y, LBLAUW)
+    # kettingen aan het plafond en spinrag in de hoeken
+    for x in (30, 130):
+        for y in range(1, 30, 3):
+            dk.px(x + (y // 3) % 2, y, GRIJS)
+    for i in range(6):
+        dk.lijn([(B - 1, 1 + i * 3), (B - 1 - 12 + i * 2, 1)], LGRIJS)
+    # kaarsen op de stenen van de kring: warme vlammetjes
+    kaarsen = []
+    for a in (0, 90, 180, 270):
+        r = math.radians(a + 22)
+        x, y = 80 + 36 * math.cos(r), 107 + 15 * math.sin(r)
+        h = 14 + 4 * math.sin(r)
+        dk.rect(x - 1, y - h - 4, x, y - h, WIT)
+        dk.poly([(x - 1, y - h - 4), (x, y - h - 8), (x + 1, y - h - 4)], GEEL, ORANJE)
+        kaarsen.append((x, y - h - 6))
+    for x, y in ((34, 74),):                                     # een kaars op de lessenaar
+        dk.rect(x + 8, y + 4, x + 9, y + 8, WIT)
+        dk.poly([(x + 8, y + 4), (x + 9, y), (x + 10, y + 4)], GEEL, ORANJE)
+    # gloeiende runen in de zwarte kring
+    for a in range(0, 360, 30):
+        r = math.radians(a)
+        dk.px(80 + 26 * math.cos(r), 107 + 10 * math.sin(r), LBLAUW)
+    rijk.verrijk(dk, 121, lichten=[(x, y, 22, 14, 0.75, {DGRIJS: BRUIN, GRIJS: ORANJE, LGRIJS: GEEL, ZWART: DGRIJS})
+                                   for x, y in kaarsen] + [(44, 80, 20, 14, 0.7, {DGRIJS: BRUIN, GRIJS: ORANJE})])
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im

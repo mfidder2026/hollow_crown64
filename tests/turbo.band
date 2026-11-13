@@ -1,0 +1,30 @@
+# turbo.band — de snellader (src/turbo.asm), met de echte 1541-emulatie: van het plein de herberg in en weer terug,
+# en een kamer van diskette 2 (de wissel gaat via de Kernal-vraag). Alles moet kloppen zoals met de Kernal.
+echte_drive
+wacht 3
+verwacht_kamer plein
+verwacht turbo_uit = 0
+cursor 260,156
+vuur
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+cursor 290,60
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
+verwacht turbo_teller >= 2              # het plaatje en de scripts kwamen met de snellader
+verwacht turbo_uit = 0
+verwacht laad_fout = 0
+screenshot herberg
+cursor 90,76
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer plein
+verwacht turbo_teller >= 4
+screenshot plein

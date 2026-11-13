@@ -1,0 +1,89 @@
+# poort.hcs — hoofdstuk 6: de binnenpoort (data/plaatjes/poort.png, met de hand getekend: tools/teken_kasteel.py).
+# Vier spookridders: de fluisterkever praat met de kevers in hun helmen, de harnassen vallen uiteen (patches
+# ridders_l, ridders_r). De sleutelschub van Moeder Aard opent de poort (patch poort_open). Erlangs zonder kever: Tik.
+KAMER poort
+  LOOPKLEUREN donkergrijs zwart
+  LOOPVAK 2,108 157,122
+  BINNENKOMST:
+    MUZIEK bosrand
+    ALS vlag ridders_weg
+      PATCH ridders_l
+      PATCH ridders_r
+    EINDE
+    ALS vlag poort_open
+      PATCH poort_open
+    EINDE
+
+VOORWERP terug_kerker "gang" VAK 0,100 4,24 LOOP 4,114 LINKS
+  GA_NAAR:
+    KAMER kerker 100,104 LINKS
+
+VOORWERP poortdeur "poort" VAK 56,12 48,44 LOOP 80,110 RUG
+  BEKIJK:
+    ALS vlag poort_open
+      ZEG eldric "De poort staat open. Daarachter: een grote zaal."
+    ANDERS
+      ZEG eldric "Een hoge poort. Het slot heeft de vorm van een schub."
+    EINDE
+  GEBRUIK sleutelschub:
+    ALS NIET vlag ridders_weg
+      TUSSENSCENE
+      ZEG eldric "Even snel langs de ridders..."
+      VERBERG eldric
+      GELUID wolf
+      TOON tik
+      ZEG tik "Vier harnassen. Eén Eldric. Rekensom."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+    ANDERS
+      ZEG eldric "De schub van Moeder Aard past. Klik."
+      GELUID deur
+      PATCH poort_open
+      ZET poort_open
+      NEEM sleutelschub
+      PUNTEN 10
+    EINDE
+  GA_NAAR:
+    ALS vlag poort_open
+      KAMER troonzaal 80,120 RUG
+      STOP
+    EINDE
+    ALS NIET vlag ridders_weg
+      TUSSENSCENE
+      ZEG eldric "Even snel langs de ridders..."
+      VERBERG eldric
+      GELUID wolf
+      TOON tik
+      ZEG tik "Vier harnassen. Eén Eldric. Rekensom."
+      EINDE_TUSSENSCENE
+      PRAAT tik_vraag
+      STOP
+    EINDE
+    ZEG eldric "De poort zit op slot."
+
+VOORWERP ridders "spookridders" VAK 30,58 100,46 LOOP 16,114 RECHTS
+  BEKIJK:
+    ALS vlag ridders_weg
+      ZEG eldric "Vier hopen oud ijzer."
+    ANDERS
+      ZEG eldric "Vier spookridders voor de poort. In elke helm zoemt iets."
+    EINDE
+  GEBRUIK fluisterkever:
+    ALS vlag ridders_weg
+      ZEG eldric "Daar zit niemand meer in."
+    ANDERS
+      TUSSENSCENE
+      ZEG kever "Zzzmm. Zzzmm?"
+      ZEG verteller "De kevers in de helmen zoemen terug. Dan vliegen ze weg."
+      GELUID deur
+      PATCH ridders_l
+      PATCH ridders_r
+      ZET ridders_weg
+      ZEG eldric "De harnassen vallen uit elkaar. Er zat nooit iemand in."
+      PUNTEN 15
+      EINDE_TUSSENSCENE
+    EINDE
+
+VOORWERP fakkels "fakkel" VAK 0,38 10,26 LOOP 10,112 LINKS
+  BEKIJK:
+    ZEG eldric "Een fakkel. Ze branden hier gewoon. Grom is dus niet bang voor elk licht."

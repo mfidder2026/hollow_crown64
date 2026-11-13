@@ -52,6 +52,7 @@ intro: {
         lda #0
         ldx #<KAMER_BUF
         ldy #>KAMER_BUF
+        jsr turbo_vergeet               // (turbo.asm: de drive gebruikt nu zijn buffers)
         jsr LOAD
         lda #0
         bcc !+

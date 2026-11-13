@@ -90,7 +90,7 @@ VOORWERP spookridder "spookridder" VAK 40,66 14,29 LOOP 30,108 RECHTS   # (boven
 
 VOORWERP helm "helm" VAK 32,94 12,10 LOOP 30,110 RECHTS NERGENS
   BEKIJK:
-    ALS STAND helm 1
+    ALS vlag kroon_in_helm
       ZEG eldric "De helm van de spookridder, met de Holle Kroon erin."
     ANDERS
       ZEG eldric "Een lege helm. Hij is zwaar, en hij past op niets."

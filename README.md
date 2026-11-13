@@ -159,7 +159,7 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-Chapters 1 and 2 are playable from the title screen to "Chapter 2 complete". The build makes a D64; automated tests boot it in VICE,
+The whole game is playable, from the title screen through all six chapters to the final scene on the castle roof. It comes on two disks; the game asks for disk 2 when it needs it. The build makes a D64; automated tests boot it in VICE,
 play input tapes (one of them plays the whole chapter, another saves, loads and carries on), check the game state and
 compare every screenshot pixel by pixel with the screen as memory says it should be, sprites included. The engine is being built
 in this order:
@@ -176,6 +176,8 @@ in this order:
 - [x] 9. Chapter 1, fully playable (sound effects, save/load with F5/F7, finale)
 - [x] 10. Title screen with original SID music (own theme in D minor, checked note by note against the SID)
 - [x] 11. Chapter 2, *Darkwood*: chapters, deaths and rewinding (Tik), Mira follows Eldric, scripts per room on disk
+- [x] 12. Chapters 3-6 and a cutscene between every two chapters; two disks; the fog of forgetting
+- [x] 13. Turbo loader: our own 2-bit fast loader for the 1541 (about twice as fast as the Kernal; falls back to the Kernal when there is no real drive)
 
 Progress notes are in [`docs/LOGBOEK.md`](docs/LOGBOEK.md) (in Dutch).
 

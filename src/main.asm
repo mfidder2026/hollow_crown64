@@ -169,6 +169,7 @@ kamer_nu: .byte 0
 #import "flakker.asm"
 #import "inventaris.asm"
 #import "schijf.asm"
+#import "turbo.asm"
 #import "geluid.asm"
 #import "opslaan.asm"
 #import "muziek.asm"

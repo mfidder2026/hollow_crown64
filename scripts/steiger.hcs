@@ -3,7 +3,7 @@
 KAMER steiger
   LOOPKLEUREN bruin donkergrijs zwart oranje grijs lichtgrijs
   LOOPVAK 2,100 108,122                  # de planken
-  FLAKKER 156,48 4,16 geel oranje wit    # de lantaarn op de boot
+  FLAKKER 148,48 8,16 geel oranje wit    # de lantaarn op de boot
   BINNENKOMST:
     MUZIEK zee
 

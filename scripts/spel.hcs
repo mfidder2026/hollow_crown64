@@ -9,8 +9,9 @@ HOOFDSTUK 2 "Duisterwoud" hoofdstuk2_klaar
 HOOFDSTUK 3 "Zee van Vergetelheid" hoofdstuk3_klaar
 HOOFDSTUK 4 "Rotskloof" hoofdstuk4_klaar
 HOOFDSTUK 5 "IJstop" hoofdstuk5_klaar
+HOOFDSTUK 6 "Het Vergeten Kasteel" spel_klaar
 # Tot waar het spel nu speelbaar is (de compiler controleert dat dit te halen is)
-DOEL hoofdstuk5_klaar
+DOEL spel_klaar
 
 # Wat Eldric bij zich heeft (en wat later bij hem komt)
 VOORWERP zonnesteen "zonnesteen" BIJ eldric

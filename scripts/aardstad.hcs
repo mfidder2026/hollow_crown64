@@ -2,7 +2,7 @@
 # tools/teken_kloof.py). Moeder Aard vertelt hoe het echt zit (met de fluisterkever), toont het laatste ei (patch ei:
 # het gloeit, net als Mira's steen) en geeft de sleutelschub.
 KAMER aardstad
-  LOOPKLEUREN bruin oranje zwart
+  LOOPKLEUREN bruin oranje zwart donkergrijs
   LOOPVAK 4,100 156,122
   BINNENKOMST:
     MUZIEK kelder

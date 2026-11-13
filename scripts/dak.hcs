@@ -1,0 +1,50 @@
+# dak.hcs — de slotscène: het dak van het kasteel (data/plaatjes/dak.png, met de hand getekend:
+# tools/teken_kasteel.py). Een toneel: de zon zit in het plaatje, de twee manen ervoor zijn figuren. Grom neemt één
+# maansteen uit de kroon: de eerste maan schuift opzij, de hemel wordt blauw, rood, goud; de tweede maan blijft staan
+# boven het dal van de aardmannetjes. Mira's steen barst: Tik. "Dawnhaven, de eerste ochtend." Einde.
+KAMER dak
+  TONEEL
+  LOOPKLEUREN grijs donkergrijs lichtgrijs
+  LOOPVAK 40,108 120,120
+  ACTOR maan_dak1 KOSTUUM maan OP 76,24 VERBORGEN
+  ACTOR maan_dak2 KOSTUUM maan OP 84,24 VERBORGEN
+  BINNENKOMST:
+    TUSSENSCENE
+    MUZIEK thema
+    TOON maan_dak1
+    TOON maan_dak2
+    TOON eldric
+    KIJK eldric RUG
+    WACHT 40
+    ZEG verteller "Grom neemt één maansteen uit de Holle Kroon."
+    WACHT 30
+    LOOP maan_dak1 10,30
+    VERBERG maan_dak1
+    KLEUR 0,0 160,88 paars blauw
+    ZEG verteller "De eerste maan schuift opzij. Het licht stort over de bergen."
+    ZEG verteller "Het baken vangt het, en kaatst het zacht over het land."
+    LOOP maan_dak2 150,44
+    ZEG verteller "De tweede maan blijft staan, boven één dal achter de bergen."
+    ZEG verteller "Daar trekken de aardmannetjes heen. Grom voorop."
+    KLEUR 0,0 160,88 blauw rood
+    WACHT 30
+    KLEUR 0,0 160,88 rood oranje
+    WACHT 30
+    KLEUR 0,0 160,88 oranje lichtblauw
+    TOON mira_mee
+    KIJK eldric VOOR
+    ZEG eldric "Mira. De zon komt terug."
+    ZEG mira "Ik weet het. Het ei zegt het."
+    ZEG verteller "Mira's steen barst. Er komt een eitje uit, met één oog."
+    VERBERG maan_dak2
+    TOON tik
+    ZEG tik "Hallo, ik."
+    ZEG mira "Dus daarom wist hij alles."
+    ZEG verteller "Op de IJstop staat Oma Rijm, met de zon op haar gezicht."
+    ZEG verteller "In Dawnhaven laat Bram zijn hamer vallen."
+    ZEG verteller "Dawnhaven. De eerste ochtend."
+    PUNTEN 25
+    ZET spel_klaar
+    WACHT 100
+    ZEG verteller "EINDE. Dank je wel voor het spelen!"
+    EINDE_TUSSENSCENE

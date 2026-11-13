@@ -866,6 +866,60 @@ wacht_op_script
 verwacht vm_fout = 0
 screenshot kelder
 
+# ---- kerker ----
+start_script proef_kamer_kerker
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer kerker
+cursor 20,164
+vuur
+cursor 262,78
+wacht 2
+verwacht_tekst 18 "Bekijk tralies"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 260,156
+vuur
+cursor 262,78
+wacht 2
+verwacht_tekst 18 "Open tralies"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,172
+vuur
+cursor 262,78
+wacht 2
+verwacht_tekst 18 "Trek tralies"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 66,36
+wacht 2
+verwacht_tekst 18 "Bekijk raampje"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 22,67
+wacht 2
+verwacht_tekst 18 "Bekijk ketting"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot kerker
+
 # ---- kloof ----
 start_script proef_kamer_kloof
 wacht_op_script
@@ -910,6 +964,60 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot kloof
+
+# ---- maankamer ----
+start_script proef_kamer_maankamer
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer maankamer
+cursor 20,164
+vuur
+cursor 158,79
+wacht 2
+verwacht_tekst 18 "Bekijk Holle Kroon"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 192,82
+wacht 2
+verwacht_tekst 18 "Bekijk steentje"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 10,113
+wacht 2
+verwacht_tekst 18 "Bekijk deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 62,86
+wacht 2
+verwacht_tekst 18 "Bekijk spiegels"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,33
+wacht 2
+verwacht_tekst 18 "Bekijk koepel"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot maankamer
 
 # ---- oever ----
 start_script proef_kamer_oever
@@ -1054,6 +1162,51 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot plein
+
+# ---- poort ----
+start_script proef_kamer_poort
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer poort
+cursor 20,164
+vuur
+cursor 2,127
+wacht 2
+verwacht_tekst 18 "Bekijk gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,49
+wacht 2
+verwacht_tekst 18 "Bekijk poort"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,96
+wacht 2
+verwacht_tekst 18 "Bekijk spookridders"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 8,66
+wacht 2
+verwacht_tekst 18 "Bekijk fakkel"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot poort
 
 # ---- smit ----
 start_script proef_kamer_smit
@@ -1360,6 +1513,60 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot steiger
+
+# ---- troonzaal ----
+start_script proef_kamer_troonzaal
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer troonzaal
+cursor 20,164
+vuur
+cursor 158,86
+wacht 2
+verwacht_tekst 18 "Bekijk Grom"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 50,77
+wacht 2
+verwacht_tekst 18 "Bekijk aardmannetjes"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 278,118
+wacht 2
+verwacht_tekst 18 "Bekijk Mira"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,164
+vuur
+cursor 278,118
+wacht 2
+verwacht_tekst 18 "Praat met Mira"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 4,101
+wacht 2
+verwacht_tekst 18 "Bekijk gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot troonzaal
 
 # ---- vuurtoren ----
 start_script proef_kamer_vuurtoren

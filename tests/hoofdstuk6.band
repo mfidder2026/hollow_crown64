@@ -1,0 +1,6 @@
+# hoofdstuk6.band — de oplossing van hoofdstuk 6 (het Vergeten Kasteel) tot de slotscène, met vijf keer Tik.
+wacht 3
+start_script proef_hfst6
+wacht_op_script
+wacht 3
+voeg_in hoofdstuk6_stappen.txt

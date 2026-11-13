@@ -1,0 +1,20 @@
+# oma.hcs — tussenscène na hoofdstuk 4: hoog op de IJstop ziet Oma Rijm ver beneden een lichtje (data/plaatjes/oma.png,
+# met de hand getekend: tools/teken_ijs.py). Een toneel: geen Eldric. Daarna begint hoofdstuk 5 op het bergpad.
+KAMER oma
+  TONEEL
+  LOOPKLEUREN wit lichtblauw lichtgrijs grijs geel
+  LOOPVAK 20,112 60,120                  # (alleen omdat een kamer een loopvak moet hebben)
+  FLAKKER 128,64 16,16 geel oranje wit   # het licht achter het raam
+  BINNENKOMST:
+    TUSSENSCENE
+    MUZIEK herberg
+    WACHT 40
+    ZEG verteller "Hoog op de IJstop, in een hut in de sneeuw, woont een oude vrouw."
+    WACHT 20
+    ZEG oma "Daar beneden. Een lichtje. Heel klein."
+    ZEG oma "Dat is het steentje. Dat is mijn jongen."
+    ZEG oma "Hij komt eraan. Ik zet water op, voor thee."
+    WACHT 50
+    EINDE_TUSSENSCENE
+    HOOFDSTUK 5
+    KAMER bergpad 10,114 RECHTS
