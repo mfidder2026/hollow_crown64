@@ -13,6 +13,9 @@ BINNENKOMST:
   ALS vlag tafel_geschoven
     PATCH tafel_weg
   EINDE
+  ALS vlag ziensteen_gepakt              # (na tafel_weg: die tekent de steen er nog bij)
+    PATCH steen_weg
+  EINDE
   ALS vlag kruik_gepakt
     PATCH kruik_weg
   EINDE
@@ -29,6 +32,8 @@ VOORWERP ziensteen "ziensteen" VAK 58,103 8,7 LOOP 62,112 RUG NERGENS
   PAK:
     ZEG eldric "Die neem ik mee. Misschien is iemand hem kwijt."
     GEEF ziensteen
+    PATCH steen_weg                      # weg van de vloer (tafel_weg tekende hem)
+    ZET ziensteen_gepakt
 
 VOORWERP tafel "tafel" VAK 54,86 36,16 LOOP 70,110 RUG
   BEKIJK:

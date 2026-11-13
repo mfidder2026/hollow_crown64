@@ -41,7 +41,7 @@ irq_start:
         sta $0315
         lda #IRQ_ONDERRAND
         sta $d012
-        lda #D011_TEKST                 // bit 7 = 0: bit 8 van de rasterlijn; scherm weer aan
+        lda d011_tekst                 // bit 7 = 0: bit 8 van de rasterlijn; scherm weer aan
         sta $d011
         lda #%00000001
         sta $d01a                       // raster-IRQ aan
@@ -62,7 +62,7 @@ irq_kamer:
         bne !+
         lda #D016_KAMER                 // eerst multicolor (tekst in kleur 0-7 blijft gewoon)
         sta $d016
-        lda #D011_BITMAP
+        lda d011_kamer 
         sta $d011
 !:      lda #IRQ_BALK
         sta $d012
@@ -79,7 +79,7 @@ irq_balk:
         lda #IRQ_BALK + 1
 !:      cmp $d012                       // wacht op lijn 195
         bne !-
-        lda #D011_TEKST
+        lda d011_tekst
         sta $d011
         lda #D016_TEKST
         sta $d016
@@ -122,7 +122,7 @@ irq_scroll:
 irq_onderrand:
         lda #%00000001
         sta $d019
-        lda #D011_TEKST
+        lda d011_tekst
         sta $d011
         lda #D016_TEKST
         sta $d016
@@ -143,5 +143,24 @@ irq_onderrand:
         sta $0315
         jmp $ea31                       // Kernal: toetsenbord, klok
 
+// scherm_uit / scherm_aan: het beeld zwart (bit 4 van $d011 = 0) terwijl er iets wordt opgebouwd, zonder rommel
+// (de baas-toets: terug van het rekenblad). De IRQ's schrijven $d011 uit deze twee variabelen.
+scherm_uit:
+        inc scherm_uit_teller
+        lda #D011_TEKST & %11101111
+        sta d011_tekst
+        lda #D011_BITMAP & %11101111
+        sta d011_kamer
+        rts
+scherm_aan:
+        lda #D011_TEKST
+        sta d011_tekst
+        lda #D011_BITMAP
+        sta d011_kamer
+        rts
+
 .segment Data
+d011_tekst:   .byte D011_TEKST
+d011_kamer:   .byte D011_BITMAP
+scherm_uit_teller: .byte 0              // hoe vaak het beeld even zwart was (voor de tests)
 beelden:      .word 0                  // beeldteller, telt op in de IRQ

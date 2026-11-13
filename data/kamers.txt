@@ -1,7 +1,7 @@
 # kamers: naam  plaatje  opties (zie tools/kamer.py)
 # De plaatjes in data/plaatjes/ zijn VOORLOPIG (tools/maak_kamers.py): vervang ze door FLUX-plaatjes.
 plein    data/flux/dawnhaven.png      boven=190  kleur=1.5  licht=1.0  sterkte=0.5  voorgrond=data/plein_voorgrond.txt  patch=deur_open:132,56,12,32:data/plaatjes/plein_deur_open.png
-herberg  data/flux/herberg.png    boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=tafel_weg:44,88,72,24:data/flux/herberg_tafel_weg.png  patch=kruik_weg:140,24,8,24:data/flux/herberg_zonder_kruik.png
+herberg  data/flux/herberg.png    boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=tafel_weg:44,88,72,24:data/flux/herberg_tafel_weg.png  patch=kruik_weg:140,24,8,24:data/flux/herberg_zonder_kruik.png  patch=steen_weg:56,96,12,16:data/flux/herberg_zonder_steen.png
 smit     data/plaatjes/smit.png     boven=0  exact=1  sterkte=0  patch=vuur_aan:64,56,32,16:data/plaatjes/smit_vuur.png
 bosrand  data/flux/bosrand.png    boven=115  kleur=1.8  licht=1.4  sterkte=0  patch=wolven_weg:24,72,88,24:data/flux/bosrand_zonder_wolven.png
 titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen

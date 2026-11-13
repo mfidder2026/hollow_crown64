@@ -1,5 +1,7 @@
 // baas.asm — de baas-toets (menu Bosskey): in één klap een rekenblad in plaats van het spel.
 //
+// Terug: eerst het beeld zwart (scherm_uit, irq.asm), dan alles herstellen, en pas als BINNENKOMST klaar is weer aan:
+// zo zie je nooit de letters van het rekenblad als kleuren in de kamer.
 // Het hele scherm wordt tekst (de IRQ schakelt niet meer naar de bitmap: irq.asm kijkt naar baas_actief), witte
 // achtergrond, geen sprites, de muziek stil. Het rekenblad komt uit tools/baas.py. Een toets, de joystick of de muis
 // brengt het spel terug, precies zoals het was: het plaatje uit de kamerbuffer, BINNENKOMST (patches, muziek), de balk.
@@ -76,6 +78,12 @@ klaar:  rts
 }
 
 baas_uit:
+        jsr scherm_uit                  // eerst zwart: geen rekenblad-letters als kleuren tijdens het herstellen
+        lda beelden                     // één beeld wachten: de IRQ's hebben het nu uitgezet
+!:      cmp beelden
+        beq !-
+        lda #1
+        sta baas_terug                  // main.asm zet het beeld weer aan als BINNENKOMST klaar is
         lda #0
         sta baas_actief
         sta $d021
@@ -98,4 +106,5 @@ baas_uit:
 baas_actief:    .byte 0                 // 1: het rekenblad staat er (voor irq.asm en de tests)
 baas_los_nodig: .byte 0
 baas_teller:    .byte 0                 // hoe vaak de baas-toets gebruikt is (voor de tests)
+baas_terug:     .byte 0                 // 1: het spel wordt hersteld; het beeld blijft zwart tot het klaar is
 rand_was:       .byte 0

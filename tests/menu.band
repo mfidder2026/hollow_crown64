@@ -60,7 +60,12 @@ verwacht_tekst 0 "Microsoft Excel - BEGROTING.XLS"
 verwacht_tekst 24 "Gereed"
 wacht 20
 toets spatie 2
-wacht 5
+wacht 2
+verwacht scherm_uit_teller = 1         # eerst zwart: geen rekenblad-letters als kleuren tijdens het herstellen
+wacht_op_script
+wacht 3
+verwacht baas_terug = 0
+verwacht d011_tekst = 27               # en weer aan ($1B) als alles hersteld is
 verwacht baas_actief = 0
 verwacht_kamer plein
 verwacht muz_aan = 1                   # het plein speelt weer

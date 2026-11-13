@@ -686,3 +686,18 @@ is daarop aangepast (niet vastgelegd: hun bestand, hun branch; een kopie van de 
 stond met zijn rug naar je toe. De zon in de schemer was niet helemaal gevuld: het witte glimlicht maakte van één
 vakje van 4 x 8 vier kleuren (lucht, geel, oranje, wit), de omzetter liet er een weg en dat werd later paars. Het
 glimlicht is eruit, en de kleurwissels van de zon gelden nu ook voor de punten van de stralen (x 60-99).
+
+## 2026-11-13 — Ziensteen weg na Pak, nette terugkeer van de baas-toets, tests zonder venster
+
+- **De ziensteen bleef op de vloer liggen** na Pak: de patch tafel_weg tekent hem. Nu een kleine patch `steen_weg`
+  (56,96,12,16; `herberg_zonder_steen.png`) bij Pak ziensteen en in BINNENKOMST (na tafel_weg). Daarbij
+  `tools/flux_patches.py` opgeruimd: er stonden twee versies van tafel_weg in (Python nam de laatste, zonder de
+  lichtcorrectie van de vloer); nu één, met de lichtcorrectie, met of zonder steen.
+- **Terug van het rekenblad was het scherm even rommel** (de letters van het rekenblad als kleuren, tot de kamer weer
+  uitgepakt was). Nu gaat het beeld eerst op zwart (`scherm_uit`: de IRQ's schrijven $d011 uit twee variabelen,
+  bit 4 uit), wordt alles hersteld, en pas als BINNENKOMST klaar is gaat het beeld weer aan.
+- **De tests draaien VICE zonder venster** (`-console`): ze pakken de focus niet meer af en na afloop spring je niet
+  meer naar het bureaublad. De screenshots werken gewoon (pixel voor pixel). Met `--houd-open` krijg je het venster.
+
+**Getest:** gesprek.band (Pak ziensteen, opzij lopen, screenshot: de vloer is leeg), menu.band (scherm_uit_teller = 1
+bij de terugkeer, daarna weer aan). 23/23 compiler, 17/17 banden.

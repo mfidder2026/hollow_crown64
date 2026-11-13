@@ -67,6 +67,12 @@ vuur
 wacht_tot_stil
 wacht_op_script
 verwacht_eigenaar ziensteen eldric
+verwacht_vlag ziensteen_gepakt 1
+verwacht_tekst 18 "Ga naar"                # waar de steen lag, ligt niets meer om aan te klikken
+cursor 190,130                         # een stukje opzij lopen (niet op het luik), zodat je de vloer ziet
+vuur
+wacht_tot_stil
+screenshot steen_weg                   # de steen ligt niet meer op de vloer (de patch steen_weg)
 cursor 180,164
 vuur
 cursor 20,180                          # de ziensteen staat links (de herberg komt vóór de zonnesteen in de scripts)

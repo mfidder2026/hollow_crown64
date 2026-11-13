@@ -249,6 +249,8 @@ class Vice:
             args.append("-busdevice8")           # virtueel apparaat 8: het spel laadt zelf kamers (Kernal LOAD)
         if warp:
             args.append("-warp")
+        if not zichtbaar_houden:
+            args.append("-console")              # geen venster: de test pakt de focus niet af (macOS)
         args += ["-autostart", d64]
         # Eigen procesgroep: bin/x64sc start op macOS een kindproces. Bij het stoppen sluiten we alleen
         # deze groep af, nooit andere VICE's.

@@ -120,6 +120,14 @@ hoofdlus:
         jsr klik                        // zin.asm
         jsr actie_beeld
         jsr vm_stap
+        lda baas_terug                  // terug van het rekenblad: het beeld aan als alles hersteld is (baas.asm)
+        beq !+
+        lda vm_pc + 1
+        bne !+
+        lda #0
+        sta baas_terug
+        jsr scherm_aan
+!:
         jsr bericht_beeld
         jsr zin_beeld
         jsr actor_beweeg
