@@ -84,3 +84,13 @@ SCRIPT proef_naar_herberg:
 
 SCRIPT proef_naar_bos:
   KAMER bosrand 80,120 RUG
+
+SCRIPT proef_dood:                     # een dood met Tik (hoofdstuk 2 en verder): terug naar binnenkomst van de kamer
+  ZET proef_dood_vlag
+  GEEF munt
+  TOON tik
+  ZEG tik "Dat was dom. Terugdraaien?"
+  PRAAT tik_vraag
+
+SCRIPT proef_mira:                     # Mira loopt mee
+  TOON mira_mee

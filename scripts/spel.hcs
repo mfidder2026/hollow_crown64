@@ -3,7 +3,10 @@
 BEGIN plein 60,112 VOOR
 # Na het titelscherm eerst de verhaalanimatie (scripts/verhaal.hcs); die gaat daarna zelf naar het plein
 VERHAAL verhaal 79,124 RUG
-# Het einde van hoofdstuk 1: de wolven zijn verjaagd en Vex is gezien
+# De hoofdstukken: titel onderaan, en de vlag die het afsluit ("Hoofdstuk n voltooid")
+HOOFDSTUK 1 "Dawnhaven" hoofdstuk1_klaar
+HOOFDSTUK 2 "Duisterwoud" hoofdstuk2_klaar
+# Tot waar het spel nu speelbaar is (de compiler controleert dat dit te halen is)
 DOEL hoofdstuk1_klaar
 
 # Wat Eldric bij zich heeft (en wat later bij hem komt)
@@ -61,6 +64,17 @@ SPREKER eldric geel
 SPREKER bram oranje
 SPREKER mira cyaan
 SPREKER grom lichtgroen
+SPREKER tik wit
+
+# Figuren die overal mee kunnen (geen KAMER): Tik verschijnt bij een dood, Mira loopt mee vanaf hoofdstuk 2
+ACTOR tik KOSTUUM tik OP 120,40 VERBORGEN
+ACTOR mira_mee KOSTUUM mira OP 80,100 VERBORGEN VOLGT
+
+# Tik, de Terugdraaier: na een dood ("TOON tik", zijn droge regel, "PRAAT tik_vraag")
+GESPREK tik_vraag
+  KEUZE "Ja, terugdraaien." EINDE
+    ZEG tik "Daar gaan we weer."
+    TERUG
 SPREKER verteller lichtgrijs
 
 # Standaardantwoorden: als een voorwerp geen script heeft voor dat werkwoord

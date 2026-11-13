@@ -203,30 +203,47 @@ nieuw:  .byte 0
 }
 
 .segment Code
-// voltooid_beeld: staat de DOEL-vlag, dan één keer "Hoofdstuk 1 voltooid" onderaan en het klaar-geluid
-voltooid_beeld:
+// voltooid_beeld: staat de doelvlag van dit hoofdstuk, dan één keer "Hoofdstuk n voltooid" onderaan en het klaar-geluid
+voltooid_beeld: {
         lda voltooid
-        bne !+
-        lda st_vlaggen + DOEL_VLAG / 8
-        and #1 << (DOEL_VLAG & 7)
-        beq !+
+        bne klaar
+        ldy st_hoofdstuk
+        lda hoofdstuk_doel,y            // de vlag: byte vlag / 8, bit vlag & 7
+        pha
+        lsr
+        lsr
+        lsr
+        tax
+        pla
+        and #7
+        tay
+        lda st_vlaggen,x
+        and bits8,y
+        beq klaar
         lda vm_pc + 1                   // pas als het laatste script klaar is
-        bne !+
+        bne klaar
         inc voltooid
         ldy #RIJ_ONDER
         lda #KLEUR_HOOFDSTUK
         jsr rij_wissen
-        lda #<tekst_voltooid
+        ldy st_hoofdstuk
+        lda hoofdstuk_klaar_lo,y
         sta zp_ptr
-        lda #>tekst_voltooid
+        lda hoofdstuk_klaar_hi,y
         sta zp_ptr + 1
-        ldx #(40 - tekst_voltooid_lengte) / 2
+        lda #40
+        sec
+        sbc hoofdstuk_klaar_lengte,y
+        lsr
+        tax
         ldy #RIJ_ONDER
         lda #KLEUR_VOLTOOID
         jsr tekst_schrijf
         lda #GL_KLAAR
         jmp geluid_speel
-!:      rts
+klaar:  rts
+}
+bits8: .byte 1, 2, 4, 8, 16, 32, 64, 128
 voltooid: .byte 0                       // 1: het hoofdstuk is uitgespeeld (voor de tests)
 
 .segment Data

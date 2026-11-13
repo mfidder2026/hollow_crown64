@@ -179,7 +179,7 @@ wacht 3
 verwacht_vlag wolven_weg 1
 verwacht_vlag hoofdstuk1_klaar 1
 verwacht vm_scene = 0
-verwacht_slot 0 mira_bos               # Mira staat er (in het slot van Grom, die weg is): ze reist mee
+verwacht_slot 0 mira_mee               # Mira loopt nu mee (de figuur die overal mee kan)
 verwacht voltooid = 1
 verwacht gl_laatste = 4                # GL_KLAAR
 verwacht_tekst 24 "          Hoofdstuk 1 voltooid"

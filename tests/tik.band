@@ -1,0 +1,38 @@
+# tik.band — Tik de Terugdraaier en Mira die meeloopt (motor voor hoofdstuk 2).
+# Een dood: Tik verschijnt, zegt iets droogs, "Ja, terugdraaien." zet alles terug zoals bij binnenkomst van de kamer.
+wacht 3
+start_script proef_dood                # zet een vlag, geeft de munt, en dan: dood
+wacht 3
+verwacht_slot 0 tik
+verwacht_tekst 0 "Dat was dom. Terugdraaien?"
+verwacht_eigenaar munt eldric
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+verwacht_tekst 19 "Ja, terugdraaien."
+screenshot tik
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht terug_teller = 1
+verwacht gs_actief = 0
+verwacht_vlag proef_dood_vlag 0        # terug zoals bij binnenkomst van het plein
+verwacht_eigenaar munt nergens
+verwacht_slot 0 geen                   # Tik is weer weg
+verwacht act_x.w = 120
+verwacht act_y = 112
+verwacht_tekst 22 "zonnesteen         ↑"
+screenshot terug
+
+# Mira loopt mee: ze verschijnt vlak achter Eldric en volgt hem
+start_script proef_mira
+wacht 3
+verwacht_slot 0 mira_mee
+cursor 250,120
+vuur
+wacht_tot_stil
+wacht 60
+verwacht act_richting = 2              # hij liep naar rechts ...
+verwacht npc_py+6 = 104                # ... en Mira staat op zijn hoogte
+screenshot mira_mee

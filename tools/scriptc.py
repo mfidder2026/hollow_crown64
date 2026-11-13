@@ -10,7 +10,9 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
   Bovenaan:
     BEGIN kamer x,y richting          waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
     SPREKER naam kleur                wie kan praten, in welke kleur (berichten op rij 0-1)
-    DOEL vlag                         het einde van het hoofdstuk: de compiler controleert dat het te halen is
+    DOEL vlag                         het einde van het spel (tot nu toe): de compiler controleert dat het te halen is
+    HOOFDSTUK n "naam" vlag           een hoofdstuk: de titel onderaan ("Hoofdstuk n: naam") en de vlag die het
+                                      afsluit ("Hoofdstuk n voltooid"). In een script: HOOFDSTUK n = dat begint nu.
     VERHAAL kamer x,y richting        na het titelscherm eerst naar deze kamer (de verhaalanimatie); zijn
                                       BINNENKOMST vertelt het verhaal en gaat daarna met KAMER naar het spel
     STANDAARD werkwoord:              antwoord als een voorwerp geen script heeft voor dat werkwoord
@@ -28,7 +30,9 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
                                       schuiven deze kleuren rond (bv. vuur: rood oranje geel). Hooguit 2 per kamer.
     TONEEL                            een toneel (de verhaalanimatie): geen Eldric (tot TOON eldric), geen cursor,
                                       geen balk; alleen het plaatje en de tekst van de verteller
-    ACTOR naam KOSTUUM k OP x,y [VERBORGEN]
+    ACTOR naam KOSTUUM k OP x,y [VERBORGEN] [VOLGT]
+                                      (buiten een KAMER, in spel.hcs: een figuur die overal mee kan, zoals Tik;
+                                      met VOLGT loopt hij achter Eldric aan, zoals Mira vanaf hoofdstuk 2)
                                       een figuur (NPC) in de kamer, met een kostuum uit tools/costume.py
                                       (mira, vex, wolf); OP = waar de voeten staan. Hooguit 2 per kamer.
 
@@ -70,6 +74,7 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand) of stil;
                                       bij het laden van een kamer stopt het (zet MUZIEK dus in BINNENKOMST).
                                       F1 zet de muziek voor de speler uit.
+    TERUG                             terug naar het ankerpunt: zoals bij binnenkomst van deze kamer (Tik)
     PUNTEN n                          n lichtpunten erbij (de score; zet hem waar iets maar één keer kan)
     GELUID naam                       een geluidseffect op stem 3 (deur munt vuur wolf klaar klik); wacht niet
     LOOP naam x,y                     een figuur in een rechte lijn laten lopen (wacht tot hij er is)
@@ -104,13 +109,13 @@ OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLA
       "ALS_NIET_HEEFT": 0x06, "ALS_STAND": 0x07, "ALS_NIET_STAND": 0x08, "ZET": 0x09, "WIS": 0x0A, "GEEF": 0x0B,
       "NEEM": 0x0C, "STAND": 0x0D, "PLAATS": 0x0E, "LOOP": 0x0F, "KIJK": 0x10, "WACHT": 0x11,
       "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13, "PATCH": 0x14, "KAMER": 0x15, "PRAAT": 0x16,
-      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A, "MUZIEK": 0x1B, "KLEUR": 0x1C, "PUNTEN": 0x1D}
+      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A, "MUZIEK": 0x1B, "KLEUR": 0x1C, "PUNTEN": 0x1D, "HOOFDSTUK": 0x1E, "TERUG": 0x1F}
 # geluidseffecten: gelijk houden met de GL_-nummers in src/geluid.asm
 GELUIDEN = ["deur", "munt", "vuur", "wolf", "klaar", "klik"]
 MAX_NPC_KAMER = 2
 MAX_KEUZES = 8
 OPDRACHTEN = {"ZEG", "ALS", "ANDERS", "EINDE", "ZET", "WIS", "GEEF", "NEEM", "PLAATS", "STAND", "LOOP", "KIJK",
-              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID", "MUZIEK", "KLEUR", "PUNTEN"}
+              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID", "MUZIEK", "KLEUR", "PUNTEN", "HOOFDSTUK", "TERUG"}
 
 
 class Fout(Exception):
@@ -170,6 +175,7 @@ class Spel:
         self.actors, self.actor_volgorde = {}, []
         self.gesprekken = {}
         self.begin, self.doel, self.verhaal = None, None, None
+        self.hoofdstukken = {}                       # n -> (naam, doelvlag, waar)
 
 
 def lees(bestanden):
@@ -252,14 +258,17 @@ def lees(bestanden):
                 blok = nieuw_blok(blok, keuze, "script", waar)
                 continue
             if kop == "ACTOR":
-                if kamer is None or len(w) not in (6, 7) or w[2] != "KOSTUUM" or w[4] != "OP" \
-                        or (len(w) == 7 and w[6] != "VERBORGEN"):
-                    raise Fout("%s: ACTOR naam KOSTUUM kostuum OP x,y [VERBORGEN] (binnen een KAMER)" % waar)
+                extra = w[6:]
+                if len(w) < 6 or w[2] != "KOSTUUM" or w[4] != "OP" \
+                        or any(e not in ("VERBORGEN", "VOLGT") for e in extra) \
+                        or ("VOLGT" in extra and kamer is not None):
+                    raise Fout("%s: ACTOR naam KOSTUUM kostuum OP x,y [VERBORGEN] (in een KAMER), of buiten een KAMER: "
+                               "een figuur die overal mee kan, ook met VOLGT (loopt achter Eldric aan)" % waar)
                 if w[1] in spel.actors or w[1] == "eldric":
                     raise Fout("%s: actor %s bestaat al" % (waar, w[1]))
                 x, y = punt(w[5], waar)
                 spel.actors[w[1]] = {"naam": w[1], "kostuum": w[3], "kamer": kamer, "x": x, "y": y,
-                                     "zichtbaar": len(w) == 6, "waar": waar}
+                                     "zichtbaar": "VERBORGEN" not in extra, "volgt": "VOLGT" in extra, "waar": waar}
                 spel.actor_volgorde.append(w[1])
                 if blok is not None:
                     sluit_blok(blok)
@@ -275,7 +284,7 @@ def lees(bestanden):
                 continue
 
             # ---- opdrachten in een script (KAMER met 4 woorden is de opdracht, met 2 de kamer zelf) ----
-            if kop in OPDRACHTEN or (kop == "KAMER" and len(w) == 4):
+            if (kop in OPDRACHTEN and not (kop == "HOOFDSTUK" and len(w) == 4)) or (kop == "KAMER" and len(w) == 4):
                 if blok is None:
                     raise Fout("%s: %s hoort in een script (onder BEKIJK: enz.)" % (waar, kop))
                 opdracht(blok, kop, w, waar)
@@ -285,7 +294,7 @@ def lees(bestanden):
             if blok is not None:
                 sluit_blok(blok)
                 blok = None
-            if any(is_tekst(x) for x in w) and kop != "VOORWERP":
+            if any(is_tekst(x) for x in w) and kop not in ("VOORWERP", "HOOFDSTUK"):
                 raise Fout("%s: %s kent geen tekst tussen aanhalingstekens" % (waar, kop))
             if kop == "KAMER":
                 if len(w) != 2:
@@ -358,6 +367,11 @@ def lees(bestanden):
                 if len(w) != 3:
                     raise Fout("%s: SPREKER naam kleur" % waar)
                 spel.sprekers[w[1]] = (w[2], waar)
+            elif kop == "HOOFDSTUK":
+                if len(w) != 4 or not is_tekst(w[2]):
+                    raise Fout('%s: HOOFDSTUK n "naam" doelvlag' % waar)
+                n = getal(w[1], waar, 1, 9)
+                spel.hoofdstukken[n] = (w[2][1], w[3], waar)
             elif kop == "DOEL":
                 if len(w) != 2:
                     raise Fout("%s: DOEL vlag" % waar)
@@ -494,6 +508,10 @@ def opdracht(blok, kop, w, waar):
         if n != 2:
             raise Fout("%s: %s naam" % (waar, kop))
         L.append((kop, w[1], waar))
+    elif kop == "HOOFDSTUK":
+        if n != 2:
+            raise Fout("%s: HOOFDSTUK n (in een script: het hoofdstuk begint)" % waar)
+        L.append(("HOOFDSTUK", getal(w[1], waar, 1, 9), waar))
     elif kop == "PUNTEN":
         if n != 2:
             raise Fout("%s: PUNTEN n" % waar)
@@ -527,7 +545,7 @@ def opdracht(blok, kop, w, waar):
         if n != 2:
             raise Fout("%s: WACHT beelden" % waar)
         L.append(("WACHT", getal(w[1], waar, 1, 65535), waar))
-    elif kop in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"):
+    elif kop in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "TERUG"):
         if n != 1:
             raise Fout("%s: %s (zonder meer)" % (waar, kop))
         L.append((kop, waar))
@@ -741,9 +759,9 @@ def controleer_scripts(spel):
     for a in spel.actors.values():
         if a["kostuum"] not in kostuums:
             raise Fout("%s: onbekend kostuum %s (tools/costume.py: %s)" % (a["waar"], a["kostuum"], ", ".join(kostuums)))
-        if a["zichtbaar"]:
+        if a["zichtbaar"] and a["kamer"] is not None:
             per_kamer.setdefault(a["kamer"], []).append(a["naam"])
-        if len(per_kamer.get(a["kamer"], [])) > MAX_NPC_KAMER:
+        if a["kamer"] is not None and len(per_kamer.get(a["kamer"], [])) > MAX_NPC_KAMER:
             raise Fout("%s: hooguit %d figuren tegelijk zichtbaar per kamer (de sprites zijn op); zet de rest "
                        "VERBORGEN en TOON ze later" % (a["waar"], MAX_NPC_KAMER))
     for g in spel.gesprekken.values():
@@ -926,6 +944,8 @@ class Uitvoer:
             elif k == "LOOP":
                 x = o[1] * 2
                 L.append("        .byte $%02x, %d, %d, %d    // LOOP eldric %d,%d" % (OP[k], x & 255, x >> 8, o[2], o[1], o[2]))
+            elif k == "HOOFDSTUK":
+                L.append("        .byte $%02x, %d    // HOOFDSTUK %d" % (OP[k], o[1] - 1, o[1]))
             elif k == "PUNTEN":
                 L.append("        .byte $%02x, %d    // PUNTEN %d" % (OP[k], o[1], o[1]))
             elif k == "KLEUR":
@@ -938,7 +958,7 @@ class Uitvoer:
                 L.append("        .byte $%02x, %d    // KIJK eldric" % (OP[k], o[1]))
             elif k == "WACHT":
                 L.append("        .byte $%02x, %d, %d    // WACHT %d" % (OP[k], o[1] & 255, o[1] >> 8, o[1]))
-            elif k in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP"):
+            elif k in ("TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "TERUG"):
                 L.append("        .byte $%02x    // %s" % (OP[k], k))
             elif k == "PATCH":
                 pk, pn = self.patches[o[1]]
@@ -1044,7 +1064,8 @@ def schrijf(spel, pad, json_pad):
 
     def nrij(label, waarden):
         L.append("%s: .byte %s" % (label, ", ".join(waarden) if waarden else "0"))
-    nrij("npc_kamer", [str(km[a["kamer"]]) for a in acts])
+    nrij("npc_kamer", ["255" if a["kamer"] is None else str(km[a["kamer"]]) for a in acts])   # 255: overal
+    nrij("npc_volgt", ["1" if a.get("volgt") else "0" for a in acts])
     nrij("npc_x_lo", [str((a["x"] * 2) & 255) for a in acts])
     nrij("npc_x_hi", [str((a["x"] * 2) >> 8) for a in acts])
     nrij("npc_y", [str(a["y"]) for a in acts])
@@ -1165,6 +1186,25 @@ def schrijf(spel, pad, json_pad):
               ".const VERHAAL_Y = %d" % vy, ".const VERHAAL_RICHTING = %d" % vr]
     else:
         L += [".const VERHAAL_KAMER = 255", ".const VERHAAL_X = 0", ".const VERHAAL_Y = 0", ".const VERHAAL_RICHTING = 0"]
+    hs = spel.hoofdstukken or {1: ("", spel.doel[0] if spel.doel else "geen_doel", None)}
+    nrs = list(range(1, max(hs) + 1))
+    for n in nrs:
+        if n not in hs:
+            raise Fout("HOOFDSTUK %d ontbreekt (de hoofdstukken gaan 1, 2, 3, ...)" % n)
+    L.append(".const AANTAL_HOOFDSTUKKEN = %d" % len(nrs))
+    for n in nrs:
+        naam, vlag, waar = hs[n]
+        for soort, tekst in (("titel", "Hoofdstuk %d: %s" % (n, naam)), ("klaar", "Hoofdstuk %d voltooid" % n)):
+            codes, _ = tekst_codes(tekst, waar, 1)
+            L.append("hs_%s_%d: .byte %s, 0    // %s" % (soort, n, ", ".join("$%02x" % c for c in codes), tekst))
+    for soort in ("titel", "klaar"):
+        L.append("hoofdstuk_%s_lo: .byte %s" % (soort, ", ".join("<hs_%s_%d" % (soort, n) for n in nrs)))
+        L.append("hoofdstuk_%s_hi: .byte %s" % (soort, ", ".join(">hs_%s_%d" % (soort, n) for n in nrs)))
+    L.append("hoofdstuk_titel_lengte: .byte %s" % ", ".join(
+        str(len("Hoofdstuk %d: %s" % (n, hs[n][0]))) for n in nrs))
+    L.append("hoofdstuk_klaar_lengte: .byte %s" % ", ".join(str(len("Hoofdstuk %d voltooid" % n)) for n in nrs))
+    L.append("hoofdstuk_doel: .byte %s    // de vlag die het hoofdstuk afsluit" % ", ".join(
+        str(u.vlag(hs[n][1])) for n in nrs))
     L.append(".const DOEL_VLAG = %d    // %s" % ((u.vlag(spel.doel[0]), spel.doel[0]) if spel.doel else (255, "geen")))
     L.append(".const AANTAL_VLAGGEN = %d" % len(u.vlaggen))
     L.append("// teksten (schermcodes; $%02x = tweede regel, 0 = einde)" % NIEUWE_REGEL)

@@ -1,7 +1,7 @@
 // status.asm — de spelstatus in één blok (§6.4). Opslaan = dit blok naar de diskette schrijven.
 // tools/vicetest.py leest deze labels via build/.../hollowcrown.vs; hernoem ze dus niet zomaar.
 
-.const STATUS_VERSIE   = 2              // 2: met de score (lichtpunten)
+.const STATUS_VERSIE   = 3              // 2: met de score (lichtpunten); 3: met het hoofdstuk
 .const MAX_VLAGGEN     = 256            // bits
 .const MAX_VOORWERPEN  = 64
 .const MAX_NPC         = 16
@@ -18,6 +18,7 @@ st_eigenaar:  .fill MAX_VOORWERPEN, 0  // per voorwerp: kamer, of $ff = inventar
 st_stand:     .fill MAX_VOORWERPEN, 0  // per voorwerp: stand (bv. open/dicht)
 st_npc:       .fill MAX_NPC, 0         // per figuur: 1 = zichtbaar
 st_score:     .byte 0                  // lichtpunten (hooguit SCORE_MAX)
+st_hoofdstuk: .byte 0                  // het hoofdstuk van nu (0 = hoofdstuk 1)
 spelstatus_eind:
 
 .const STATUS_GROOTTE = spelstatus_eind - spelstatus
@@ -48,6 +49,7 @@ status_begin:
         bpl !-
 !:      lda #0
         sta st_score
+        sta st_hoofdstuk
         lda #BEGIN_KAMER
         sta st_kamer
         lda #<BEGIN_X

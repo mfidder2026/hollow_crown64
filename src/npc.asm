@@ -10,6 +10,8 @@
 
 .const NPC_SLOTS = 2
 .const NPC_GEEN  = $ff
+.const NPC_OVERAL = 255                 // npc_kamer: een figuur die overal mee kan (ACTOR buiten een KAMER)
+.const VOLG_AFSTAND = 24                // zo ver (schermpixels) loopt een volger achter Eldric
 .const VM_FOUT_SLOTS = $fe              // vm_fout: TOON, maar beide slots zijn bezet
 
 .segment Code
@@ -34,25 +36,81 @@ npc_kamer_in: {
         lda #NPC_GEEN
         sta slot_npc
         sta slot_npc + 1
-        ldy #0                          // het volgende vrije slot
+        lda #0
+        sta vrij                        // het volgende vrije slot
         ldx #0
 lus:    cpx #AANTAL_NPC
         bcs klaar
-        lda npc_kamer,x
-        cmp st_kamer
-        bne volgende
         lda st_npc,x                    // alleen wie zichtbaar is
         beq volgende
+        lda npc_kamer,x
+        cmp #NPC_OVERAL                 // een figuur die overal mee kan (Tik, Mira die volgt)
+        bne !+
+        ldy st_kamer                    // (niet op een toneel)
+        lda kamer_toneel,y
+        bne volgende
+        jsr volger_bij_eldric           // volgt hij Eldric, dan staat hij vlak achter hem
+        jmp in_slot
+!:      cmp st_kamer
+        bne volgende
+in_slot:
+        ldy vrij
         cpy #NPC_SLOTS
         bcs klaar
         txa
         sta slot_npc,y
         jsr kostuum_naar_slot           // X = figuur, Y = slot
-        iny
+        inc vrij
 volgende:
         inx
         jmp lus
 klaar:  jmp npc_sprites
+vrij:   .byte 0
+}
+
+// volger_bij_eldric: volgt figuur X Eldric, dan zet hem vlak achter Eldric (X blijft)
+volger_bij_eldric: {
+        lda npc_volgt,x
+        beq klaar
+        jsr volg_doel
+        lda npc_dx_lo,x
+        sta npc_px_lo,x
+        lda npc_dx_hi,x
+        sta npc_px_hi,x
+        lda npc_dy,x
+        sta npc_py,x
+        lda #0
+        sta npc_lopen,x
+klaar:  rts
+}
+
+// volg_doel: het doel van een volger X: een stukje achter Eldric (links van hem, of rechts als hij naar links kijkt)
+volg_doel: {
+        lda act_richting
+        cmp #3                          // LINKS: erachter is rechts
+        beq rechts
+        lda act_x
+        sec
+        sbc #VOLG_AFSTAND
+        sta npc_dx_lo,x
+        lda act_x + 1
+        sbc #0
+        sta npc_dx_hi,x
+        bcs y                           // (niet voorbij de linkerrand)
+        lda #0
+        sta npc_dx_lo,x
+        sta npc_dx_hi,x
+        jmp y
+rechts: lda act_x
+        clc
+        adc #VOLG_AFSTAND
+        sta npc_dx_lo,x
+        lda act_x + 1
+        adc #0
+        sta npc_dx_hi,x
+y:      lda act_y
+        sta npc_dy,x
+        rts
 }
 
 // npc_toon: figuur X zichtbaar; staat hij in deze kamer, dan krijgt hij een vrij slot
@@ -60,8 +118,11 @@ npc_toon: {
         lda #1
         sta st_npc,x
         lda npc_kamer,x
+        cmp #NPC_OVERAL
+        beq !+
         cmp st_kamer
         bne klaar
+!:
         txa                             // heeft hij al een slot?
         cmp slot_npc
         beq klaar
@@ -80,6 +141,7 @@ npc_toon: {
 vrij:   txa
         sta slot_npc,y
         jsr kostuum_naar_slot
+        jsr volger_bij_eldric           // een volger verschijnt vlak achter Eldric
         jmp npc_sprites
 klaar:  rts
 }
@@ -252,7 +314,14 @@ hulp:   .byte 0
 npc_beweeg: {
         ldx #AANTAL_NPC - 1
         bmi klaar
-lus:    lda npc_lopen,x
+lus:    lda npc_volgt,x                 // een volger: elk beeld een doel vlak achter Eldric
+        beq !+
+        lda st_npc,x
+        beq volgende
+        jsr volg_doel
+        lda #1
+        sta npc_lopen,x
+!:      lda npc_lopen,x
         beq volgende
         lda npc_px_lo,x                 // x naar het doel (16 bits, 1 per beeld)
         cmp npc_dx_lo,x

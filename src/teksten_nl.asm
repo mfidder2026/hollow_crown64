@@ -49,9 +49,6 @@ tekst_opgeslagen:       .text "Het spel is opgeslagen."; .byte 0
 tekst_opslaan_fout:     .text "Opslaan lukte niet. Zit de diskette erin?"; .byte 0
 tekst_geladen:          .text "Daar ben ik weer."; .byte 0
 tekst_niets_opgeslagen: .text "Er is geen opgeslagen spel."; .byte 0
-tekst_voltooid:  .text "Hoofdstuk 1 voltooid"
-.label tekst_voltooid_lengte = * - tekst_voltooid
-                 .byte 0
 // de menubalk (menu.asm)
 tekst_bestand:      .text "Bestand"; .byte 0
 tekst_score:        .text "Score"; .byte 0
@@ -77,6 +74,3 @@ tekst_scroll:
         .text "Muziek: een eigen thema in D-mineur. Plaatjes: FLUX. ... "
         .text "Groeten aan iedereen die nog een C64 aanzet!          "
         .byte 0
-tekst_hoofdstuk: .text "Hoofdstuk 1: Dawnhaven"
-.label tekst_hoofdstuk_lengte = * - tekst_hoofdstuk
-                 .byte 0

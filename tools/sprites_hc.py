@@ -417,6 +417,22 @@ grom = sym(check([
 ], 6))
 grom = put(grom, [(y, 0, "k") for y in range(3, 33)] + [(0, 0, "s"), (0, 1, "s"), (1, 0, "s"), (1, 1, "s"), (2, 0, "k")])
 
+# ---------------------------------------------------------------- Tik, de Terugdraaier: een zwevend eitje met één oog
+tik = pad(sym(check([
+    "....kk",
+    "..kkcc",
+    ".kcccc",
+    ".kccck",   # 3 het oog (midden: 2 breed)
+    "kccckk",
+    "kccckk",
+    "kccccc",
+    "kccccc",
+    ".kcccc",
+    ".kcccc",
+    "..kkcc",
+    "....kk",
+], 6)))
+
 # ---------------------------------------------------------------- een maan (verhaalanimatie): een schijf die voor de zon schuift
 maan = pad(sym(check([
     "....kk",
@@ -545,6 +561,7 @@ CHARS = [
     ("king",  king,  7, 11),
     ("spook", ghost, 15, 12),
     ("maan",  maan,  12, 12),
+    ("tik",   tik,   1, 1),           # wit
     ("bram",  bram,  8, 9),
     ("grom",  grom,  5, 9),          # boven groen (zijn steenhuid), onder bruin (de vacht)          # boven oranje (baard, haar, hemd), onder bruin (schort)
     ("vex_kroon", vex_kroon, 7, 11),      # boven goud (kroon en schouders), onder donkergrijs

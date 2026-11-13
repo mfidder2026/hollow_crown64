@@ -25,11 +25,13 @@
 //   $1B n                         MUZIEK: 0 = stil, n = stuk n-1 (LIED_THEMA, LIED_PLEIN, ...: tools/thema.py)
 //   $1C kol rij b h van naar      KLEUR: kleur van -> naar in die vakjes (toneel.asm)
 //   $1D n                         PUNTEN: n lichtpunten erbij (de score, hooguit SCORE_MAX)
+//   $1E n                         HOOFDSTUK: hoofdstuk n (0 = 1) begint: de titel onderaan
+//   $1F                           TERUG: terug naar het ankerpunt (binnenkomst van de kamer; terug.asm)
 // TOON / VERBERG met figuur 255: Eldric zelf.
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
 
 .const OP_STOP = $00
-.const OP_LAATSTE = $1d
+.const OP_LAATSTE = $1f
 .const EIGENAAR_ELDRIC = $ff
 .const EIGENAAR_NERGENS = $fe
 .const SCORE_MAX = 250                  // de lichtpunten van het hele spel (scenario: tot 250)
@@ -398,6 +400,23 @@ op_geluid:
         lda #2
         jmp verder
 
+op_terug:
+        jsr terug_naar_anker            // zet de VM zelf op BINNENKOMST (of stopt hem)
+        jmp lus
+
+op_hoofdstuk:
+        ldy #1
+        lda (zp_vm),y
+        sta st_hoofdstuk
+        lda #0
+        sta voltooid                    // (opslaan.asm) het nieuwe hoofdstuk is nog niet uitgespeeld
+        ldy #RIJ_ONDER
+        lda #12                         // KLEUR_HOOFDSTUK (balk.asm, die later komt)
+        jsr rij_wissen
+        jsr balk_tekenen.hoofdstuk_tekenen
+        lda #2
+        jmp verder
+
 op_punten:
         ldy #1
         lda (zp_vm),y
@@ -472,7 +491,7 @@ sprongen:
         .word op_zet - 1, op_wis - 1, op_geef - 1, op_neem - 1, op_stand - 1, op_plaats - 1
         .word op_loop - 1, op_kijk - 1, op_wacht - 1, op_tussenscene - 1, op_einde_tussenscene - 1
         .word op_patch - 1, op_kamer - 1, op_praat - 1, op_toon - 1, op_verberg - 1, op_npc_loop - 1
-        .word op_geluid - 1, op_muziek - 1, op_kleur - 1, op_punten - 1
+        .word op_geluid - 1, op_muziek - 1, op_kleur - 1, op_punten - 1, op_hoofdstuk - 1, op_terug - 1
 .assert "een sprong per opcode", (* - sprongen) / 2, OP_LAATSTE + 1
 }
 

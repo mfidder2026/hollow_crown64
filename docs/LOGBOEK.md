@@ -741,3 +741,19 @@ Later, als de diskette vol raakt (rond 25 kamers): meerdere diskettes ("Plaats d
 scripts als eigen bestanden is dat eenvoudig.
 
 **Getest:** 23/23 compiler, 18/18 banden (de oplossingsband speelt alle kamers met hun scripts van de diskette).
+
+## 2026-11-13 — Motor voor hoofdstuk 2: hoofdstukken, Tik, Mira loopt mee
+
+- **Hoofdstukken**: in spel.hcs `HOOFDSTUK n "naam" doelvlag` (1 Dawnhaven, 2 Duisterwoud). De titel onderaan en
+  "Hoofdstuk n voltooid" komen uit een tabel; `st_hoofdstuk` staat in de spelstatus (STATUS_VERSIE 3). In een script
+  begint `HOOFDSTUK n` het hoofdstuk (opcode $1E).
+- **Tik en terugdraaien**: bij binnenkomst van elke kamer bewaart de motor een kopie van de spelstatus (het
+  ankerpunt, `src/terug.asm`). `TERUG` (opcode $1F) zet alles terug en begint de kamer opnieuw zonder te laden.
+  Tik is een figuur die overal mee kan (wit eitje met één oog); na een dood: `TOON tik`, zijn regel, `PRAAT
+  tik_vraag` ("Ja, terugdraaien.").
+- **Figuren die overal mee kunnen**: een ACTOR buiten een KAMER (in spel.hcs). Met `VOLGT` loopt hij achter Eldric aan
+  (24 pixels erachter, aan de kant waar Eldric niet heen kijkt). Mira (`mira_mee`) loopt mee vanaf het eind van
+  hoofdstuk 1.
+
+**Getest:** `tests/tik.band` (dood met Tik, terugdraaien: vlag en munt terug, Eldric op zijn plek van binnenkomst;
+Mira verschijnt en loopt mee). 23/23 compiler, 19/19 banden.

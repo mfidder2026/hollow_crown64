@@ -64,6 +64,7 @@ kamer_wissel: {
         jsr npc_kamer_in                // de figuren van deze kamer
         ldx st_kamer
         jsr toneel_kamer                // TONEEL: geen balk, cursor, Eldric (toneel.asm)
+        jsr anker_zetten                // het ankerpunt: hierheen draait Tik terug (terug.asm)
         ldx st_kamer                    // BINNENKOMST
         lda kamer_binnen_hi,x
         beq !+

@@ -80,6 +80,8 @@ VOORWERP wolven "wolven" VAK 28,80 82,12 LOOP 80,100 RUG
         ZEG mira "Wacht op mij, jongen."
         ZEG mira "Het pad vraagt om mij."
         VERBERG mira                       # ze reist mee: in de herberg is ze niet meer
+        VERBERG mira_bos
+        TOON mira_mee                      # en vanaf nu loopt ze achter Eldric aan (een figuur die overal mee kan)
         ZEG eldric "Ik ben maar een jongen. Maar ik ga mee. Samen dan."
         ZET hoofdstuk1_klaar
         EINDE_TUSSENSCENE

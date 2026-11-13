@@ -65,12 +65,17 @@ ww:     stx teller
 
         // inventaris: inventaris.asm tekent hem (inventaris_anders staat bij het begin op 1)
         // hoofdstuk
-hoofdstuk_tekenen:
-        lda #<tekst_hoofdstuk
+hoofdstuk_tekenen:                      // "Hoofdstuk n: naam" van het hoofdstuk van nu (tools/scriptc.py: HOOFDSTUK)
+        ldy st_hoofdstuk
+        lda hoofdstuk_titel_lo,y
         sta zp_ptr
-        lda #>tekst_hoofdstuk
+        lda hoofdstuk_titel_hi,y
         sta zp_ptr + 1
-        ldx #(40 - tekst_hoofdstuk_lengte) / 2
+        lda #40                         // in het midden
+        sec
+        sbc hoofdstuk_titel_lengte,y
+        lsr
+        tax
         ldy #RIJ_ONDER
         lda #KLEUR_HOOFDSTUK
         jmp tekst_schrijf
