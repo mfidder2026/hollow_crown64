@@ -10,6 +10,9 @@ Beschrijf alleen het onderwerp, in het Engels; de stijl die de C64 nodig heeft k
 achtergrond). --rauw laat die stijl weg. --groen geeft een sprite een groene achtergrond (voor iets paars of roze).
 --aantal N maakt N versies met verschillende zaden (naam_1.png, naam_2.png ...): kies de beste.
 --zaad N maakt een plaatje opnieuw precies zo.
+--ref beeld.png (mag vaker) geeft een referentiebeeld mee (FLUX.2 kan daarmee "in dezelfde stijl" of "hetzelfde,
+maar ..." maken). --init beeld.png --masker masker.png schildert alleen het witte deel van het masker opnieuw
+(bv. een patch: dezelfde kamer met de tafel verschoven); --sterkte bepaalt hoeveel.
 
 Daarna: python3 c64beeld.py bitmap kasteel.png kasteel   of   python3 c64beeld.py sprites figuren spook.png ...
 
@@ -69,6 +72,11 @@ def main():
     ap.add_argument("--zaad", type=int)
     ap.add_argument("--groen", action="store_true")
     ap.add_argument("--rauw", action="store_true")
+    ap.add_argument("--ref", action="append", default=[],
+                    help="referentiebeeld (stijl/inhoud), mag vaker: bv. data/flux/dawnhaven.png voor dezelfde stijl")
+    ap.add_argument("--init", help="beginbeeld (img2img of, met --masker, inpainting)")
+    ap.add_argument("--masker", help="wit = opnieuw tekenen, zwart = laten (zelfde maat als --init)")
+    ap.add_argument("--sterkte", type=float, default=0.75, help="hoeveel er van --init verandert (0-1)")
     a = ap.parse_args()
 
     for deel in DELEN:
@@ -100,6 +108,12 @@ def main():
                 "-p", prompt, "--steps", "4", "--cfg-scale", "1.0", "--sampling-method", "euler", "-s", str(zaad),
                 "-W", str(w), "-H", str(h), "-o", os.path.abspath(uit), "--mmap", "--disable-image-metadata",
                 "--max-vram", budget, "--vae-tiling"]
+        for r in a.ref:
+            args += ["-r", os.path.abspath(r)]
+        if a.init:
+            args += ["-i", os.path.abspath(a.init), "--strength", str(a.sterkte)]
+        if a.masker:
+            args += ["--mask", os.path.abspath(a.masker)]
         t = time.time()
         r = subprocess.run(args, cwd=os.path.dirname(exe), capture_output=True, text=True)
         if r.returncode != 0 or not os.path.exists(uit):

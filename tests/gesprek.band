@@ -1,17 +1,17 @@
 # gesprek.band — hoofdstuk 7: het hele gesprek met Mira, met de juiste vlag aan het eind.
-# Praat met = (100,164); Mira staat links bij de haard (cursor 56,96). Keuzes op rij 19-22 (cursor-y 156, 164, 172, 180).
+# Praat met = (100,164); Mira staat links bij de haard (cursor 264,100). Keuzes op rij 19-22 (cursor-y 156, 164, 172, 180).
 start_script proef_naar_herberg
 wacht_op_script
 wacht 3
 verwacht_kamer herberg
-cursor 56,96
+cursor 264,100
 verwacht_tekst 18 "Ga naar Mira"
 screenshot mira
 
 # Praat met Mira: de keuzes komen in plaats van de werkwoorden
 cursor 100,164
 vuur
-cursor 56,96
+cursor 264,100
 verwacht_tekst 18 "Praat met Mira"
 vuur
 wacht_tot_stil
@@ -72,7 +72,7 @@ vuur
 cursor 20,180                          # de ziensteen staat links (de herberg komt vóór het zwaard in de scripts)
 verwacht_tekst 18 "Geef ziensteen"
 vuur
-cursor 56,96
+cursor 264,100
 verwacht_tekst 18 "Geef ziensteen aan Mira"
 vuur
 wacht_tot_stil
@@ -84,7 +84,7 @@ verwacht_vlag hint_wolven 1
 # opnieuw praten: nu een andere keuze (de wolven)
 cursor 100,164
 vuur
-cursor 56,96
+cursor 264,100
 vuur
 wacht_tot_stil
 wacht_op_script

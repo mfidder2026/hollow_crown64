@@ -45,6 +45,11 @@ def pixels(naam):
 def masker(naam, kleuren=STANDAARD_KLEUREN, vrij=()):
     """True waar de voeten mogen staan: de loopkleuren, plus de VRIJ-gebieden uit het script."""
     m = np.isin(pixels(naam), kleurnummers(kleuren))
+    # Een dunne lijn (1 pixel hoog, met vloer erboven en eronder) is vloer: de voegen tussen planken, een
+    # scheur in de aarde. Een tafelpoot of een kruk is hoger dan 1 pixel en telt dus nog steeds niet.
+    lijn = np.zeros_like(m)
+    lijn[1:-1] = ~m[1:-1] & m[:-2] & m[2:]
+    m = m | lijn
     for x1, y1, x2, y2 in vrij:
         m[y1:y2 + 1, x1:x2 + 1] = True
     return m

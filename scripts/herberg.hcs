@@ -1,13 +1,12 @@
 # herberg.hcs — de herberg "De Laatste Straal". Plaatje: data/plaatjes/herberg.png (voorlopig).
 KAMER herberg
-  LOOPKLEUREN oranje bruin               # de houten vloer
+  LOOPKLEUREN oranje bruin geel          # de houten vloer (geel: het licht van het vuur op de vloer)
   SCHAAL 100
-  LOOPVAK 2,80 157,88                    # 0 achter, langs de toog
-  LOOPVAK 2,80 44,124                    # 1 links, bij de haard
-  LOOPVAK 96,80 157,124                  # 2 rechts
-  LOOPVAK 2,108 157,124                  # 3 voor de tafel langs
+  LOOPVAK 36,86 50,124                   # 0 links, bij de haard en de deur (links daarvan de oven)
+  LOOPVAK 97,88 143,124                  # 1 rechts, langs het vat en de toog (rechts staat een emmer)
+  LOOPVAK 36,108 157,124                 # 2 voor de tafel langs (achter de tafel is geen plek)
   FLAKKER 12,64 16,16 rood oranje geel  # het haardvuur
-  ACTOR mira KOSTUUM mira OP 28,96       # Mira, bij de haard
+  ACTOR mira KOSTUUM mira OP 132,104     # Mira, bij de toog
 
 BINNENKOMST:
   MUZIEK thema                         # het thema keert terug in de herberg (§9)
@@ -18,7 +17,7 @@ BINNENKOMST:
     PATCH kruik_weg
   EINDE
 
-VOORWERP deur "deur" VAK 40,46 11,34 LOOP 45,84 RUG
+VOORWERP deur "deur" VAK 40,46 11,38 LOOP 45,88 RUG
   GA_NAAR:
     KAMER plein 122,90 VOOR
   BEKIJK:
@@ -31,7 +30,7 @@ VOORWERP ziensteen "ziensteen" VAK 58,103 8,7 LOOP 62,112 RUG NERGENS
     ZEG eldric "Die neem ik mee. Misschien is iemand hem kwijt."
     GEEF ziensteen
 
-VOORWERP tafel "tafel" VAK 52,88 40,18 LOOP 70,110 RUG
+VOORWERP tafel "tafel" VAK 54,86 36,16 LOOP 70,110 RUG
   BEKIJK:
     ZEG eldric "Een eikenhouten tafel. Er ligt iets onder, in het donker."
   DUW:
@@ -47,7 +46,7 @@ VOORWERP tafel "tafel" VAK 52,88 40,18 LOOP 70,110 RUG
   TREK:
     ZEG eldric "Duwen gaat makkelijker. Denk ik."
 
-VOORWERP kruik "kruik" VAK 140,34 8,10 LOOP 140,86 RUG
+VOORWERP kruik "kruik" VAK 139,28 8,20 LOOP 140,90 RUG
   BEKIJK:
     ALS STAND kruik 1
       ZEG eldric "Een kruik vol lampolie. Niet opdrinken."
@@ -60,7 +59,7 @@ VOORWERP kruik "kruik" VAK 140,34 8,10 LOOP 140,86 RUG
     PATCH kruik_weg
     ZET kruik_gepakt
 
-VOORWERP vat "vat" VAK 87,55 13,25 LOOP 92,84 RUG
+VOORWERP vat "vat" VAK 87,55 13,30 LOOP 98,90 RUG
   BEKIJK:
     ZEG eldric "Een vat lampolie. Er zit een kraantje aan."
   PAK:
@@ -73,17 +72,13 @@ VOORWERP vat "vat" VAK 87,55 13,25 LOOP 92,84 RUG
       STAND kruik 1
     EINDE
 
-VOORWERP haard "haard" VAK 4,30 32,50 LOOP 32,86 LINKS
+VOORWERP haard "haard" VAK 2,26 30,54 LOOP 36,90 LINKS
   BEKIJK:
     ZEG eldric "Het enige warme vuur in het dorp. Dit hout komt nog van voor de schemering."
   GEBRUIK zwaard:
     ZEG eldric "Dit vuur brandt al. Het heeft mijn licht niet nodig."
 
-VOORWERP toog "toog" VAK 100,57 59,23 LOOP 120,84 RUG
-  BEKIJK:
-    ZEG eldric "Flessen, bekers en een plank. Geen waard te zien."
-
-VOORWERP mira "Mira" VAK 22,62 13,36 LOOP 42,100 LINKS
+VOORWERP mira "Mira" VAK 126,70 13,36 LOOP 116,108 RECHTS
   BEKIJK:
     ZEG eldric "Mira. Ze is blind, maar ze kijkt dwars door me heen."
   PRAAT:
@@ -98,6 +93,10 @@ VOORWERP mira "Mira" VAK 22,62 13,36 LOOP 42,100 LINKS
     ZET hint_wolven
   GEEF munt:
     ZEG mira "Een munt uit de fontein? Hou hem maar. Wensen zijn niet te koop."
+
+VOORWERP toog "toog" VAK 100,57 59,26 LOOP 120,90 RUG
+  BEKIJK:
+    ZEG eldric "Flessen, bekers en een plank. Geen waard te zien."
 
 GESPREK mira
   KEUZE "Wie bent u?"

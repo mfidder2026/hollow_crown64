@@ -499,3 +499,26 @@ zonlicht; Eldric draagt het laatste lichtfragment; Vex dient de Holle Koning).
 **Nog open (voor later):** het thema "bij de titel van elk hoofdstuk" (er is nu één hoofdstuk); een snellader
 (laden via de Kernal duurt op een echte 1541 ~14 s per kamer); FLUX-plaatjes voor herberg, smidse en bosrand;
 invoer op echte hardware (joystick, 1351-muis, toetsenbord) is alleen in VICE getest; Engels en Frans als aparte D64.
+
+## 2026-11-13 — FLUX-plaatjes: de herberg ✅
+
+De voorlopige herberg is opnieuw getekend in de stijl van het plein, met behoud van de indeling en de verhoudingen
+(Eldric naast de deur klopt). Eerst nieuwe FLUX-plaatjes zonder voorbeeld geprobeerd: mooi, maar de verhouding
+klopte niet (meubels veel te groot voor Eldric). Wat werkte: FLUX.2 met twee referentiebeelden, ons eigen plaatje
+(de indeling) en het plein (de stijl), met "Redraw the first image in exactly the art style of the second image,
+keep the composition". `--init` met `--sterkte` doet niets bij dit model (0,55 en 0,65 gaven hetzelfde beeld).
+
+- `docs/FLUX_PROMPT.md`: de vaste prompt (stijl, camera, uitsnede, schaal) en hoe je een plaatje maakt.
+- `tools/flux.py`: `--ref` (referentiebeeld, mag vaker), `--init`, `--masker`, `--sterkte`.
+- `tools/flux_patches.py herberg`: van `herberg_bron.png` (zoals FLUX hem maakte) naar het kamerplaatje (de kruik
+  grijs steengoed, zodat hij op de bruine muur zichtbaar blijft) en de twee patches, gemaakt uit het plaatje zelf:
+  zonder kruik (de muur erboven doorgetrokken) en de tafel opzij (vloer per rij aangevuld, met het licht van het vuur
+  per kolom) met de ziensteen waar hij stond. Zo passen de patches pixel voor pixel.
+- Omzetten: `boven=115 kleur=1.5 licht=1.0 sterkte=0` (geen menging: vlakke kleuren, zoals het plein).
+- `tools/loopkaart.py`: een lijn van 1 pixel hoog met vloer erboven en eronder telt als vloer (de voegen tussen de
+  planken). Een tafelpoot of kruk is hoger en telt nog steeds niet.
+- herberg.hcs: nieuwe loopvakken (om de tafel heen, niet door de oven), klikvakken; Mira staat nu bij de toog
+  (bij de haard stond ze voor de deur). `tests/gesprek.band`: Mira op cursor 264,100.
+
+**Getest:** 22/22 compiler, 13/13 banden (oplossing, kamers, gesprek en opslaan lopen door de nieuwe herberg).
+Volgende: de smidse en de bosrand, op dezelfde manier.
