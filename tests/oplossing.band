@@ -155,7 +155,7 @@ cursor 200,188
 verwacht_tekst 18 "Gebruik lantaarn"
 vuur
 wacht 2
-cursor 160,92
+cursor 120,100
 verwacht_tekst 18 "Gebruik lantaarn met wolven"
 vuur
 wacht_tot_stil

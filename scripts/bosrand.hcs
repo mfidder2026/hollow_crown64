@@ -1,11 +1,16 @@
-# bosrand.hcs — de rand van het Duisterwoud. Plaatje: data/plaatjes/bosrand.png (voorlopig).
+# bosrand.hcs — de rand van het Duisterwoud. Plaatje: data/flux/bosrand.png (FLUX, uit ons eigen voorlopige plaatje;
+# twee van de drie schaduwwolven staan in het plaatje, tools/flux_patches.py bosrand; de patch wolven_weg haalt ze weg).
 KAMER bosrand
   LOOPKLEUREN groen lichtgroen geel oranje
-  SCHAAL 100 88
-  LOOPVAK 2,98 157,124                   # 0 voor
-  LOOPVAK 2,76 118,124                   # 1 links en het pad
-  LOOPVAK 122,76 157,124                 # 2 rechts van de wegwijzer
-  ACTOR wolf KOSTUUM wolf OP 80,82       # een schaduwwolf op het pad (er zijn er meer, in het donker)
+  SCHAAL 104 94
+  LOOPVAK 2,112 157,124                  # 0 voor
+  LOOPVAK 2,92 118,124                   # 1 links en het pad
+  LOOPVAK 126,92 157,124                 # 2 rechts van de wegwijzer
+  ACTOR wolf KOSTUUM wolf OP 80,90       # de derde schaduwwolf, waar het pad het bos in gaat
+  BINNENKOMST:
+    ALS vlag wolven_weg
+      PATCH wolven_weg
+    EINDE
   ACTOR vex KOSTUUM vex OP 80,62 VERBORGEN   # Baron Vex, tussen de bomen (tussenscène, hoofdstuk 9)
   ACTOR mira_bos KOSTUUM mira OP 150,124 VERBORGEN   # Mira komt aanlopen (einde hoofdstuk 1); daarna reist ze mee
 
@@ -15,13 +20,13 @@ VOORWERP dorp "dorp" VAK 130,112 30,16 LOOP 150,120 RECHTS
   BEKIJK:
     ZEG eldric "Terug naar Dawnhaven."
 
-VOORWERP wegwijzer "wegwijzer" VAK 110,68 24,30 LOOP 116,100 RUG
+VOORWERP wegwijzer "wegwijzer" VAK 112,78 24,34 LOOP 116,114 RUG
   LEES:
     ZEG eldric "'Duisterwoud.' En met krijt eronder: 'Niet doen.'"
   BEKIJK:
     ZEG eldric "Een wegwijzer. Er staat iets op."
 
-VOORWERP bospad "pad" VAK 64,56 32,20 LOOP 80,80 RUG
+VOORWERP bospad "pad" VAK 68,58 24,22 LOOP 80,94 RUG
   BEKIJK:
     ZEG eldric "Het pad het Duisterwoud in. Ergens daar is Baron Vex."
   GA_NAAR:
@@ -31,7 +36,7 @@ VOORWERP bospad "pad" VAK 64,56 32,20 LOOP 80,80 RUG
       ZEG eldric "Daar ga ik niet zomaar in. Nog niet."
     EINDE
 
-VOORWERP wolven "wolven" VAK 66,68 28,18 LOOP 80,100 RUG
+VOORWERP wolven "wolven" VAK 28,80 82,12 LOOP 80,100 RUG
   BEKIJK:
     ALS vlag wolven_weg
       ZEG eldric "Weg zijn ze. Alleen hun pootafdrukken nog."
@@ -56,7 +61,8 @@ VOORWERP wolven "wolven" VAK 66,68 28,18 LOOP 80,100 RUG
         TUSSENSCENE
         ZEG eldric "Weg met jullie! Hier is het licht van de zon!"
         GELUID wolf
-        LOOP wolf 4,82
+        PATCH wolven_weg                   # de twee wolven in het plaatje vluchten het bos in
+        LOOP wolf 4,90
         VERBERG wolf
         ZET wolven_weg
         WACHT 25

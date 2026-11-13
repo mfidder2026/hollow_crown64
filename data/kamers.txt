@@ -3,6 +3,6 @@
 plein    data/flux/dawnhaven.png      boven=190  kleur=1.5  licht=1.0  sterkte=0.5  voorgrond=data/plein_voorgrond.txt  patch=deur_open:132,56,12,32:data/plaatjes/plein_deur_open.png
 herberg  data/flux/herberg.png    boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=tafel_weg:44,88,72,24:data/flux/herberg_tafel_weg.png  patch=kruik_weg:140,24,8,24:data/flux/herberg_zonder_kruik.png
 smit     data/plaatjes/smit.png     boven=0  kleur=1.0  sterkte=0  patch=vuur_aan:60,56,36,24:data/plaatjes/smit_vuur.png
-bosrand  data/plaatjes/bosrand.png    boven=0  kleur=1.0  sterkte=0
+bosrand  data/flux/bosrand.png    boven=115  kleur=1.8  licht=1.4  sterkte=0  patch=wolven_weg:24,72,88,24:data/flux/bosrand_zonder_wolven.png
 titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen
 kelder   data/flux/kelder.png     boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=honingpot_weg:140,40,16,16:data/flux/kelder_zonder_honingpot.png

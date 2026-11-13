@@ -3,6 +3,7 @@
 
     python3 tools/flux_patches.py herberg
     python3 tools/flux_patches.py kelder
+    python3 tools/flux_patches.py bosrand
 
 Een patch moet hetzelfde plaatje zijn met één kleine verandering op precies dezelfde plek. Daarom maken we hem hier
 uit het kamerplaatje zelf, met Pillow, in plaats van FLUX een nieuw plaatje te laten maken (dat past nooit precies).
@@ -174,5 +175,40 @@ def kelder():
     print("[patches] kelder: kelder.png, kelder_zonder_honingpot.png")
 
 
+# twee schaduwwolven in het plaatje (de derde is de figuur 'wolf' in bosrand.hcs): voeten in kamerpixels, kijkrichting
+WOLVEN = ((38, 89, False), (100, 88, True))
+WOLF_KLEUR = {"k": (0, 0, 0), "c": (80, 80, 80), "s": (184, 105, 98)}   # zwart, donkergrijs, lichtrood (de ogen)
+
+
+def kamer_naar_bron(x, y):
+    return x * 6.4, 115 + y * 3.2
+
+
+def wolf(im, voet_x, voet_y, gespiegeld):
+    """De wolf uit tools/sprites_hc.py, pixel voor pixel als kamerpixels: zo lijken alle drie de wolven op elkaar."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import sprites_hc as hc
+    rijen = [r[::-1] if gespiegeld else r for r in hc.wolf]
+    voeten = max(i for i, r in enumerate(rijen) if r.strip("."))
+    d = ImageDraw.Draw(im)
+    for cy, rij in enumerate(rijen):
+        for cx, ch in enumerate(rij):
+            if ch in WOLF_KLEUR:
+                x, y = kamer_naar_bron(voet_x - 12 + cx, voet_y - voeten + cy)
+                d.rectangle((round(x), round(y), round(x + 6.4) - 1, round(y + 3.2) - 1), fill=WOLF_KLEUR[ch])
+    return im
+
+
+def bosrand():
+    """bosrand_bron.png (FLUX, zonder wolven) -> bosrand.png (met twee wolven) en bosrand_zonder_wolven.png."""
+    bron = Image.open(os.path.join(FLUX, "bosrand_bron.png")).convert("RGB")
+    bron.save(os.path.join(FLUX, "bosrand_zonder_wolven.png"))
+    met = bron.copy()
+    for x, y, spiegel in WOLVEN:
+        wolf(met, x, y, spiegel)
+    met.save(os.path.join(FLUX, "bosrand.png"))
+    print("[patches] bosrand: bosrand.png (met wolven), bosrand_zonder_wolven.png")
+
+
 if __name__ == "__main__":
-    {"herberg": herberg, "kelder": kelder}[sys.argv[1]]()
+    {"herberg": herberg, "kelder": kelder, "bosrand": bosrand}[sys.argv[1]]()

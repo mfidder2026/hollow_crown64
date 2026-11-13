@@ -558,3 +558,14 @@ na het titelscherm wordt één toneel met spriteanimatie, en Mira komt aan het e
   en loopt nu via de kelder.
 
 **Getest:** 22/22 compiler, 13/13 banden.
+
+## 2026-11-13 — De bosrand als FLUX-plaatje, met drie wolven
+
+- FLUX in de stijl van het plein uit ons eigen voorlopige plaatje (2 referentiebeelden). De donkere boomkruinen
+  werden bij het omzetten zwart; met `kleur=1.8 licht=1.4` blijven ze grijs, blauw en groen.
+- Drie schaduwwolven (scenario): de figuur `wolf` op het pad, en twee wolven in het plaatje zelf, pixel voor pixel uit
+  dezelfde tekening als de figuur (`tools/flux_patches.py bosrand`, de rechter gespiegeld). De patch `wolven_weg`
+  (24,72,88,24) is het FLUX-plaatje zonder wolven; bij de lantaarn vluchten ze alle drie.
+- bosrand.hcs: nieuwe loopvakken (het gras begint lager), klikvakken, SCHAAL 104 94, BINNENKOMST zet de patch terug.
+
+**Getest:** 22/22 compiler, 13/13 banden. Alle vijf kamers zijn nu FLUX-plaatjes in dezelfde stijl, behalve de smit.
