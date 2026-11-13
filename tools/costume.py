@@ -133,8 +133,9 @@ def main():
          ".const ELDRIC_KB = %d    // kleur bovenste sprite: %s" % (kb, hc.NAMES[kb]),
          ".const ELDRIC_KO = %d    // kleur onderste sprite: %s" % (ko, hc.NAMES[ko]),
          ".segment Data",
-         ".const MATEN = %d" % len(MATEN),
-         "costume_eldric:    // MATEN x 12 poses x 128 bytes: maat * 12 + richting * 3 + fase"]
+         ".const MATEN = %d" % len(MATEN)]
+    import inpak
+    poses = []                                                   # per pose 128 bytes, ingepakt (src/inpak.asm)
     voorbeeld = []
     for m, hoogte in enumerate(MATEN):
         for r in RICHTINGEN:
@@ -149,12 +150,18 @@ def main():
                     rijen = HANDWERK.get((m, naam)) or verklein(rijen, hoogte)
                 voorbeeld.append((m, r, f, rijen))
                 boven, onder = hc.halves(rijen)
-                L.append("        // %s, maat %d (%s, fase %d)" % (naam, m, r, f))
-                for deel in (boven, onder):
-                    data = hc.sprite_bytes(deel)
-                    for i in range(0, 64, 16):
-                        L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
-    L.append(".assert \"costume_eldric is MATEN x 12 x 128 bytes\", * - costume_eldric, MATEN * 12 * 128")
+                data = bytes(hc.sprite_bytes(boven)) + bytes(hc.sprite_bytes(onder))
+                poses.append(("%s, maat %d (%s, fase %d)" % (naam, m, r, f), inpak.pak(data)))
+    # ingepakt: Eldric was 7,5 KB (MATEN x 12 poses x 128 bytes); de sprites zijn grotendeels leeg. actor_pose pakt
+    # een pose uit als hij verandert (src/actor.asm).
+    L.append("costume_eldric_lo: .byte " + ", ".join("<pose_%d" % i for i in range(len(poses))))
+    L.append("costume_eldric_hi: .byte " + ", ".join(">pose_%d" % i for i in range(len(poses))))
+    for i, (uitleg, data) in enumerate(poses):
+        L.append("pose_%d:    // %s" % (i, uitleg))
+        for j in range(0, len(data), 16):
+            L.append("        .byte " + ", ".join("$%02x" % x for x in data[j:j + 16]))
+    L.append(".assert \"een pose per maat, richting en fase\", %d, MATEN * 12" % len(poses))
+    print("[costume] eldric ingepakt: %d bytes (was %d)" % (sum(len(d) for _, d in poses), 128 * len(poses)))
     # NPC's (hoofdstuk 7): één pose, 2 sprites (128 bytes). vorm 0 = boven elkaar (de onderste 21 lager),
     # vorm 1 = naast elkaar (de rechter 24 schermpixels verder). voeten = de onderste rij met pixels.
     import json

@@ -385,21 +385,16 @@ actor_pose: {
         cmp act_pose
         beq klaar
         sta act_pose
-        lsr                             // pose * 128: hoog = pose / 2, laag = (pose & 1) * 128
-        tax
-        lda #0
-        ror
-        clc
-        adc #<costume_eldric
+        tax                             // de pose staat ingepakt (tools/costume.py): uitpakken in de sprite-vakken
+        lda costume_eldric_lo,x
         sta zp_ptr
-        txa
-        adc #>costume_eldric
+        lda costume_eldric_hi,x
         sta zp_ptr + 1
-        ldy #127
-!:      lda (zp_ptr),y
-        sta SPRITE_VAKKEN + ACT_VAK * 64,y
-        dey
-        bpl !-
+        lda #<(SPRITE_VAKKEN + ACT_VAK * 64)
+        sta zp_ptr2
+        lda #>(SPRITE_VAKKEN + ACT_VAK * 64)
+        sta zp_ptr2 + 1
+        jmp uitpak                      // inpak.asm
 klaar:  rts
 hulp:   .byte 0
 }
