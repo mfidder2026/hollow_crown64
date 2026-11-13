@@ -522,3 +522,6 @@ keep the composition". `--init` met `--sterkte` doet niets bij dit model (0,55 e
 
 **Getest:** 22/22 compiler, 13/13 banden (oplossing, kamers, gesprek en opslaan lopen door de nieuwe herberg).
 Volgende: de smidse en de bosrand, op dezelfde manier.
+
+**Hernoemd (2026-11-13):** de kamer heet nu overal "smit" in plaats van "smidse" (scripts/smit.hcs, KAMER smit,
+bestand SMIT op de diskette, data/plaatjes/smit*.png, tests). Op verzoek van de gebruiker.

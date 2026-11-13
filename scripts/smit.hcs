@@ -1,5 +1,5 @@
-# smidse.hcs — de smidse van Bram. Plaatje: data/plaatjes/smidse.png (voorlopig).
-KAMER smidse
+# smit.hcs — de smit van Bram. Plaatje: data/plaatjes/smit.png (voorlopig).
+KAMER smit
   LOOPKLEUREN bruin oranje               # aangestampte aarde
   SCHAAL 104
   LOOPVAK 2,106 157,124                  # 0 voor
@@ -13,7 +13,7 @@ BINNENKOMST:
     PATCH vuur_aan
   EINDE
 
-VOORWERP deur_smidse "deur" VAK 140,50 13,34 LOOP 146,86 RUG
+VOORWERP deur_smit "deur" VAK 140,50 13,34 LOOP 146,86 RUG
   GA_NAAR:
     KAMER plein 30,94 RECHTS
   BEKIJK:

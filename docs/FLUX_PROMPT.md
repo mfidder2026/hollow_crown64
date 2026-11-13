@@ -34,7 +34,7 @@ counter on the right with a few clay jugs on a shelf above it, a long low table 
 middle of the floor, wooden plank floor.
 ```
 
-**Smithy (smidse):**
+**Smithy (smit):**
 ```text
 The inside of a village smithy: a big stone forge hearth with cold grey ashes in the middle of the back wall,
 the smith's corner on the left, an iron anvil on a tree stump on the right, a wooden door on the right of the

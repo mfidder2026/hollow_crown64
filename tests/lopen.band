@@ -6,7 +6,7 @@ verwacht act_richting = 0
 verwacht act_maat = 0
 screenshot begin
 
-# 1. links, het gele pad naar de smidse (vak 1)
+# 1. links, het gele pad naar de smit (vak 1)
 cursor 80,108
 vuur
 wacht_tot_stil

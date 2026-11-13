@@ -3,7 +3,7 @@
 
     python3 tools/maak_kamers.py          schrijft data/plaatjes/*.png (640 x 256, verhouding 5:2)
 
-Er zijn (nog) geen FLUX-plaatjes voor de herberg, de smidse en de bosrand. Deze plaatjes houden de plek warm:
+Er zijn (nog) geen FLUX-plaatjes voor de herberg, de smit en de bosrand. Deze plaatjes houden de plek warm:
 maak je een FLUX-plaatje, zet het dan in data/kamers.txt en de rest (loopvakken, klikvakken) pas je daarop aan.
 Elk plaatje komt in twee versies waar een patch nodig is (bv. de tafel verschoven, het smidsvuur aan).
 Ook: plein_deur_open.png, het FLUX-plein met de herbergdeur open (voor de patch op het plein).
@@ -168,7 +168,7 @@ def herberg(tafel_weg=False, met_kruik=True):
     return img
 
 
-def smidse(vuur_aan=False):
+def smit(vuur_aan=False):
     rnd = random.Random(11)
     img = Image.new("RGB", (W, H), ZWART)
     d = ImageDraw.Draw(img)
@@ -260,7 +260,7 @@ def main():
     os.makedirs(UIT, exist_ok=True)
     plaatjes = {"herberg.png": herberg(), "herberg_tafel_weg.png": herberg(tafel_weg=True),
                 "herberg_zonder_kruik.png": herberg(met_kruik=False),
-                "smidse.png": smidse(), "smidse_vuur.png": smidse(vuur_aan=True),
+                "smit.png": smit(), "smit_vuur.png": smit(vuur_aan=True),
                 "bosrand.png": bosrand(), "plein_deur_open.png": plein_deur_open()}
     for naam, img in plaatjes.items():
         img.save(os.path.join(UIT, naam))

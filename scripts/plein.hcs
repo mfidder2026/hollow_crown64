@@ -5,12 +5,12 @@
 
 KAMER plein
   SCHAAL 104 88 76 69        # diepte: vooraan groot; achteraan zo klein dat hij door de deuren past
-                             # (deuren: achteraan ~14-16 hoog met de voet op y~66, smidse ~20 op y~78,
+                             # (deuren: achteraan ~14-16 hoog met de voet op y~66, smit ~20 op y~78,
                              #  herberg ~26 op y~84; Eldric: 34 / 26 / 20 / 14 / 10 rijen; 10 = helemaal bovenaan)
   LOOPKLEUREN groen lichtgroen geel   # de voeten mogen alleen hierop staan (de build controleert elk LOOPVAK)
   ACHTER 72,62 86,75         # achter de fontein, bij het torentje: dan staat het torentje vóór Eldric
   LOOPVAK 7,100 157,124      # 0 voor: het gras en het pad vooraan
-  LOOPVAK 27,88 59,101       # 1 links: het gele pad naar de smidse
+  LOOPVAK 27,88 59,101       # 1 links: het gele pad naar de smit
   LOOPVAK 50,74 63,90        # 2 links omhoog, naast de fontein
   VRIJ 76,62 82,76           # de waterstraal en het torentje staan op het gras erachter: daar loop je achterlangs
   LOOPVAK 59,72 104,75       # 3 achter de fontein langs (dwars door de waterstraal)
@@ -45,11 +45,11 @@ VOORWERP fontein "fontein" VAK 62,74 39,26 LOOP 80,100 RUG     # alleen de bak: 
 
 VOORWERP smit "smit" VAK 0,56 26,44 LOOP 30,94 LINKS
   GA_NAAR:
-    KAMER smidse 146,88 LINKS
+    KAMER smit 146,88 LINKS
   BEKIJK:
     ZEG eldric "Hier werkt Bram de smit. Het vuur is uit. Bram ook, zo te zien."
   OPEN:
-    KAMER smidse 146,88 LINKS
+    KAMER smit 146,88 LINKS
 
 VOORWERP herberg "herberg" VAK 126,26 34,70 LOOP 122,90 RECHTS
   OPEN:

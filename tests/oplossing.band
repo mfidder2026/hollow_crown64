@@ -44,7 +44,7 @@ wacht_tot_stil
 wacht_op_script
 verwacht_stand kruik 1
 
-# 3. terug naar het plein en naar de smidse
+# 3. terug naar het plein en naar de smit
 cursor 90,76
 vuur
 wacht_tot_stil
@@ -57,7 +57,7 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
-verwacht_kamer smidse
+verwacht_kamer smit
 
 # 4. het smidsvuur aan met het zwaard: Bram geeft de lantaarn
 cursor 180,156
@@ -97,7 +97,7 @@ vuur
 wacht_op_script
 verwacht_stand lantaarn 2
 
-# 6. naar de bosrand: smidse -> plein -> pad
+# 6. naar de bosrand: smit -> plein -> pad
 cursor 292,80
 verwacht_tekst 18 "Ga naar deur"
 vuur
