@@ -1,25 +1,25 @@
-# smit.hcs — de smit van Bram. Plaatje: data/plaatjes/smit.png (voorlopig).
+# smit.hcs — de smit van Bram. Plaatje: data/plaatjes/smit.png, met de hand getekend (tools/teken_smit.py).
 KAMER smit
-  LOOPKLEUREN bruin oranje               # aangestampte aarde
+  LOOPKLEUREN bruin oranje geel grijs donkergrijs   # aarde (oranje: licht van het vuur), stro, steentjes, een hoefijzer
   SCHAAL 104
-  LOOPVAK 2,106 157,124                  # 0 voor
-  LOOPVAK 38,84 108,124                  # 1 midden, voor het smidsvuur
-  LOOPVAK 2,92 20,124                    # 2 links, naast Bram
-  LOOPVAK 138,84 157,124                 # 3 rechts, bij de deur
-  FLAKKER 60,56 36,24 rood oranje geel   # het smidsvuur (uit: alleen grijs in die vakjes, dan verandert er niets)
+  LOOPVAK 2,112 157,124                  # 0 voor
+  LOOPVAK 24,84 100,124                  # 1 midden, voor het smidsvuur (links het watervat, rechts het aambeeld)
+  LOOPVAK 130,84 157,124                 # 2 rechts, bij de deur
+  FLAKKER 64,56 32,16 rood oranje geel   # het smidsvuur: uit gloeien de kolen zacht na, aan flakkeren de vlammen
+  ACTOR bram KOSTUUM bram OP 32,100      # Bram de smit, naast zijn blaasbalg
 
 BINNENKOMST:
   ALS vlag smidsvuur_aan
     PATCH vuur_aan
   EINDE
 
-VOORWERP deur_smit "deur" VAK 140,50 13,34 LOOP 146,86 RUG
+VOORWERP deur_smit "deur" VAK 133,39 21,43 LOOP 142,90 RUG
   GA_NAAR:
     KAMER plein 30,94 RECHTS
   BEKIJK:
     ZEG eldric "Terug naar het plein."
 
-VOORWERP smidsvuur "smidsvuur" VAK 58,48 41,30 LOOP 78,90 RUG
+VOORWERP smidsvuur "smidsvuur" VAK 54,24 52,58 LOOP 80,92 RUG
   BEKIJK:
     ALS vlag smidsvuur_aan
       ZEG eldric "Het vuur brandt weer. Voor het eerst sinds de zon weg is."
@@ -40,7 +40,7 @@ VOORWERP smidsvuur "smidsvuur" VAK 58,48 41,30 LOOP 78,90 RUG
       GEEF lantaarn
     EINDE
 
-VOORWERP bram "Bram" VAK 20,55 17,36 LOOP 44,96 LINKS
+VOORWERP bram "Bram" VAK 26,66 13,36 LOOP 46,104 LINKS
   BEKIJK:
     ZEG eldric "Bram de smit. Groot, rood en chagrijnig."
   PRAAT:
@@ -59,8 +59,28 @@ VOORWERP bram "Bram" VAK 20,55 17,36 LOOP 44,96 LINKS
       ZEG bram "Wat moet ik met goud zonder vuur? Ga weg."
     EINDE
 
-VOORWERP aambeeld "aambeeld" VAK 110,85 28,20 LOOP 104,100 RECHTS
+VOORWERP aambeeld "aambeeld" VAK 102,84 26,24 LOOP 96,100 RECHTS
   BEKIJK:
     ZEG eldric "Een aambeeld. Zwaar en koud."
   PAK:
     ZEG eldric "Ha. Nee."
+
+VOORWERP blaasbalg "blaasbalg" VAK 38,64 18,17 LOOP 50,96 RUG
+  BEKIJK:
+    ZEG eldric "Een blaasbalg. Daarmee maakt Bram het vuur heet."
+  GEBRUIK:
+    ALS vlag smidsvuur_aan
+      ZEG eldric "Pfff, pfff. Het vuur laait op."
+    ANDERS
+      ZEG eldric "Blazen op koude as helpt niet. Er moet eerst vuur zijn."
+    EINDE
+
+VOORWERP gereedschap "gereedschap" VAK 6,20 36,34 LOOP 30,92 RUG
+  BEKIJK:
+    ZEG eldric "Tangen, hamers en hoefijzers. Alles netjes aan een haak."
+  PAK:
+    ZEG bram "Afblijven. Mijn gereedschap is mijn gereedschap."
+
+VOORWERP schild "schild" VAK 134,12 20,24 LOOP 142,90 RUG
+  BEKIJK:
+    ZEG eldric "Een schild en twee zwaarden. Bram maakt mooi werk."

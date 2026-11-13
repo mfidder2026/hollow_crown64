@@ -122,6 +122,12 @@ def lees_band(pad):
                 if data:
                     raise Fout("%s:%d: intro moet de eerste stap zijn" % (pad, nr))
                 data += bytes([OP_INTRO])
+            elif cmd == "verwacht_slot":
+                d = arg.split()                          # slot figuur   (de figuur bij naam: tools/scriptc.py-volgorde)
+                if len(d) != 2 or d[0] not in ("0", "1"):
+                    raise ValueError
+                namen.append(("SLOT", int(d[0]), d[1]))
+                data += bytes([OP_MARKEER, len(namen)])
             elif cmd == "verwacht_logo" and not arg:
                 namen.append(("LOGO", None))
                 data += bytes([OP_MARKEER, len(namen)])
@@ -536,6 +542,12 @@ def controleer(vice, sym, regel, spel=None):
             rij, kol, KLEURNAMEN[oud], n, KLEURNAMEN[verwacht], "" if ok else "  (is %s)" % KLEURNAMEN[nu])
     if regel[0] == "MUZIEK":
         return muziek_klopt(vice, sym)
+    if regel[0] == "SLOT":
+        _, slot, naam = regel
+        figuren = spel["figuren"]
+        echt = vice.lees(sym["slot_npc"] + slot)[0]
+        echt_n = figuren[echt] if echt < len(figuren) else ("geen" if echt == 255 else str(echt))
+        return echt_n == naam, "figuurslot %d = %s%s" % (slot, naam, "" if echt_n == naam else "  (is %s)" % echt_n)
     if regel[0] == "LOGO":
         # de kleurenloop: elke logokolom k heeft kleur logo_kleuren[(k + intro_kleur) & 15], in alle 3 de rijen
         stap = vice.lees(sym["intro_kleur"])[0]
@@ -604,7 +616,7 @@ def draai(bandpad, args):
                 raise Fout("%s: onbekende %s %s" % (bandpad, "vlag" if soort == "vlaggen" else "voorwerp", m[1]))
     for _, label, *_ in verwacht + [m for m in shots if isinstance(m, tuple) and m[0] not in
                                      ("TEKST", "VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND", "VERWACHT_KAMER",
-                                      "ONTHOUD_KLEUR", "VERWACHT_KLEUR_VOLGEND", "MUZIEK", "LOGO")]:
+                                      "ONTHOUD_KLEUR", "VERWACHT_KLEUR_VOLGEND", "MUZIEK", "LOGO", "SLOT")]:
         if label not in sym:
             raise Fout("%s: onbekend label %s" % (verwachtpad, label))
     controles = [m for m in shots if isinstance(m, tuple)]

@@ -339,6 +339,46 @@ king = sym(check([
     "...k.k",
 ], 6))
 
+# ---------------------------------------------------------------- Bram de smit: breed, rode baard, blote armen, leren schort
+bram = sym(check([
+    "......",
+    "...kkk",   # 1 haar
+    "..kccc",
+    ".kcccc",
+    ".kssss",   # 4 voorhoofd
+    ".kssks",   # 5 ogen
+    ".kssss",
+    ".kcssc",   # 7 de baard begint
+    ".kcccc",
+    "..kccc",
+    "...kcc",   # 10 baardpunt
+    ".kkkcc",   # 11 brede schouders
+    "kssccc",
+    "kssccc",   # 13 blote armen
+    "kssccc",
+    "ksskcc",
+    "ksskcc",
+    "ksskcc",
+    "kss.kc",
+    "kkk.kc",   # 19 vuisten
+    "....kc",
+    "...kcc",   # 21 het leren schort (onderste sprite: bruin)
+    "..kccc",
+    "..kccc",
+    "..kccc",
+    "..kccc",
+    "..kccc",
+    "..kkkk",
+    "...kck",   # 28 benen
+    "...kck",
+    "...kck",
+    "...kck",
+    "..kkck",
+    ".kkkkk",   # 33 laarzen
+], 6))
+bram = put(bram, [(20, 9, "k"), (20, 10, "k"), (20, 11, "k"), (21, 9, "k"), (21, 10, "k"), (21, 11, "k"),
+                  (22, 10, "k"), (22, 11, "k")])   # de hamerkop onder zijn rechtervuist
+
 # ---------------------------------------------------------------- een maan (verhaalanimatie): een schijf die voor de zon schuift
 maan = pad(sym(check([
     "....kk",
@@ -467,6 +507,7 @@ CHARS = [
     ("king",  king,  7, 11),
     ("spook", ghost, 15, 12),
     ("maan",  maan,  12, 12),
+    ("bram",  bram,  8, 9),          # boven oranje (baard, haar, hemd), onder bruin (schort)
     ("vex_kroon", vex_kroon, 7, 11),      # boven goud (kroon en schouders), onder donkergrijs
     ("hol",   hol,   11, 11),
 ]

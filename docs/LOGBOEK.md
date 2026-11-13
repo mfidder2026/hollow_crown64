@@ -606,3 +606,17 @@ rij 18 blijft leeg.
   uitstak), en een pad de heuvel af.
 - Vex was moeilijk te zien voor het grijze kasteel: nu komt hij na een flits uit de poort en loopt de heuvel af tot hij
   tegen het groene gras staat, met de Lichte Kroon (eigen kostuum vex_kroon: boven goud, onder donkergrijs).
+
+## 2026-11-13 — De smit opnieuw: zelf getekend, Bram als figuur
+
+- `tools/teken_smit.py`: de smit met de hand getekend als C64-pixelart, in de sfeer van het plein: stenen smidsvuur met
+  kap en schoorsteen, blaasbalg, gereedschap en hoefijzers aan de muur, houten palen, een schild met twee zwaarden,
+  raampje met schemer, deur, aambeeld op een boomstronk, watervat, warm licht van het vuur op de aarden vloer. Ook
+  smit_vuur.png (vlammentongen) voor de patch vuur_aan (64,56,32,16).
+- In de koude haard gloeien een paar kolen (rood/oranje): FLAKKER laat ze zacht nagloeien; aan flakkeren de vlammen.
+- Bram is geen deel van het plaatje meer (dat leek een stoel) maar een figuur: rode baard, blote armen, leren schort,
+  hamer (tools/sprites_hc.py bram). Nieuwe voorwerpen: blaasbalg, gereedschap, schild.
+- vicetest: `verwacht_slot 0 bram` (de figuur bij naam, niet bij nummer: nummers verschuiven als er figuren bijkomen).
+- LOOPKLEUREN smit: ook geel, grijs, donkergrijs (stro, steentjes, een hoefijzer op de vloer: je loopt eroverheen).
+
+**Getest:** de oplossingsband maakt nu screenshots in de smit (koud en met vuur), pixel voor pixel met Bram. 23/23, 14/14.

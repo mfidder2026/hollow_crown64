@@ -91,6 +91,8 @@ wacht_tot_stil
 wacht_op_script
 wacht 3
 verwacht_kamer smit
+verwacht_slot 0 bram                   # Bram is een figuur, niet meer in het plaatje
+screenshot smit_koud
 
 # 4. het smidsvuur aan met het zwaard: Bram geeft de lantaarn
 cursor 180,156
@@ -104,6 +106,7 @@ vuur
 wacht_tot_stil
 wacht_op_script
 verwacht_vlag smidsvuur_aan 1
+screenshot smit_vuur
 verwacht_eigenaar lantaarn eldric
 verwacht_tekst 23 "zwaard             ↓  lantaarn"
 
@@ -163,11 +166,11 @@ wacht 60
 verwacht vm_scene = 1                  # de tussenscène loopt
 wacht 360
 verwacht_tekst 0 "Kom maar, Wachter. Ik heb een kroon voor"
-verwacht slot_npc = 1                  # Vex kreeg het slot dat de wolf vrijmaakte (slot 0)
+verwacht_slot 0 vex                    # Vex kreeg het slot dat de wolf vrijmaakte
 screenshot vex
 wacht 450
 verwacht_tekst 0 "Het pad vraagt om mij."
-verwacht slot_npc = 2                  # en nu Mira in dat slot (vex weg)
+verwacht_slot 0 mira_bos               # en nu Mira in dat slot (Vex weg)
 screenshot mira
 wacht_op_script
 wacht 3
