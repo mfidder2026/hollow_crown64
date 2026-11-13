@@ -1,0 +1,197 @@
+# hele_spel.band — het hele spel in één keer: hoofdstuk 1 (de stappen van oplossing.band), en dan hoofdstuk 2 met
+# wat Eldric echt bij zich heeft (kruik, lantaarn, honingpot, zonnesteen), met drie doden en terugdraaien.
+voeg_in oplossing.band
+
+# ---- hoofdstuk 2 ----
+cursor 160,84
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bospad
+verwacht st_hoofdstuk = 1
+verwacht voltooid = 0
+verwacht_slot 0 mira_mee
+wacht_op_script
+
+# het moeras (dood 1)
+cursor 40,120
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht terug_teller = 1
+verwacht act_zichtbaar = 1
+
+cursor 100,156
+vuur
+cursor 200,52
+wacht 2
+verwacht_tekst 18 "Pak kokers"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar koker eldric
+verwacht_tekst 22 "kruik              ↑  lantaarn"
+verwacht_tekst 23 "honingpot          ↓  zonnesteen"
+cursor 300,104
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+verwacht muz_lied = 6
+
+# de zonnesteen tegen de spookridder (dood 2); de koker blijft (die kwam uit het bospad)
+cursor 180,156
+vuur
+cursor 200,188
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen"
+vuur
+wacht 2
+cursor 92,100
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen met spookridder"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+screenshot ridder_tik
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht terug_teller = 2
+verwacht_eigenaar koker eldric
+verwacht_slot 1 spookridder               # (na TERUG staat Mira in slot 0)
+
+# honing, kever, helm
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik honingpot"
+vuur
+wacht 2
+cursor 92,100
+wacht 2
+verwacht_tekst 18 "Gebruik honingpot met spookridder"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag ridder_weg 1
+cursor 180,156
+vuur
+cursor 200,188
+wacht 2
+verwacht_tekst 18 "Gebruik koker"
+vuur
+wacht 2
+cursor 36,115
+wacht 2
+verwacht_tekst 18 "Gebruik koker met kever"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar fluisterkever eldric
+cursor 100,156
+vuur
+cursor 76,115
+wacht 2
+verwacht_tekst 18 "Pak helm"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar helm eldric
+cursor 200,90
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer jachthut
+
+# de kooi bij brandend vuur (dood 3), dan de goede weg
+cursor 260,156
+vuur
+cursor 232,60
+wacht 2
+verwacht_tekst 18 "Open kooi"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht gs_actief = 1
+cursor 20,156
+vuur
+wacht_op_script
+wacht 3
+verwacht terug_teller = 3
+cursor 180,156
+vuur
+cursor 200,188
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever"
+vuur
+wacht 2
+cursor 250,100
+wacht 2
+verwacht_tekst 18 "Gebruik fluisterkever met aardmannetje"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag jong_gesproken 1
+# de helm staat onder in de inventaris: eerst een rij naar beneden schuiven
+cursor 156,188
+vuur
+wacht 3
+verwacht_tekst 22 "zonnesteen         ↑  fluisterkever"
+cursor 180,156
+vuur
+cursor 20,188
+wacht 2
+verwacht_tekst 18 "Gebruik helm"
+vuur
+wacht 2
+cursor 164,60
+wacht 2
+verwacht_tekst 18 "Gebruik helm met haard"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_vlag vuur_uit 1
+cursor 260,156
+vuur
+cursor 232,60
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar gloeischub eldric
+cursor 304,76
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer oever
+
+cursor 100,172
+vuur
+cursor 224,72
+wacht 2
+verwacht_tekst 18 "Trek bel"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_vlag hoofdstuk2_klaar 1
+verwacht voltooid = 1
+verwacht_tekst 24 "          Hoofdstuk 2 voltooid"
+screenshot einde

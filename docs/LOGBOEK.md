@@ -783,3 +783,21 @@ Mira verschijnt en loopt mee). 23/23 compiler, 19/19 banden.
 
 **Getest:** `tests/hoofdstuk2.band` speelt het hele hoofdstuk, met beide doden en terugdraaien, en controleert vlaggen,
 voorwerpen, muziek en "Hoofdstuk 2 voltooid". 23/23 compiler, 20/20 banden.
+
+## 2026-11-13 — Alles testen: het hele spel, elk voorwerp, elke uitgang
+
+- `tools/maak_testbanden.py` maakt `tests/alle_voorwerpen.band` uit de scripts zelf: elke kamer, elk voorwerp, elk
+  "veilig" werkwoord (alleen praten/kijken; anders Bekijk). De zinregel moet het goede voorwerp noemen (het punt wordt
+  gekozen buiten de vakken van voorwerpen die voorrang hebben), en de VM moet zonder fout klaar zijn. 76 aanwijzingen
+  in 9 kamers. Draai het opnieuw na nieuwe kamers.
+- `tests/hele_spel.band` speelt hoofdstuk 1 en 2 achter elkaar (`voeg_in oplossing.band`: nieuw in vicetest.py), met
+  wat Eldric echt bij zich heeft, drie doden met terugdraaien en de inventaris die moet schuiven (5+ voorwerpen).
+- `tests/rondje_woud.band`: alle uitgangen van hoofdstuk 2 heen en terug, Mira overal mee, de steiger op over de trap
+  van loopvakken, opslaan en laden in de jachthut (hoofdstuk, vlaggen, Mira komen terug).
+- De testband mag nu 4 KB zijn (was 1 KB; alleen in de testbuild).
+- **Gevonden en opgelost:**
+  - Mira (een figuur heeft maar één maat) liep mee tot het eind van de steiger en stond daar als reus boven het water.
+    Een volger gaat buiten nu niet dieper dan de eerste SCHAAL-grens: daar wacht ze op Eldric (`volg_doel`).
+  - Het vak van de zee lag over het eind van de steiger: klikken om daar te lopen werd "Ga naar zee". Nu rechts ervan.
+
+**Getest:** 23/23 compiler, 23/23 banden.

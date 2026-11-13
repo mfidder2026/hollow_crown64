@@ -55,7 +55,7 @@ TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), 
          "f1": (0, 0x10), "f5": (0, 0x40), "f7": (0, 0x08)}
 MUISKNOP = {"links": 0x10, "rechts": 0x01}
 BAND_WACHT, BAND_LOOPT, BAND_KLAAR, BAND_FOUT = 0, 1, 2, 0xFF
-BAND_GROOTTE = 1024
+BAND_GROOTTE = 4096
 
 
 class Fout(Exception):
@@ -79,7 +79,19 @@ def lees_band(pad):
             raise ValueError
         return [tabel[w] for w in woorden[0].split(",")], n
 
-    for nr, regel in enumerate(open(pad, encoding="utf-8"), 1):
+    def regels(p, diepte=0):
+        """de regels van de band; 'voeg_in andere.band' zet daar de stappen van een andere band (zonder .verwacht)"""
+        for nr, r in enumerate(open(p, encoding="utf-8"), 1):
+            kaal = r.split("#", 1)[0].strip()
+            if kaal.startswith("voeg_in "):
+                ander = os.path.join(os.path.dirname(p), kaal.split(None, 1)[1])
+                if diepte > 3 or not os.path.exists(ander):
+                    raise Fout("%s:%d: voeg_in: %s" % (p, nr, ander))
+                yield from regels(ander, diepte + 1)
+            else:
+                yield nr, r
+
+    for nr, regel in regels(pad):
         regel = regel.split("#", 1)[0].strip()
         if not regel:
             continue

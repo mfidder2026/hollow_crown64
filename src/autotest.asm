@@ -23,7 +23,7 @@
 
 #if AUTOTEST
 
-.const BAND_GROOTTE   = 1024
+.const BAND_GROOTTE   = 4096
 .const BAND_WACHT     = 0               // band_status: wacht tot vicetest de band heeft geladen
 .const BAND_LOOPT     = 1
 .const BAND_KLAAR     = 2

@@ -1,0 +1,120 @@
+# rondje_woud.band — alle uitgangen van hoofdstuk 2 heen en terug, Mira loopt overal mee, en opslaan/laden in de
+# jachthut (de patches en het hoofdstuk komen terug). Alles is al opgelost (proef_hfst2_open).
+wacht 3
+start_script proef_hfst2_open
+wacht_op_script
+wacht 3
+verwacht_kamer bosrand
+verwacht st_hoofdstuk = 1
+
+cursor 160,84
+wacht 2
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bospad
+verwacht_slot 0 mira_mee
+cursor 300,104
+wacht 2
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+verwacht_slot 0 mira_mee
+verwacht_slot 1 geen                   # de ridder is in stukken
+screenshot spookbrug_stukken
+cursor 200,90
+wacht 2
+verwacht_tekst 18 "Ga naar brug"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer jachthut
+verwacht_slot 0 mira_mee
+screenshot jachthut_uit_open
+
+# opslaan in de jachthut
+toets f5 2
+wacht 3
+verwacht opslag_fout = 0
+verwacht_tekst 0 "Het spel is opgeslagen."
+wacht 150
+
+cursor 304,76
+wacht 2
+verwacht_tekst 18 "Ga naar achterdeur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer oever
+verwacht_slot 0 mira_mee
+cursor 200,96                          # de steiger op (lopen over de trapjes van loopvakken)
+wacht 2
+verwacht_tekst 18 "Ga naar"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht act_y < 86
+screenshot oever_steiger
+cursor 30,53
+wacht 2
+verwacht_tekst 18 "Ga naar bos"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer jachthut
+
+# laden: weer in de jachthut zoals opgeslagen, hoofdstuk 2, Mira erbij
+toets f7 2
+wacht 5
+verwacht_kamer jachthut
+verwacht st_hoofdstuk = 1
+verwacht_vlag vuur_uit 1
+verwacht_vlag kooi_open 1
+verwacht_eigenaar gloeischub eldric
+verwacht_slot 0 mira_mee
+verwacht_tekst 24 "        Hoofdstuk 2: Duisterwoud"
+screenshot na_laden
+wacht 150
+
+cursor 32,72
+wacht 2
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+cursor 6,123
+wacht 2
+verwacht_tekst 18 "Ga naar bospad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bospad
+cursor 184,138
+wacht 2
+verwacht_tekst 18 "Ga naar bosrand"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bosrand
+cursor 160,137
+wacht 2
+verwacht_tekst 18 "Ga naar dorp"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer plein
+verwacht_slot 0 mira_mee
+screenshot plein_met_mira

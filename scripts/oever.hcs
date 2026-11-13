@@ -57,7 +57,7 @@ VOORWERP oever_toren "vuurtoren" VAK 136,20 12,30 LOOP 100,80 RECHTS
   BEKIJK:
     ZEG eldric "Een vuurtoren op een eiland. Donker. Daar hoort licht te branden."
 
-VOORWERP zee "zee" VAK 100,64 59,30 LOOP 88,96 RECHTS
+VOORWERP zee "zee" VAK 112,64 47,30 LOOP 88,96 RECHTS   # (rechts van de steiger: het eind van de steiger is om op te lopen)
   BEKIJK:
     ZEG eldric "De zee. Ik heb de zee nog nooit gezien. Ze is groter dan ik dacht."
   GA_NAAR:

@@ -84,7 +84,8 @@ volger_bij_eldric: {
 klaar:  rts
 }
 
-// volg_doel: het doel van een volger X: een stukje achter Eldric (links van hem, of rechts als hij naar links kijkt)
+// volg_doel: het doel van een volger X: een stukje achter Eldric (links van hem, of rechts als hij naar links kijkt);
+// buiten niet hoger dan de eerste SCHAAL-grens (een figuur wordt niet kleiner: achteraan zou hij een reus zijn)
 volg_doel: {
         lda act_richting
         cmp #3                          // LINKS: erachter is rechts
@@ -108,8 +109,15 @@ rechts: lda act_x
         lda act_x + 1
         adc #0
         sta npc_dx_hi,x
-y:      lda act_y
-        sta npc_dy,x
+y:      lda schaal_aantal               // buiten (SCHAAL): een figuur heeft maar één maat, dus hij gaat niet
+        beq !+                          // dieper de kamer in dan de grootste maat; daar wacht hij op Eldric
+        lda act_y
+        cmp schaal_grens                // (de eerste grens: tot daar is Eldric ook op zijn grootst)
+        bcs !++
+        lda schaal_grens
+        bcc !++
+!:      lda act_y
+!:      sta npc_dy,x
         rts
 }
 
