@@ -258,6 +258,46 @@ vex = sym(check([
     ".kkkkk",
 ], 6))
 
+# ---------------------------------------------------------------- Baron Vex met de Lichte Kroon (verhaalanimatie)
+vex_kroon = sym(check([
+    "...c.c",   # de Lichte Kroon
+    "..cccc",
+    "..kkkk",
+    "..kkkk",
+    "..ksss",   # 4 voorhoofd
+    "..ksss",
+    "..ksks",   # 6 ogen
+    "..ksss",
+    "..kskk",   # 8 snor
+    "...ksk",
+    "....kk",   # 10 sik
+    "kc.kkk",   # 11 kraag van de mantel
+    "kckkkk",
+    "kcckcc",
+    "kcckcc",
+    "kcckck",
+    "kcckck",
+    "kcckck",
+    "kcckck",
+    "kcksck",
+    "kckssk",   # 20
+    "kckkkk",   # 21 (onderste sprite: donkergrijs)
+    "kckkcc",
+    "kckkcc",
+    "kckkcc",
+    "kckkcc",
+    "kccckc",
+    "kccckc",
+    "kccckc",
+    "kccckc",
+    "kccckc",
+    "kccckc",
+    ".kcckk",
+    "..kckk",
+    "..kkkk",
+    ".kkkkk",
+], 6))
+
 # ---------------------------------------------------------------- de Hollow King: holle kroon, gele ogen in een zwart gezicht
 king = sym(check([
     "...k.k",
@@ -427,6 +467,7 @@ CHARS = [
     ("king",  king,  7, 11),
     ("spook", ghost, 15, 12),
     ("maan",  maan,  12, 12),
+    ("vex_kroon", vex_kroon, 7, 11),      # boven goud (kroon en schouders), onder donkergrijs
     ("hol",   hol,   11, 11),
 ]
 

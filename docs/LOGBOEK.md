@@ -598,3 +598,11 @@ het verhaal over, geen hangende toon). 23/23 compiler, 14/14 banden.
 **Logo (2026-11-13):** de bovenste pixelrij van HOLLOW CROWN gaf een witte streep: rij 18 begint op de rasterlijn waar de
 IRQ van bitmap naar tekst schakelt (lijn 195), en het logo gebruikt alle 8 pixelrijen. Het logo staat nu op rij 19-21,
 rij 18 blijft leeg.
+
+## 2026-11-13 — Verbeteringen aan het toneel (na de eerste keer kijken)
+
+- De zon is helemaal geel gevuld (geen wit gat), met een klein glimlicht en schaduw rechtsonder.
+- De kasteelpoort: een boog met houten deuren die op de voet van de muur eindigt (was een zwarte ovaal die in het gras
+  uitstak), en een pad de heuvel af.
+- Vex was moeilijk te zien voor het grijze kasteel: nu komt hij na een flits uit de poort en loopt de heuvel af tot hij
+  tegen het groene gras staat, met de Lichte Kroon (eigen kostuum vex_kroon: boven goud, onder donkergrijs).

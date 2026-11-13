@@ -10,7 +10,7 @@ KAMER verhaal
   ACTOR maan_r KOSTUUM maan OP 126,26 VERBORGEN
   ACTOR hol_1 KOSTUUM hol OP 128,127 VERBORGEN
   ACTOR hol_2 KOSTUUM hol OP 138,127 VERBORGEN
-  ACTOR vex_toneel KOSTUUM vex OP 30,62 VERBORGEN
+  ACTOR vex_toneel KOSTUUM vex_kroon OP 30,54 VERBORGEN   # komt uit de poort, de Lichte Kroon op zijn hoofd
   BINNENKOMST:
     TUSSENSCENE
     MUZIEK thema
@@ -40,7 +40,11 @@ KAMER verhaal
     ZEG verteller "En uit de diepte kwamen holle wezens."
     VERBERG hol_1
     VERBERG hol_2
+    KLEUR 0,0 160,72 paars roze          # een flits: de poort gaat open
+    WACHT 4
+    KLEUR 0,0 160,72 roze paars
     TOON vex_toneel
+    LOOP vex_toneel 38,80                # de heuvel af, tot hij tegen het groene gras staat
     ZEG verteller "Baron Vex nam het kasteel en de Lichte Kroon."
     ZEG vex "De Holle Koning stal jullie zon! Alleen ik kan jullie beschermen."
     VERBERG vex_toneel

@@ -823,6 +823,54 @@ maan_onder:
         .byte $00, $00, $00      // ............
         .byte $00, $00, $00      // ............
         .byte 0
+.label vex_kroon_kb = 7      // geel
+.label vex_kroon_ko = 11      // donkergrijs
+vex_kroon_boven:
+        .byte $02, $28, $80      // ...c.cc.c...
+        .byte $0a, $aa, $a0      // ..cccccccc..
+        .byte $05, $55, $50      // ..kkkkkkkk..
+        .byte $05, $55, $50      // ..kkkkkkkk..
+        .byte $07, $ff, $d0      // ..kssssssk..
+        .byte $07, $ff, $d0      // ..kssssssk..
+        .byte $07, $7d, $d0      // ..kskssksk..
+        .byte $07, $ff, $d0      // ..kssssssk..
+        .byte $07, $55, $d0      // ..kskkkksk..
+        .byte $01, $d7, $40      // ...kskksk...
+        .byte $00, $55, $00      // ....kkkk....
+        .byte $61, $55, $49      // kc.kkkkkk.ck
+        .byte $65, $55, $59      // kckkkkkkkkck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $69, $96, $69      // kcckckkckcck
+        .byte $69, $96, $69      // kcckckkckcck
+        .byte $69, $96, $69      // kcckckkckcck
+        .byte $69, $96, $69      // kcckckkckcck
+        .byte $67, $96, $d9      // kcksckkcskck
+        .byte $67, $d7, $d9      // kcksskksskck
+        .byte 0
+vex_kroon_onder:
+        .byte $65, $55, $59      // kckkkkkkkkck
+        .byte $65, $aa, $59      // kckkcccckkck
+        .byte $65, $aa, $59      // kckkcccckkck
+        .byte $65, $aa, $59      // kckkcccckkck
+        .byte $65, $aa, $59      // kckkcccckkck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $1a, $55, $a4      // .kcckkkkcck.
+        .byte $06, $55, $90      // ..kckkkkck..
+        .byte $05, $55, $50      // ..kkkkkkkk..
+        .byte $15, $55, $54      // .kkkkkkkkkk.
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte 0
 .label hol_kb = 11      // donkergrijs
 .label hol_ko = 11      // donkergrijs
 hol_boven:

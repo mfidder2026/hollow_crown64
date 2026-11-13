@@ -60,8 +60,11 @@ def zon(dk):
         a = i * math.pi / 6
         dk.lijn([(cx + 12 * math.cos(a), cy + 12 * math.sin(a) * 0.9),
                  (cx + 16 * math.cos(a), cy + 16 * math.sin(a) * 0.9)], GEEL)
-    dk.ovaal(cx - 9, cy - 9, cx + 9, cy + 9, GEEL, ORANJE)
-    dk.ovaal(cx - 5, cy - 5, cx + 5, cy + 5, WIT, WIT)
+    dk.ovaal(cx - 9, cy - 9, cx + 9, cy + 9, GEEL, ORANJE)       # helemaal gevuld (geen wit gat in het midden)
+    for x, y in ((cx + 4, cy + 6), (cx + 5, cy + 5), (cx + 6, cy + 4), (cx + 3, cy + 7), (cx + 7, cy + 2)):
+        dk.px(x, y, ORANJE)                                      # schaduw rechtsonder: hij is rond
+    dk.rect(cx - 5, cy - 6, cx - 3, cy - 5, WIT)                 # een klein glimlicht linksboven
+    dk.px(cx - 6, cy - 4, WIT)
 
 
 def bergen(dk):
@@ -105,9 +108,18 @@ def heuvel_en_kasteel(dk):
         dk.poly([(x + 5, top - 15), (x + 9, top - 13), (x + 5, top - 11)], GEEL, GEEL)
         dk.rect(x + 3, top + 5, x + 5, top + 8, ZWART)
         dk.px(x + 4, top + 7, GEEL)
-    dk.ovaal(26, 46, 34, 58, ZWART, ZWART)                       # de poort
-    dk.rect(26, 52, 34, 54, ZWART)
+    # de poort: een boog die netjes op de voet van de muur eindigt, met houten deuren en ijzeren nagels
+    dk.ovaal(25, 43, 35, 51, ZWART, ZWART)
+    dk.rect(25, 47, 35, 54, ZWART)
+    dk.ovaal(26, 44, 34, 50, BRUIN, BRUIN)
+    dk.rect(26, 47, 34, 53, BRUIN)
+    dk.lijn([(30, 45), (30, 53)], ZWART)                         # de naad tussen de deuren
+    for x in (27, 33):
+        for y in (48, 51):
+            dk.px(x, y, DGRIJS)
     dk.lijn([(10, 54), (50, 54)], ZWART)
+    # een pad van de poort de heuvel af
+    dk.poly([(27, 55), (33, 55), (40, 70), (46, 86), (36, 86), (30, 70)], GEEL, ORANJE)
 
 
 def huisje(dk, x, y, b, h, rnd):
