@@ -5,3 +5,4 @@ herberg  data/flux/herberg.png    boven=115  kleur=1.5  licht=1.0  sterkte=0  pa
 smit     data/plaatjes/smit.png     boven=0  kleur=1.0  sterkte=0  patch=vuur_aan:60,56,36,24:data/plaatjes/smit_vuur.png
 bosrand  data/plaatjes/bosrand.png    boven=0  kleur=1.0  sterkte=0
 titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen
+kelder   data/flux/kelder.png     boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=honingpot_weg:140,40,16,16:data/flux/kelder_zonder_honingpot.png

@@ -1,0 +1,54 @@
+# kelder.hcs — de kelder onder de herberg: het vat lampolie en de honingpot (scenario hoofdstuk 1).
+# Plaatje: data/flux/kelder.png (FLUX, uit ons eigen voorlopige plaatje; zie docs/FLUX_PROMPT.md).
+KAMER kelder
+  LOOPKLEUREN oranje bruin rood          # aangestampte aarde (rood: een vlek lampolie bij het vat)
+  SCHAAL 100
+  LOOPVAK 8,99 62,124                    # 0 links, onder aan de trap
+  LOOPVAK 8,113 126,124                  # 1 voor het vat langs
+  LOOPVAK 104,98 126,124                 # 2 rechts van het vat, bij de planken
+  BINNENKOMST:
+    ALS vlag honingpot_gepakt
+      PATCH honingpot_weg
+    EINDE
+
+VOORWERP trap "trap" VAK 4,2 26,94 LOOP 24,106 LINKS
+  GA_NAAR:
+    KAMER herberg 108,116 RECHTS
+  BEKIJK:
+    ZEG eldric "De trap naar de herberg. Het licht van boven is warm."
+
+VOORWERP honingpot "honingpot" VAK 143,42 10,15 LOOP 124,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Een pot honing. Voor de bijen die er niet meer zijn."
+  PAK:
+    ZEG eldric "Voor de bijen die er niet meer zijn."
+    GEEF honingpot
+    PATCH honingpot_weg
+    ZET honingpot_gepakt
+
+VOORWERP vat "vat" VAK 66,45 36,52 LOOP 84,116 RUG
+  BEKIJK:
+    ZEG eldric "Een groot vat lampolie, met een koperen kraan."
+  PAK:
+    ZEG eldric "Veel te zwaar. Ik neem wel wat in een kruik mee."
+  GEBRUIK kruik:
+    ALS STAND kruik 1
+      ZEG eldric "De kruik is al vol."
+    ANDERS
+      ZEG eldric "Klok, klok, klok. De kruik zit vol lampolie."
+      STAND kruik 1
+    EINDE
+
+VOORWERP planken "planken" VAK 100,24 42,34 LOOP 124,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Potten jam, flessen en een pot honing."
+
+VOORWERP kisten "kisten" VAK 130,60 30,66 LOOP 124,108 RECHTS
+  BEKIJK:
+    ZEG eldric "Lege kisten. Hier stond ooit de voorraad voor de winter."
+  OPEN:
+    ZEG eldric "Leeg. Allemaal leeg."
+
+VOORWERP raampje "raampje" VAK 44,10 18,32 LOOP 40,104 RUG
+  BEKIJK:
+    ZEG eldric "Een raampje op straathoogte. Buiten is het schemer, zoals altijd."

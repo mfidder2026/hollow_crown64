@@ -1,7 +1,7 @@
 # oplossing.band — hoofdstuk 9: het hele hoofdstuk 1 uitspelen, van het plein tot "Hoofdstuk 1 voltooid".
 # Werkwoorden: Pak (100,156), Gebruik (180,156), Open (260,156). Ga naar is het standaardwerkwoord.
 # Inventaris: links x 20, rechts x 200; rij 22 = y 180, rij 23 = y 188. Volgorde: zoals in de scripts
-# (herberg.hcs vóór spel.hcs): kruik, zwaard, lantaarn.
+# (herberg.hcs, kelder.hcs, dan spel.hcs): kruik (20,180), honingpot (200,180), zwaard (20,188), lantaarn (200,188).
 wacht 3
 verwacht_kamer plein
 
@@ -22,7 +22,7 @@ wacht_op_script
 wacht 3
 verwacht_kamer herberg
 
-# 2. de kruik pakken en vullen bij het vat
+# 2. de kruik pakken; door het luik naar de kelder: de kruik vullen bij het vat, de honingpot pakken
 cursor 100,156
 vuur
 cursor 288,55
@@ -37,12 +37,45 @@ cursor 20,180
 verwacht_tekst 18 "Gebruik kruik"
 vuur
 wacht 2
-cursor 186,80
+cursor 248,133
+verwacht_tekst 18 "Gebruik kruik met luik"
+cursor 20,156                          # toch maar niet: Ga naar (de zin begint opnieuw)
+vuur
+cursor 248,133
+verwacht_tekst 18 "Ga naar luik"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer kelder
+cursor 180,156
+vuur
+cursor 20,180
+vuur
+wacht 2
+cursor 168,86
 verwacht_tekst 18 "Gebruik kruik met vat"
 vuur
 wacht_tot_stil
 wacht_op_script
 verwacht_stand kruik 1
+cursor 100,156
+vuur
+cursor 296,66
+verwacht_tekst 18 "Pak honingpot"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht_eigenaar honingpot eldric
+verwacht_vlag honingpot_gepakt 1
+screenshot kelder
+cursor 30,60
+verwacht_tekst 18 "Ga naar trap"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer herberg
 
 # 3. terug naar het plein en naar de smit
 cursor 90,76
@@ -62,7 +95,7 @@ verwacht_kamer smit
 # 4. het smidsvuur aan met het zwaard: Bram geeft de lantaarn
 cursor 180,156
 vuur
-cursor 200,180
+cursor 20,188
 vuur
 wacht 2
 cursor 156,78
@@ -72,7 +105,7 @@ wacht_tot_stil
 wacht_op_script
 verwacht_vlag smidsvuur_aan 1
 verwacht_eigenaar lantaarn eldric
-verwacht_tekst 23 "lantaarn           ↓"
+verwacht_tekst 23 "zwaard             ↓  lantaarn"
 
 # 5. olie in de lantaarn, en aansteken met het zwaard
 cursor 180,156
@@ -80,7 +113,7 @@ vuur
 cursor 20,180
 vuur
 wacht 2
-cursor 20,188
+cursor 200,188
 verwacht_tekst 18 "Gebruik kruik met lantaarn"
 vuur
 wacht_op_script
@@ -88,10 +121,10 @@ verwacht_stand lantaarn 1
 verwacht_stand kruik 0
 cursor 180,156
 vuur
-cursor 200,180
+cursor 20,188
 vuur
 wacht 2
-cursor 20,188
+cursor 200,188
 verwacht_tekst 18 "Gebruik zwaard met lantaarn"
 vuur
 wacht_op_script
@@ -118,7 +151,7 @@ screenshot bosrand_wolf
 # 7. de finale: de lantaarn verjaagt de wolven, Vex verschijnt en verdwijnt het bos in
 cursor 180,156
 vuur
-cursor 20,188
+cursor 200,188
 verwacht_tekst 18 "Gebruik lantaarn"
 vuur
 wacht 2

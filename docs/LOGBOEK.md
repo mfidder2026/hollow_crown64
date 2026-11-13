@@ -543,3 +543,18 @@ na het titelscherm wordt één toneel met spriteanimatie, en Mira komt aan het e
   Vex en daarna Mira in het vrijgekomen slot, met screenshots pixel voor pixel.
 
 **Getest:** 22/22 compiler, 13/13 banden.
+
+## 2026-11-13 — De kelder (scenario hoofdstuk 1)
+
+- Eigen voorlopig plaatje (`maak_kamers.py kelder()`, trap links, vat met kraan, planken met de honingpot, rooster,
+  kisten), daarna FLUX in de stijl van het plein (2 referentiebeelden); de gebruiker koos versie 2.
+- `tools/flux_patches.py kelder`: `kelder_bron.png` → `kelder.png` en `kelder_zonder_honingpot.png` (de bakstenen
+  muur van ernaast op de plek van de pot). Patch `honingpot_weg:140,40,16,16`.
+- `scripts/kelder.hcs`: trap (terug naar de herberg), vat lampolie (Gebruik kruik met vat), honingpot (Pak; "Voor
+  de bijen die er niet meer zijn."), planken, kisten, raampje. LOOPKLEUREN oranje bruin rood (rood: een vlek olie).
+- Herberg: een luik rechtsvoor in de vloer (getekend in `flux_patches.py herberg`, licht hout met ijzeren banden; de
+  randen donkerbruin zodat de loopvakcontrole klopt). Het vat in de herberg is nu een leeg biervat.
+- De honingpot komt in de inventaris vóór het zwaard (kelder.hcs vóór spel.hcs): de oplossingsband is daarop aangepast
+  en loopt nu via de kelder.
+
+**Getest:** 22/22 compiler, 13/13 banden.

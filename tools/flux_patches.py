@@ -2,6 +2,7 @@
 """flux_patches.py — kleine bewerkingen op de FLUX-kamerplaatjes, en de patches die daaruit volgen.
 
     python3 tools/flux_patches.py herberg
+    python3 tools/flux_patches.py kelder
 
 Een patch moet hetzelfde plaatje zijn met één kleine verandering op precies dezelfde plek. Daarom maken we hem hier
 uit het kamerplaatje zelf, met Pillow, in plaats van FLUX een nieuw plaatje te laten maken (dat past nooit precies).
@@ -10,7 +11,8 @@ Coördinaten in bronpixels van het FLUX-plaatje (1024 x 640). Een kamerpixel (x,
 bij boven=115 (zie docs/FLUX_PROMPT.md).
 
 herberg:  data/flux/herberg_bron.png (zoals FLUX hem maakte) ->
-    herberg.png              de kruik (rechts aan de muur) grijs steengoed in plaats van een cyaan fles
+    herberg.png              de kruik (rechts aan de muur) grijs steengoed in plaats van een cyaan fles, en een luik
+                             naar de kelder rechtsvoor in de vloer
     herberg_zonder_kruik.png zonder de kruik: de plankenmuur erachter
     herberg_tafel_weg.png    de tafel (met de rechterkruk) opzij geschoven; waar hij stond ligt de ziensteen
 """
@@ -28,6 +30,7 @@ OPZIJ = 60                            # zoveel bronpixels schuift de tafel naar 
 VLOER_SCHOON = (640, 900)             # x-bereik met alleen vloerplanken (rechts van de kruk, links van de emmer)
 VLOER_RIJEN = (502, 522)              # rijen met alleen vloer over de hele breedte (voor het licht per kolom)
 STEEN = (378, 444, 414, 466)          # de ziensteen (kamer VAK 58,103 8,7)
+LUIK = (722, 478, 866, 506)           # het luik naar de kelder, rechtsvoor in de vloer (kamer x 113-135, y 114-122)
 
 
 def kruik_grijs(im):
@@ -129,14 +132,47 @@ def tafel_weg(im):
     return im
 
 
+def luik(im):
+    """Een houten luik in de vloer met een ijzeren ring. De randen donkerbruin, niet zwart: een zwarte lijn van
+    9 kamerpixels hoog zou de loopvakcontrole breken (het luik ligt in de vloer, je loopt eroverheen)."""
+    d = ImageDraw.Draw(im)
+    x1, y1, x2, y2 = LUIK
+    rand, hout, licht = (80, 40, 8), (235, 150, 60), (255, 210, 90)
+    d.rectangle((x1, y1, x2, y2), fill=rand)
+    d.rectangle((x1 + 4, y1 + 3, x2 - 4, y2 - 3), fill=hout)
+    for x in range(x1 + 4, x2 - 4, 24):                 # planken
+        d.rectangle((x, y1 + 3, x + 2, y2 - 3), fill=rand)
+    d.rectangle((x1 + 4, y1 + 3, x2 - 4, y1 + 5), fill=licht)
+    for y in (y1 + 8, y2 - 9):                          # ijzeren banden
+        d.rectangle((x1 + 4, y, x2 - 4, y + 2), fill=(170, 170, 180))
+    cx, cy = (x1 + x2) // 2, (y1 + y2) // 2             # de ring
+    d.ellipse((cx - 10, cy - 5, cx + 10, cy + 5), outline=(200, 200, 210), width=3)
+    return im
+
+
 def herberg():
     bron = Image.open(os.path.join(FLUX, "herberg_bron.png")).convert("RGB")
-    basis = kruik_grijs(bron.copy())
+    basis = luik(kruik_grijs(bron.copy()))
     basis.save(os.path.join(FLUX, "herberg.png"))
     zonder_kruik(basis.copy()).save(os.path.join(FLUX, "herberg_zonder_kruik.png"))
     tafel_weg(basis.copy()).save(os.path.join(FLUX, "herberg_tafel_weg.png"))
     print("[patches] herberg: herberg.png, herberg_zonder_kruik.png, herberg_tafel_weg.png")
 
 
+HONINGPOT = (918, 245, 972, 293)      # de ronde gele pot met deksel, rechts op de onderste plank
+MUUR_SCHUIF = -56                     # daar links van staat alleen muur (tussen de gele jampot en de honingpot)
+
+
+def kelder():
+    """kelder_bron.png -> kelder.png (zoals hij is) en kelder_zonder_honingpot.png (muur waar de pot stond)."""
+    bron = Image.open(os.path.join(FLUX, "kelder_bron.png")).convert("RGB")
+    bron.save(os.path.join(FLUX, "kelder.png"))
+    zonder = bron.copy()
+    x1, y1, x2, y2 = HONINGPOT
+    zonder.paste(bron.crop((x1 + MUUR_SCHUIF, y1, x2 + MUUR_SCHUIF, y2 - 3)), (x1, y1))
+    zonder.save(os.path.join(FLUX, "kelder_zonder_honingpot.png"))
+    print("[patches] kelder: kelder.png, kelder_zonder_honingpot.png")
+
+
 if __name__ == "__main__":
-    {"herberg": herberg}[sys.argv[1]]()
+    {"herberg": herberg, "kelder": kelder}[sys.argv[1]]()

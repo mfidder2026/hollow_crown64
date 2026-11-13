@@ -256,12 +256,79 @@ def plein_deur_open():
     return img
 
 
+def honingpot(d, x, y):
+    """een dikke gele pot met een deksel (8 x 8 kamerpixels)"""
+    rect(d, x, y + 1, x + 7, y + 7, ZWART)
+    rect(d, x + 1, y + 2, x + 6, y + 7, GEEL)
+    rect(d, x + 1, y + 2, x + 2, y + 6, ORANJE)
+    rect(d, x + 2, y, x + 5, y + 1, BRUIN)
+    rect(d, x + 3, y - 1, x + 4, y - 1, ZWART)
+
+
+def kelder(met_honingpot=True):
+    """De kelder onder de herberg: de trap naar boven links, het grote vat lampolie, planken met potten rechts."""
+    rnd = random.Random(11)
+    img = Image.new("RGB", (W, H), ZWART)
+    d = ImageDraw.Draw(img)
+    rect(d, 0, 1, 159, 6, BRUIN)                        # balken: de vloer van de herberg
+    for x in range(0, 160, 20):
+        rect(d, x, 1, x + 1, 6, ZWART)
+    stenen_muur(d, 0, 7, 159, 79, rnd)
+    # het luik boven de trap (licht van de herberg) en de trap omlaag, links
+    rect(d, 2, 7, 26, 14, ZWART)
+    rect(d, 4, 7, 24, 12, ORANJE)
+    for i in range(9):                                  # treden: van linksboven naar de vloer
+        y = 16 + i * 7
+        x1 = 2 + i
+        rect(d, x1 - 1, y - 1, x1 + 24, y + 2, ZWART)
+        rect(d, x1, y, x1 + 23, y + 1, BRUIN)
+        rect(d, x1, y, x1 + 23, y, ORANJE)
+    rect(d, 28, 14, 29, 79, ZWART)                      # de trapleuning
+    rect(d, 30, 14, 30, 79, BRUIN)
+    # een rooster hoog in de muur: schemering van buiten
+    rect(d, 48, 12, 62, 20, ZWART)
+    rect(d, 49, 13, 61, 19, PAARS)
+    for x in (52, 55, 58):
+        rect(d, x, 13, x, 19, ZWART)
+    # het grote vat lampolie met een kraan, op een stelling
+    rect(d, 64, 72, 102, 79, ZWART)
+    rect(d, 65, 73, 101, 75, BRUIN)
+    vat(d, 68, 34, 98, 72)
+    rect(d, 81, 58, 86, 61, ZWART)                      # de kraan
+    rect(d, 82, 59, 85, 60, LGRIJS)
+    rect(d, 84, 62, 85, 64, LGRIJS)
+    rect(d, 80, 76, 88, 79, DGRIJS)                     # een plasje olie eronder
+    # planken rechts met potten en flessen; de honingpot op de onderste plank
+    for y in (34, 54):
+        rect(d, 110, y, 157, y + 1, BRUIN)
+        rect(d, 110, y + 2, 157, y + 2, ZWART)
+    for x, kl in ((114, ROOD), (122, GROEN), (138, LGRIJS), (148, ROOD)):
+        rect(d, x - 1, 25, x + 4, 33, ZWART)
+        rect(d, x, 26, x + 3, 33, kl)
+    for x, kl in ((114, LGRIJS), (146, GROEN)):
+        rect(d, x - 1, 45, x + 4, 53, ZWART)
+        rect(d, x, 46, x + 3, 53, kl)
+    if met_honingpot:
+        honingpot(d, 128, 46)
+    # kisten rechtsonder
+    for x1, y1, x2 in ((134, 64, 156), (140, 56, 152)):
+        rect(d, x1 - 1, y1 - 1, x2 + 1, 79, ZWART)
+        rect(d, x1, y1, x2, 79, BRUIN)
+        rect(d, x1, y1, x2, y1, ORANJE)
+    # vloer: aangestampte aarde
+    rect(d, 0, 80, 159, 125, BRUIN)
+    vlekken(d, 0, 80, 159, 125, ORANJE, 0.08, rnd)
+    rect(d, 0, 126, 159, 127, ZWART)
+    return img
+
+
 def main():
     os.makedirs(UIT, exist_ok=True)
     plaatjes = {"herberg.png": herberg(), "herberg_tafel_weg.png": herberg(tafel_weg=True),
                 "herberg_zonder_kruik.png": herberg(met_kruik=False),
                 "smit.png": smit(), "smit_vuur.png": smit(vuur_aan=True),
-                "bosrand.png": bosrand(), "plein_deur_open.png": plein_deur_open()}
+                "bosrand.png": bosrand(), "plein_deur_open.png": plein_deur_open(),
+                "kelder.png": kelder(), "kelder_zonder_honingpot.png": kelder(met_honingpot=False)}
     for naam, img in plaatjes.items():
         img.save(os.path.join(UIT, naam))
     print("[plaatjes] %s" % ", ".join(plaatjes))

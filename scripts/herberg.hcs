@@ -59,18 +59,21 @@ VOORWERP kruik "kruik" VAK 139,28 8,20 LOOP 140,90 RUG
     PATCH kruik_weg
     ZET kruik_gepakt
 
-VOORWERP vat "vat" VAK 87,55 13,30 LOOP 98,90 RUG
+VOORWERP luik "luik" VAK 112,112 24,11 LOOP 108,116 RECHTS
+  GA_NAAR:
+    KAMER kelder 24,106 RECHTS
+  OPEN:
+    ZEG eldric "Een luik naar de kelder. Er komt een geur van olie omhoog."
   BEKIJK:
-    ZEG eldric "Een vat lampolie. Er zit een kraantje aan."
+    ZEG eldric "Een luik in de vloer. Daaronder is vast de kelder."
+
+VOORWERP biervat "vat" VAK 87,55 13,30 LOOP 98,90 RUG
+  BEKIJK:
+    ZEG eldric "Een biervat. Leeg, zo te horen. De lampolie staat vast in de kelder."
   PAK:
-    ZEG eldric "Veel te zwaar. Ik neem wel wat in een kruik mee."
+    ZEG eldric "Een leeg biervat. Wat moet ik daarmee?"
   GEBRUIK kruik:
-    ALS STAND kruik 1
-      ZEG eldric "De kruik is al vol."
-    ANDERS
-      ZEG eldric "Klok, klok, klok. De kruik zit vol lampolie."
-      STAND kruik 1
-    EINDE
+    ZEG eldric "Hier zit geen olie in. Zelfs geen bier."
 
 VOORWERP haard "haard" VAK 2,26 30,54 LOOP 36,90 LINKS
   BEKIJK:
