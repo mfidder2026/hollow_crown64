@@ -1,0 +1,50 @@
+# slim.band — de slimme zinregel: het voorwerp waar de cursor even op stond wordt onthouden; kies je daarna een
+# werkwoord, dan staat het erachter, en nog eens klikken op hetzelfde werkwoord voert de zin uit.
+# Werkwoorden: Bekijk (20,164), Gebruik (180,156). De fontein: cursor 160,100. De zonnesteen: 20,180 (inventaris).
+wacht 3
+
+# 1. de fontein aanwijzen, dan Bekijk: "Bekijk fontein"; nog eens Bekijk: uitvoeren
+cursor 160,100
+wacht 15
+verwacht_tekst 18 "Ga naar fontein"
+cursor 20,164
+wacht 2
+verwacht_tekst 18 "Ga naar"                # nog geen werkwoord gekozen: geen voorstel
+vuur
+wacht 2
+verwacht_tekst 18 "Bekijk fontein"         # het onthouden voorwerp staat er al achter
+verwacht ww_gekozen = 1
+vuur                                   # nog eens op Bekijk: uitvoeren
+wacht_tot_stil
+wacht 3
+verwacht ww_gekozen = 0
+verwacht_tekst 0 "Het water is zwart sinds de zon weg is."
+vuur
+wacht 3
+
+# 2. een ander voorwerp aanwijzen gaat voor het onthouden voorwerp
+cursor 20,164
+vuur
+wacht 2
+verwacht_tekst 18 "Bekijk fontein"
+cursor 290,60
+wacht 2
+verwacht_tekst 18 "Bekijk herberg"
+cursor 20,164                          # de cursor stond lang genoeg op de herberg: die is nu onthouden
+wacht 2
+verwacht_tekst 18 "Bekijk herberg"
+
+# 3. iets uit de inventaris, dan Gebruik: "Gebruik zonnesteen", nog eens: "Gebruik zonnesteen met", dan de fontein
+cursor 20,180
+wacht 15
+cursor 180,156
+vuur
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen"
+vuur
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen met"
+cursor 160,100
+wacht 2
+verwacht_tekst 18 "Gebruik zonnesteen met fontein"
+screenshot gebruik

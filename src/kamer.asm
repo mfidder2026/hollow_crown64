@@ -54,6 +54,7 @@ kamer_wissel: {
         sta act_pose
         lda #$ff                        // GEEN_VOORWERP (zin.asm)
         sta zin_eerste
+        jsr vergeet_laatst              // het onthouden voorwerp hoort bij de vorige kamer (zin.asm)
         lda #$fe                        // zinregel opnieuw
         sta zin_ww
         ldx st_kamer

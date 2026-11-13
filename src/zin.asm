@@ -11,6 +11,9 @@
 // - Het script: twee voorwerpen -> eerst bij het tweede (GEBRUIK kruik: onder het vat), dan (Gebruik) bij het
 //   eerste, anders het standaardantwoord. Eén voorwerp -> zijn script, anders het standaardantwoord.
 // - Vuur terwijl er een tekst staat: de tekst weg. In een tussenscène: overslaan.
+// - Slim: het voorwerp waar de cursor even op bleef staan (VW_ONTHOUD beelden) wordt onthouden. Kies je daarna een
+//   werkwoord, dan staat dat voorwerp er al achter ("Pak kruik"); klik je nog eens op hetzelfde werkwoord, dan
+//   wordt de zin uitgevoerd. Een ander voorwerp aanwijzen gaat gewoon voor. Bij een andere kamer is het vergeten.
 
 .const GEEN_VOORWERP   = $ff
 .const WW_GA_NAAR      = 0
@@ -19,6 +22,7 @@
 .const WW_WAT_IS       = 11
 .const KLEUR_GEKOZEN   = 7              // geel: het gekozen werkwoord
 .const ZIN_LENGTE      = 40
+.const VW_ONTHOUD      = 10             // zo lang (beelden) moet de cursor op een voorwerp staan om het te onthouden
 
 .segment Code
 // voorwerp_onder: welk voorwerp ligt onder de cursor? -> vw_onder (of GEEN_VOORWERP)
@@ -76,12 +80,25 @@ zin_beeld: {
         jmp gesprek_beeld
 !:      jsr inv_bijwerken
         jsr voorwerp_onder
+        jsr onthouden                   // het laatst aangewezen voorwerp (slim: zie boven)
         lda werkwoord                   // wat moet er staan?
         sta nu_ww
         lda zin_eerste
         sta nu_eerste
         lda vw_onder
         sta nu_vw
+        cmp #GEEN_VOORWERP              // niets onder de cursor, wel een werkwoord gekozen: het onthouden voorwerp
+        bne geen_voorstel
+        lda ww_gekozen
+        beq geen_voorstel
+        lda zin_eerste
+        cmp #GEEN_VOORWERP
+        bne geen_voorstel
+        jsr laatst_geldig
+        bcc geen_voorstel
+        lda vw_laatst
+        sta nu_vw
+geen_voorstel:
         lda actie_bezig                 // tijdens een actie: de zin die wordt uitgevoerd
         beq !+
         lda actie_ww
@@ -214,6 +231,69 @@ nu_eerste: .byte 0
 nu_vw:  .byte 0
 }
 
+// onthouden: staat de cursor VW_ONTHOUD beelden op hetzelfde voorwerp, dan wordt het vw_laatst
+onthouden: {
+        lda vw_onder
+        cmp #GEEN_VOORWERP
+        beq los
+        cmp vw_vorig
+        beq zelfde
+        sta vw_vorig
+        lda #0
+        sta vw_blijf
+        rts
+zelfde: lda vw_blijf
+        cmp #VW_ONTHOUD
+        bcs klaar
+        inc vw_blijf
+        lda vw_blijf
+        cmp #VW_ONTHOUD
+        bne klaar
+        lda vw_onder                    // lang genoeg: onthouden (en waar: inventaris of kamer)
+        sta vw_laatst
+        lda #0
+        ldx cursor_y
+        cpx #RIJ_INVENTARIS * 8
+        bcc !+
+        lda #1
+!:      sta vw_laatst_inv
+        rts
+los:    sta vw_vorig                    // (GEEN_VOORWERP)
+        lda #0
+        sta vw_blijf
+klaar:  rts
+}
+
+// laatst_geldig: C = 1 als het onthouden voorwerp er nog is (in de inventaris, of in deze kamer)
+laatst_geldig: {
+        ldx vw_laatst
+        cpx #GEEN_VOORWERP
+        beq nee
+        lda st_eigenaar,x
+        ldy vw_laatst_inv
+        beq kamer
+        cmp #EIGENAAR_ELDRIC
+        bne nee
+        sec
+        rts
+kamer:  cmp st_kamer
+        bne nee
+        sec
+        rts
+nee:    clc
+        rts
+}
+
+// vergeet_laatst: een nieuwe kamer (kamer.asm)
+vergeet_laatst:
+        lda #GEEN_VOORWERP
+        sta vw_laatst
+        sta vw_vorig
+        lda #0
+        sta ww_gekozen
+        sta vw_blijf
+        rts
+
 // klik: vuur. Tekst weg, overslaan, werkwoord kiezen, inventaris, of een zin in de kamer.
 klik: {
         lda invoer_vuur
@@ -232,9 +312,14 @@ klik: {
         jmp gesprek_klik
 !:      lda cursor_y
         cmp #RIJ_WERKWOORD * 8
-        bcc kamer
-        cmp #(RIJ_WERKWOORD + 3) * 8
-        bcs inventaris
+        bcs !+
+        jmp kamer                       // (te ver voor een korte sprong)
+!:      cmp #(RIJ_WERKWOORD + 3) * 8
+        bcc !+
+        jmp inventaris
+!:
+        ldx werkwoord                   // (het werkwoord van nu: is de klik op hetzelfde?)
+        stx vorig_ww
         lsr                             // werkwoord: rij = y / 8 - 19, kolom = x / 80
         lsr
         lsr
@@ -259,7 +344,25 @@ klik: {
 kol:    txa
         clc
         adc werkwoord
+        sta nieuw_ww
+        cmp vorig_ww                    // hetzelfde werkwoord nog eens, met een onthouden voorwerp: uitvoeren
+        bne nieuw
+        ldy ww_gekozen
+        beq nieuw
+        ldy zin_eerste
+        cpy #GEEN_VOORWERP
+        bne nieuw
+        jsr laatst_geldig
+        bcc nieuw
+        lda nieuw_ww                    // (werkwoord bevat hier nog alleen de rij: eerst het hele werkwoord terug)
         sta werkwoord
+        ldx vw_laatst
+        lda vw_laatst_inv
+        jmp voorwerp_klik
+nieuw:  lda nieuw_ww
+        sta werkwoord
+        lda #1
+        sta ww_gekozen
         lda #GEEN_VOORWERP              // een nieuw werkwoord begint een nieuwe zin
         sta zin_eerste
 geen:   rts
@@ -287,6 +390,7 @@ kamer:  cmp #RIJ_KAMER * 8
 vloer:  jsr vm_stop                     // Ga naar die plek; een halve zin vervalt
         lda #0
         sta actie_bezig
+        sta ww_gekozen
         lda #GEEN_VOORWERP
         sta zin_eerste
         lda #WW_GA_NAAR
@@ -345,6 +449,8 @@ uitvoeren:
         sta actie_in_inv
         lda #1
         sta actie_bezig
+        lda #0
+        sta ww_gekozen
         lda #WW_GA_NAAR
         sta werkwoord
         lda #GEEN_VOORWERP
@@ -480,3 +586,12 @@ inventaris_anders: .byte 1              // GEEF/NEEM/PLAATS: de inventaris opnie
 zin_buf:      .fill ZIN_LENGTE + 1, 0
 kleur_rij_lo: .fill 3, <(KLEUR_RAM + (RIJ_WERKWOORD + i) * 40)
 kleur_rij_hi: .fill 3, >(KLEUR_RAM + (RIJ_WERKWOORD + i) * 40)
+
+.segment Data
+vw_laatst:     .byte GEEN_VOORWERP      // het laatst aangewezen voorwerp (slim)
+vw_laatst_inv: .byte 0                  // 1: dat was in de inventaris
+vw_vorig:      .byte GEEN_VOORWERP
+vw_blijf:      .byte 0                  // zo lang staat de cursor al op vw_vorig
+ww_gekozen:    .byte 0                  // 1: er is een werkwoord aangeklikt (dan staat het onthouden voorwerp erachter)
+vorig_ww:      .byte 0
+nieuw_ww:      .byte 0

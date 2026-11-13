@@ -14,7 +14,7 @@ cursor 20,164
 vuur
 wacht 2
 verwacht werkwoord = 4
-verwacht_tekst 18 "Bekijk"
+verwacht_tekst 18 "Bekijk fontein"     # slim: de fontein (waar de cursor op stond) staat er al achter
 
 # Bekijk fontein: Eldric loopt naar het LOOP-punt (80,100 = schermpixel 160), kijkt ernaar (rug) en zegt iets
 cursor 160,100

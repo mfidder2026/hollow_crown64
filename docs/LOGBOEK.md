@@ -701,3 +701,23 @@ glimlicht is eruit, en de kleurwissels van de zon gelden nu ook voor de punten v
 
 **Getest:** gesprek.band (Pak ziensteen, opzij lopen, screenshot: de vloer is leeg), menu.band (scherm_uit_teller = 1
 bij de terugkeer, daarna weer aan). 23/23 compiler, 17/17 banden.
+
+## 2026-11-13 — Eén map: ~/Development/hollow_crown64
+
+Alles staat nu in één map, `~/Development/hollow_crown64` (dezelfde naam als de repository op GitHub), met een eigen
+git-kopie op branch main. De oude gedeelde map `~/Development/Hollow_Crown` (waar ook MacAIMagic werkte, met een eigen
+branch) is naar de prullenbak; daar stond niets meer dat niet ook hier of op GitHub staat. Het scenario staat in
+`docs/SCRIPT_HOLLOW_CROWN.md` (met Grom, de aardmannetjes en de zonnesteen). Verwijzingen hierboven naar
+`Hollow_Crown` en `Hollow_Crown_motor` zijn geschiedenis.
+
+## 2026-11-13 — Slimme zinregel
+
+Het voorwerp waar de cursor even op bleef staan (10 beelden, 0,2 s: zo telt een voorwerp waar je alleen overheen
+schiet niet) wordt onthouden. Kies je daarna een werkwoord, dan staat dat voorwerp er al achter ("Pak kruik"); klik je
+nog eens op hetzelfde werkwoord, dan wordt de zin uitgevoerd. Een ander voorwerp aanwijzen gaat gewoon voor. Bij
+Gebruik/Geef met iets uit de inventaris wordt het het eerste deel ("Gebruik zonnesteen met ..."). Bij een andere kamer
+is het onthouden voorwerp vergeten (`src/zin.asm`: onthouden, laatst_geldig, vergeet_laatst).
+
+**Getest:** `tests/slim.band` (Bekijk fontein via het onthouden voorwerp, een ander voorwerp gaat voor, Gebruik
+zonnesteen met fontein); `tests/bekijk.band` aangepast (na het kiezen van Bekijk staat de fontein er al achter).
+23/23 compiler, 18/18 banden.
