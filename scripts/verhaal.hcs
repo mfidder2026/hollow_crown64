@@ -34,10 +34,10 @@ KAMER verhaal
     TOON maan_r
     LOOP maan_l 76,26
     LOOP maan_r 84,26
-    KLEUR 64,0 32,40 geel oranje         # de zon dooft
+    KLEUR 60,0 40,40 geel oranje         # de zon dooft (met de stralen tot aan hun punt)
     KLEUR 0,0 160,72 cyaan lichtblauw    # de lucht wordt donkerder
     WACHT 30
-    KLEUR 64,0 32,40 oranje bruin
+    KLEUR 60,0 40,40 oranje bruin
     KLEUR 0,0 160,72 lichtblauw blauw
     KLEUR 0,0 160,72 wit lichtgrijs      # de wolken worden grauw
     WACHT 30
@@ -55,6 +55,7 @@ KAMER verhaal
     VERBERG hol_2
     TOON eldric
     LOOP eldric 79,110
+    KIJK eldric VOOR                     # hij draait zich om naar het publiek
     ZEG verteller "In Dawnhaven woont Eldric. Een gewone jongen met een goed hart."
     ZEG verteller "Hij weet nog niet dat alles van hem afhangt."
     ZEG eldric "Hm. Weer geen zon vandaag."

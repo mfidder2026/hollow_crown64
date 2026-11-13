@@ -681,3 +681,8 @@ is daarop aangepast (niet vastgelegd: hun bestand, hun branch; een kopie van de 
   gele pad onderaan (waar je vandaan komt) de weg terug. Nieuwe band `tests/bos_terug.band`.
 
 **Getest:** 23/23 compiler, 17/17 banden.
+
+**Toneel (2026-11-13):** Eldric draait zich aan het eind van het verhaal om naar het publiek (KIJK eldric VOOR); hij
+stond met zijn rug naar je toe. De zon in de schemer was niet helemaal gevuld: het witte glimlicht maakte van één
+vakje van 4 x 8 vier kleuren (lucht, geel, oranje, wit), de omzetter liet er een weg en dat werd later paars. Het
+glimlicht is eruit, en de kleurwissels van de zon gelden nu ook voor de punten van de stralen (x 60-99).

@@ -64,8 +64,7 @@ def zon(dk):
     dk.ovaal(cx - 9, cy - 9, cx + 9, cy + 9, GEEL, ORANJE)       # helemaal gevuld (geen wit gat in het midden)
     for x, y in ((cx + 4, cy + 6), (cx + 5, cy + 5), (cx + 6, cy + 4), (cx + 3, cy + 7), (cx + 7, cy + 2)):
         dk.px(x, y, ORANJE)                                      # schaduw rechtsonder: hij is rond
-    dk.rect(cx - 5, cy - 6, cx - 3, cy - 5, WIT)                 # een klein glimlicht linksboven
-    dk.px(cx - 6, cy - 4, WIT)
+    # (geen wit glimlicht: in dat vakje van 4 x 8 zouden dan 4 kleuren staan, en dan valt er een weg op de C64)
 
 
 def bergen(dk):
