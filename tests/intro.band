@@ -38,15 +38,22 @@ verwacht muz_aan = 1
 verwacht muz_beelden.w < 10
 verwacht_muziek
 
-# spatie: het spel begint; geen hangende toon, de IRQ's zoals in het spel
+# spatie: het intro is klaar; nu eerst de verhaalanimatie (die zet het thema zelf weer aan)
 toets spatie 2
 wacht 5
 verwacht intro_gedaan = 1
 verwacht intro_actief = 0
-verwacht muz_aan = 0
+verwacht_kamer verhaal
+verwacht toneel_aan = 1
+
+# vuur slaat het hele verhaal over: meteen naar het plein; geen hangende toon, de IRQ's zoals in het spel
+vuur
+wacht 10
+verwacht_kamer plein
+verwacht toneel_aan = 0
+verwacht muz_aan = 0                   # laden van het plein: de muziek stopt
 verwacht muz_ctrl = 0                  # geen gate meer aan: geen hangende toon
 verwacht muz_ctrl+1 = 0
 verwacht muz_ctrl+2 = 0
-verwacht_kamer plein
 verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
 screenshot spel

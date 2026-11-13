@@ -23,10 +23,12 @@
 //   $16 gesprek(2) PRAAT   $17 n TOON   $18 n VERBERG   $19 n x(2) y NPC_LOOP (gesprek.asm, npc.asm)
 //   $1A effect                    GELUID: een effect op stem 3 (geluid.asm); wacht niet
 //   $1B n                         MUZIEK: 1 = het thema, 0 = stil (muziek.asm)
+//   $1C kol rij b h van naar      KLEUR: kleur van -> naar in die vakjes (toneel.asm)
+// TOON / VERBERG met figuur 255: Eldric zelf.
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
 
 .const OP_STOP = $00
-.const OP_LAATSTE = $1b
+.const OP_LAATSTE = $1c
 .const EIGENAAR_ELDRIC = $ff
 .const EIGENAAR_NERGENS = $fe
 
@@ -342,14 +344,28 @@ op_toon:
         ldy #1
         lda (zp_vm),y
         tax
+        inx                             // 255 = Eldric zelf
+        bne !+
+        lda #1
+        sta act_zichtbaar
+        bne !++
+!:      dex
         jsr npc_toon                    // npc.asm: een vrij slot
+!:
         lda #2
         jmp verder
 op_verberg:
         ldy #1
         lda (zp_vm),y
         tax
+        inx                             // 255 = Eldric zelf
+        bne !+
+        lda #0
+        sta act_zichtbaar
+        beq !++
+!:      dex
         jsr npc_verberg                 // npc.asm: het slot komt vrij
+!:
         lda #2
         jmp verder
 
@@ -378,6 +394,11 @@ op_geluid:
         lda (zp_vm),y
         jsr geluid_speel
         lda #2
+        jmp verder
+
+op_kleur:
+        jsr kleur_wissel                // toneel.asm
+        lda #7
         jmp verder
 
 op_muziek:
@@ -434,7 +455,7 @@ sprongen:
         .word op_zet - 1, op_wis - 1, op_geef - 1, op_neem - 1, op_stand - 1, op_plaats - 1
         .word op_loop - 1, op_kijk - 1, op_wacht - 1, op_tussenscene - 1, op_einde_tussenscene - 1
         .word op_patch - 1, op_kamer - 1, op_praat - 1, op_toon - 1, op_verberg - 1, op_npc_loop - 1
-        .word op_geluid - 1, op_muziek - 1
+        .word op_geluid - 1, op_muziek - 1, op_kleur - 1
 .assert "een sprong per opcode", (* - sprongen) / 2, OP_LAATSTE + 1
 }
 

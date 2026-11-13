@@ -1,0 +1,37 @@
+# verhaal.band — de verhaalanimatie na het titelscherm (scripts/verhaal.hcs): het toneel zonder balk, cursor en Eldric,
+# twee manen die voor de zon schuiven, de lucht die met KLEUR donker wordt, de Holen, Vex, en dan Eldric en het plein.
+intro
+wacht 5
+toets spatie 2                         # van het titelscherm naar het verhaal
+wacht 150
+verwacht_kamer verhaal
+verwacht toneel_aan = 1
+verwacht act_zichtbaar = 0             # geen Eldric
+verwacht vm_scene = 1                  # een tussenscène
+verwacht muz_aan = 1                   # het thema speelt
+verwacht_tekst 0 "Lang geleden leefde het rijk Aethermoor"
+verwacht_tekst 18 ""                   # geen balk
+verwacht_tekst 24 ""
+screenshot zon
+wacht 450
+verwacht slot_npc = 4                  # maan_l
+verwacht slot_npc+1 = 5                # maan_r: de twee manen voor de zon
+verwacht kleur_teller >= 2             # de zon dooft, de lucht wordt donkerder
+screenshot verduistering
+wacht 360
+verwacht_tekst 0 "En uit de diepte kwamen holle wezens."
+verwacht slot_npc = 6                  # hol_1
+verwacht slot_npc+1 = 7                # hol_2
+verwacht kleur_teller = 7              # de schemer is er: alle kleurwissels gedaan
+screenshot holen
+wacht 240
+verwacht slot_npc = 8                  # vex_toneel
+screenshot vex
+wacht_op_script                        # tot het einde: Eldric, en dan naar het plein
+wacht 5
+verwacht_kamer plein
+verwacht toneel_aan = 0
+verwacht act_zichtbaar = 1
+verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
+verwacht_tekst 22 "zwaard             ↑"
+screenshot plein

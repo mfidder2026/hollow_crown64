@@ -322,13 +322,82 @@ def kelder(met_honingpot=True):
     return img
 
 
+def boom(d, x, voet, h, kruin=(40, 110, 40), donker=(20, 70, 25)):
+    """een ronde boom zoals op het plein: stam en een kruin van drie bollen (kamerpixels)"""
+    rect(d, x - 1, voet - h // 2, x + 1, voet, BRUIN)
+    r = h // 3
+    for dx, dy in ((-r // 2, -h // 2), (r // 2, -h // 2), (0, -h + r // 2)):
+        cx, cy = x + dx, voet + dy
+        d.ellipse([k(cx - r, cy - r)[0], k(cx - r, cy - r)[1], k(cx + r, cy + r)[0], k(cx + r, cy + r)[1]], fill=donker)
+        d.ellipse([k(cx - r + 1, cy - r)[0], k(cx - r + 1, cy - r)[1], k(cx + r - 1, cy + r - 2)[0],
+                   k(cx + r - 1, cy + r - 2)[1]], fill=kruin)
+
+
+def huisje(d, x, y, b=12, h=9, rnd=None):
+    """een huisje zoals in Dawnhaven: stenen muur, rieten dak, schoorsteen met rook (x, y = linksonder)"""
+    rect(d, x, y - h, x + b, y, LGRIJS)
+    for yy in range(y - h + 2, y, 3):
+        rect(d, x, yy, x + b, yy, GRIJS)
+    d.polygon([k(x - 2, y - h), k(x + b // 2, y - h - 8), k(x + b + 2, y - h)], fill=ORANJE)
+    d.line([k(x - 2, y - h), k(x + b // 2, y - h - 8), k(x + b + 2, y - h)], fill=BRUIN, width=3)
+    rect(d, x + b - 3, y - h - 8, x + b - 2, y - h - 3, DGRIJS)
+    for i in range(3):
+        rect(d, x + b - 3 - i, y - h - 11 - 3 * i, x + b - 1 - i, y - h - 10 - 3 * i, LGRIJS)
+    rect(d, x + 2, y - 5, x + 4, y, BRUIN)
+    rect(d, x + b - 5, y - 6, x + b - 3, y - 4, GEEL)
+
+
+def verhaal():
+    """Het toneel voor de verhaalanimatie na het titelscherm: Aethermoor onder de zon. Links het kasteel op een heuvel
+    tussen de bomen, in het dal Dawnhaven (rieten daken, rokende schoorstenen), rechts de Rotskloof met bos erlangs.
+    De zon staat midden in de lucht (de manen schuiven er als sprites voor); de lucht is lichtblauw, zodat de animatie
+    hem met kleurwissels donker kan maken, tot de paarse schemer van het plein."""
+    rnd = random.Random(31)
+    img = Image.new("RGB", (W, H), ZWART)
+    d = ImageDraw.Draw(img)
+    rect(d, 0, 1, 159, 64, LBLAUW)
+    for cx, cy in ((24, 14), (120, 10), (140, 22)):              # een paar wolkjes
+        d.ellipse([k(cx - 8, cy - 3)[0], k(cx - 8, cy - 3)[1], k(cx + 8, cy + 3)[0], k(cx + 8, cy + 3)[1]], fill=WIT)
+    d.ellipse([k(72, 10)[0], k(72, 10)[1], k(88, 26)[0], k(88, 26)[1]], fill=GEEL)       # de zon
+    d.ellipse([k(75, 13)[0], k(75, 13)[1], k(85, 23)[0], k(85, 23)[1]], fill=WIT)
+    d.polygon([k(0, 62), k(20, 44), k(45, 58), k(70, 46), k(100, 60), k(130, 42), k(159, 56), k(159, 76), k(0, 76)],
+              fill=GRIJS)                                         # bergen
+    for x in range(0, 160, 7):                                    # een rij bomen achter het dal
+        boom(d, x + rnd.randint(-2, 2), 76, rnd.randint(12, 16), kruin=(30, 90, 40), donker=(15, 55, 25))
+    d.polygon([k(0, 80), k(8, 54), k(50, 54), k(64, 84), k(0, 84)], fill=GROEN)        # de heuvel
+    rect(d, 14, 36, 42, 54, DGRIJS)                               # het kasteel
+    for x in (12, 26, 40):
+        rect(d, x, 26, x + 5, 54, DGRIJS)
+        for xx in (x, x + 2, x + 4):
+            rect(d, xx, 24, xx, 25, DGRIJS)
+    rect(d, 27, 46, 30, 54, ZWART)
+    for x in (16, 34):
+        rect(d, x, 40, x + 1, 42, ZWART)
+    for x in (4, 50, 56):
+        boom(d, x, 60 if x < 10 else 70, 14)
+    rect(d, 0, 80, 159, 125, GROEN)                               # het dal
+    vlekken(d, 0, 80, 159, 125, LGROEN, 0.05, rnd)
+    for x, y in ((58, 92), (74, 88), (90, 94), (104, 90), (66, 104)):
+        huisje(d, x, y, rnd=rnd)
+    d.polygon([k(112, 62), k(159, 58), k(159, 125), k(106, 125)], fill=DGRIJS)        # de Rotskloof
+    d.polygon([k(126, 64), k(138, 62), k(136, 125), k(120, 125)], fill=ZWART)
+    for x, v in ((112, 76), (150, 70), (156, 90)):
+        boom(d, x, v, 16)
+    d.polygon([k(72, 100), k(82, 100), k(98, 125), k(52, 125)], fill=GEEL)            # het pad naar voren
+    for x in (6, 22, 40, 120, 146):                               # struiken vooraan
+        d.ellipse([k(x - 7, 112)[0], k(x - 7, 112)[1], k(x + 7, 125)[0], k(x + 7, 125)[1]], fill=(30, 100, 30))
+    rect(d, 0, 126, 159, 127, ZWART)
+    return img
+
+
 def main():
     os.makedirs(UIT, exist_ok=True)
     plaatjes = {"herberg.png": herberg(), "herberg_tafel_weg.png": herberg(tafel_weg=True),
                 "herberg_zonder_kruik.png": herberg(met_kruik=False),
                 "smit.png": smit(), "smit_vuur.png": smit(vuur_aan=True),
                 "bosrand.png": bosrand(), "plein_deur_open.png": plein_deur_open(),
-                "kelder.png": kelder(), "kelder_zonder_honingpot.png": kelder(met_honingpot=False)}
+                "kelder.png": kelder(), "kelder_zonder_honingpot.png": kelder(met_honingpot=False),
+                "verhaal.png": verhaal()}
     for naam, img in plaatjes.items():
         img.save(os.path.join(UIT, naam))
     print("[plaatjes] %s" % ", ".join(plaatjes))

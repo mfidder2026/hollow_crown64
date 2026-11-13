@@ -157,6 +157,12 @@ klaar:  rts
 
 // cursor_plaatsen: sprite 0 op cursor_x/y, met het midden van de tekening op dat punt
 cursor_plaatsen:
+        lda $d015                       // in een TONEEL-kamer geen cursor (toneel.asm)
+        ora #%00000001
+        ldx toneel_aan
+        beq !+
+        and #%11111110
+!:      sta $d015
         lda cursor_x
         clc
         adc #24 - CURSOR_MIDDEN_X

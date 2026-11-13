@@ -44,7 +44,10 @@ def engine():
                 kandidaten.append(m.group(1))
     except OSError:
         pass
-    kandidaten += ["/Applications/MacAIMagic.app", os.path.expanduser("~/Applications/MacAIMagic.app")]
+    kandidaten += ["/Applications/MacAIMagic.app", os.path.expanduser("~/Applications/MacAIMagic.app"),
+                   os.path.expanduser("~/Development/MacAIMagic/dist/MacAIMagic.app")]   # (ook als de app niet draait)
+    if os.environ.get("FLUX_ENGINE") and os.access(os.environ["FLUX_ENGINE"], os.X_OK):
+        return os.environ["FLUX_ENGINE"]
     for app in kandidaten:
         exe = os.path.join(app, "Contents/Resources/engine/image-engine")
         if os.access(exe, os.X_OK):
@@ -115,7 +118,14 @@ def main():
         if a.masker:
             args += ["--mask", os.path.abspath(a.masker)]
         t = time.time()
-        r = subprocess.run(args, cwd=os.path.dirname(exe), capture_output=True, text=True)
+        for poging in range(3):
+            # Met sommige zaden faalt de engine meteen ("sampling failed after 0.2s"), elke keer weer. Dan een ander zaad.
+            r = subprocess.run(args, cwd=os.path.dirname(exe), capture_output=True, text=True)
+            if r.returncode == 0 and os.path.exists(uit):
+                break
+            zaad += 1000
+            args[args.index("-s") + 1] = str(zaad)
+            print(f"{uit}: mislukt (poging {poging + 1}), nog eens met zaad {zaad}")
         if r.returncode != 0 or not os.path.exists(uit):
             fout = [l for l in (r.stdout + r.stderr).splitlines() if "[E]" in l or "error" in l.lower()]
             sys.exit(f"FOUT: FLUX maakte {uit} niet: " + (" | ".join(fout[-3:]) or f"code {r.returncode}"))

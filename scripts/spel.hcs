@@ -1,6 +1,8 @@
 # spel.hcs — het begin van het spel.
 # BEGIN kamer x,y richting   (richting: VOOR, RUG, RECHTS, LINKS)
 BEGIN plein 60,112 VOOR
+# Na het titelscherm eerst de verhaalanimatie (scripts/verhaal.hcs); die gaat daarna zelf naar het plein
+VERHAAL verhaal 80,124 RUG
 # Het einde van hoofdstuk 1: de wolven zijn verjaagd en Vex is gezien
 DOEL hoofdstuk1_klaar
 
@@ -53,6 +55,7 @@ SPREKER eldric geel
 SPREKER bram oranje
 SPREKER mira cyaan
 SPREKER vex rood
+SPREKER verteller lichtgrijs
 
 # Standaardantwoorden: als een voorwerp geen script heeft voor dat werkwoord
 STANDAARD BEKIJK:

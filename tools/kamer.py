@@ -8,6 +8,7 @@ data/kamers.txt, één kamer per regel ('#' is commentaar):
 
     boven    bovenste pixelrij van de strook in het bronplaatje (de strook is 5:2, over de hele breedte)
     kleur    verzadiging vooraf; licht: helderheid vooraf; sterkte: Floyd-Steinberg (0 = geen menging)
+    exact=1  het plaatje staat al in C64-kleuren (zelf getekend): niets vooraf bewerken
     patch=naam:x,y,b,h:plaatje   (mag vaker) een patch (§6.2): een rechthoek van vakjes (x, b veelvoud van 4;
              y, h veelvoud van 8; kamerpixels) uit een tweede versie van het plaatje (bv. de deur open).
              De scripts zetten hem met PATCH naam; de volgorde hier is zijn nummer.
@@ -56,7 +57,8 @@ def lees_lijst(pad):
             continue
         if len(regel) < 2:
             raise SystemExit("%s:%d: naam en plaatje nodig" % (pad, nr))
-        opties = {"boven": 0, "kleur": 1.5, "licht": 1.0, "sterkte": 0.5, "voorgrond": None, "patches": []}
+        opties = {"boven": 0, "kleur": 1.5, "licht": 1.0, "sterkte": 0.5, "voorgrond": None, "patches": [],
+                  "exact": 0}
         for o in regel[2:]:
             k, _, v = o.partition("=")
             if k == "patch":
@@ -110,6 +112,14 @@ def lees_voorgrond(pad):
     if len(ys) and (xs.max() - xs.min() >= 12 or ys.max() - ys.min() >= 21):
         raise SystemExit("%s: de voorgrond past niet in één sprite (12 x 21 multicolor-pixels)" % pad)
     return m, vkleur
+
+
+def laad_bron(pad, o):
+    """Het bronplaatje. Met exact=1 staat het al in C64-kleuren (met de hand getekend, tools/teken_toneel.py): dan
+    niets oprekken of verzadigen, anders verschuiven de kleuren (cyaan wordt grijs, groen lichtgroen)."""
+    if o["exact"]:
+        return cb.laad(pad)
+    return cb.voorbewerk(cb.laad(pad), o["kleur"], o["licht"])
 
 
 def strook(beeld, boven):
@@ -250,7 +260,7 @@ def main():
                                                                    for p in [bron_pad, lijst, __file__, cb.__file__] + extra):
             print("[kamer]   %s is bij" % naam)
             continue
-        beeld = cb.voorbewerk(cb.laad(bron_pad), o["kleur"], o["licht"])
+        beeld = laad_bron(bron_pad, o)
         bron, klein = strook(beeld, o["boven"])
         vg, vkleur = lees_voorgrond(vg_pad) if vg_pad else (None, None)
         bitmap, scherm, kleur, vkleur = omzetten(klein, o["sterkte"], vg, vkleur)
@@ -261,7 +271,7 @@ def main():
             pbron = os.path.join(wortel, plaatje)
             if not os.path.exists(pbron):
                 raise SystemExit("%s:%d: patch %s: plaatje %s bestaat niet" % (lijst, nr, pnaam, plaatje))
-            _, pklein = strook(cb.voorbewerk(cb.laad(pbron), o["kleur"], o["licht"]), o["boven"])
+            _, pklein = strook(laad_bron(pbron, o), o["boven"])
             pb, ps, pk, _ = omzetten(pklein, o["sterkte"], vg, vkleur)
             patches.append(patch_data(pb, ps, pk, x, y, b, h))
         assert (pix[0] == ACHTER).all() and (pix[-ZWART_ONDER:] == ACHTER).all()

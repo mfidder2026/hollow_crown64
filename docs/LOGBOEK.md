@@ -569,3 +569,28 @@ na het titelscherm wordt één toneel met spriteanimatie, en Mira komt aan het e
 - bosrand.hcs: nieuwe loopvakken (het gras begint lager), klikvakken, SCHAAL 104 94, BINNENKOMST zet de patch terug.
 
 **Getest:** 22/22 compiler, 13/13 banden. Alle vijf kamers zijn nu FLUX-plaatjes in dezelfde stijl, behalve de smit.
+
+## 2026-11-13 — De verhaalanimatie na het titelscherm
+
+Na het titelscherm (spatie of vuur) vertelt één toneel het verhaal zoals het volk het kent (scenario: de waarheid
+komt later), geïnspireerd op het openingsfilmpje van de oude avonturen, met eigen beeld en eigen verhaal.
+
+- **Het toneel is met de hand getekend** (`tools/teken_toneel.py`), niet met FLUX: de FLUX-versies pasten niet bij de
+  sfeer van het dorp (kaal, geen bomen). Rechtstreeks in 160 x 128 kamerpixels, alleen C64-kleuren (het palet van de
+  omzetter, zoals VICE ze toont), dikke zwarte lijnen. Het script telt de vakjes van 4 x 8 met meer dan 3 kleuren +
+  zwart (nu 42 van 640). `tools/kamer.py` kreeg `exact=1`: een plaatje dat al in C64-kleuren staat niet oprekken of
+  verzadigen (anders werd cyaan grijs en groen lichtgroen).
+- **De scènes** (`scripts/verhaal.hcs`): de Eeuwige Zon; twee manen schuiven voor de zon (dubbele
+  maansverduistering) terwijl de lucht met KLEUR van cyaan via lichtblauw en blauw naar het paars van het plein gaat en
+  de zon dooft; twee Holen klimmen uit de Rotskloof; Vex bij het kasteel ("De Holle Koning stal jullie zon! Alleen ik
+  kan jullie beschermen."); Eldric loopt het pad op. Daarna naar het plein. Het thema speelt mee. Vuur slaat over.
+- **Motor:** kamerinstelling `TONEEL` (geen Eldric, cursor, balk; `src/toneel.asm`), opdracht `KLEUR x,y b,h van naar`
+  (opcode $1C: een kleur wisselen in scherm- en kleur-RAM), `TOON eldric` / `VERBERG eldric`, en `VERHAAL kamer x,y
+  richting` in spel.hcs (na het titelscherm eerst daarheen). Nieuwe figuren: maan en Hol (tools/sprites_hc.py).
+- In een AUTOTEST-build alleen als de band met `intro` begint, net als het titelscherm.
+- `tools/flux.py`: vindt de engine ook als de app niet draait; met sommige zaden faalt de engine meteen: dan een
+  ander zaad.
+
+**Getest:** `tests/verhaal.band` (de scènes, manen en Holen in de figuurslots, alle 7 kleurwissels, daarna het plein
+met balk, inventaris en cursor terug; screenshots pixel voor pixel met de sprites), `tests/intro.band` (vuur slaat
+het verhaal over, geen hangende toon). 23/23 compiler, 14/14 banden.

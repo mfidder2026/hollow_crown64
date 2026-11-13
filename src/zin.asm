@@ -68,7 +68,10 @@ klaar:  rts
 
 // zin_beeld: elk beeld; inventaris bijwerken, zinregel en werkwoordkleuren tekenen als er iets veranderd is
 zin_beeld: {
-        lda gs_actief                   // tijdens een gesprek: de keuzes in plaats van zinregel en werkwoorden
+        lda toneel_aan                  // een TONEEL-kamer: de balk blijft leeg (toneel.asm)
+        beq !+
+        rts
+!:      lda gs_actief                   // tijdens een gesprek: de keuzes in plaats van zinregel en werkwoorden
         beq !+
         jmp gesprek_beeld
 !:      jsr inv_bijwerken

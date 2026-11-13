@@ -11,6 +11,8 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     BEGIN kamer x,y richting          waar Eldric begint (richting: VOOR RUG RECHTS LINKS)
     SPREKER naam kleur                wie kan praten, in welke kleur (berichten op rij 0-1)
     DOEL vlag                         het einde van het hoofdstuk: de compiler controleert dat het te halen is
+    VERHAAL kamer x,y richting        na het titelscherm eerst naar deze kamer (de verhaalanimatie); zijn
+                                      BINNENKOMST vertelt het verhaal en gaat daarna met KAMER naar het spel
     STANDAARD werkwoord:              antwoord als een voorwerp geen script heeft voor dat werkwoord
     SCRIPT naam:                      een los script (voor tests, of om aan te roepen)
 
@@ -24,6 +26,8 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     BINNENKOMST:                      script als Eldric de kamer binnenkomt
     FLAKKER x,y b,h kleur kleur ...   een kleine animatie (hoofdstuk 8): in die vakjes (x, b veelvoud van 4; y, h van 8)
                                       schuiven deze kleuren rond (bv. vuur: rood oranje geel). Hooguit 2 per kamer.
+    TONEEL                            een toneel (de verhaalanimatie): geen Eldric (tot TOON eldric), geen cursor,
+                                      geen balk; alleen het plaatje en de tekst van de verteller
     ACTOR naam KOSTUUM k OP x,y [VERBORGEN]
                                       een figuur (NPC) in de kamer, met een kostuum uit tools/costume.py
                                       (mira, vex, wolf); OP = waar de voeten staan. Hooguit 2 per kamer.
@@ -61,7 +65,8 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     KIJK eldric richting
     WACHT n                           n beelden
     PRAAT gesprek                     een gesprek beginnen (de werkwoorden maken plaats voor de keuzes)
-    TOON naam / VERBERG naam          een figuur (ACTOR) tonen of weghalen
+    TOON naam / VERBERG naam          een figuur (ACTOR) tonen of weghalen; ook TOON eldric / VERBERG eldric
+    KLEUR x,y b,h van naar            in die vakjes (zoals FLAKKER) kleur van -> naar (bv. de lucht donkerder)
     MUZIEK thema / MUZIEK stil        het thema (tools/thema.py) aan of uit; bij het laden van een kamer stopt het
                                       (zet MUZIEK thema dus in BINNENKOMST). F1 zet de muziek voor de speler uit.
     GELUID naam                       een geluidseffect op stem 3 (deur munt vuur wolf klaar klik); wacht niet
@@ -97,13 +102,13 @@ OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLA
       "ALS_NIET_HEEFT": 0x06, "ALS_STAND": 0x07, "ALS_NIET_STAND": 0x08, "ZET": 0x09, "WIS": 0x0A, "GEEF": 0x0B,
       "NEEM": 0x0C, "STAND": 0x0D, "PLAATS": 0x0E, "LOOP": 0x0F, "KIJK": 0x10, "WACHT": 0x11,
       "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13, "PATCH": 0x14, "KAMER": 0x15, "PRAAT": 0x16,
-      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A, "MUZIEK": 0x1B}
+      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A, "MUZIEK": 0x1B, "KLEUR": 0x1C}
 # geluidseffecten: gelijk houden met de GL_-nummers in src/geluid.asm
 GELUIDEN = ["deur", "munt", "vuur", "wolf", "klaar", "klik"]
 MAX_NPC_KAMER = 2
 MAX_KEUZES = 8
 OPDRACHTEN = {"ZEG", "ALS", "ANDERS", "EINDE", "ZET", "WIS", "GEEF", "NEEM", "PLAATS", "STAND", "LOOP", "KIJK",
-              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID", "MUZIEK"}
+              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID", "MUZIEK", "KLEUR"}
 
 
 class Fout(Exception):
@@ -162,7 +167,7 @@ class Spel:
         self.sprekers, self.standaard, self.losse = {}, {}, {}
         self.actors, self.actor_volgorde = {}, []
         self.gesprekken = {}
-        self.begin, self.doel = None, None
+        self.begin, self.doel, self.verhaal = None, None, None
 
 
 def lees(bestanden):
@@ -289,7 +294,7 @@ def lees(bestanden):
                         raise Fout("%s: kamer %s bestaat al" % (waar, kamer))
                     continue                   # in een ander bestand: verder met dezelfde kamer
                 spel.kamers[kamer] = {"bestand": pad, "flakker": [], "naam": kamer, "vakken": [], "waar": waar, "schaal": [], "kleuren": None,
-                                      "vrij": [], "achter": None}
+                                      "vrij": [], "achter": None, "toneel": False}
                 spel.kamer_volgorde.append(kamer)
             elif kop == "VOORWERP":
                 voorwerp = lees_voorwerp(spel, w, kamer, waar)
@@ -323,6 +328,10 @@ def lees(bestanden):
                 k["flakker"].append((x, y, b, h, [c64beeld.NAMEN.index(kl) for kl in w[3:]], waar))
                 if len(k["flakker"]) > 2:
                     raise Fout("%s: hooguit 2 keer FLAKKER per kamer" % waar)
+            elif kop == "TONEEL":
+                if kamer is None or len(w) != 1:
+                    raise Fout("%s: TONEEL (binnen een KAMER, zonder meer)" % waar)
+                spel.kamers[kamer]["toneel"] = True
             elif kop == "LOOPKLEUREN":
                 if kamer is None or len(w) < 2:
                     raise Fout("%s: LOOPKLEUREN kleur ... (binnen een KAMER)" % waar)
@@ -335,6 +344,10 @@ def lees(bestanden):
                         or len(set(grenzen)) != len(grenzen):
                     raise Fout("%s: SCHAAL: 1 tot %d grenzen tussen 1 en %d, aflopend" % (waar, MAX_SCHAAL, KAMER_H - 1))
                 spel.kamers[kamer]["schaal"] = grenzen
+            elif kop == "VERHAAL":
+                if len(w) != 4 or w[3] not in RICHTINGEN:
+                    raise Fout("%s: VERHAAL kamer x,y richting" % waar)
+                spel.verhaal = (w[1], punt(w[2], waar), RICHTINGEN[w[3]], waar)
             elif kop == "BEGIN":
                 if len(w) != 4 or w[3] not in RICHTINGEN:
                     raise Fout("%s: BEGIN kamer x,y richting" % waar)
@@ -479,6 +492,18 @@ def opdracht(blok, kop, w, waar):
         if n != 2:
             raise Fout("%s: %s naam" % (waar, kop))
         L.append((kop, w[1], waar))
+    elif kop == "KLEUR":
+        if n != 5:
+            raise Fout("%s: KLEUR x,y b,h van naar" % waar)
+        (x, y), (b, h) = punt(w[1], waar), punt(w[2], waar)
+        if x % 4 or b % 4 or y % 8 or h % 8 or b < 4 or h < 8 or x + b > KAMER_B or y + h > KAMER_H:
+            raise Fout("%s: KLEUR: x en b veelvoud van 4, y en h van 8, binnen de kamer" % waar)
+        import c64beeld
+        for kl in w[3:5]:
+            if kl not in c64beeld.NAMEN:
+                raise Fout("%s: onbekende kleur %s" % (waar, kl))
+        L.append(("KLEUR", x // 4, y // 8, b // 4, h // 8, c64beeld.NAMEN.index(w[3]), c64beeld.NAMEN.index(w[4]),
+                  waar))
     elif kop == "MUZIEK":
         if n != 2 or w[1] not in ("thema", "stil"):
             raise Fout("%s: MUZIEK thema  of  MUZIEK stil" % waar)
@@ -612,6 +637,8 @@ def controleer_kamers(spel, kleurcontrole=True):
             opties = {n: o for n, _, o, _ in kamermod.lees_lijst(os.path.join(WORTEL, "data", "kamers.txt"))}
             if not (opties.get(naam) or {}).get("voorgrond"):
                 raise Fout("%s: ACHTER, maar de kamer heeft geen voorgrond (voorgrond=... in data/kamers.txt)" % k["achter"][4])
+    if spel.verhaal and spel.verhaal[0] not in spel.kamers:
+        raise Fout("%s: VERHAAL: onbekende kamer %s" % (spel.verhaal[3], spel.verhaal[0]))
     if spel.begin is None:
         raise Fout("geen BEGIN in de scripts")
     kamer, (x, y), _, waar = spel.begin
@@ -686,7 +713,9 @@ def controleer_scripts(spel):
                 if o[1] not in spel.gesprekken:
                     raise Fout("%s: onbekend gesprek %s" % (waar, o[1]))
             elif k in ("TOON", "VERBERG", "NPC_LOOP"):
-                if o[1] not in spel.actors:
+                if o[1] == "eldric" and k != "NPC_LOOP":
+                    pass                                        # Eldric zelf verbergen/tonen (een TONEEL-kamer)
+                elif o[1] not in spel.actors:
                     raise Fout("%s: onbekende figuur %s (ACTOR in een KAMER)" % (waar, o[1]))
             elif k == "PATCH":
                 if o[1] not in patches:
@@ -871,6 +900,8 @@ class Uitvoer:
             elif k == "LOOP":
                 x = o[1] * 2
                 L.append("        .byte $%02x, %d, %d, %d    // LOOP eldric %d,%d" % (OP[k], x & 255, x >> 8, o[2], o[1], o[2]))
+            elif k == "KLEUR":
+                L.append("        .byte $%02x, %d, %d, %d, %d, %d, %d    // KLEUR" % ((OP[k],) + tuple(o[1:7])))
             elif k == "MUZIEK":
                 L.append("        .byte $%02x, %d    // MUZIEK %s" % (OP[k], o[1], "thema" if o[1] else "stil"))
             elif k == "GELUID":
@@ -887,7 +918,8 @@ class Uitvoer:
             elif k == "PRAAT":
                 L.append("        .byte $%02x, <gesprek_%s, >gesprek_%s    // PRAAT %s" % (OP[k], o[1], o[1], o[1]))
             elif k in ("TOON", "VERBERG"):
-                L.append("        .byte $%02x, %d    // %s %s" % (OP[k], self.spel.actor_volgorde.index(o[1]), k, o[1]))
+                nr = 255 if o[1] == "eldric" else self.spel.actor_volgorde.index(o[1])
+                L.append("        .byte $%02x, %d    // %s %s" % (OP[k], nr, k, o[1]))
             elif k == "NPC_LOOP":
                 x = o[2] * 2
                 L.append("        .byte $%02x, %d, %d, %d, %d    // LOOP %s %d,%d" % (
@@ -1040,6 +1072,8 @@ def schrijf(spel, pad, json_pad):
     L.append("kamer_bestand_lo: .byte %s" % ", ".join("<bestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_bestand_hi: .byte %s" % ", ".join(">bestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_bestand_len: .byte %s" % ", ".join(str(len(n)) for n in spel.kamer_volgorde))
+    L.append("kamer_toneel: .byte %s    // 1: TONEEL (geen Eldric, cursor en balk)" % ", ".join(
+        "1" if spel.kamers[n]["toneel"] else "0" for n in spel.kamer_volgorde))
     L.append("kamer_binnen_lo: .byte %s" % ", ".join(
         "<binnen_%s" % n if "binnenkomst" in spel.kamers[n] else "0" for n in spel.kamer_volgorde))
     L.append("kamer_binnen_hi: .byte %s" % ", ".join(
@@ -1047,6 +1081,12 @@ def schrijf(spel, pad, json_pad):
     kamer, (x, y), r, _ = spel.begin
     L += [".const BEGIN_KAMER = KAMER_%s" % kamer.upper(), ".const BEGIN_X = %d    // schermpixels" % (x * 2),
           ".const BEGIN_Y = %d" % y, ".const BEGIN_RICHTING = %d" % r]
+    if spel.verhaal:
+        vk, (vx, vy), vr, _ = spel.verhaal
+        L += [".const VERHAAL_KAMER = KAMER_%s" % vk.upper(), ".const VERHAAL_X = %d" % (vx * 2),
+              ".const VERHAAL_Y = %d" % vy, ".const VERHAAL_RICHTING = %d" % vr]
+    else:
+        L += [".const VERHAAL_KAMER = 255", ".const VERHAAL_X = 0", ".const VERHAAL_Y = 0", ".const VERHAAL_RICHTING = 0"]
     L.append(".const DOEL_VLAG = %d    // %s" % ((u.vlag(spel.doel[0]), spel.doel[0]) if spel.doel else (255, "geen")))
     L.append(".const AANTAL_VLAGGEN = %d" % len(u.vlaggen))
     L.append("// teksten (schermcodes; $%02x = tweede regel, 0 = einde)" % NIEUWE_REGEL)

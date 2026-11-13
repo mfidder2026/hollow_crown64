@@ -406,6 +406,12 @@ hulp:   .byte 0
 
 // actor_plaatsen: sprites 2 en 3 op de plek van de voeten
 actor_plaatsen:
+        lda $d015                       // zichtbaar of niet (een TONEEL-kamer, VERBERG eldric: toneel.asm)
+        ora #ACT_SPRITES
+        ldx act_zichtbaar
+        bne !+
+        and #~ACT_SPRITES
+!:      sta $d015
         lda act_x                       // X = act_x + 24 - 12
         clc
         adc #12

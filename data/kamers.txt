@@ -6,3 +6,4 @@ smit     data/plaatjes/smit.png     boven=0  kleur=1.0  sterkte=0  patch=vuur_aa
 bosrand  data/flux/bosrand.png    boven=115  kleur=1.8  licht=1.4  sterkte=0  patch=wolven_weg:24,72,88,24:data/flux/bosrand_zonder_wolven.png
 titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen
 kelder   data/flux/kelder.png     boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=honingpot_weg:140,40,16,16:data/flux/kelder_zonder_honingpot.png
+verhaal  data/plaatjes/toneel.png    boven=0  exact=1  sterkte=0   # de verhaalanimatie (met de hand getekend: tools/teken_toneel.py)

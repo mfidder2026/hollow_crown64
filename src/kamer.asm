@@ -61,6 +61,8 @@ kamer_wissel: {
         ldx st_kamer
         jsr kamer_gegevens              // main.asm: loopvakken, schaal, ACHTER + voorgrond
         jsr npc_kamer_in                // de figuren van deze kamer
+        ldx st_kamer
+        jsr toneel_kamer                // TONEEL: geen balk, cursor, Eldric (toneel.asm)
         ldx st_kamer                    // BINNENKOMST
         lda kamer_binnen_hi,x
         beq !+

@@ -299,6 +299,52 @@ king = sym(check([
     "...k.k",
 ], 6))
 
+# ---------------------------------------------------------------- een maan (verhaalanimatie): een schijf die voor de zon schuift
+maan = pad(sym(check([
+    "....kk",
+    "..kkcc",
+    ".kcccc",
+    ".kcccc",
+    "kccccc",
+    "kccccc",
+    "kccccc",
+    "kccccc",
+    ".kcccc",
+    ".kcccc",
+    "..kkcc",
+    "....kk",
+], 6)))
+
+# ---------------------------------------------------------------- een Hol (verhaalanimatie): hol, mager, gloeiende ogen
+hol = pad(sym(check([
+    "......",
+    "....kk",
+    "...kcc",
+    "..kccc",
+    ".kcccc",
+    ".kcssk",   # 5 de ogen gloeien
+    ".kcssk",
+    ".kcccc",
+    "..kccc",
+    "...kcc",
+    "..kkcc",
+    ".kcccc",   # 11 schouders
+    "kccccc",
+    "kckccc",
+    "kckccc",
+    "kckccc",
+    "kc.kcc",
+    "kc.kcc",
+    "k..kcc",
+    "...kcc",
+    "...kck",
+    "...kck",   # 21
+    "...kck",
+    "...kck",
+    "..kkck",
+    "..kkkk",
+], 6)))
+
 # ---------------------------------------------------------------- spookridder: een harnas zonder iemand erin, vervaagt naar onder
 ghost = sym(check([
     "......",
@@ -380,6 +426,8 @@ CHARS = [
     ("vex",   vex,   2, 11),
     ("king",  king,  7, 11),
     ("spook", ghost, 15, 12),
+    ("maan",  maan,  12, 12),
+    ("hol",   hol,   11, 11),
 ]
 
 PALETTE = [(0, 0, 0), (255, 255, 255), (136, 57, 50), (103, 182, 189), (139, 63, 150), (85, 160, 73), (64, 49, 141),

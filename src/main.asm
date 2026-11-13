@@ -40,7 +40,24 @@ start:
 #endif
         jsr intro                       // titel, logo, scrolltekst en muziek tot spatie of vuur (intro.asm)
         jsr balk_tekenen
-        lda #<BEGIN_X                   // de eerste kamer, van de diskette (laden_einde zet de IRQ's aan)
+        lda intro_gedaan                // na het titelscherm eerst het verhaal (VERHAAL in spel.hcs, toneel.asm)
+        beq begin
+        lda #VERHAAL_KAMER
+        cmp #255
+        beq begin
+        lda #<VERHAAL_X
+        sta kw_x
+        lda #>VERHAAL_X
+        sta kw_x + 1
+        lda #VERHAAL_Y
+        sta kw_y
+        lda #VERHAAL_RICHTING
+        sta kw_richting
+        lda #VERHAAL_KAMER
+        jsr kamer_wissel
+        cli
+        jmp hoofdlus
+begin:  lda #<BEGIN_X                   // de eerste kamer, van de diskette (laden_einde zet de IRQ's aan)
         sta kw_x
         lda #>BEGIN_X
         sta kw_x + 1
@@ -138,6 +155,7 @@ kamer_nu: .byte 0
 #import "opslaan.asm"
 #import "muziek.asm"
 #import "intro.asm"
+#import "toneel.asm"
 #import "invoer.asm"
 #import "cursor.asm"
 #import "autotest.asm"
