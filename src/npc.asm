@@ -1,12 +1,16 @@
 // npc.asm — figuren in een kamer (NPC's, hoofdstuk 7): Mira, de wolven, het silhouet van Vex.
 //
 // Een figuur heeft één pose (2 sprites, uit tools/costume.py): boven elkaar (vorm 0) of naast elkaar (vorm 1).
-// Hooguit 2 per kamer: slot 0 = sprite 4 en 5 (vak 2, 3), slot 1 = sprite 6 en 7 (vak 4, 5).
+// Twee slots: slot 0 = sprite 4 en 5 (vak 2, 3), slot 1 = sprite 6 en 7 (vak 4, 5). Een figuur heeft alleen een slot
+// zolang hij zichtbaar is: VERBERG maakt zijn slot vrij, TOON pakt een vrij slot (zo kan Mira binnenkomen als de wolf
+// weg is). Een kamer mag dus meer figuren hebben, maar er staan er hooguit 2 tegelijk. Geen slot vrij bij TOON:
+// vm_fout = VM_FOUT_SLOTS (de tests letten daarop).
 // Eldric (sprite 2, 3) komt vóór de figuren (lager nummer). Zichtbaar of niet staat in de spelstatus (st_npc).
 // LOOP <figuur> x,y: in een rechte lijn, 1 pixel per beeld per as.
 
 .const NPC_SLOTS = 2
 .const NPC_GEEN  = $ff
+.const VM_FOUT_SLOTS = $fe              // vm_fout: TOON, maar beide slots zijn bezet
 
 .segment Code
 // npc_begin: posities uit de tabel (bij het begin van het spel)
@@ -37,6 +41,8 @@ lus:    cpx #AANTAL_NPC
         lda npc_kamer,x
         cmp st_kamer
         bne volgende
+        lda st_npc,x                    // alleen wie zichtbaar is
+        beq volgende
         cpy #NPC_SLOTS
         bcs klaar
         txa
@@ -47,6 +53,51 @@ volgende:
         inx
         jmp lus
 klaar:  jmp npc_sprites
+}
+
+// npc_toon: figuur X zichtbaar; staat hij in deze kamer, dan krijgt hij een vrij slot
+npc_toon: {
+        lda #1
+        sta st_npc,x
+        lda npc_kamer,x
+        cmp st_kamer
+        bne klaar
+        txa                             // heeft hij al een slot?
+        cmp slot_npc
+        beq klaar
+        cmp slot_npc + 1
+        beq klaar
+        ldy #0
+!:      lda slot_npc,y
+        cmp #NPC_GEEN
+        beq vrij
+        iny
+        cpy #NPC_SLOTS
+        bne !-
+        lda #VM_FOUT_SLOTS              // geen slot vrij
+        sta vm_fout
+        rts
+vrij:   txa
+        sta slot_npc,y
+        jsr kostuum_naar_slot
+        jmp npc_sprites
+klaar:  rts
+}
+
+// npc_verberg: figuur X weg; zijn slot komt vrij (npc_sprites zet de sprites uit)
+npc_verberg: {
+        lda #0
+        sta st_npc,x
+        ldy #0
+!:      txa
+        cmp slot_npc,y
+        bne !+
+        lda #NPC_GEEN
+        sta slot_npc,y
+!:      iny
+        cpy #NPC_SLOTS
+        bne !--
+        jmp npc_sprites
 }
 
 // kostuum_naar_slot: het kostuum van figuur X naar de vakken van slot Y; kleuren en multicolor (X, Y blijven)

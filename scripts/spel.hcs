@@ -13,6 +13,10 @@ VOORWERP munt "gouden munt" NERGENS
   BEKIJK:
     ZEG eldric "Een gouden munt uit de fontein. Er staat een zon op. Hoe toepasselijk."
 
+VOORWERP vuursteen "vuursteen" NERGENS
+  BEKIJK:
+    ZEG eldric "Een vuursteen van Bram. Voor als het licht uitgaat."
+
 VOORWERP lantaarn "lantaarn" NERGENS
   BEKIJK:
     ALS STAND lantaarn 2

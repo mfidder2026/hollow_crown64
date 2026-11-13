@@ -525,3 +525,21 @@ Volgende: de smidse en de bosrand, op dezelfde manier.
 
 **Hernoemd (2026-11-13):** de kamer heet nu overal "smit" in plaats van "smidse" (scripts/smit.hcs, KAMER smit,
 bestand SMIT op de diskette, data/plaatjes/smit*.png, tests). Op verzoek van de gebruiker.
+
+## 2026-11-13 — Hoofdstuk 1 volgens het scenario (deel 1)
+
+Het scenario van MacAIMagic (`~/Development/Hollow_Crown/docs/SCRIPT_HOLLOW_CROWN.md`, nog niet vastgelegd op hun
+branch) is nu leidend voor hoofdstuk 1. Afgesproken met de gebruiker: de kelder komt er nu bij, de verhaalanimatie
+na het titelscherm wordt één toneel met spriteanimatie, en Mira komt aan het eind erbij (motor uitgebreid).
+
+- Teksten: fontein ("Het water is zwart sinds de zon weg is. Er glimt iets."), Mira ("De steen is warm. Hij is
+  altijd warm. Rare steen."), Bram ("Vuur uit, lantaarn leeg, hoofd vol.").
+- Nieuw voorwerp **vuursteen**: Geef munt aan Bram (als het vuur brandt) → vuursteen (nodig in hoofdstuk 4).
+- **Figuren krijgen een slot bij TOON** (`npc_toon`/`npc_verberg` in npc.asm): VERBERG maakt het slot vrij. Een kamer
+  mag nu meer figuren hebben, er staan er hooguit 2 tegelijk (de compiler telt de zichtbare bij binnenkomst; is er
+  bij TOON geen slot vrij, dan vm_fout = $FE).
+- **Finale bosrand**: de wolf vlucht, Vex fluistert "Kom maar, Wachter. Ik heb een kroon voor je." en verdwijnt,
+  Mira komt aanlopen: "Het pad vraagt om mij." Ze reist mee (in de herberg is ze weg). De oplossingsband controleert
+  Vex en daarna Mira in het vrijgekomen slot, met screenshots pixel voor pixel.
+
+**Getest:** 22/22 compiler, 13/13 banden.

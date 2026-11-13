@@ -29,7 +29,7 @@ verwacht act_x.w = 160
 verwacht act_y = 100
 verwacht act_richting = 1
 verwacht_tekst 0 "Het water is zwart sinds de zon weg is."
-verwacht_tekst 1 "Er glinstert iets op de bodem."
+verwacht_tekst 1 "Er glimt iets."
 screenshot bekijk_fontein
 
 # vuur haalt de tekst weg

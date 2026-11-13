@@ -30,7 +30,7 @@ BINNENKOMST:
 
 VOORWERP fontein "fontein" VAK 62,74 39,26 LOOP 80,100 RUG     # alleen de bak: het gras erachter blijft vloer
   BEKIJK:
-    ZEG eldric "Het water is zwart sinds de zon weg is. Er glinstert iets op de bodem."
+    ZEG eldric "Het water is zwart sinds de zon weg is. Er glimt iets."
   PAK:
     ALS vlag munt_gepakt
       ZEG eldric "Eén is genoeg. De rest is voor andermans wensen."

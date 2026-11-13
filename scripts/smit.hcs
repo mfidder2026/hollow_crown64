@@ -47,7 +47,16 @@ VOORWERP bram "Bram" VAK 20,55 17,36 LOOP 44,96 LINKS
     ALS vlag smidsvuur_aan
       ZEG bram "Met dit vuur maak ik weer ijzer. Dank je, Wachter."
     ANDERS
-      ZEG bram "Laat me. Zonder zon geen vuur, zonder vuur geen smit."
+      ZEG bram "Vuur uit, lantaarn leeg, hoofd vol."
+    EINDE
+  GEEF munt:
+    ALS vlag smidsvuur_aan
+      ZEG bram "Een munt uit de fontein? Voor het geluk, dan."
+      NEEM munt
+      ZEG bram "Hier. Een vuursteen. Voor als je lantaarn ooit uitgaat."
+      GEEF vuursteen
+    ANDERS
+      ZEG bram "Wat moet ik met goud zonder vuur? Ga weg."
     EINDE
 
 VOORWERP aambeeld "aambeeld" VAK 110,85 28,20 LOOP 104,100 RECHTS

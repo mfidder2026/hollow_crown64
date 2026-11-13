@@ -128,10 +128,14 @@ vuur
 wacht_tot_stil
 wacht 60
 verwacht vm_scene = 1                  # de tussenscène loopt
-wacht 300
-verwacht_tekst 0 "Zo. De kleine lichtdrager van Dawnhaven."
-verwacht slot_npc+1 = 1                # Vex in figuurslot 1 (sprite 6-7; tot nu toe alleen slot 0 getest)
+wacht 360
+verwacht_tekst 0 "Kom maar, Wachter. Ik heb een kroon voor"
+verwacht slot_npc = 1                  # Vex kreeg het slot dat de wolf vrijmaakte (slot 0)
 screenshot vex
+wacht 450
+verwacht_tekst 0 "Het pad vraagt om mij."
+verwacht slot_npc = 2                  # en nu Mira in dat slot (vex weg)
+screenshot mira
 wacht_op_script
 wacht 3
 verwacht_vlag wolven_weg 1

@@ -339,17 +339,17 @@ op_praat:
         jmp verder
 
 op_toon:
-        lda #1
-        bne npc_zichtbaar
-op_verberg:
-        lda #0
-npc_zichtbaar:
-        pha
         ldy #1
         lda (zp_vm),y
         tax
-        pla
-        sta st_npc,x
+        jsr npc_toon                    // npc.asm: een vrij slot
+        lda #2
+        jmp verder
+op_verberg:
+        ldy #1
+        lda (zp_vm),y
+        tax
+        jsr npc_verberg                 // npc.asm: het slot komt vrij
         lda #2
         jmp verder
 

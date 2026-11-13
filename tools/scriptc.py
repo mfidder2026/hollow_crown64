@@ -705,9 +705,11 @@ def controleer_scripts(spel):
     for a in spel.actors.values():
         if a["kostuum"] not in kostuums:
             raise Fout("%s: onbekend kostuum %s (tools/costume.py: %s)" % (a["waar"], a["kostuum"], ", ".join(kostuums)))
-        per_kamer.setdefault(a["kamer"], []).append(a["naam"])
-        if len(per_kamer[a["kamer"]]) > MAX_NPC_KAMER:
-            raise Fout("%s: hooguit %d figuren per kamer (de sprites zijn op)" % (a["waar"], MAX_NPC_KAMER))
+        if a["zichtbaar"]:
+            per_kamer.setdefault(a["kamer"], []).append(a["naam"])
+        if len(per_kamer.get(a["kamer"], [])) > MAX_NPC_KAMER:
+            raise Fout("%s: hooguit %d figuren tegelijk zichtbaar per kamer (de sprites zijn op); zet de rest "
+                       "VERBORGEN en TOON ze later" % (a["waar"], MAX_NPC_KAMER))
     for g in spel.gesprekken.values():
         if not g["keuzes"]:
             raise Fout("%s: GESPREK %s heeft geen keuzes" % (g["waar"], g["naam"]))
