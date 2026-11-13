@@ -2,7 +2,10 @@
 //
 //   rij 0-1    leeg
 //   rij 2-17   het titelplaatje (bestand "titel", hetzelfde formaat als een kamer: tools/kamer.py)
-//   rij 18-20  HOLLOW CROWN in het logo-lettertype (tools/logo.py: tekens $80.. in het lettertype)
+//   rij 18     leeg: op de eerste lijn van rij 18 schakelt de IRQ van bitmap naar tekst (lijn 195); daar zou de
+//              bovenste pixelrij van het logo half in de verkeerde stand komen (een witte streep). Gewone letters hebben
+//              daarom pixelrij 0 leeg; het logo gebruikt alle 8 rijen, dus begint het een rij lager.
+//   rij 19-21  HOLLOW CROWN in het logo-lettertype (tools/logo.py: tekens $80.. in het lettertype)
 //   rij 22     "Druk op spatie of vuur"      rij 23 leeg (daar begint de scroll-IRQ)
 //   rij 24     de scrolltekst, vloeiend: een extra raster-IRQ op lijn 241 zet XSCROLL (38 kolommen) en de
 //              onderrand zet hem weer terug (irq.asm).
@@ -12,7 +15,7 @@
 
 #import "../build/gen/logo.asm"
 
-.const RIJ_LOGO      = 18
+.const RIJ_LOGO      = 19
 .const RIJ_DRUK      = 22
 .const RIJ_SCROLL    = 24
 .const KLEURSTAP     = 3                // beelden per stap van de kleurenloop
@@ -74,7 +77,7 @@ intro: {
         ldy #1
         lda #0
         jsr rij_wissen
-        ldy #RIJ_LOGO
+        ldy #RIJ_ZIN                    // rij 18-24 leeg
 !:      tya
         pha
         lda #0
@@ -165,7 +168,7 @@ klaar:  jsr muziek_stop
         lda beelden                     // één beeld wachten: de IRQ's lopen weer zoals in het spel
 !:      cmp beelden
         beq !-
-        ldy #RIJ_LOGO
+        ldy #RIJ_ZIN                    // rij 18-24 leeg
 !:      tya
         pha
         lda #0

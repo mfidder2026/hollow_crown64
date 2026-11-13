@@ -540,8 +540,9 @@ def controleer(vice, sym, regel, spel=None):
         # de kleurenloop: elke logokolom k heeft kleur logo_kleuren[(k + intro_kleur) & 15], in alle 3 de rijen
         stap = vice.lees(sym["intro_kleur"])[0]
         tabel = vice.lees(sym["logo_kleuren"], 16)
-        scherm = vice.lees(0xC000 + 18 * 40, 120)
-        kleur = [b & 15 for b in vice.lees(0xD800 + 18 * 40, 120)]
+        rij = 19                                 # RIJ_LOGO in src/intro.asm (rij 18 blijft leeg: de naad)
+        scherm = vice.lees(0xC000 + rij * 40, 120)
+        kleur = [b & 15 for b in vice.lees(0xD800 + rij * 40, 120)]
         tekens = sum(1 for c in scherm if c >= 0x80)
         fout = [i for i in range(120) if kleur[i] != tabel[(i % 40 + stap) & 15]]
         return tekens > 60 and not fout, "logo: %d logotekens, kleurenloop op stap %d%s" % (

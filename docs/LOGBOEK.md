@@ -594,3 +594,7 @@ komt later), geïnspireerd op het openingsfilmpje van de oude avonturen, met eig
 **Getest:** `tests/verhaal.band` (de scènes, manen en Holen in de figuurslots, alle 7 kleurwissels, daarna het plein
 met balk, inventaris en cursor terug; screenshots pixel voor pixel met de sprites), `tests/intro.band` (vuur slaat
 het verhaal over, geen hangende toon). 23/23 compiler, 14/14 banden.
+
+**Logo (2026-11-13):** de bovenste pixelrij van HOLLOW CROWN gaf een witte streep: rij 18 begint op de rasterlijn waar de
+IRQ van bitmap naar tekst schakelt (lijn 195), en het logo gebruikt alle 8 pixelrijen. Het logo staat nu op rij 19-21,
+rij 18 blijft leeg.
