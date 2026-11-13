@@ -84,6 +84,8 @@ at the same time:
 | 1351 mouse (port 1) | mouse | left button |
 | Keyboard | **CRSR** keys, with **SHIFT** for up/left (arrow keys in VICE) | **SPACE** or **CTRL** (left Control in VICE), also RETURN |
 **F1** toggles music, **F5** saves, **F7** loads, and **space** skips text you've already read.
+Move the cursor to the top line for the menu: **Bestand** (save, load, exit to BASIC), **Score** (light points)
+and **Bosskey**, which instantly turns the screen into a very boring spreadsheet. Any key brings the game back.
 
 ---
 

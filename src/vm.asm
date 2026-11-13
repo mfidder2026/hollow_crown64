@@ -24,13 +24,15 @@
 //   $1A effect                    GELUID: een effect op stem 3 (geluid.asm); wacht niet
 //   $1B n                         MUZIEK: 0 = stil, n = stuk n-1 (LIED_THEMA, LIED_PLEIN, ...: tools/thema.py)
 //   $1C kol rij b h van naar      KLEUR: kleur van -> naar in die vakjes (toneel.asm)
+//   $1D n                         PUNTEN: n lichtpunten erbij (de score, hooguit SCORE_MAX)
 // TOON / VERBERG met figuur 255: Eldric zelf.
 // Een onbekende opcode stopt het script en zet vm_fout (voor de tests).
 
 .const OP_STOP = $00
-.const OP_LAATSTE = $1c
+.const OP_LAATSTE = $1d
 .const EIGENAAR_ELDRIC = $ff
 .const EIGENAAR_NERGENS = $fe
+.const SCORE_MAX = 250                  // de lichtpunten van het hele spel (scenario: tot 250)
 
 .segment Code
 // vm_start: script op A (laag) / X (hoog) starten
@@ -396,6 +398,19 @@ op_geluid:
         lda #2
         jmp verder
 
+op_punten:
+        ldy #1
+        lda (zp_vm),y
+        clc
+        adc st_score
+        bcs !+                          // (meer dan 255: vol)
+        cmp #SCORE_MAX + 1
+        bcc !++
+!:      lda #SCORE_MAX
+!:      sta st_score
+        lda #2
+        jmp verder
+
 op_kleur:
         jsr kleur_wissel                // toneel.asm
         lda #7
@@ -457,7 +472,7 @@ sprongen:
         .word op_zet - 1, op_wis - 1, op_geef - 1, op_neem - 1, op_stand - 1, op_plaats - 1
         .word op_loop - 1, op_kijk - 1, op_wacht - 1, op_tussenscene - 1, op_einde_tussenscene - 1
         .word op_patch - 1, op_kamer - 1, op_praat - 1, op_toon - 1, op_verberg - 1, op_npc_loop - 1
-        .word op_geluid - 1, op_muziek - 1, op_kleur - 1
+        .word op_geluid - 1, op_muziek - 1, op_kleur - 1, op_punten - 1
 .assert "een sprong per opcode", (* - sprongen) / 2, OP_LAATSTE + 1
 }
 

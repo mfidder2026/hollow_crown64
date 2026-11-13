@@ -70,6 +70,7 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     MUZIEK naam / MUZIEK stil         een stuk uit tools/thema.py (thema plein herberg kelder smit bosrand) of stil;
                                       bij het laden van een kamer stopt het (zet MUZIEK dus in BINNENKOMST).
                                       F1 zet de muziek voor de speler uit.
+    PUNTEN n                          n lichtpunten erbij (de score; zet hem waar iets maar één keer kan)
     GELUID naam                       een geluidseffect op stem 3 (deur munt vuur wolf klaar klik); wacht niet
     LOOP naam x,y                     een figuur in een rechte lijn laten lopen (wacht tot hij er is)
     TUSSENSCENE / EINDE_TUSSENSCENE   geen invoer daartussen; vuur of spatie slaat over
@@ -103,13 +104,13 @@ OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLA
       "ALS_NIET_HEEFT": 0x06, "ALS_STAND": 0x07, "ALS_NIET_STAND": 0x08, "ZET": 0x09, "WIS": 0x0A, "GEEF": 0x0B,
       "NEEM": 0x0C, "STAND": 0x0D, "PLAATS": 0x0E, "LOOP": 0x0F, "KIJK": 0x10, "WACHT": 0x11,
       "TUSSENSCENE": 0x12, "EINDE_TUSSENSCENE": 0x13, "PATCH": 0x14, "KAMER": 0x15, "PRAAT": 0x16,
-      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A, "MUZIEK": 0x1B, "KLEUR": 0x1C}
+      "TOON": 0x17, "VERBERG": 0x18, "NPC_LOOP": 0x19, "GELUID": 0x1A, "MUZIEK": 0x1B, "KLEUR": 0x1C, "PUNTEN": 0x1D}
 # geluidseffecten: gelijk houden met de GL_-nummers in src/geluid.asm
 GELUIDEN = ["deur", "munt", "vuur", "wolf", "klaar", "klik"]
 MAX_NPC_KAMER = 2
 MAX_KEUZES = 8
 OPDRACHTEN = {"ZEG", "ALS", "ANDERS", "EINDE", "ZET", "WIS", "GEEF", "NEEM", "PLAATS", "STAND", "LOOP", "KIJK",
-              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID", "MUZIEK", "KLEUR"}
+              "WACHT", "TUSSENSCENE", "EINDE_TUSSENSCENE", "STOP", "PATCH", "PRAAT", "TOON", "VERBERG", "GELUID", "MUZIEK", "KLEUR", "PUNTEN"}
 
 
 class Fout(Exception):
@@ -493,6 +494,10 @@ def opdracht(blok, kop, w, waar):
         if n != 2:
             raise Fout("%s: %s naam" % (waar, kop))
         L.append((kop, w[1], waar))
+    elif kop == "PUNTEN":
+        if n != 2:
+            raise Fout("%s: PUNTEN n" % waar)
+        L.append(("PUNTEN", getal(w[1], waar, 1, 250), waar))
     elif kop == "KLEUR":
         if n != 5:
             raise Fout("%s: KLEUR x,y b,h van naar" % waar)
@@ -902,6 +907,8 @@ class Uitvoer:
             elif k == "LOOP":
                 x = o[1] * 2
                 L.append("        .byte $%02x, %d, %d, %d    // LOOP eldric %d,%d" % (OP[k], x & 255, x >> 8, o[2], o[1], o[2]))
+            elif k == "PUNTEN":
+                L.append("        .byte $%02x, %d    // PUNTEN %d" % (OP[k], o[1], o[1]))
             elif k == "KLEUR":
                 L.append("        .byte $%02x, %d, %d, %d, %d, %d, %d    // KLEUR" % ((OP[k],) + tuple(o[1:7])))
             elif k == "MUZIEK":

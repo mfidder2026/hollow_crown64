@@ -66,6 +66,7 @@ VOORWERP wolven "wolven" VAK 28,80 82,12 LOOP 80,100 RUG
         LOOP wolf 4,90
         VERBERG wolf
         ZET wolven_weg
+        PUNTEN 25
         WACHT 25
         TOON vex
         WACHT 25

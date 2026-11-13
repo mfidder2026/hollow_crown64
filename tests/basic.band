@@ -1,0 +1,9 @@
+# basic.band — menu Bestand, Exit: terug naar BASIC (READY.), met de ROM's aan en het gewone scherm.
+wacht 3
+cursor 20,4
+vuur
+wacht 2
+cursor 180,12
+verwacht_tekst 1 " Opslaan   Laden     Exit"
+vuur
+wacht 10

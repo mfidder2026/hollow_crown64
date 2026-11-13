@@ -41,6 +41,7 @@ VOORWERP tafel "tafel" VAK 54,86 36,16 LOOP 70,110 RUG
       PATCH tafel_weg
       ZET tafel_geschoven
       PLAATS ziensteen herberg
+      PUNTEN 10
       ZEG eldric "Daar ligt een steen. Met een gat erin."
     EINDE
   TREK:
@@ -56,6 +57,7 @@ VOORWERP kruik "kruik" VAK 139,28 8,20 LOOP 140,90 RUG
   PAK:
     ZEG eldric "Een lege kruik. Die kan van pas komen."
     GEEF kruik
+    PUNTEN 5
     PATCH kruik_weg
     ZET kruik_gepakt
 
@@ -91,6 +93,7 @@ VOORWERP mira "Mira" VAK 126,70 13,36 LOOP 116,108 RECHTS
     ZEG mira "Mijn ziensteen! Ik voel het aan het gat. Dank je, Wachter."
     NEEM ziensteen
     ZET ziensteen_terug
+    PUNTEN 10
     ZEG mira "Ah, nu zie ik het pad weer. Het loopt langs de wolven."
     ZEG mira "Schaduwwolven vrezen licht. Bram de smit heeft een lantaarn."
     ZEG mira "De steen is warm. Hij is altijd warm. Rare steen."

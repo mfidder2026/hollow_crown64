@@ -52,6 +52,15 @@ tekst_niets_opgeslagen: .text "Er is geen opgeslagen spel."; .byte 0
 tekst_voltooid:  .text "Hoofdstuk 1 voltooid"
 .label tekst_voltooid_lengte = * - tekst_voltooid
                  .byte 0
+// de menubalk (menu.asm)
+tekst_bestand:      .text "Bestand"; .byte 0
+tekst_score:        .text "Score"; .byte 0
+tekst_bosskey:      .text "Bosskey"; .byte 0
+tekst_opslaan_menu: .text "Opslaan"; .byte 0
+tekst_laden_menu:   .text "Laden"; .byte 0
+tekst_exit:         .text "Exit"; .byte 0
+tekst_lichtpunten:  .text "Lichtpunten:"; .byte 0
+tekst_van_max:      .text "van 250"; .byte 0
 // het intro (intro.asm)
 tekst_druk:      .text "Druk op spatie of vuur"
 .label tekst_druk_lengte = * - tekst_druk

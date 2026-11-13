@@ -58,11 +58,13 @@ irq_kamer:
         ldx #9                          // ~45 cycli: naar de rechterrand van lijn 66
 !:      dex
         bne !-
+        lda baas_actief                 // de baas-toets: het hele scherm blijft tekst (baas.asm)
+        bne !+
         lda #D016_KAMER                 // eerst multicolor (tekst in kleur 0-7 blijft gewoon)
         sta $d016
         lda #D011_BITMAP
         sta $d011
-        lda #IRQ_BALK
+!:      lda #IRQ_BALK
         sta $d012
         lda #<irq_balk
         sta $0314

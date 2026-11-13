@@ -17,7 +17,7 @@ Een teken is hieronder 7 regels (pixelrij 1-7) van hooguit 6 tekens breed: kolom
 import os, struct, sys, zlib
 
 # Plekken die niet uit "screencode_mixed" komen: de compiler van de scripts gebruikt deze tabel ook.
-EXTRA = {"↑": 0x1E, "↓": 0x1F, "é": 0x5B, "ë": 0x5C, "ï": 0x5D, "ö": 0x5E, "ü": 0x5F}
+EXTRA = {"↑": 0x1E, "↓": 0x1F, "é": 0x5B, "ë": 0x5C, "ï": 0x5D, "ö": 0x5E, "ü": 0x5F, "|": 0x1C}
 
 
 def code_van(t):
@@ -38,6 +38,7 @@ def code_van(t):
 # Elk teken: 7 regels, pixelrij 1 t/m 7. Lege regels mogen weg aan het eind.
 TEKENS = {
     " ": [],
+    "|": ["..#..", "..#..", "..#..", "..#..", "..#..", "..#..", "..#.."],   # de kolomlijnen van het rekenblad (baas.asm)
     "A": [".###.", "#...#", "#...#", "#####", "#...#", "#...#"],
     "B": ["####.", "#...#", "####.", "#...#", "#...#", "####."],
     "C": [".###.", "#...#", "#....", "#....", "#...#", ".###."],
@@ -223,6 +224,8 @@ def main():
     os.makedirs(uit, exist_ok=True)
     font = lettertype()
     open(os.path.join(uit, "lettertype.bin"), "wb").write(font)
+    import inpak                                     # ingepakt in het programma (scherm.asm pakt het uit naar $F800)
+    open(os.path.join(uit, "lettertype_ingepakt.bin"), "wb").write(inpak.pak(bytes(font)))
     open(os.path.join(uit, "cursor.bin"), "wb").write(cursor())
     png(font, os.path.join(uit, "lettertype.png"))
     with open(os.path.join(uit, "lettertype_info.asm"), "w") as f:

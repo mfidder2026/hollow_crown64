@@ -102,12 +102,21 @@ hoofdlus:
         lda band_markering              // vicetest kijkt: de wereld staat stil (een echte momentopname)
         bne hoofdlus
 #endif
+        lda baas_actief                 // de baas-toets: alleen het rekenblad (baas.asm)
+        beq !+
+        jsr baas_beeld
+#if AUTOTEST
+        jsr band_stap
+#endif
+        jmp hoofdlus
+!:
         jsr invoer_lees
         jsr cursor_beweeg
         jsr cursor_muis
 #if AUTOTEST
         jsr band_na_beweging
 #endif
+        jsr menu_beeld                  // de menubalk in rij 0-1 (menu.asm); een klik daar is voor het menu
         jsr klik                        // zin.asm
         jsr actie_beeld
         jsr vm_stap
@@ -156,6 +165,9 @@ kamer_nu: .byte 0
 #import "muziek.asm"
 #import "intro.asm"
 #import "toneel.asm"
+#import "menu.asm"
+#import "baas.asm"
+#import "basic.asm"
 #import "invoer.asm"
 #import "cursor.asm"
 #import "autotest.asm"

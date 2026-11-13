@@ -53,7 +53,7 @@ scherm_start:
         dex
         bne !-
 
-        // lettertype naar $F800 (2 KB)
+        // lettertype naar $F800 (2 KB; ingepakt in het programma: veel lege pixelrijen)
         lda #<lettertype_data
         sta zp_ptr
         lda #>lettertype_data
@@ -62,16 +62,7 @@ scherm_start:
         sta zp_ptr2
         lda #>LETTERTYPE
         sta zp_ptr2 + 1
-        ldx #8
-        ldy #0
-!:      lda (zp_ptr),y
-        sta (zp_ptr2),y
-        iny
-        bne !-
-        inc zp_ptr + 1
-        inc zp_ptr2 + 1
-        dex
-        bne !-
+        jsr uitpak
 
         // $FFFA-$FFFF in het RAM (teken 255, rij 2-7, nooit op het scherm): veilige vectoren, voor als
         // de Kernal-ROM ooit even weg is ($01=$35) en er een NMI (RESTORE) komt
@@ -137,6 +128,5 @@ rij_lo:       .fill 25, <(SCHERM + i * 40)
 rij_hi:       .fill 25, >(SCHERM + i * 40)
 .assert "KLEUR_OFFSET is een veelvoud van $100", <KLEUR_OFFSET, 0
 
-lettertype_data:
-        .import binary "../build/gen/lettertype.bin"
-.assert "lettertype is 2 KB", * - lettertype_data, $800
+lettertype_data:                        // ingepakt (tools/inpak.py); uitgepakt 2 KB
+        .import binary "../build/gen/lettertype_ingepakt.bin"

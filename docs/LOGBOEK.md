@@ -637,3 +637,24 @@ stil, n = stuk n-1). vicetest `verwacht_muziek` leest welk stuk speelt (muz_lied
 
 **Getest:** in elke kamer het juiste stuk, noot voor noot (kamers, oplossing, intro). Nog niet met oren beluisterd
 (de WAV-opname werkt alleen zonder warp en het titelscherm wacht op een toets).
+
+## 2026-11-13 — Menubalk, lichtpunten, baas-toets en Exit
+
+- **Menubalk** (`src/menu.asm`): komt de cursor in rij 0-1 (en praat er niemand, loopt er geen script, gesprek of
+  toneel), dan staat daar **Bestand – Score – Bosskey**; het woord onder de cursor licht geel op. Bestand opent in rij 1
+  **Opslaan – Laden – Exit**; Score toont "Lichtpunten: 25 van 250". Een klik in de balk is voor het menu.
+- **Lichtpunten**: opcode `PUNTEN n` ($1D), `st_score` in de spelstatus (STATUS_VERSIE 2: oude opslag laadt niet meer).
+  Hoofdstuk 1 heeft er 100: munt 5, kruik 5, ziensteen gevonden 10, ziensteen terug 10, honingpot 5, smidsvuur 15,
+  vuursteen 5, olie in de lantaarn 10, lantaarn aan 10, wolven verjaagd 25. Alleen waar iets één keer kan; olie in een
+  lantaarn die al olie heeft kan niet meer (dat doofde hem eerst weer).
+- **Bosskey** (`src/baas.asm`, `tools/baas.py`): het hele scherm wordt tekst (de IRQ schakelt niet meer naar de
+  bitmap), witte achtergrond, een rekenblad met een begroting; geen sprites, muziek stil. Een toets/stick/muisknop:
+  het spel komt precies terug (plaatje uit de kamerbuffer, BINNENKOMST, balk). Nieuw teken `|` in het lettertype.
+- **Exit** (`src/basic.asm`): raster-IRQ uit, SID stil, ROM's aan, dan IOINIT, RESTOR, CINT van de Kernal en de warme
+  start van BASIC: READY. (RUN start het spel opnieuw.) De reset als terugval was niet nodig.
+- **Geheugen**: het programma paste niet meer onder $A000. Het rekenblad (1000 → 694 bytes) en het lettertype
+  (2048 → 673 bytes) staan nu ingepakt in het programma en worden bij gebruik uitgepakt.
+
+**Getest:** `tests/menu.band` (balk verschijnt en verdwijnt, opslaan via het menu, score 0 en na de munt 5, het
+rekenblad en terug: scherm pixel voor pixel), `tests/basic.band` (Exit: READY. op het BASIC-scherm, ROM's aan).
+23/23 compiler, 16/16 banden.

@@ -31,17 +31,23 @@ VOORWERP lantaarn "lantaarn" NERGENS
       EINDE
     EINDE
   GEBRUIK kruik:
-    ALS STAND kruik 1
-      ZEG eldric "Ik giet de olie in de lantaarn."
-      STAND lantaarn 1
-      STAND kruik 0
+    ALS NIET STAND lantaarn 0
+      ZEG eldric "Er zit al olie in."
     ANDERS
-      ZEG eldric "De kruik is leeg."
+      ALS STAND kruik 1
+        ZEG eldric "Ik giet de olie in de lantaarn."
+        STAND lantaarn 1
+        STAND kruik 0
+        PUNTEN 10
+      ANDERS
+        ZEG eldric "De kruik is leeg."
+      EINDE
     EINDE
   GEBRUIK zwaard:
     ALS STAND lantaarn 1
       ZEG eldric "Het lichtfragment raakt de olie... en de lantaarn brandt!"
       STAND lantaarn 2
+      PUNTEN 10
     ANDERS
       ALS STAND lantaarn 2
         ZEG eldric "Hij brandt al."

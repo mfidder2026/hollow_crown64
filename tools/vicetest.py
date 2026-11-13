@@ -205,6 +205,9 @@ def lees_verwacht(pad):
         regel = regel.split("#", 1)[0].strip()
         if not regel:
             continue
+        if re.fullmatch(r"basic\s*=\s*klaar", regel):
+            regels.append((regel, "basic", 0, False, "basic", 0))
+            continue
         if re.fullmatch(r"scherm\s*=\s*ideaal", regel):
             regels.append((regel, "scherm", 0, False, "ideaal", 0))
             continue
@@ -603,7 +606,8 @@ def draai(bandpad, args):
         if nodig not in sym:
             raise Fout("label %s niet in hollowcrown.vs: is dit een AUTOTEST-build?" % nodig)
     scherm_ideaal = any(r[1] == "scherm" for r in verwacht)
-    verwacht = [r for r in verwacht if r[1] != "scherm"]
+    basic_klaar = any(r[1] == "basic" for r in verwacht)
+    verwacht = [r for r in verwacht if r[1] not in ("scherm", "basic")]
     for pos, naam_s in starts:                       # START: het adres van het script
         if "scr_" + naam_s not in sym:
             raise Fout("%s: onbekend script %s (SCRIPT %s: in tests/scripts/*.hcs?)" % (bandpad, naam_s, naam_s))
@@ -692,6 +696,19 @@ def draai(bandpad, args):
         if scherm_ideaal and not shots_n:
             print("[test]   FOUT scherm = ideaal, maar de band maakt geen screenshot")
             goed = False
+        if basic_klaar:
+            # menu Bestand, Exit: terug in BASIC? Het gewone scherm op $0400 moet READY. laten zien.
+            for _ in range(40):
+                vice.verder()
+                time.sleep(0.05)
+                codes = vice.lees(0x0400, 1000)
+                tekst = "".join(chr(c + 64) if 1 <= c <= 26 else chr(c) if 32 <= c <= 63 else " " for c in codes)
+                if "READY." in tekst:
+                    break
+            ok = "READY." in tekst and vice.lees(0x0001)[0] & 7 == 7
+            goed &= ok
+            print("[test]   %-4s basic = klaar: READY. op het scherm, BASIC- en Kernal-ROM aan%s" % (
+                "ok" if ok else "FOUT", "" if ok else "  (scherm: %r)" % tekst.strip()[:80]))
         for r in verwacht:
             ok, tekst = controleer(vice, sym, r)
             goed &= ok

@@ -1,0 +1,70 @@
+# menu.band — de menubalk in rij 0-1: Bestand (Opslaan), Score (lichtpunten) en Bosskey (het rekenblad).
+# Rij 0: Bestand (kolom 1, cursor-x 20), Score (kolom 11, x 100), Bosskey (kolom 21, x 180); rij 1 = cursor-y 12.
+wacht 3
+verwacht menu_stand = 0
+cursor 20,4                            # de cursor naar boven: de menubalk verschijnt
+wacht 2
+verwacht menu_stand = 1
+verwacht_tekst 0 " Bestand   Score     Bosskey"
+verwacht_tekst 1 ""
+
+# Bestand -> Opslaan
+vuur
+wacht 2
+verwacht menu_stand = 2
+verwacht_tekst 1 " Opslaan   Laden     Exit"
+cursor 20,12
+vuur
+wacht 3
+verwacht opslag_teller = 1
+verwacht opslag_fout = 0
+verwacht_tekst 0 "Het spel is opgeslagen."
+verwacht menu_stand = 0                # het menu is dicht
+wacht 150
+
+# Score: nog geen lichtpunten
+cursor 100,4
+vuur
+wacht 2
+verwacht menu_stand = 3
+verwacht_tekst 1 " Lichtpunten: 0 van 250"
+screenshot score
+
+# de cursor weer naar beneden: het menu verdwijnt
+cursor 160,100
+wacht 2
+verwacht menu_stand = 0
+verwacht_tekst 0 ""
+
+# een munt uit de fontein: 5 lichtpunten
+cursor 100,156
+vuur
+cursor 160,100
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht st_score = 5
+cursor 100,4
+vuur
+wacht 2
+verwacht_tekst 1 " Lichtpunten: 5 van 250"
+
+# Bosskey: het rekenblad; een toets brengt het spel terug, precies zoals het was
+cursor 180,4
+vuur
+wacht 3
+verwacht baas_actief = 1
+verwacht baas_teller = 1
+verwacht muz_aan = 0
+verwacht_tekst 0 "Microsoft Excel - BEGROTING.XLS"
+verwacht_tekst 24 "Gereed"
+wacht 20
+toets spatie 2
+wacht 5
+verwacht baas_actief = 0
+verwacht_kamer plein
+verwacht muz_aan = 1                   # het plein speelt weer
+verwacht_tekst 22 "zwaard             ↑  gouden munt"
+cursor 160,100
+wacht 3
+screenshot terug

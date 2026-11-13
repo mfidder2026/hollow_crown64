@@ -24,6 +24,7 @@ VOORWERP honingpot "honingpot" VAK 143,42 10,15 LOOP 124,104 RECHTS
   PAK:
     ZEG eldric "Voor de bijen die er niet meer zijn."
     GEEF honingpot
+    PUNTEN 5
     PATCH honingpot_weg
     ZET honingpot_gepakt
 
