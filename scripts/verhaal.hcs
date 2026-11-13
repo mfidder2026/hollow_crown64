@@ -1,22 +1,35 @@
-# verhaal.hcs — de verhaalanimatie na het titelscherm: het verhaal zoals het volk het kent (de waarheid komt later,
-# zie het scenario). Eén toneel (data/plaatjes/toneel.png, met de hand getekend: tools/teken_toneel.py), figuren als
-# sprites, en de lucht die met KLEUR stap voor stap donker wordt. Vuur of spatie slaat alles over.
+# verhaal.hcs — de verhaalanimatie na het titelscherm (scenario hoofdstuk 1): het dorp in het dal, de berg van Grom met
+# een grot. Eén toneel (data/plaatjes/toneel.png, met de hand getekend: tools/teken_toneel.py), figuren als sprites, de
+# lucht die met KLEUR stap voor stap schemer wordt. Vuur of spatie slaat alles over.
 KAMER verhaal
   TONEEL
   LOOPKLEUREN geel oranje
   SCHAAL 118 110
-  LOOPVAK 74,106 86,124                  # het pad: hier loopt Eldric aan het eind het beeld in
+  LOOPVAK 74,108 81,124                  # het pad: hier loopt Eldric aan het eind het beeld in
   ACTOR maan_l KOSTUUM maan OP 34,26 VERBORGEN
   ACTOR maan_r KOSTUUM maan OP 126,26 VERBORGEN
-  ACTOR hol_1 KOSTUUM hol OP 128,127 VERBORGEN
-  ACTOR hol_2 KOSTUUM hol OP 138,127 VERBORGEN
-  ACTOR vex_toneel KOSTUUM vex_kroon OP 30,54 VERBORGEN   # komt uit de poort, de Lichte Kroon op zijn hoofd
+  ACTOR hol_1 KOSTUUM hol OP 130,84 VERBORGEN      # de aardmannetjes, bij de grot
+  ACTOR hol_2 KOSTUUM hol OP 136,84 VERBORGEN
+  ACTOR grom_toneel KOSTUUM grom OP 133,86 VERBORGEN   # Grom de tovertrol, in de mond van zijn grot
   BINNENKOMST:
     TUSSENSCENE
     MUZIEK thema
     WACHT 50
-    ZEG verteller "Lang geleden leefde het rijk Aethermoor onder de Eeuwige Zon."
-    ZEG verteller "Tot de nacht van de dubbele maansverduistering."
+    ZEG verteller "Lang geleden scheen de zon over Aethermoor."
+    TOON hol_1
+    ZEG verteller "Diep onder de bergen woonden de aardmannetjes."
+    ZEG verteller "Zij verdroegen geen licht."
+    VERBERG hol_1
+    TOON grom_toneel
+    ZEG verteller "Hun meester was Grom, de tovertrol."
+    ZEG verteller "Hij wilde een thuis voor zijn volk. Boven de grond."
+    ZEG grom "Kom naar boven, mijn kleintjes. Het licht gaat uit."
+    KLEUR 0,0 160,72 cyaan wit           # een flits: de spreuk
+    WACHT 4
+    KLEUR 0,0 160,72 wit cyaan
+    VERBERG grom_toneel
+    ZEG verteller "In de nacht van de dubbele maansverduistering"
+    ZEG verteller "sprak hij zijn spreuk."
     TOON maan_l
     TOON maan_r
     LOOP maan_l 76,26
@@ -26,32 +39,25 @@ KAMER verhaal
     WACHT 30
     KLEUR 64,0 32,40 oranje bruin
     KLEUR 0,0 160,72 lichtblauw blauw
-    KLEUR 0,0 160,72 wit lichtgrijs      # de wolken (en het hart van de zon) worden grauw
+    KLEUR 0,0 160,72 wit lichtgrijs      # de wolken worden grauw
     WACHT 30
     KLEUR 0,0 160,72 blauw paars         # de schemer van Dawnhaven
-    KLEUR 0,0 160,72 lichtgrijs grijs
+    KLEUR 0,0 160,48 lichtgrijs grijs
     VERBERG maan_l
     VERBERG maan_r
-    ZEG verteller "Uit de Rotskloof steeg as op. Het werd schemer, en het bleef schemer."
+    ZEG verteller "Sindsdien is het schemer."
     TOON hol_1
-    LOOP hol_1 128,100
+    LOOP hol_1 120,100
     TOON hol_2
-    LOOP hol_2 138,108
-    ZEG verteller "En uit de diepte kwamen holle wezens."
+    LOOP hol_2 110,106
+    ZEG verteller "De aardmannetjes kwamen naar boven. Het land werd grauw en koud."
     VERBERG hol_1
     VERBERG hol_2
-    KLEUR 0,0 160,72 paars roze          # een flits: de poort gaat open
-    WACHT 4
-    KLEUR 0,0 160,72 roze paars
-    TOON vex_toneel
-    LOOP vex_toneel 38,80                # de heuvel af, tot hij tegen het groene gras staat
-    ZEG verteller "Baron Vex nam het kasteel en de Lichte Kroon."
-    ZEG vex "De Holle Koning stal jullie zon! Alleen ik kan jullie beschermen."
-    VERBERG vex_toneel
     TOON eldric
-    LOOP eldric 80,108
-    ZEG verteller "Maar één Wachter bleef over. In zijn zwaard gloeit het laatste licht."
-    ZEG eldric "Ik ben Eldric. En ik breng het licht terug."
+    LOOP eldric 79,110
+    ZEG verteller "In Dawnhaven woont Eldric. Een gewone jongen met een goed hart."
+    ZEG verteller "Hij weet nog niet dat alles van hem afhangt."
+    ZEG eldric "Hm. Weer geen zon vandaag."
     WACHT 25
     EINDE_TUSSENSCENE
     KAMER plein 60,112 VOOR

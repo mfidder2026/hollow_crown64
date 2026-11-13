@@ -13,7 +13,7 @@ READY.
 RUN
 ```
 
-> *The sun has been stolen. The lantern is empty. The wolves are waiting.*
+> *The sun has been spelled away. The lantern is empty. The wolves are waiting.*
 > *Somebody hand Eldric a jug.*
 
 **Hollow Crown** is a point-and-click adventure for the **Commodore 64**, written from scratch in 6502 assembly.
@@ -35,20 +35,22 @@ what memory says it should be.*
 
 ## 📜 The story
 
-The kingdom of **Aethermoor** lived beneath the Eternal Sun, until the night of the double lunar eclipse. That
-night the **Hollow King** crawled out of the earth, stole the sunlight and took the throne castle. Ever since,
-the land has been stuck in an endless dusk.
+Long ago the sun shone over **Aethermoor**. Deep under the mountains lived the **earth folk**: small, hollow
+creatures with glowing eyes who cannot bear daylight. Their master, **Grom the troll wizard**, wanted a home for his
+people above ground. On the night of the double lunar eclipse he spoke his spell, and ever since the land has been
+stuck in an endless dusk.
 
-You are **Eldric**, the last Warden of the Light Crown. Your sword holds the last fragment of sunlight, and you'll
-need it, because there is no combat here. Shadow wolves, ghost knights and worse are puzzles to be solved, not
-monsters to be hit.
+You are **Eldric**, an ordinary boy from Dawnhaven with a good heart and a warm little stone from his grandmother,
+with a bit of the old sun still in it. No hero, no knight. He grows along the way, and in the end he is the one who
+makes the sun shine again, without a single fight. Shadow wolves, ghost knights and worse are puzzles to be solved,
+not monsters to be hit.
 
 | Who | What |
 |---|---|
-| **Eldric** | You. Last Warden, carrier of the last light, owner of a very important sword |
-| **Mira** | A blind witch in Dawnhaven who *sees* paths, once she has her seeing stone back |
-| **Baron Vex** | First servant of the Hollow King, lord of the Darkwood |
-| **The Hollow King** | Stole the sun. Rude |
+| **Eldric** | You. An ordinary boy with a good heart and grandma's sunstone |
+| **Mira** | A blind woman in Dawnhaven who *sees* paths, once she has her seeing stone back |
+| **Bram** | The smith. Grumpy, big heart |
+| **Grom** | The troll wizard who stole the light, for his people. Not evil, just wrong |
 
 **Chapters:** Dawnhaven → Darkwood → Sea of Oblivion → Rock Gorge → Ice Peak → The Forgotten Castle.
 

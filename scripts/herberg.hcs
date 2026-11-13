@@ -1,7 +1,7 @@
 # herberg.hcs — de herberg "De Laatste Straal". Plaatje: data/plaatjes/herberg.png (voorlopig).
 KAMER herberg
   LOOPKLEUREN oranje bruin geel          # de houten vloer (geel: het licht van het vuur op de vloer)
-  SCHAAL 100
+  # (geen SCHAAL: binnen blijft Eldric overal even groot, de grootste maat)
   LOOPVAK 36,86 50,124                   # 0 links, bij de haard en de deur (links daarvan de oven)
   LOOPVAK 97,88 143,124                  # 1 rechts, langs het vat en de toog (rechts staat een emmer)
   LOOPVAK 36,108 157,124                 # 2 voor de tafel langs (achter de tafel is geen plek)
@@ -80,8 +80,8 @@ VOORWERP biervat "vat" VAK 87,55 13,30 LOOP 98,90 RUG
 VOORWERP haard "haard" VAK 2,26 30,54 LOOP 36,90 LINKS
   BEKIJK:
     ZEG eldric "Het enige warme vuur in het dorp. Dit hout komt nog van voor de schemering."
-  GEBRUIK zwaard:
-    ZEG eldric "Dit vuur brandt al. Het heeft mijn licht niet nodig."
+  GEBRUIK zonnesteen:
+    ZEG eldric "Dit vuur brandt al. Het heeft oma's steentje niet nodig."
 
 VOORWERP mira "Mira" VAK 126,70 13,36 LOOP 116,108 RECHTS
   BEKIJK:
@@ -90,7 +90,7 @@ VOORWERP mira "Mira" VAK 126,70 13,36 LOOP 116,108 RECHTS
     PRAAT mira
   GEEF ziensteen:
     ZEG eldric "Is dit van u?"
-    ZEG mira "Mijn ziensteen! Ik voel het aan het gat. Dank je, Wachter."
+    ZEG mira "Mijn ziensteen! Ik voel het aan het gat. Dank je, jongen."
     NEEM ziensteen
     ZET ziensteen_terug
     PUNTEN 10
@@ -121,4 +121,4 @@ GESPREK mira
     ZET hint_wolven
   KEUZE "Ik ga maar weer." EINDE
     ZEG eldric "Ik ga maar weer."
-    ZEG mira "Pas op in het donker, Wachter."
+    ZEG mira "Pas op in het donker, jongen."

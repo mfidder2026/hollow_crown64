@@ -1,6 +1,6 @@
 # vm.band — hoofdstuk 4: elke opcode van de VM, via de proefscripts in tests/scripts/proef.hcs.
 wacht 3
-verwacht_eigenaar zwaard eldric        # begint in de inventaris
+verwacht_eigenaar zonnesteen eldric        # begint in de inventaris
 verwacht_eigenaar munt nergens
 verwacht_eigenaar proef_steen nergens
 

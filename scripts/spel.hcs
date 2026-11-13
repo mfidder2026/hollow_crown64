@@ -2,14 +2,14 @@
 # BEGIN kamer x,y richting   (richting: VOOR, RUG, RECHTS, LINKS)
 BEGIN plein 60,112 VOOR
 # Na het titelscherm eerst de verhaalanimatie (scripts/verhaal.hcs); die gaat daarna zelf naar het plein
-VERHAAL verhaal 80,124 RUG
+VERHAAL verhaal 79,124 RUG
 # Het einde van hoofdstuk 1: de wolven zijn verjaagd en Vex is gezien
 DOEL hoofdstuk1_klaar
 
 # Wat Eldric bij zich heeft (en wat later bij hem komt)
-VOORWERP zwaard "zwaard" BIJ eldric
+VOORWERP zonnesteen "zonnesteen" BIJ eldric
   BEKIJK:
-    ZEG eldric "Mijn zwaard. Het laatste lichtfragment zit erin, en het gloeit."
+    ZEG eldric "Een warm steentje van oma. Er zit nog een beetje zon in, zei ze."
 
 VOORWERP munt "gouden munt" NERGENS
   BEKIJK:
@@ -43,9 +43,9 @@ VOORWERP lantaarn "lantaarn" NERGENS
         ZEG eldric "De kruik is leeg."
       EINDE
     EINDE
-  GEBRUIK zwaard:
+  GEBRUIK zonnesteen:
     ALS STAND lantaarn 1
-      ZEG eldric "Het lichtfragment raakt de olie... en de lantaarn brandt!"
+      ZEG eldric "Ik houd oma's steentje bij de olie... en de lantaarn brandt!"
       STAND lantaarn 2
       PUNTEN 10
     ANDERS
@@ -60,7 +60,7 @@ VOORWERP lantaarn "lantaarn" NERGENS
 SPREKER eldric geel
 SPREKER bram oranje
 SPREKER mira cyaan
-SPREKER vex rood
+SPREKER grom lichtgroen
 SPREKER verteller lichtgrijs
 
 # Standaardantwoorden: als een voorwerp geen script heeft voor dat werkwoord

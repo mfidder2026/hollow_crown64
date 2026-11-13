@@ -50,7 +50,7 @@ wacht_op_script
 wacht 3
 verwacht gs_actief = 0
 verwacht_tekst 19 "Ga naar   Pak       Gebruik   Open"
-verwacht_tekst 22 "zwaard             ↑"
+verwacht_tekst 22 "zonnesteen         ↑"
 
 # de ziensteen: Duw tafel, Pak ziensteen, Geef ziensteen aan Mira
 cursor 20,172
@@ -69,7 +69,7 @@ wacht_op_script
 verwacht_eigenaar ziensteen eldric
 cursor 180,164
 vuur
-cursor 20,180                          # de ziensteen staat links (de herberg komt vóór het zwaard in de scripts)
+cursor 20,180                          # de ziensteen staat links (de herberg komt vóór de zonnesteen in de scripts)
 verwacht_tekst 18 "Geef ziensteen"
 vuur
 cursor 264,100

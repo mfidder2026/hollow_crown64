@@ -2,8 +2,8 @@
 # Werkwoorden: Pak (100,156), Gebruik (180,156), Bekijk (20,164), Geef (180,164).
 # Inventaris: rij 22-23 = cursor-y 176-191; links x < 144, pijlen x 144-175, rechts x >= 176.
 wacht 3
-verwacht_tekst 22 "zwaard             ↑"
-verwacht_eigenaar zwaard eldric
+verwacht_tekst 22 "zonnesteen         ↑"
+verwacht_eigenaar zonnesteen eldric
 
 # pak de kruik
 cursor 100,156
@@ -17,7 +17,7 @@ verwacht_tekst 0 "Een kruik. Leeg."
 vuur
 wacht 2
 verwacht_eigenaar proef_kruik eldric
-verwacht_tekst 22 "zwaard             ↑  kruik"
+verwacht_tekst 22 "zonnesteen         ↑  kruik"
 screenshot kruik_gepakt
 
 # gebruik kruik met fontein: geen script -> het standaardantwoord
@@ -42,11 +42,11 @@ wacht 2
 cursor 20,164
 vuur
 cursor 20,180
-verwacht_tekst 18 "Bekijk zwaard"
+verwacht_tekst 18 "Bekijk zonnesteen"
 vuur
 wacht 3
 verwacht act_lopen = 0
-verwacht_tekst 0 "Mijn zwaard. Het laatste lichtfragment"
+verwacht_tekst 0 "Een warm steentje van oma. Er zit nog"
 vuur
 wacht 2
 
@@ -56,7 +56,7 @@ vuur
 cursor 20,180
 vuur
 cursor 200,180
-verwacht_tekst 18 "Gebruik zwaard met kruik"
+verwacht_tekst 18 "Gebruik zonnesteen met kruik"
 vuur
 wacht 3
 verwacht_tekst 0 "Tink."
@@ -68,7 +68,7 @@ vuur
 cursor 200,180
 vuur
 cursor 20,180
-verwacht_tekst 18 "Gebruik kruik met zwaard"
+verwacht_tekst 18 "Gebruik kruik met zonnesteen"
 vuur
 wacht 3
 verwacht_tekst 0 "Tink."
@@ -94,7 +94,7 @@ start_script proef_veel
 wacht_op_script
 wacht 2
 verwacht inv_aantal = 6
-verwacht_tekst 22 "zwaard             ↑  kruik"
+verwacht_tekst 22 "zonnesteen         ↑  kruik"
 verwacht_tekst 23 "appel              ↓  brood"
 screenshot zes_spullen
 cursor 156,188                         # pijl omlaag

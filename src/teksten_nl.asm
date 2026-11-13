@@ -66,10 +66,11 @@ tekst_druk:      .text "Druk op spatie of vuur"
 .label tekst_druk_lengte = * - tekst_druk
                  .byte 0
 tekst_scroll:
-        .text "Hollow Crown ... Het rijk Aethermoor leefde onder de Eeuwige Zon, tot de nacht van de dubbele "
-        .text "maansverduistering. Toen kroop de Holle Koning uit de aarde, stal het zonlicht en nam het kasteel. "
-        .text "Sindsdien is het overal schemer. Eldric, de laatste Wachter van de Lichte Kroon, draagt het "
-        .text "laatste lichtfragment in zijn zwaard. Help hem het licht terug te brengen ... "
+        .text "Hollow Crown ... Lang geleden scheen de zon over Aethermoor. Diep onder de bergen woonden de "
+        .text "aardmannetjes, die geen licht verdragen. Hun meester, Grom de tovertrol, wilde een thuis voor zijn "
+        .text "volk boven de grond. In de nacht van de dubbele maansverduistering sprak hij zijn spreuk, en sindsdien "
+        .text "is het schemer. In Dawnhaven woont Eldric, een gewone jongen met een goed hart en een warm steentje "
+        .text "van zijn oma. Hij weet nog niet dat alles van hem afhangt ... "
         .text "Bediening: joystick in poort 2, 1351-muis in poort 1, of de cursortoetsen met spatie als vuur. "
         .text "F1 muziek aan/uit, F5 opslaan, F7 laden ... "
         .text "Een point-and-click-avontuur voor de Commodore 64, gemaakt met Kick Assembler, Python en VICE. "

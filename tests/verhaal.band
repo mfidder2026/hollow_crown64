@@ -1,5 +1,6 @@
-# verhaal.band — de verhaalanimatie na het titelscherm (scripts/verhaal.hcs): het toneel zonder balk, cursor en Eldric,
-# twee manen die voor de zon schuiven, de lucht die met KLEUR donker wordt, de Holen, Vex, en dan Eldric en het plein.
+# verhaal.band — de verhaalanimatie na het titelscherm (scripts/verhaal.hcs): het toneel zonder balk, cursor en Eldric;
+# een aardmannetje bij de grot, Grom de tovertrol, twee manen voor de zon terwijl de lucht met KLEUR schemer wordt, de
+# aardmannetjes die naar boven komen, en dan Eldric en het plein.
 intro
 wacht 5
 toets spatie 2                         # van het titelscherm naar het verhaal
@@ -8,30 +9,35 @@ verwacht_kamer verhaal
 verwacht toneel_aan = 1
 verwacht act_zichtbaar = 0             # geen Eldric
 verwacht vm_scene = 1                  # een tussenscène
-verwacht muz_aan = 1                   # het thema speelt
-verwacht_tekst 0 "Lang geleden leefde het rijk Aethermoor"
+verwacht muz_lied = 0                  # het thema
+verwacht_tekst 0 "Lang geleden scheen de zon over"
 verwacht_tekst 18 ""                   # geen balk
 verwacht_tekst 24 ""
 screenshot zon
-wacht 450
+wacht 170
+verwacht_tekst 0 "Diep onder de bergen woonden de"
+verwacht_slot 0 hol_1                  # een aardmannetje kijkt uit de grot
+screenshot aardmannetje
+wacht 200
+verwacht_tekst 0 "Hun meester was Grom, de tovertrol."
+verwacht_slot 0 grom_toneel
+screenshot grom
+wacht 830
 verwacht_slot 0 maan_l
 verwacht_slot 1 maan_r                 # de twee manen voor de zon
-verwacht kleur_teller >= 2             # de zon dooft, de lucht wordt donkerder
+verwacht kleur_teller >= 2             # de flits van de spreuk is geweest; de manen schuiven voor de zon
 screenshot verduistering
-wacht 360
-verwacht_tekst 0 "En uit de diepte kwamen holle wezens."
+wacht 300
+verwacht_tekst 0 "De aardmannetjes kwamen naar boven. Het"
 verwacht_slot 0 hol_1
 verwacht_slot 1 hol_2
-verwacht kleur_teller = 7              # de schemer is er: alle kleurwissels gedaan
-screenshot holen
-wacht 240
-verwacht_slot 0 vex_toneel
-screenshot vex
+verwacht kleur_teller = 9              # de schemer is er: alle kleurwissels gedaan
+screenshot aardmannetjes
 wacht_op_script                        # tot het einde: Eldric, en dan naar het plein
 wacht 5
 verwacht_kamer plein
 verwacht toneel_aan = 0
 verwacht act_zichtbaar = 1
 verwacht_tekst 24 "         Hoofdstuk 1: Dawnhaven"
-verwacht_tekst 22 "zwaard             ↑"
+verwacht_tekst 22 "zonnesteen         ↑"
 screenshot plein

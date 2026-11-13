@@ -58,7 +58,7 @@ verwacht_eigenaar munt eldric
 verwacht act_x.w = 160
 verwacht act_y = 100
 verwacht_tekst 0 "Daar ben ik weer."
-verwacht_tekst 22 "zwaard             ↑  gouden munt"
+verwacht_tekst 22 "zonnesteen         ↑  gouden munt"
 screenshot na_laden
 wacht 150
 

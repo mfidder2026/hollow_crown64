@@ -871,6 +871,54 @@ bram_onder:
         .byte $00, $00, $00      // ............
         .byte $00, $00, $00      // ............
         .byte 0
+.label grom_kb = 5      // groen
+.label grom_ko = 9      // bruin
+grom_boven:
+        .byte $f0, $00, $00      // ss..........
+        .byte $f5, $55, $50      // sskkkkkkkk..
+        .byte $5a, $aa, $a4      // kkcccccccck.
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $6f, $aa, $f9      // kcssccccssck
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $5a, $aa, $a4      // kkcccccccck.
+        .byte $5b, $55, $e4      // kkcskkkksck.
+        .byte $46, $aa, $90      // k.kcccccck..
+        .byte $56, $aa, $94      // kkkcccccckk.
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $69, $aa, $69      // kcckcccckcck
+        .byte $61, $aa, $49      // kc.kcccck.ck
+        .byte $51, $aa, $45      // kk.kcccck.kk
+        .byte $41, $aa, $40      // k..kcccck...
+        .byte $41, $aa, $40      // k..kcccck...
+        .byte 0
+grom_onder:
+        .byte $46, $aa, $90      // k.kcccccck..
+        .byte $5a, $aa, $a4      // kkcccccccck.
+        .byte $5a, $aa, $a4      // kkcccccccck.
+        .byte $5a, $aa, $a4      // kkcccccccck.
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $55, $55, $55      // kkkkkkkkkkkk
+        .byte $46, $41, $90      // k.kck..kck..
+        .byte $46, $41, $90      // k.kck..kck..
+        .byte $46, $41, $90      // k.kck..kck..
+        .byte $55, $41, $54      // kkkkk..kkkk.
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
+        .byte 0
 .label vex_kroon_kb = 7      // geel
 .label vex_kroon_ko = 11      // donkergrijs
 vex_kroon_boven:

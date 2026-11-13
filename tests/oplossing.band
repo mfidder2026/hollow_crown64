@@ -1,7 +1,7 @@
 # oplossing.band — hoofdstuk 9: het hele hoofdstuk 1 uitspelen, van het plein tot "Hoofdstuk 1 voltooid".
 # Werkwoorden: Pak (100,156), Gebruik (180,156), Open (260,156). Ga naar is het standaardwerkwoord.
 # Inventaris: links x 20, rechts x 200; rij 22 = y 180, rij 23 = y 188. Volgorde: zoals in de scripts
-# (herberg.hcs, kelder.hcs, dan spel.hcs): kruik (20,180), honingpot (200,180), zwaard (20,188), lantaarn (200,188).
+# (herberg.hcs, kelder.hcs, dan spel.hcs): kruik (20,180), honingpot (200,180), zonnesteen (20,188), lantaarn (200,188).
 wacht 3
 verwacht_kamer plein
 
@@ -98,23 +98,23 @@ verwacht muz_lied = 4                  # LIED_SMIT
 verwacht_muziek
 screenshot smit_koud
 
-# 4. het smidsvuur aan met het zwaard: Bram geeft de lantaarn
+# 4. het smidsvuur aan met de zonnesteen: Bram geeft de lantaarn
 cursor 180,156
 vuur
 cursor 20,188
 vuur
 wacht 2
 cursor 156,78
-verwacht_tekst 18 "Gebruik zwaard met smidsvuur"
+verwacht_tekst 18 "Gebruik zonnesteen met smidsvuur"
 vuur
 wacht_tot_stil
 wacht_op_script
 verwacht_vlag smidsvuur_aan 1
 screenshot smit_vuur
 verwacht_eigenaar lantaarn eldric
-verwacht_tekst 23 "zwaard             ↓  lantaarn"
+verwacht_tekst 23 "zonnesteen         ↓  lantaarn"
 
-# 5. olie in de lantaarn, en aansteken met het zwaard
+# 5. olie in de lantaarn, en aansteken met de zonnesteen
 cursor 180,156
 vuur
 cursor 20,180
@@ -132,7 +132,7 @@ cursor 20,188
 vuur
 wacht 2
 cursor 200,188
-verwacht_tekst 18 "Gebruik zwaard met lantaarn"
+verwacht_tekst 18 "Gebruik zonnesteen met lantaarn"
 vuur
 wacht_op_script
 verwacht_stand lantaarn 2
@@ -157,7 +157,7 @@ verwacht muz_lied = 5                  # LIED_BOSRAND
 verwacht_muziek
 screenshot bosrand_wolf
 
-# 7. de finale: de lantaarn verjaagt de wolven, Vex verschijnt en verdwijnt het bos in
+# 7. de finale: de lantaarn verjaagt de wolven, Grom verschijnt tussen de bomen en verdwijnt, Mira komt erbij
 cursor 180,156
 vuur
 cursor 200,188
@@ -171,18 +171,15 @@ wacht_tot_stil
 wacht 60
 verwacht vm_scene = 1                  # de tussenscène loopt
 wacht 360
-verwacht_tekst 0 "Kom maar, Wachter. Ik heb een kroon voor"
-verwacht_slot 0 vex                    # Vex kreeg het slot dat de wolf vrijmaakte
-screenshot vex
-wacht 450
-verwacht_tekst 0 "Het pad vraagt om mij."
-verwacht_slot 0 mira_bos               # en nu Mira in dat slot (Vex weg)
-screenshot mira
+verwacht_tekst 0 "Een jongen met een stukje zon in zijn"
+verwacht_slot 0 grom                   # Grom kreeg het slot dat de wolf vrijmaakte
+screenshot grom
 wacht_op_script
 wacht 3
 verwacht_vlag wolven_weg 1
 verwacht_vlag hoofdstuk1_klaar 1
 verwacht vm_scene = 0
+verwacht_slot 0 mira_bos               # Mira staat er (in het slot van Grom, die weg is): ze reist mee
 verwacht voltooid = 1
 verwacht gl_laatste = 4                # GL_KLAAR
 verwacht_tekst 24 "          Hoofdstuk 1 voltooid"

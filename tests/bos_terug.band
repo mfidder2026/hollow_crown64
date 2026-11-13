@@ -1,0 +1,14 @@
+# bos_terug.band — van de bosrand terug naar het dorp: de uitgang is het gele pad onderaan (daar kwam je vandaan).
+wacht 3
+start_script proef_naar_bos
+wacht_op_script
+wacht 3
+verwacht_kamer bosrand
+cursor 160,136
+verwacht_tekst 18 "Ga naar dorp"
+screenshot bos
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer plein

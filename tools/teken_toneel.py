@@ -7,8 +7,9 @@ Rechtstreeks in kamerpixels (160 x 128, multicolor: elke pixel 2 breed) en allee
 lijnen zoals het plein. Per vakje van 4 x 8 mogen er 3 kleuren + zwart zijn: het script telt de vakjes met te veel
 kleuren (die kiest de omzetter dan zelf), zodat je ziet waar het plaatje op de C64 anders wordt.
 
-Het toneel: Aethermoor onder de Eeuwige Zon. Links het kasteel op een heuvel, in het dal Dawnhaven met rieten daken en
-rokende schoorstenen, rijen ronde bomen, rechts de Rotskloof. De zon staat midden in de lucht: daar schuiven de manen
+Het toneel: Aethermoor onder de zon. Links een bos en een molentje op de heuvels, in het dal Dawnhaven met scheve
+huisjes, rieten daken en rokende schoorstenen, rechts de rotsige berg van Grom met een donkere grot (daar komen de
+aardmannetjes uit). De zon staat midden in de lucht: daar schuiven de manen
 als sprites overheen. De lucht is één kleur (lichtblauw) met witte wolkjes: de animatie maakt hem met kleurwissels
 donkerder, tot de paarse schemer van het plein.
 """
@@ -180,24 +181,137 @@ def voorgrond(dk, rnd):
         dk.px(x, y, rnd.choice((GEEL, ROOD, WIT)))
 
 
+# ---- het toneel van het verhaal (na de opmerkingen: minder klinisch, geen recht kasteel, Groms berg met een grot) ----
+import math
+
+
+def golf(x1, x2, y, amp, rnd, stap=3, fase=0.0, freq=0.15):
+    """een organische lijn: punten van x1 tot x2 rond hoogte y (een golf met wat toeval)"""
+    return [(x, y + amp * math.sin(fase + x * freq) + rnd.uniform(-amp / 3, amp / 3)) for x in range(x1, x2 + 1, stap)]
+
+
+def dither(dk, pts_vlak, kleur, dicht, rnd, vlak):
+    """een lichtere vlek in een vlak: om en om pixels (de C64-manier van verlopen)"""
+    x1, y1, x2, y2 = pts_vlak
+    for y in range(y1, y2):
+        for x in range(x1 + (y % 2), x2, 2):
+            if dk.im.getpixel((x, y)) == vlak and rnd.random() < dicht:
+                dk.px(x, y, kleur)
+
+
+def verre_bergen(dk, rnd):
+    pts = [(0, 76)] + golf(0, 159, 50, 7, rnd, stap=4, freq=0.09) + [(159, 76)]
+    dk.poly(pts, GRIJS, DGRIJS)
+    for x, y in pts[1:-1:5]:                                     # lichte flanken (licht van links)
+        dk.lijn([(x, y + 2), (x - 6, y + 14)], LGRIJS)
+
+
+def bos_links(dk, rnd):
+    """een bos op de heuvels links: ronde kruinen, achteraan donker, vooraan lichter"""
+    dk.poly([(0, 92)] + golf(0, 64, 64, 4, rnd, stap=4, freq=0.12) + [(64, 92)], GROEN, GROEN)
+    for rij, (y, r) in enumerate(((60, 5), (66, 6), (72, 6))):
+        for x in range(-2, 60, 8 + rij):
+            xx, rr = x + rnd.randint(-2, 2), r + rnd.randint(-1, 1)
+            dk.ovaal(xx - rr, y - rr, xx + rr, y + rr * 0.8, GROEN)
+            dk.ovaal(xx - rr * 0.6, y - rr * 0.8, xx, y - rr * 0.2, LGROEN, LGROEN)
+    # een molentje op de heuvel
+    mx, my = 30, 58
+    dk.poly([(mx - 4, my), (mx - 3, my - 14), (mx + 3, my - 14), (mx + 4, my)], LGRIJS)
+    dk.poly([(mx - 4, my - 14), (mx, my - 19), (mx + 4, my - 14)], BRUIN)
+    dk.rect(mx - 1, my - 5, mx + 1, my, BRUIN)
+    for a in (0.6, 2.17, 3.74, 5.31):                            # de wieken, een beetje scheef
+        ex, ey = mx + 12 * math.cos(a), my - 14 + 10 * math.sin(a)
+        dk.lijn([(mx, my - 14), (ex, ey)], BRUIN)
+        dk.lijn([(mx + (ex - mx) * 0.4, my - 14 + (ey - my + 14) * 0.4), (ex, ey)], LGRIJS)
+
+
+def groms_berg(dk, rnd):
+    """de berg van Grom, rechts: rotsvlakken (licht links, schaduw rechts), barsten, een donkere grot met oogjes"""
+    rand = [(98, 104), (106, 84), (112, 68), (118, 52), (124, 42), (130, 32), (136, 26), (142, 31), (148, 27),
+            (154, 35), (159, 39), (159, 106)]
+    dk.poly(rand, GRIJS)
+    # rotsvlakken: een schaduwkant rechts van de top, en lichte vlakken aan de linkerflank
+    dk.poly([(136, 27), (142, 32), (148, 28), (154, 36), (159, 40), (159, 104), (146, 104), (144, 84), (140, 60)],
+            DGRIJS, DGRIJS)
+    for pts in ([(118, 53), (124, 43), (127, 46), (121, 60), (116, 62)],
+                [(108, 82), (112, 69), (116, 66), (113, 80)],
+                [(126, 40), (131, 33), (134, 36), (128, 48)]):
+        dk.poly(pts, LGRIJS, LGRIJS)
+    dk.lijn(rand[:-1], ZWART)                                    # de rand van de berg
+    for x, y, lx, ly in ((128, 50, 3, 6), (150, 50, -2, 7), (118, 76, 2, 5), (152, 80, 2, 6), (134, 92, -3, 5)):
+        dk.lijn([(x, y), (x + lx, y + ly), (x + lx + 2, y + ly + 3)], ZWART)
+    for x, y in ((114, 84), (150, 66), (156, 92)):              # een paar bergdennen
+        dk.poly([(x - 3, y), (x, y - 9), (x + 3, y)], GROEN, ZWART)
+        dk.lijn([(x, y - 6), (x - 1, y - 2)], LGROEN)
+    # de grot: een donkere, onregelmatige mond
+    mond = [(124, 84), (123, 74), (126, 66), (131, 62), (137, 63), (141, 68), (142, 76), (141, 84)]
+    dk.poly(mond, ZWART, DGRIJS)
+    for x, y in ((129, 72), (132, 72), (135, 78), (138, 78)):    # oogjes in het donker
+        dk.px(x, y, ROOD)
+
+
+def scheef_huisje(dk, x, y, b, h, hel, rnd):
+    """een huisje uit Dawnhaven, een beetje scheef: vakwerk, rieten dak, rook, een warm raampje (x, y = linksonder)"""
+    dk.poly([(x, y), (x + hel, y - h), (x + b + hel, y - h), (x + b, y)], LGRIJS)
+    dk.lijn([(x + b // 2, y), (x + b // 2 + hel, y - h)], BRUIN)          # vakwerk
+    dk.lijn([(x, y - h // 2), (x + b, y - h // 2)], BRUIN)
+    top = (x + b // 2 + hel + rnd.randint(-1, 1), y - h - b // 2 - 3)
+    dk.poly([(x - 3 + hel, y - h + 1), top, (x + b + 3 + hel, y - h + 1)], ORANJE)
+    for i in range(2, b // 2 + 2, 2):                           # het riet
+        dk.lijn([(top[0] - i, top[1] + i + 1), (top[0] + i, top[1] + i + 1)], BRUIN if i % 4 else ORANJE)
+    sx = x + b - 3 + hel
+    dk.rect(sx, y - h - 6, sx + 2, y - h - 1, DGRIJS)
+    for i in range(4):
+        dk.ovaal(sx - i - 1, y - h - 11 - 4 * i, sx + 2 - i + i // 2, y - h - 9 - 4 * i, LGRIJS, LGRIJS)
+    dk.rect(x + 2, y - 5, x + 4, y - 1, BRUIN)
+    dk.rect(x + b - 5, y - 6, x + b - 3, y - 4, GEEL)
+
+
+def dorp(dk, rnd):
+    for x in range(44, 106, 7):                                  # bomen achter het dorp
+        boom(dk, x + rnd.randint(-2, 2), 82, rnd.randint(4, 6), rnd)
+    for x, y, b, h, hel in ((48, 92, 12, 8, 1), (64, 88, 12, 8, -1), (80, 94, 13, 8, 1), (95, 90, 11, 7, 0),
+                            (58, 102, 14, 9, -1)):
+        scheef_huisje(dk, x, y, b, h, hel, rnd)
+
+
+def weide(dk, rnd):
+    dk.poly([(0, 92)] + golf(0, 159, 92, 2, rnd, stap=8) + [(159, 106), (159, 126), (0, 126)], GROEN, GROEN)
+    dk.poly([(100, 104), (130, 100), (159, 104), (159, 110), (100, 110)], GROEN, GROEN)   # het gras aan de voet van de berg
+    dither(dk, (0, 96, 159, 126), LGROEN, 0.3, rnd, GROEN)       # licht op het gras
+    # het pad: slingert van voren naar het dorp
+    links = [(72, 102), (70, 108), (66, 114), (68, 120), (74, 126)]
+    rechts = [(80, 102), (82, 108), (80, 114), (86, 120), (94, 126)]
+    dk.poly(links + rechts[::-1], GEEL, ORANJE)
+    for _ in range(30):
+        dk.px(rnd.randint(68, 90), rnd.randint(104, 125), ORANJE)
+    # een scheef hekje, struiken, bloemen en steentjes
+    for i, x in enumerate(range(4, 50, 7)):
+        y = 98 + i % 2
+        dk.rect(x, y, x + 1, y + 5 + i % 3, BRUIN)
+    dk.lijn([(3, 100), (50, 101)], BRUIN)
+    for x, y, w in ((8, 116, 9), (26, 121, 7), (100, 119, 7), (44, 124, 6)):
+        dk.ovaal(x - w, y - 6, x + w, y + 6, GROEN)
+        dk.ovaal(x - w // 2, y - 5, x - w // 4, y - 2, LGROEN, LGROEN)
+    for _ in range(26):
+        x, y = rnd.randint(2, 104), rnd.randint(98, 124)
+        if dk.im.getpixel((x, y)) in (GROEN, LGROEN):
+            dk.px(x, y, rnd.choice((GEEL, ROOD, WIT, GEEL)))
+
+
 def teken():
-    rnd = random.Random(5)
+    rnd = random.Random(8)
     dk = Doek()
     lucht(dk, rnd)
     zon(dk)
-    bergen(dk)
-    for x in range(56, 116, 8):                                  # bomen achter het dorp
-        boom(dk, x + rnd.randint(-2, 2), 80, rnd.randint(5, 6), rnd, kruin=GROEN, licht=LGROEN)
-    heuvel_en_kasteel(dk)
-    for x, v, r in ((4, 66, 6), (60, 72, 5), (104, 80, 6)):
+    verre_bergen(dk, rnd)
+    bos_links(dk, rnd)
+    groms_berg(dk, rnd)
+    weide(dk, rnd)
+    dorp(dk, rnd)
+    for x, v, r in ((108, 104, 6), (4, 86, 6)):                  # een paar bomen vooraan
         boom(dk, x, v, r, rnd)
-    voorgrond(dk, rnd)
-    for x, y, b, h in ((60, 94, 12, 8), (78, 90, 12, 8), (92, 96, 12, 8), (68, 104, 14, 9)):
-        huisje(dk, x, y, b, h, rnd)
-    kloof(dk, rnd)
-    for x, v, r in ((116, 72, 6), (152, 66, 6), (150, 98, 7)):
-        boom(dk, x, v, r, rnd, kruin=GROEN, licht=LGROEN)
-    dk.rect(0, 0, B - 1, 0, ZWART)                               # bovenste rij en onderste 2 rijen zwart
+    dk.rect(0, 0, B - 1, 0, ZWART)
     dk.rect(0, 126, B - 1, 127, ZWART)
     return dk.im
 

@@ -12,10 +12,10 @@ KAMER bosrand
     ALS vlag wolven_weg
       PATCH wolven_weg
     EINDE
-  ACTOR vex KOSTUUM vex OP 80,62 VERBORGEN   # Baron Vex, tussen de bomen (tussenscène, hoofdstuk 9)
+  ACTOR grom KOSTUUM grom OP 80,62 VERBORGEN   # Grom de tovertrol, tussen de bomen (tussenscène; docs/VERHAAL.md)
   ACTOR mira_bos KOSTUUM mira OP 150,124 VERBORGEN   # Mira komt aanlopen (einde hoofdstuk 1); daarna reist ze mee
 
-VOORWERP dorp "dorp" VAK 130,112 30,16 LOOP 150,120 RECHTS
+VOORWERP dorp "dorp" VAK 52,114 56,14 LOOP 80,124 VOOR      # het gele pad onderaan: daar kwam je vandaan
   GA_NAAR:
     KAMER plein 84,66 VOOR
   BEKIJK:
@@ -29,10 +29,10 @@ VOORWERP wegwijzer "wegwijzer" VAK 112,78 24,34 LOOP 116,114 RUG
 
 VOORWERP bospad "pad" VAK 68,58 24,22 LOOP 80,94 RUG
   BEKIJK:
-    ZEG eldric "Het pad het Duisterwoud in. Ergens daar is Baron Vex."
+    ZEG eldric "Het pad het Duisterwoud in. Daar komen de aardmannetjes vandaan."
   GA_NAAR:
     ALS vlag wolven_weg
-      ZEG eldric "Het Duisterwoud in. Achter Vex aan. Maar dat is voor hoofdstuk 2."
+      ZEG eldric "Het Duisterwoud in. Achter Grom aan. Maar dat is voor hoofdstuk 2."
     ANDERS
       ZEG eldric "Daar ga ik niet zomaar in. Nog niet."
     EINDE
@@ -52,15 +52,15 @@ VOORWERP wolven "wolven" VAK 28,80 82,12 LOOP 80,100 RUG
       ZEG eldric "Brave hondjes?"
       ZEG eldric "Nee. Geen brave hondjes."
     EINDE
-  GEBRUIK zwaard:
-    ZEG eldric "Het fragment gloeit, maar het zijn er te veel. Ik heb meer licht nodig."
+  GEBRUIK zonnesteen:
+    ZEG eldric "Het steentje is warm, maar het zijn er te veel. Ik heb meer licht nodig."
   GEBRUIK lantaarn:
     ALS vlag wolven_weg
       ZEG eldric "Ze zijn al weg."
     ANDERS
       ALS STAND lantaarn 2
         TUSSENSCENE
-        ZEG eldric "Weg met jullie! Hier is het licht van de zon!"
+        ZEG eldric "Ksst! Weg jullie! Kijk, licht!"
         GELUID wolf
         PATCH wolven_weg                   # de twee wolven in het plaatje vluchten het bos in
         LOOP wolf 4,90
@@ -68,18 +68,19 @@ VOORWERP wolven "wolven" VAK 28,80 82,12 LOOP 80,100 RUG
         ZET wolven_weg
         PUNTEN 25
         WACHT 25
-        TOON vex
+        TOON grom
         WACHT 25
-        ZEG vex "Kom maar, Wachter. Ik heb een kroon voor je."
-        LOOP vex 80,40
-        VERBERG vex
-        ZEG eldric "Baron Vex... Wat moet hij met mij?"
+        ZEG grom "Een jongen met een stukje zon in zijn hand..."
+        ZEG grom "Interessant. Heel interessant."
+        LOOP grom 80,40
+        VERBERG grom
+        ZEG eldric "Wie... wat was dat? Die ogen. Zo groot als lantaarns."
         TOON mira_bos
         LOOP mira_bos 112,112
-        ZEG mira "Wacht op mij, Wachter."
+        ZEG mira "Wacht op mij, jongen."
         ZEG mira "Het pad vraagt om mij."
         VERBERG mira                       # ze reist mee: in de herberg is ze niet meer
-        ZEG eldric "Dan gaan we samen. Het Duisterwoud in."
+        ZEG eldric "Ik ben maar een jongen. Maar ik ga mee. Samen dan."
         ZET hoofdstuk1_klaar
         EINDE_TUSSENSCENE
       ANDERS

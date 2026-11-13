@@ -64,7 +64,7 @@ wacht 5
 verwacht baas_actief = 0
 verwacht_kamer plein
 verwacht muz_aan = 1                   # het plein speelt weer
-verwacht_tekst 22 "zwaard             ↑  gouden munt"
+verwacht_tekst 22 "zonnesteen         ↑  gouden munt"
 cursor 160,100
 wacht 3
 screenshot terug

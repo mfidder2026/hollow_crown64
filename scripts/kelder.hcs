@@ -2,7 +2,7 @@
 # Plaatje: data/flux/kelder.png (FLUX, uit ons eigen voorlopige plaatje; zie docs/FLUX_PROMPT.md).
 KAMER kelder
   LOOPKLEUREN oranje bruin rood          # aangestampte aarde (rood: een vlek lampolie bij het vat)
-  SCHAAL 100
+  # (geen SCHAAL: binnen blijft Eldric overal even groot, de grootste maat)
   LOOPVAK 8,99 62,124                    # 0 links, onder aan de trap
   LOOPVAK 8,113 126,124                  # 1 voor het vat langs
   LOOPVAK 104,98 126,124                 # 2 rechts van het vat, bij de planken

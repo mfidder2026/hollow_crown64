@@ -62,7 +62,7 @@ VOORWERP proef_kruik "kruik" VAK 40,104 6,8 LOOP 44,112 VOOR
   PAK:
     ZEG eldric "Een kruik. Leeg."
     GEEF proef_kruik
-  GEBRUIK zwaard:                      # "Gebruik zwaard met kruik" (en andersom: de VM zoekt ook bij het zwaard)
+  GEBRUIK zonnesteen:                      # "Gebruik zonnesteen met kruik" (en andersom: de VM zoekt ook bij de zonnesteen)
     ZEG eldric "Tink."
     ZET proef_paar
 
@@ -81,3 +81,6 @@ SCRIPT proef_veel:
 SCRIPT proef_naar_herberg:
   ZET herbergdeur_open
   KAMER herberg 45,86 VOOR
+
+SCRIPT proef_naar_bos:
+  KAMER bosrand 80,120 RUG

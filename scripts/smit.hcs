@@ -1,7 +1,7 @@
 # smit.hcs — de smit van Bram. Plaatje: data/plaatjes/smit.png, met de hand getekend (tools/teken_smit.py).
 KAMER smit
   LOOPKLEUREN bruin oranje geel grijs donkergrijs   # aarde (oranje: licht van het vuur), stro, steentjes, een hoefijzer
-  SCHAAL 104
+  # (geen SCHAAL: binnen blijft Eldric overal even groot, de grootste maat)
   LOOPVAK 2,112 157,124                  # 0 voor
   LOOPVAK 24,84 100,124                  # 1 midden, voor het smidsvuur (links het watervat, rechts het aambeeld)
   LOOPVAK 130,84 157,124                 # 2 rechts, bij de deur
@@ -27,18 +27,19 @@ VOORWERP smidsvuur "smidsvuur" VAK 54,24 52,58 LOOP 80,92 RUG
     ANDERS
       ZEG eldric "Koude as. Het smidsvuur is uit sinds de zon weg is."
     EINDE
-  GEBRUIK zwaard:
+  GEBRUIK zonnesteen:
     ALS vlag smidsvuur_aan
       ZEG eldric "Het brandt al."
     ANDERS
-      ZEG eldric "Ik houd het zwaard in de as. Het lichtfragment gloeit op..."
+      ZEG eldric "Ik leg oma's steentje in de koude as. Het wordt warm..."
       GELUID vuur
       PATCH vuur_aan
       ZET smidsvuur_aan
       PUNTEN 15
       ZEG bram "Het vuur! Het brandt weer! Wie ben jij, jongen?"
-      ZEG eldric "Eldric. Wachter van de Lichte Kroon. De laatste."
-      ZEG bram "Dan heb je dit nodig. Een lantaarn. Leeg, maar jij vindt wel olie."
+      ZEG eldric "Eldric. Gewoon Eldric. Het is oma's steentje, niet ik."
+      ZEG bram "Gewoon of niet, je hebt me geholpen. Hier, een lantaarn. Leeg."
+      ZEG bram "Olie vind je vast wel. En met dat steentje steek je hem aan."
       GEEF lantaarn
     EINDE
 
@@ -47,7 +48,7 @@ VOORWERP bram "Bram" VAK 26,66 13,36 LOOP 46,104 LINKS
     ZEG eldric "Bram de smit. Groot, rood en chagrijnig."
   PRAAT:
     ALS vlag smidsvuur_aan
-      ZEG bram "Met dit vuur maak ik weer ijzer. Dank je, Wachter."
+      ZEG bram "Met dit vuur maak ik weer ijzer. Dank je, jongen."
     ANDERS
       ZEG bram "Vuur uit, lantaarn leeg, hoofd vol."
     EINDE

@@ -658,3 +658,26 @@ stil, n = stuk n-1). vicetest `verwacht_muziek` leest welk stuk speelt (muz_lied
 **Getest:** `tests/menu.band` (balk verschijnt en verdwijnt, opslaan via het menu, score 0 en na de munt 5, het
 rekenblad en terug: scherm pixel voor pixel), `tests/basic.band` (Exit: READY. op het BASIC-scherm, ROM's aan).
 23/23 compiler, 16/16 banden.
+
+## 2026-11-13 — Het verhaal opnieuw: Grom de tovertrol, Eldric een gewone jongen
+
+Afgesproken met de gebruiker; het scenario (`~/Development/Hollow_Crown/docs/SCRIPT_HOLLOW_CROWN.md`, van MacAIMagic)
+is daarop aangepast (niet vastgelegd: hun bestand, hun branch; een kopie van de oude versie staat in de scratchpad).
+- **Grom de tovertrol** (geen koning) sprak in de nacht van de dubbele maansverduistering de Schemerspreuk: het zonlicht
+  zit in de Holle Kroon, zodat zijn volk, de **aardmannetjes** (die geen licht verdragen), boven de grond kan leven.
+  Hij is niet slecht om het slecht zijn; aan het eind wordt hij een bondgenoot. Baron Vex valt weg.
+- **Eldric** is een gewone jongen met een goed hart, geen Wachter. Hij draagt geen zwaard maar de **zonnesteen** van
+  zijn oma ("Er zit nog een beetje zon in, zei ze."). Bram en Mira noemen hem "jongen".
+- Hoofdstuk 1: het zwaard is de zonnesteen geworden (scripts en tests); aan de bosrand verschijnt Grom na de wolven:
+  "Een jongen met een stukje zon in zijn hand... Interessant. Heel interessant." Nieuwe figuur `grom`
+  (tools/sprites_hc.py); de kostuums van Vex zijn eruit.
+- **Het toneel opnieuw getekend**, minder klinisch: links een bos en een molentje op de heuvels, in het dal Dawnhaven
+  met scheve vakwerkhuisjes, rechts Groms rotsige berg met een grot (rotsvlakken licht/schaduw, barsten, oogjes in het
+  donker), een slingerend pad door de wei. Het verhaal: aardmannetje bij de grot, Grom, de spreuk (flits), de manen,
+  de schemer, de aardmannetjes komen naar boven, Eldric. Ook de scrolltekst van het titelscherm.
+- **Binnen geen diepte meer**: in de herberg, kelder en smit blijft Eldric overal even groot (de grootste maat; geen
+  SCHAAL). Buiten (plein, bosrand) wel.
+- **De bosrand had geen zichtbare uitgang**: het "dorp" was een onzichtbaar vakje in de hoek rechtsonder. Nu is het
+  gele pad onderaan (waar je vandaan komt) de weg terug. Nieuwe band `tests/bos_terug.band`.
+
+**Getest:** 23/23 compiler, 17/17 banden.
