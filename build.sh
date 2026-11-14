@@ -134,6 +134,19 @@ for schijf in 1 2; do
   fi
 done
 [[ -f "$D64" && -f "$D64_2" ]] || fout "geen D64 gemaakt"
+# En alles op één dubbelzijdige diskette voor de 1571: build/hollowcrown.d71 (geen wissel: elke kamer is er,
+# dus het spel vraagt nooit om diskette 2). c1541 maakt hem (tools/d64.py kent alleen D64).
+D71="$UIT/$NAAM.d71"
+rm -f "$D71"
+C1541_ARGS=(-format "$SCHIJFNAAM" d71 "$D71" -write "$UIT/$NAAM.prg" "$NAAM")
+for kamer in $("$PYTHON" tools/kamer.py --schijf 1 data/kamers.txt) $("$PYTHON" tools/kamer.py --schijf 2 data/kamers.txt); do
+  [[ " ${C1541_ARGS[*]} " == *" $kamer "* ]] && continue      # (schijf=beide: maar één keer)
+  [[ -f "build/gen/kamer_$kamer.prg" ]] && C1541_ARGS+=(-write "build/gen/kamer_$kamer.prg" "$kamer")
+  [[ -f "$UIT/scr_$kamer.prg" ]] && C1541_ARGS+=(-write "$UIT/scr_$kamer.prg" "$kamer.s")
+done
+"$VICE_BIN/c1541" ${C1541_ARGS[@]} >/dev/null 2>&1 || fout "c1541 (D71)"
+[[ -f "$D71" ]] || fout "geen D71 gemaakt"
+print "[build]   ${D71#$ROOT/}: $("$VICE_BIN/c1541" -attach "$D71" -list 2>/dev/null | grep -cE '^[0-9]+ ') bestanden, $("$VICE_BIN/c1541" -attach "$D71" -list 2>/dev/null | grep -i 'blocks free')"
 for d in "$D64" "$D64_2"; do
   print "[build]   ${d#$ROOT/}:"
   "$VICE_BIN/c1541" -attach "$d" -list 2>/dev/null | grep -E '^[0-9]+ ' | sed 's/^/[build]     /'

@@ -1031,3 +1031,21 @@ het spel direct na de wissel nog de oude diskette, vroeg opnieuw, en vicetest st
 tijdlus: tijdens het laden staan de interrupts uit, dus een beeldteller loopt niet), zoals een speler die op vuur
 drukt; en vicetest stopt een diskette die er al in zit niet opnieuw in. Getest: hoofdstuk4.band en het hele spel met
 de echte drive. Testronde: 30 van 30.
+
+## 2026-11-14 — Alles op één diskette: de D71 voor de 1571
+
+build.sh maakt nu ook build/hollowcrown.d71: het spel en alle kamers op één dubbelzijdige diskette (982 blokken,
+346 vrij), met c1541. Geen wissel: elke kamer is er, dus het spel vraagt nooit om diskette 2. vicetest kan hem testen
+met `--d71` (een 1571 in VICE; met `--echte-drive` de echte 1571-emulatie).
+
+De snellader op de 1571, twee fouten:
+- Op kant 2 bleef een leesopdracht in de jobqueue hangen (spoor 41) zolang de 1571 in de 1541-stand stond. Nu stuurt
+  het spel eerst "U0>M1": de 1571 in zijn eigen stand. Een 1541 kent alleen U0 (de gebruikerssprongen terugzetten):
+  onschuldig; turbo.band op de 1541 slaagt nog.
+- In zijn eigen stand gebruikt de 1571 zelf $0700, waar de bestandsnaam voor het drive-programma stond: dan vond hij
+  niets en laadde het spel alles via de Kernal. De naam staat nu op $06E0, direct achter het programma.
+Om dit te vinden meldt vicetest bij een time-out met de echte drive nu ook waar de processor van de drive staat
+(monitor `device 8:`) en zijn zeropage (de jobqueue).
+
+Getest: turbo.band op de 1541 en de 1571, hoofdstuk5.band en hele_spel.band op de D71 met de echte 1571 (het hele
+spel in 160 s warp, alles met de snellader), testronde 30 van 30.

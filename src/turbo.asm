@@ -13,7 +13,8 @@
 // seconde; het bestand bestaat niet), dan geeft turbo_laden C = 1 terug en laadt schijf.asm gewoon via de Kernal
 // (die vraagt dan ook om de andere diskette). Na een mislukking zonder antwoord blijft de turbo uit (turbo_uit).
 
-.const TURBO_NAAM   = $0700             // in de drive: de bestandsnaam (16 tekens, met $a0 aangevuld)
+.const TURBO_NAAM   = $06e0             // in de drive: de bestandsnaam (16 tekens, met $a0 aangevuld), achter het
+                                         // programma ($0700 gebruikt een 1571 in zijn eigen stand zelf)
 .const TURBO_CODE   = $0500             // in de drive: het programma (buffer 2 en 3)
 
 .segment Code
@@ -74,6 +75,15 @@ alleen_naam:
         jsr mw
         jmp start
 code_sturen:
+        ldx #15                          // eerst "U0>M1": een 1571 in zijn eigen stand (beide kanten van een D71 met
+        jsr $ffc9                        // de jobqueue; in de 1541-stand bleef een leesopdracht op kant 2 hangen).
+        ldx #0                           // Een 1541 kent alleen U0 (de gebruikerssprongen terugzetten): onschuldig.
+!:      lda u0_m1,x
+        jsr $ffd2
+        inx
+        cpx #5
+        bne !-
+        jsr $ffcc
         lda #<drive_code                 // het programma: M-W in stukjes van 32
         sta zp_ptr2
         lda #>drive_code
@@ -332,6 +342,7 @@ code_in_drive: .byte 0                   // 1: het drive-programma staat nog in 
                                          //    Kernal-schijfactie (die kan de buffers van de drive gebruiken)
 atn_stand:    .byte 0
 me_opdracht:  .byte $4d, $2d, $45, <TURBO_CODE, >TURBO_CODE   // "M-E" $0500
+u0_m1:        .byte $55, $30, $3e, $4d, $31                  // "U0>M1": de 1571 in de 1571-stand
 naam:         .fill 16, 0
 
 // ---- het programma in de drive (6502, op $0500 in de 1541) ------------------------------------------------------
@@ -514,4 +525,4 @@ d_byte: .byte 0
 }
 }
 .label drive_code_lengte = * - drive_code
-.assert "het drive-programma past in buffer 2 en 3 ($0500-$06FF)", drive_code_lengte <= $200, true
+.assert "het drive-programma past in buffer 2 en 3, voor de naam ($0500-$06DF)", drive_code_lengte <= TURBO_NAAM - TURBO_CODE, true

@@ -135,7 +135,7 @@ On macOS, `/usr/bin/java` is only a stub. Use a real JDK, for example `brew inst
 Tool paths live in one place, at the top of `build.sh` and `tools/vicetest.py` (or set `JAVA` / `VICE_BIN`).
 
 ```bash
-./build.sh                              # build/hollowcrown.d64
+./build.sh                              # build/hollowcrown.d64 + _2.d64 (1541, two disks) and build/hollowcrown.d71 (1571, one disk)
 ./build.sh --vice                       # ...and start it in VICE
 ./tests/alles.sh                        # every test: compiler errors + every input tape in VICE
 ```
@@ -159,7 +159,7 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-The whole game is playable, from the title screen through all six chapters to the final scene on the castle roof. It comes on two disks; the game asks for disk 2 when it needs it. The build makes a D64; automated tests boot it in VICE,
+The whole game is playable, from the title screen through all six chapters to the final scene on the castle roof. It comes on two 1541 disks (D64; the game asks for disk 2 when it needs it) or on one double-sided 1571 disk (D71, no disk swap). The fast loader works on both drives. Automated tests boot it in VICE,
 play input tapes (one of them plays the whole chapter, another saves, loads and carries on), check the game state and
 compare every screenshot pixel by pixel with the screen as memory says it should be, sprites included. The engine is being built
 in this order:
@@ -178,6 +178,7 @@ in this order:
 - [x] 11. Chapter 2, *Darkwood*: chapters, deaths and rewinding (Tik), Mira follows Eldric, scripts per room on disk
 - [x] 12. Chapters 3-6 and a cutscene between every two chapters; two disks; the fog of forgetting
 - [x] 13. Turbo loader: our own 2-bit fast loader for the 1541 (about twice as fast as the Kernal; falls back to the Kernal when there is no real drive)
+- [x] 14. One-disk version for the 1571 (D71)
 
 Progress notes are in [`docs/LOGBOEK.md`](docs/LOGBOEK.md) (in Dutch).
 

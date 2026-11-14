@@ -250,11 +250,12 @@ def lees_symbolen(pad):
 # ---------------------------------------------------------------------------------------------------
 # VICE en de remote monitor
 # ---------------------------------------------------------------------------------------------------
-PROMPT = re.compile(rb"\(C:\$[0-9a-f]{4}\) $")
+PROMPT = re.compile(rb"\((?:C|8):\$[0-9a-f]{4}\) $")
 
 
 class Vice:
-    def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False, geluid=False, snelheid=100):
+    def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False, geluid=False, snelheid=100,
+                 drive=1541):
         self.houd_open = zichtbaar_houden
         s = socket.socket()
         s.bind(("127.0.0.1", 0))                 # een vrije poort, zodat testen naast elkaar kunnen
@@ -263,7 +264,7 @@ class Vice:
         args = [os.path.join(VICE_BIN, "x64sc"), "-pal", "-default",
                 "-remotemonitor", "-remotemonitoraddress", "ip4://127.0.0.1:%d" % self.poort,
                 "+confirmonexit",
-                "-drive8truedrive" if echte_drive else "+drive8truedrive"]
+                "-drive8truedrive" if echte_drive else "+drive8truedrive", "-drive8type", str(drive)]
         if not echte_drive:
             args.append("-busdevice8")           # virtueel apparaat 8: het spel laadt zelf kamers (Kernal LOAD)
         if not geluid:
@@ -309,9 +310,9 @@ class Vice:
             if not d:
                 raise Fout("verbinding met VICE verbroken")
             buf += d
-            if PROMPT.search(buf) and len(re.findall(rb"\(C:\$[0-9a-f]{4}\) ", buf)) >= nodig:
+            if PROMPT.search(buf) and len(re.findall(rb"\((?:C|8):\$[0-9a-f]{4}\) ", buf)) >= nodig:
                 break
-        return re.sub(r"\(C:\$[0-9a-f]{4}\) ", "", buf.decode(errors="replace"))
+        return re.sub(r"\((?:C|8):\$[0-9a-f]{4}\) ", "", buf.decode(errors="replace"))
 
     def verder(self):
         if not self.loopt:
@@ -658,16 +659,22 @@ def draai(bandpad, args):
 
     print("[test] %s: %d stappen-bytes, %d screenshots, %d tussencontroles" % (naam, len(band), shots_n, len(controles)))
     t0 = time.time()
-    d64 = os.path.join(TESTUIT, naam + ".d64")         # een eigen kopie: opslaan (F5) schrijft op de diskette
-    shutil.copyfile(os.path.join(BUILD, "hollowcrown.d64"), d64)
-    diskettes = {1: d64, 2: os.path.join(TESTUIT, naam + "_2.d64")}   # diskette 2 (build.sh: schijf=2 in kamers.txt)
-    if os.path.exists(os.path.join(BUILD, "hollowcrown_2.d64")):
-        shutil.copyfile(os.path.join(BUILD, "hollowcrown_2.d64"), diskettes[2])
+    if args.d71:                                       # alles op één D71, in een 1571: nooit een wissel
+        d64 = os.path.join(TESTUIT, naam + ".d71")
+        shutil.copyfile(os.path.join(BUILD, "hollowcrown.d71"), d64)
+        diskettes = {1: d64}
+    else:
+        d64 = os.path.join(TESTUIT, naam + ".d64")     # een eigen kopie: opslaan (F5) schrijft op de diskette
+        shutil.copyfile(os.path.join(BUILD, "hollowcrown.d64"), d64)
+        diskettes = {1: d64, 2: os.path.join(TESTUIT, naam + "_2.d64")}   # diskette 2 (build.sh: schijf=2 in kamers.txt)
+        if os.path.exists(os.path.join(BUILD, "hollowcrown_2.d64")):
+            shutil.copyfile(os.path.join(BUILD, "hollowcrown_2.d64"), diskettes[2])
     # een band met de regel "echte_drive" draait altijd met de 1541-emulatie (voor de snellader: turbo.asm)
     echte_drive = args.echte_drive or any(r.split("#", 1)[0].strip() == "echte_drive" for r in open(bandpad))
     vice = Vice(d64, warp=not args.geen_warp,
                 echte_drive=echte_drive, zichtbaar_houden=args.houd_open,
-                geluid=args.kijk and not args.stil, snelheid=args.snelheid)
+                geluid=args.kijk and not args.stil, snelheid=args.snelheid,
+                drive=1571 if args.d71 else 1541)
     try:
         # 1. wachten tot het spel draait: magic "HC" staat er en de band wacht op ons
         eind = time.time() + args.starttijd
@@ -790,6 +797,15 @@ def draai(bandpad, args):
                 waar = "%s+%d" % (labels[-1][1], pc - labels[-1][0]) if labels else "?"
                 extra = ", ".join("%s=%d" % (n, vice.lees(sym[n])[0]) for n in
                                   ("turbo_uit", "turbo_teller", "laad_teller", "laad_fout", "schijf_nodig") if n in sym)
+                if echte_drive:                          # en waar de drive staat (de snellader draait op $0500)
+                    try:
+                        vice.cmd("device 8:")
+                        d_regs = vice.cmd("r").strip().splitlines()[-1]
+                        d_mem = vice.cmd("m 0000 000f").strip().splitlines()[-1]
+                        vice.cmd("device c:")
+                        extra += "; drive: %s | %s" % (d_regs.strip(), d_mem.strip())
+                    except Exception as e:
+                        extra += "; drive: ? (%s)" % e
                 raise Fout("band niet klaar binnen %d s (de C64 staat op $%04x: %s; %s)"
                            % (args.max_tijd, pc, waar, extra))
 
@@ -834,6 +850,7 @@ def main():
                    help="om mee te kijken: venster, normale snelheid, geluid, echte 1541 (de snellader), ruime tijd")
     p.add_argument("--snelheid", type=int, default=100, help="zonder warp: zoveel procent van de echte C64 (200 = dubbel)")
     p.add_argument("--stil", action="store_true", help="in de kijkstand zonder geluid")
+    p.add_argument("--d71", action="store_true", help="build/hollowcrown.d71 (alles op één diskette) in een 1571")
     args = p.parse_args()
     if args.kijk:
         args.geen_warp = args.houd_open = args.echte_drive = True
