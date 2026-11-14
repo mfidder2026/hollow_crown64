@@ -17,7 +17,7 @@ KAMER bosrand
 
 VOORWERP dorp "dorp" VAK 52,114 56,14 LOOP 80,124 VOOR      # het gele pad onderaan: daar kwam je vandaan
   GA_NAAR:
-    KAMER plein 84,66 VOOR
+    KAMER dorpsweg 81,82 VOOR
   BEKIJK:
     ZEG eldric "Terug naar Dawnhaven."
 

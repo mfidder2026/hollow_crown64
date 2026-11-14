@@ -1,0 +1,35 @@
+# dorpsweg.hcs — hoofdstuk 1: de weg van het plein naar de bosrand, langs de akkers. Plaatje: data/plaatjes/dorpsweg.png
+# (tools/teken_tussen.py). Een diep loopscherm: onderaan terug naar het dorp, achteraan het bos in.
+KAMER dorpsweg
+  LOOPKLEUREN bruin oranje donkergrijs zwart paars roze geel
+  SCHAAL 112 100 90
+  LOOPVAK 62,112 98,124                  # vooraan
+  LOOPVAK 66,100 94,113
+  LOOPVAK 72,90 90,101
+  LOOPVAK 76,80 86,91                    # achteraan, bij het bos
+  BINNENKOMST:
+    MUZIEK bosrand
+
+VOORWERP dw_dorp "dorp" VAK 60,118 40,8 LOOP 80,124 VOOR
+  GA_NAAR:
+    KAMER plein 84,66 VOOR
+  BEKIJK:
+    ZEG eldric "Terug naar Dawnhaven."
+
+VOORWERP dw_bos "bos" VAK 66,62 28,16 LOOP 81,81 RUG
+  GA_NAAR:
+    KAMER bosrand 80,120 RUG
+  BEKIJK:
+    ZEG eldric "Het Duisterwoud. De weg verdwijnt erin."
+
+VOORWERP dw_pop "verschrikker" VAK 128,70 20,48 LOOP 96,112 RECHTS
+  BEKIJK:
+    ZEG eldric "Een vogelverschrikker. De kraai op zijn arm is niet erg onder de indruk."
+
+VOORWERP dw_molen "molen" VAK 10,40 32,32 LOOP 70,112 LINKS
+  BEKIJK:
+    ZEG eldric "De molen van Dawnhaven. De wieken staan stil: geen wind in de schemer."
+
+VOORWERP dw_wijzer "wegwijzer" VAK 96,88 24,10 LOOP 92,110 RECHTS
+  BEKIJK:
+    ZEG eldric "Op de wegwijzer staat: Duisterwoud. Eronder heeft iemand gekrast: NIET DOEN."

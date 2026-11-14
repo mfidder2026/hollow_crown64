@@ -27,7 +27,7 @@ VOORWERP deur_brug "deur" VAK 6,30 21,52 LOOP 14,96 LINKS
 VOORWERP achterdeur "achterdeur" VAK 146,30 13,52 LOOP 150,96 RECHTS
   GA_NAAR:
     ALS HEEFT gloeischub
-      KAMER oever 20,118 RECHTS
+      KAMER beekdal 10,112 RECHTS
     ANDERS
       ZEG eldric "Ik laat dat kleintje niet in die kooi zitten."
     EINDE

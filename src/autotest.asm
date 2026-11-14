@@ -23,7 +23,7 @@
 
 #if AUTOTEST
 
-.const BAND_GROOTTE   = 1024            // een ring: tools/vicetest.py vult achter de leeskop bij
+.const BAND_GROOTTE   = 768             // een ring: tools/vicetest.py vult achter de leeskop bij
 .const BAND_SPIEGEL   = 16              // de eerste 16 bytes staan ook achter het einde (een opdracht over de rand heen)
 .const BAND_WACHT     = 0               // band_status: wacht tot vicetest de band heeft geladen
 .const BAND_LOOPT     = 1
@@ -348,7 +348,7 @@ band_wacht_vm:   .byte 0                // WACHT_VM loopt
 band_buiten:     .word 0                // beelden waarin Eldric buiten alle loopvakken stond
 ruw_doel_waarden: .fill 6, 0
 
-.segment Buffers
+.segment Hoog                           // (achter patch_buf, buiten het programma: geheugen.asm)
         .align $100                     // (de ring begint op een pagina: dan is terugspringen alleen de hoge byte)
 band:           .fill BAND_GROOTTE + BAND_SPIEGEL, 0
 

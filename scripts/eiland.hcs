@@ -98,7 +98,7 @@ VOORWERP eiland_boot "boot" VAK 112,110 46,14 LOOP 96,118 RECHTS
   BEKIJK:
     ZEG eldric "Olm wacht in de boot. Hij weet nog hoe hij heet, hoop ik."
   GA_NAAR:
-    KAMER boot 80,110 RUG
+    KAMER klippad 150,112 LINKS
 
 VOORWERP toren "vuurtoren" VAK 44,1 36,66 LOOP 62,110 RUG
   BEKIJK:

@@ -115,12 +115,13 @@ mv -f "$UIT/main.vs" "$UIT/$NAAM.vs"; mv -f "$UIT/main.sym" "$UIT/$NAAM.sym"   #
 stap "4/4 diskette"
 D64="$UIT/$NAAM.d64"
 rm -f "$D64"
-# De kamers staan op twee diskettes (data/kamers.txt: schijf=2). Diskette 1: het spel en de kamers van schijf 1;
-# diskette 2: de rest. Een kamer = het plaatje (<kamer>) en zijn scripts (<kamer>.s, als hij scripts heeft).
+# De kamers staan op drie diskettes (data/kamers.txt: schijf=1/2/3/alle). Diskette 1: het spel en de kamers van
+# schijf 1; diskette 2 en 3: de rest. Een kamer = het plaatje (<kamer>) en zijn scripts (<kamer>.s, als hij scripts heeft).
 D64_2="$UIT/${NAAM}_2.d64"
-rm -f "$D64_2"
+D64_3="$UIT/${NAAM}_3.d64"
+rm -f "$D64_2" "$D64_3"
 # tools/d64.py zet de sectoren van elk bestand 3 sectoren uit elkaar (gemeten het snelst met de snellader).
-for schijf in 1 2; do
+for schijf in 1 2 3; do
   BESTANDEN=()
   (( schijf == 1 )) && BESTANDEN+=("$UIT/$NAAM.prg:$NAAM")
   for kamer in $("$PYTHON" tools/kamer.py --schijf $schijf data/kamers.txt); do
@@ -130,24 +131,26 @@ for schijf in 1 2; do
   if (( schijf == 1 )); then
     "$PYTHON" tools/d64.py "$D64" "$SCHIJFNAAM" ${BESTANDEN[@]} || fout "tools/d64.py"
   else
-    "$PYTHON" tools/d64.py "$D64_2" "${SCHIJFNAAM%%,*} 2,${SCHIJFNAAM##*,}" ${BESTANDEN[@]} || fout "tools/d64.py (diskette 2)"
+    "$PYTHON" tools/d64.py "$UIT/${NAAM}_$schijf.d64" "${SCHIJFNAAM%%,*} $schijf,${SCHIJFNAAM##*,}" ${BESTANDEN[@]} \
+      || fout "tools/d64.py (diskette $schijf)"
   fi
 done
-[[ -f "$D64" && -f "$D64_2" ]] || fout "geen D64 gemaakt"
+[[ -f "$D64" && -f "$D64_2" && -f "$D64_3" ]] || fout "geen D64 gemaakt"
 # En alles op één dubbelzijdige diskette voor de 1571: build/hollowcrown.d71 (geen wissel: elke kamer is er,
-# dus het spel vraagt nooit om diskette 2). c1541 maakt hem (tools/d64.py kent alleen D64).
+# dus het spel vraagt nooit om een andere diskette). c1541 maakt hem (tools/d64.py kent alleen D64).
 D71="$UIT/$NAAM.d71"
 rm -f "$D71"
 C1541_ARGS=(-format "$SCHIJFNAAM" d71 "$D71" -write "$UIT/$NAAM.prg" "$NAAM")
-for kamer in $("$PYTHON" tools/kamer.py --schijf 1 data/kamers.txt) $("$PYTHON" tools/kamer.py --schijf 2 data/kamers.txt); do
-  [[ " ${C1541_ARGS[*]} " == *" $kamer "* ]] && continue      # (schijf=beide: maar één keer)
+for kamer in $("$PYTHON" tools/kamer.py --schijf 1 data/kamers.txt) $("$PYTHON" tools/kamer.py --schijf 2 data/kamers.txt) \
+             $("$PYTHON" tools/kamer.py --schijf 3 data/kamers.txt); do
+  [[ " ${C1541_ARGS[*]} " == *" $kamer "* ]] && continue      # (schijf=alle: maar één keer)
   [[ -f "build/gen/kamer_$kamer.prg" ]] && C1541_ARGS+=(-write "build/gen/kamer_$kamer.prg" "$kamer")
   [[ -f "$UIT/scr_$kamer.prg" ]] && C1541_ARGS+=(-write "$UIT/scr_$kamer.prg" "$kamer.s")
 done
 "$VICE_BIN/c1541" ${C1541_ARGS[@]} >/dev/null 2>&1 || fout "c1541 (D71)"
 [[ -f "$D71" ]] || fout "geen D71 gemaakt"
 print "[build]   ${D71#$ROOT/}: $("$VICE_BIN/c1541" -attach "$D71" -list 2>/dev/null | grep -cE '^[0-9]+ ') bestanden, $("$VICE_BIN/c1541" -attach "$D71" -list 2>/dev/null | grep -i 'blocks free')"
-for d in "$D64" "$D64_2"; do
+for d in "$D64" "$D64_2" "$D64_3"; do
   print "[build]   ${d#$ROOT/}:"
   "$VICE_BIN/c1541" -attach "$d" -list 2>/dev/null | grep -E '^[0-9]+ ' | sed 's/^/[build]     /'
 done

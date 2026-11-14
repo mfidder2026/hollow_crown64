@@ -66,4 +66,4 @@ GESPREK mira_donker
     LOOP eldric 140,98
     LOOP eldric 152,94
     EINDE_TUSSENSCENE
-    KAMER zwamgrot 10,112 RECHTS
+    KAMER rivier 10,112 RECHTS

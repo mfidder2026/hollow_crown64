@@ -59,7 +59,7 @@ VOORWERP grotmond "grot" VAK 66,60 30,38 LOOP 80,102 RUG
     ZEG eldric "De mond van de grot. Ogen in het donker."
   GA_NAAR:
     ALS vlag wolven_kloof_weg
-      KAMER donker 10,110 RECHTS
+      KAMER grotgang 10,112 RECHTS
     ANDERS
       TUSSENSCENE
       ZEG eldric "Ik ren er gewoon langs!"

@@ -107,6 +107,13 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer grotgang                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer donker
 screenshot donker
 
@@ -147,6 +154,13 @@ wacht 330
 screenshot pad
 wacht_op_script
 wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer rivier                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
 wacht_op_script
 wacht 3
 verwacht_kamer zwamgrot

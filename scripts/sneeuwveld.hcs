@@ -1,0 +1,27 @@
+# sneeuwveld.hcs — hoofdstuk 5: een sneeuwveld, van het bergpad naar de hut van Oma Rijm.
+# Plaatje: data/plaatjes/sneeuwveld.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER sneeuwveld
+  LOOPKLEUREN wit lichtblauw lichtgrijs grijs zwart
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK woud
+
+VOORWERP sv_terug "bergpad" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER bergpad 150,88 LINKS
+  BEKIJK:
+    ZEG eldric "Terug naar het bergpad."
+
+VOORWERP sv_verder "pad" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER hut 10,112 RECHTS
+  BEKIJK:
+    ZEG eldric "Daar verderop moet de hut zijn. Ik ruik houtvuur!"
+
+VOORWERP sv_bergen "bergen" VAK 0,20 160,46 LOOP 80,110 RUG
+  BEKIJK:
+    ZEG eldric "De IJstop. Zo hoog dat de wolken eronder hangen."
+
+VOORWERP sv_sporen "voetstappen" VAK 14,110 136,8 LOOP 80,114 VOOR
+  BEKIJK:
+    ZEG eldric "Kleine voetstappen in de sneeuw. Van Oma Rijm?"

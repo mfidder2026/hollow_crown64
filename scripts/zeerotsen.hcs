@@ -1,0 +1,17 @@
+# zeerotsen.hcs — hoofdstuk 3: de boot vaart tussen de klippen door naar het eiland. Een toneel (geen Eldric, geen
+# cursor): Olm roeit, en dan gaat het vanzelf verder naar het klippad. Plaatje: data/plaatjes/zeerotsen.png
+# (tools/teken_tussen.py).
+KAMER zeerotsen
+  TONEEL
+  LOOPKLEUREN blauw zwart lichtblauw donkergrijs wit grijs
+  LOOPVAK 60,118 90,124                  # (een toneel heeft er toch één nodig; Eldric zit in de boot)
+  BINNENKOMST:
+    MUZIEK zee
+    VERBERG mira_mee
+    WACHT 40
+    ZEG olm "Links. En dan tussen de klippen door. Zo ging het. Zo ging het altijd."
+    WACHT 30
+    ZEG mira "Kijk, Eldric! De vuurtoren!"
+    WACHT 40
+    TOON mira_mee
+    KAMER klippad 10,112 RECHTS

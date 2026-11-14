@@ -6,6 +6,12 @@ SCRIPT proef_kamer_aardstad:
 SCRIPT proef_kamer_baken:
   KAMER baken 79,113 VOOR
 
+SCRIPT proef_kamer_beekdal:
+  KAMER beekdal 79,113 VOOR
+
+SCRIPT proef_kamer_bergkam:
+  KAMER bergkam 79,113 VOOR
+
 SCRIPT proef_kamer_bergpad:
   KAMER bergpad 21,112 VOOR
 
@@ -24,8 +30,14 @@ SCRIPT proef_kamer_diepwoud:
 SCRIPT proef_kamer_donker:
   KAMER donker 12,110 VOOR
 
+SCRIPT proef_kamer_dorpsweg:
+  KAMER dorpsweg 80,118 VOOR
+
 SCRIPT proef_kamer_eiland:
   KAMER eiland 50,114 VOOR
+
+SCRIPT proef_kamer_grotgang:
+  KAMER grotgang 79,113 VOOR
 
 SCRIPT proef_kamer_herberg:
   KAMER herberg 43,105 VOOR
@@ -48,6 +60,12 @@ SCRIPT proef_kamer_kelder:
 SCRIPT proef_kamer_kerker:
   KAMER kerker 55,107 VOOR
 
+SCRIPT proef_kamer_kerkergang:
+  KAMER kerkergang 79,113 VOOR
+
+SCRIPT proef_kamer_klippad:
+  KAMER klippad 79,113 VOOR
+
 SCRIPT proef_kamer_kloof:
   KAMER kloof 80,114 VOOR
 
@@ -63,8 +81,14 @@ SCRIPT proef_kamer_plein:
 SCRIPT proef_kamer_poort:
   KAMER poort 79,115 VOOR
 
+SCRIPT proef_kamer_rivier:
+  KAMER rivier 79,113 VOOR
+
 SCRIPT proef_kamer_smit:
   KAMER smit 79,118 VOOR
+
+SCRIPT proef_kamer_sneeuwveld:
+  KAMER sneeuwveld 79,113 VOOR
 
 SCRIPT proef_kamer_spookbrug:
   KAMER spookbrug 24,109 VOOR
@@ -80,6 +104,9 @@ SCRIPT proef_kamer_troonzaal:
 
 SCRIPT proef_kamer_vuurtoren:
   KAMER vuurtoren 96,118 VOOR
+
+SCRIPT proef_kamer_wenteltrap:
+  KAMER wenteltrap 79,113 VOOR
 
 SCRIPT proef_kamer_wolfspad:
   KAMER wolfspad 80,115 VOOR

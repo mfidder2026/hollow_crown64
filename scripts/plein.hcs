@@ -73,7 +73,7 @@ VOORWERP herberg "herberg" VAK 126,26 34,70 LOOP 122,90 RECHTS
 
 VOORWERP pad "pad" VAK 74,40 16,24 LOOP 84,66 RUG     # vóór de huizen: het pad tussen de huizen door
   GA_NAAR:
-    KAMER bosrand 80,120 RUG
+    KAMER dorpsweg 80,122 RUG
   BEKIJK:
     ZEG eldric "Het pad naar de bosrand, en daarachter het Duisterwoud."
 

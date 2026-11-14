@@ -147,6 +147,15 @@ wacht_op_script
 wacht 3
 wacht_op_script
 wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer klippad                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer eiland
 screenshot eiland
 
@@ -305,6 +314,13 @@ verwacht_kamer eiland
 cursor 270,133
 wacht 2
 verwacht_tekst 18 "Ga naar boot"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer klippad                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 6,126
+wacht 2
 vuur
 wacht_tot_stil
 wacht_op_script

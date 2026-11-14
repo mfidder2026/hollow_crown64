@@ -19,7 +19,7 @@ KAMER oever
 
 VOORWERP bos_terug "bos" VAK 0,12 30,50 LOOP 10,110 LINKS
   GA_NAAR:
-    KAMER jachthut 150,100 LINKS
+    KAMER beekdal 150,112 LINKS
   BEKIJK:
     ZEG eldric "Het Duisterwoud. Daar ligt de jachthut."
 

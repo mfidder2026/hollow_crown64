@@ -1,0 +1,27 @@
+# grotgang.hcs — hoofdstuk 4: van de grotmond in de Rotskloof naar het donker.
+# Plaatje: data/plaatjes/grotgang.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER grotgang
+  LOOPKLEUREN bruin oranje donkergrijs zwart grijs lichtgrijs geel cyaan lichtblauw blauw wit
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK grot
+
+VOORWERP gg_kloof "kloof" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER kloof 80,102 VOOR
+  BEKIJK:
+    ZEG eldric "Terug naar buiten, naar de kloof."
+
+VOORWERP gg_verder "gang" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER donker 10,110 RECHTS
+  BEKIJK:
+    ZEG eldric "De gang gaat verder. Steeds donkerder."
+
+VOORWERP gg_wormen "gloeiwormen" VAK 44,40 70,12 LOOP 80,110 RUG
+  BEKIJK:
+    ZEG eldric "Gloeiwormen aan het plafond. Net sterren, maar dan dichterbij."
+
+VOORWERP gg_druipsteen "druipsteen" VAK 34,80 10,24 LOOP 36,110 RUG
+  BEKIJK:
+    ZEG eldric "Druipsteen. Het groeit een vingerbreedte in honderd jaar."

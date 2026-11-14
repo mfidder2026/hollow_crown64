@@ -54,7 +54,7 @@ VOORWERP pad_ijstop "pad" VAK 148,70 12,16 LOOP 152,88 RECHTS
     ZEG eldric "Het pad naar boven, onder het sneeuwveld door."
   GA_NAAR:
     ALS vlag lawine_gevallen
-      KAMER hut 10,112 RECHTS
+      KAMER sneeuwveld 10,112 RECHTS
     ANDERS
       TUSSENSCENE
       ZEG eldric "Even snel eronderdoor..."

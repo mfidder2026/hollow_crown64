@@ -1,0 +1,27 @@
+# rivier.hcs — hoofdstuk 4: een ondergrondse rivier, van het donker naar de zwamgrot.
+# Plaatje: data/plaatjes/rivier.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER rivier
+  LOOPKLEUREN grijs lichtgrijs donkergrijs zwart cyaan wit blauw lichtblauw
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK grot
+
+VOORWERP rv_terug "gang" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER donker 10,110 RECHTS
+  BEKIJK:
+    ZEG eldric "Terug, het donker in."
+
+VOORWERP rv_verder "oever" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER zwamgrot 10,112 RECHTS
+  BEKIJK:
+    ZEG eldric "Langs de rivier verder."
+
+VOORWERP rv_water "rivier" VAK 0,60 160,38 LOOP 80,108 RUG
+  BEKIJK:
+    ZEG eldric "Een rivier onder de grond. Waar zou hij heen stromen?"
+
+VOORWERP rv_kristal "kristallen" VAK 54,52 12,16 LOOP 60,108 RUG
+  BEKIJK:
+    ZEG eldric "Kristallen in de wand. Ze geven een koud blauw licht."

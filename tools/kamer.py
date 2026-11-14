@@ -40,6 +40,7 @@ from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import c64beeld as cb   # noqa: E402  (kleuren, Lab, de keuze van 3 kleuren per vak, Floyd-Steinberg)
 import inpak            # noqa: E402
+SCHIJF_ALLE = 9          # schijf=alle: de kamer staat op elke diskette (de grot: tussen de hoofdstukken)
 
 B, H = 160, 128          # multicolor-pixels
 RIJEN, KOL = H // 8, B // 4
@@ -76,10 +77,10 @@ def lees_lijst(pad):
                 continue
             if k not in opties:
                 raise SystemExit("%s:%d: onbekende optie %s" % (pad, nr, k))
-            if k == "schijf":                            # 1, 2, of beide (een tussenscène die in elk deel komt)
-                if v not in ("1", "2", "beide"):
-                    raise SystemExit("%s:%d: schijf=1, schijf=2 of schijf=beide" % (pad, nr))
-                opties[k] = 3 if v == "beide" else int(v)
+            if k == "schijf":                            # 1, 2, 3, of alle (een tussenscène die in elk deel komt)
+                if v not in ("1", "2", "3", "alle"):
+                    raise SystemExit("%s:%d: schijf=1, 2, 3 of alle" % (pad, nr))
+                opties[k] = SCHIJF_ALLE if v == "alle" else int(v)
                 continue
             opties[k] = v if k == "voorgrond" else float(v)
         kamers.append((regel[0], regel[1], opties, nr))
@@ -249,7 +250,7 @@ def controle_png(bron, pix, pad):
 
 def main():
     if len(sys.argv) == 4 and sys.argv[1] == "--schijf":       # welke kamers op diskette N staan (voor build.sh)
-        print(" ".join(n for n, _, o, _ in lees_lijst(sys.argv[3]) if int(o["schijf"]) in (int(sys.argv[2]), 3)))
+        print(" ".join(n for n, _, o, _ in lees_lijst(sys.argv[3]) if int(o["schijf"]) in (int(sys.argv[2]), SCHIJF_ALLE)))
         return
     if len(sys.argv) != 3:
         raise SystemExit(__doc__)

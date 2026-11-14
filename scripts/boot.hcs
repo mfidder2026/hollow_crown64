@@ -63,7 +63,7 @@ GESPREK olm_boot
     ZET mira_links
   KEUZE "Links, Olm." ALS vlag mira_links EINDE
     ZEG olm "Links. Links is goed. Links was altijd al goed."
-    KAMER eiland 30,112 RECHTS
+    KAMER zeerotsen 80,120 RUG
   KEUZE "Volg de straal!" ALS vlag vuurtoren_brandt EINDE
     TUSSENSCENE
     ZEG olm "De straal! Nu weet ik weer waar de overkant is."

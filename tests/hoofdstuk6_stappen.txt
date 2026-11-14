@@ -36,6 +36,13 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer kerkergang                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer poort
 screenshot poort
 
@@ -329,6 +336,13 @@ verwacht_tekst 20 "Laat één maan gaan."
 cursor 20,164
 vuur
 wacht 900
+verwacht_kamer wenteltrap                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 6,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer dak
 screenshot dak_maan
 wacht 900

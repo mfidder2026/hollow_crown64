@@ -118,7 +118,7 @@ GESPREK grom_praat
     ZEG grom "Goed, jongen met het stukje zon. Goed."
     PUNTEN 20
     EINDE_TUSSENSCENE
-    KAMER dak 80,112 VOOR
+    KAMER wenteltrap 150,112 LINKS
   KEUZE "Geef de kroon, of ik breek hem!" ALS vlag slot_klaar EINDE
     TUSSENSCENE
     ZEG grom "Breken? Mijn kroon?"

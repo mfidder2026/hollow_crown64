@@ -152,6 +152,13 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer dorpsweg                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 160,86
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer bosrand
 verwacht voltooid = 0
 verwacht muz_lied = 5                  # LIED_BOSRAND

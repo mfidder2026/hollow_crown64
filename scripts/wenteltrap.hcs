@@ -1,0 +1,27 @@
+# wenteltrap.hcs — hoofdstuk 6: de wenteltrap, van de troonzaal omhoog naar het dak (van rechts naar links).
+# Plaatje: data/plaatjes/wenteltrap.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER wenteltrap
+  LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK kelder
+
+VOORWERP wt_dak "trap" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER dak 80,112 VOOR
+  BEKIJK:
+    ZEG eldric "De trap omhoog. Naar het dak, naar de manen."
+
+VOORWERP wt_terug "troonzaal" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER troonzaal 6,120 RECHTS
+  BEKIJK:
+    ZEG eldric "Terug naar de troonzaal."
+
+VOORWERP wt_raam "raam" VAK 36,24 10,38 LOOP 40,110 RUG
+  BEKIJK:
+    ZEG eldric "Door het smalle raam zie ik de twee manen. Ze staan stil."
+
+VOORWERP wt_treden "treden" VAK 4,40 156,60 LOOP 80,110 RUG
+  BEKIJK:
+    ZEG eldric "Honderden treden. Mijn benen weten het al."

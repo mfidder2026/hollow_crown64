@@ -16,7 +16,7 @@ KAMER poort
 
 VOORWERP terug_kerker "gang" VAK 0,100 4,24 LOOP 4,114 LINKS
   GA_NAAR:
-    KAMER kerker 100,104 LINKS
+    KAMER kerkergang 150,112 LINKS
 
 VOORWERP poortdeur "poort" VAK 56,12 48,44 LOOP 80,110 RUG
   BEKIJK:

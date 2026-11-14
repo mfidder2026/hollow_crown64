@@ -55,7 +55,7 @@ TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), 
          "f1": (0, 0x10), "f5": (0, 0x40), "f7": (0, 0x08)}
 MUISKNOP = {"links": 0x10, "rechts": 0x01}
 BAND_WACHT, BAND_LOOPT, BAND_KLAAR, BAND_FOUT = 0, 1, 2, 0xFF
-BAND_GROOTTE = 1024          # de ring in src/autotest.asm; een band mag langer zijn: hij wordt bijgevuld
+BAND_GROOTTE = 768           # de ring in src/autotest.asm; een band mag langer zijn: hij wordt bijgevuld
 BAND_SPIEGEL = 16
 
 
@@ -439,6 +439,22 @@ def ideaal_scherm(vice):
     return pix
 
 
+def vergroot_klopt(vice, sym):
+    """Alleen een reus (NPC-vorm 2, src/npc.asm) mag vergrote sprites hebben ($d017/$d01d): een wolf (vorm 1) liep
+    eens door in de reus-code en werd groot en uit elkaar getrokken, terwijl het scherm wel 'klopte' met de VIC."""
+    if "slot_npc" not in sym or "npc_vorm" not in sym:
+        return True, "(geen figuren)"
+    vic = vice.lees(0xD000, 0x2F)
+    slots = vice.lees(sym["slot_npc"], 2)
+    for slot, bits in enumerate((0b00110000, 0b11000000)):
+        npc = slots[slot]
+        vergroot = (vic[0x17] | vic[0x1D]) & bits and vic[0x15] & bits
+        reus = npc < 0x80 and vice.lees(sym["npc_vorm"] + npc)[0] == 2
+        if vergroot and not reus:
+            return False, "figuur %d (slot %d) is vergroot, maar is geen reus" % (npc, slot)
+    return True, "alleen een reus is vergroot"
+
+
 def kamerbuffer_klopt(vice, sym, spel):
     """De kamerbuffer ($A000) moet byte voor byte het kamerbestand van de huidige kamer zijn: anders laat het
     scherm wel 'iets' zien dat bij het geheugen past, maar niet de kamer (zo bleef een mislukt laden onopgemerkt)."""
@@ -666,9 +682,11 @@ def draai(bandpad, args):
     else:
         d64 = os.path.join(TESTUIT, naam + ".d64")     # een eigen kopie: opslaan (F5) schrijft op de diskette
         shutil.copyfile(os.path.join(BUILD, "hollowcrown.d64"), d64)
-        diskettes = {1: d64, 2: os.path.join(TESTUIT, naam + "_2.d64")}   # diskette 2 (build.sh: schijf=2 in kamers.txt)
-        if os.path.exists(os.path.join(BUILD, "hollowcrown_2.d64")):
-            shutil.copyfile(os.path.join(BUILD, "hollowcrown_2.d64"), diskettes[2])
+        diskettes = {1: d64}                           # diskette 2 en 3 (build.sh: schijf=2/3 in kamers.txt)
+        for n in (2, 3):
+            if os.path.exists(os.path.join(BUILD, "hollowcrown_%d.d64" % n)):
+                diskettes[n] = os.path.join(TESTUIT, "%s_%d.d64" % (naam, n))
+                shutil.copyfile(os.path.join(BUILD, "hollowcrown_%d.d64" % n), diskettes[n])
     # een band met de regel "echte_drive" draait altijd met de 1541-emulatie (voor de snellader: turbo.asm)
     echte_drive = args.echte_drive or any(r.split("#", 1)[0].strip() == "echte_drive" for r in open(bandpad))
     vice = Vice(d64, warp=not args.geen_warp,
@@ -736,7 +754,7 @@ def draai(bandpad, args):
         while True:
             # (elke blik in het geheugen zet de emulatie even stil: op normale snelheid hoor je dat. In de kijkstand
             #  daarom maar één keer per seconde, en alleen de ring bijvullen als die bijna op is.)
-            time.sleep(1.0 if args.kijk else 0.05)
+            time.sleep((0.25 if args.stil else 1.0) if args.kijk else 0.05)
             if sym["band_markering"] == sym["band_status"] + 1:
                 status, markering = vice.lees(sym["band_status"], 2)
             else:
@@ -781,6 +799,9 @@ def draai(bandpad, args):
                         ok, uitleg = scherm_vergelijken(vice, pad)
                         schermfouten += 0 if ok else 1
                         print("[test]   %-4s scherm: %s" % ("ok" if ok else "FOUT", uitleg))
+                        ok, uitleg = vergroot_klopt(vice, sym)
+                        schermfouten += 0 if ok else 1
+                        print("[test]   %-4s sprites: %s" % ("ok" if ok else "FOUT", uitleg))
                         ok, uitleg = kamerbuffer_klopt(vice, sym, spel)
                         schermfouten += 0 if ok else 1
                         print("[test]   %-4s kamer: %s" % ("ok" if ok else "FOUT", uitleg))

@@ -11,4 +11,11 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer dorpsweg                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 160,138
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer plein

@@ -1049,3 +1049,27 @@ Om dit te vinden meldt vicetest bij een time-out met de echte drive nu ook waar 
 
 Getest: turbo.band op de 1541 en de 1571, hoofdstuk5.band en hele_spel.band op de D71 met de echte 1571 (het hele
 spel in 160 s warp, alles met de snellader), testronde 30 van 30.
+
+## 2026-11-14 — Loopschermen door het hele spel; drie diskettes; de wolf
+
+De gebruiker: "je gaat te snel van de ene kamer naar de andere". Nu zitten er tien loopschermen tussen (met de hand
+getekend, tools/teken_tussen.py):
+- hoofdstuk 1: dorpsweg (plein - bosrand; diep: akkers in perspectief, molen, vogelverschrikker, plassen)
+- hoofdstuk 2: beekdal (jachthut - oever; een beek met een boomstambrug en een reiger)
+- hoofdstuk 3: zeerotsen (varen tussen de klippen: een toneel, gaat vanzelf) en klippad (boot - eiland)
+- hoofdstuk 4: grotgang (kloof - donker; gloeiwormen) en rivier (donker - zwamgrot; kristallen)
+- hoofdstuk 5: sneeuwveld (bergpad - hut) en bergkam (hut - ijsbrug; een zee van wolken)
+- hoofdstuk 6: kerkergang (kerker - poort) en wenteltrap (troonzaal - dak)
+Vaste vormen (diep: onder terug, achter verder; zij: links en rechts), zodat scripts en tests overal hetzelfde
+zijn. tools/loopschermen_in_banden.py zet de stappen door de loopschermen in de testbanden (waar een band van A naar
+B loopt).
+
+Ruimte: 1541 nu drie diskettes (schijf=1/2/3/alle in kamers.txt; de grot staat op alle drie); de D71 heeft nog 120
+blokken vrij. Het testprogramma paste niet meer onder $A000: anker_buf en opslag_buf staan nu in de ongebruikte
+sprite-vakken 8-15 ($C600-$C7FF) en de invoerband (768 bytes) achter patch_buf in $C800-$CFFF.
+
+De wolf (bosrand en rotskloof) was stuk sinds Grom een reus werd: de code voor vorm 1 (twee sprites naast elkaar)
+liep door in de reus-code en vergrootte de wolf. Opgelost (één jmp), en vicetest controleert bij elke schermafdruk
+dat alleen een reus vergrote sprites heeft.
+
+Testronde: 30 van 30, compiler 23 van 23.

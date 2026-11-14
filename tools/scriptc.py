@@ -1184,7 +1184,7 @@ def schrijf(spel, pad, json_pad):
     L.append("kamer_sbestand_hi: .byte %s" % ", ".join(">sbestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_sbestand_len: .byte %s" % ", ".join(str(len(n) + 2) for n in spel.kamer_volgorde))
     import kamer as kamermod
-    schijven = {n: int(o["schijf"]) % 3 or 1 for n, _, o, _ in      # (beide = 3: staat overal, de vraag komt nooit)
+    schijven = {n: int(o["schijf"]) if int(o["schijf"]) <= 3 else 1 for n, _, o, _ in   # (alle: staat overal, de vraag komt nooit)
                 kamermod.lees_lijst(os.path.join(WORTEL, "data", "kamers.txt"))}
     L.append("kamer_schijf: .byte %s    // op welke diskette de kamer staat (data/kamers.txt: schijf=)" % ", ".join(
         str(schijven.get(n, 1)) for n in spel.kamer_volgorde))

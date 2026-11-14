@@ -128,6 +128,96 @@ wacht_op_script
 verwacht vm_fout = 0
 screenshot baken
 
+# ---- beekdal ----
+start_script proef_kamer_beekdal
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer beekdal
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk hut"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk meer"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 188,107
+wacht 2
+verwacht_tekst 18 "Bekijk beek"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 240,123
+wacht 2
+verwacht_tekst 18 "Bekijk reiger"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot beekdal
+
+# ---- bergkam ----
+start_script proef_kamer_bergkam
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer bergkam
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk hut"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk kam"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,108
+wacht 2
+verwacht_tekst 18 "Bekijk wolken"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 254,37
+wacht 2
+verwacht_tekst 18 "Bekijk zon"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot bergkam
+
 # ---- bergpad ----
 start_script proef_kamer_bergpad
 wacht_op_script
@@ -506,6 +596,60 @@ wacht_op_script
 verwacht vm_fout = 0
 screenshot donker
 
+# ---- dorpsweg ----
+start_script proef_kamer_dorpsweg
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer dorpsweg
+cursor 20,164
+vuur
+cursor 158,137
+wacht 2
+verwacht_tekst 18 "Bekijk dorp"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,85
+wacht 2
+verwacht_tekst 18 "Bekijk bos"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 274,109
+wacht 2
+verwacht_tekst 18 "Bekijk verschrikker"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 50,71
+wacht 2
+verwacht_tekst 18 "Bekijk molen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 214,108
+wacht 2
+verwacht_tekst 18 "Bekijk wegwijzer"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot dorpsweg
+
 # ---- eiland ----
 start_script proef_kamer_eiland
 wacht_op_script
@@ -568,6 +712,51 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot eiland
+
+# ---- grotgang ----
+start_script proef_kamer_grotgang
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer grotgang
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk kloof"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 156,61
+wacht 2
+verwacht_tekst 18 "Bekijk gloeiwormen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 76,107
+wacht 2
+verwacht_tekst 18 "Bekijk druipsteen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot grotgang
 
 # ---- herberg ----
 start_script proef_kamer_herberg
@@ -1145,6 +1334,96 @@ wacht_op_script
 verwacht vm_fout = 0
 screenshot kerker
 
+# ---- kerkergang ----
+start_script proef_kamer_kerkergang
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer kerkergang
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk kerker"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,89
+wacht 2
+verwacht_tekst 18 "Bekijk cellen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 110,58
+wacht 2
+verwacht_tekst 18 "Bekijk fakkel"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot kerkergang
+
+# ---- klippad ----
+start_script proef_kamer_klippad
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer klippad
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk boot"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk eiland"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 280,71
+wacht 2
+verwacht_tekst 18 "Bekijk vuurtoren"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,114
+wacht 2
+verwacht_tekst 18 "Bekijk touw"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot klippad
+
 # ---- kloof ----
 start_script proef_kamer_kloof
 wacht_op_script
@@ -1433,6 +1712,51 @@ wacht_op_script
 verwacht vm_fout = 0
 screenshot poort
 
+# ---- rivier ----
+start_script proef_kamer_rivier
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer rivier
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk oever"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,94
+wacht 2
+verwacht_tekst 18 "Bekijk rivier"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 118,74
+wacht 2
+verwacht_tekst 18 "Bekijk kristallen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot rivier
+
 # ---- smit ----
 start_script proef_kamer_smit
 wacht_op_script
@@ -1540,6 +1864,51 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot smit
+
+# ---- sneeuwveld ----
+start_script proef_kamer_sneeuwveld
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer sneeuwveld
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk bergpad"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 158,58
+wacht 2
+verwacht_tekst 18 "Bekijk bergen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 162,129
+wacht 2
+verwacht_tekst 18 "Bekijk voetstappen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot sneeuwveld
 
 # ---- spookbrug ----
 start_script proef_kamer_spookbrug
@@ -1846,6 +2215,51 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot vuurtoren
+
+# ---- wenteltrap ----
+start_script proef_kamer_wenteltrap
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer wenteltrap
+cursor 20,164
+vuur
+cursor 4,125
+wacht 2
+verwacht_tekst 18 "Bekijk trap"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 312,125
+wacht 2
+verwacht_tekst 18 "Bekijk troonzaal"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 80,58
+wacht 2
+verwacht_tekst 18 "Bekijk raam"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 162,85
+wacht 2
+verwacht_tekst 18 "Bekijk treden"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot wenteltrap
 
 # ---- wolfspad ----
 start_script proef_kamer_wolfspad

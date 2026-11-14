@@ -33,12 +33,12 @@ VOORWERP raam_oma "raam" VAK 18,20 30,28 LOOP 30,112 RUG
 
 VOORWERP deur_bergpad "deur" VAK 2,40 13,42 LOOP 8,100 LINKS
   GA_NAAR:
-    KAMER bergpad 150,88 LINKS
+    KAMER sneeuwveld 150,112 LINKS
 
 VOORWERP deur_ijsbrug "deur" VAK 146,40 13,42 LOOP 152,100 RECHTS
   GA_NAAR:
     ALS HEEFT want
-      KAMER ijsbrug 10,108 RECHTS
+      KAMER bergkam 10,112 RECHTS
     ANDERS
       ZEG oma "Waar ga jij heen, jongen? Eerst even praten met je oma."
     EINDE

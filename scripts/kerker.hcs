@@ -50,7 +50,7 @@ VOORWERP tralies "tralies" VAK 112,26 40,74 LOOP 104,104 RECHTS
     EINDE
   GA_NAAR:
     ALS vlag tralies_los
-      KAMER poort 12,114 RECHTS
+      KAMER kerkergang 10,112 RECHTS
     ANDERS
       ZEG eldric "De tralies zitten dicht."
     EINDE

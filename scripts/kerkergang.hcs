@@ -1,0 +1,27 @@
+# kerkergang.hcs — hoofdstuk 6: de kerkergang, van de kerker naar de poort.
+# Plaatje: data/plaatjes/kerkergang.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER kerkergang
+  LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK kelder
+
+VOORWERP kg_terug "kerker" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER kerker 100,104 LINKS
+  BEKIJK:
+    ZEG eldric "Terug naar de kerker. Liever niet."
+
+VOORWERP kg_verder "gang" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER poort 12,114 RECHTS
+  BEKIJK:
+    ZEG eldric "De gang loopt verder, naar de poort."
+
+VOORWERP kg_cellen "cellen" VAK 18,44 124,60 LOOP 80,110 RUG
+  BEKIJK:
+    ZEG eldric "Lege cellen. Wie zat hier? En waar zijn ze nu?"
+
+VOORWERP kg_fakkel "fakkel" VAK 52,40 8,18 LOOP 56,110 RUG
+  BEKIJK:
+    ZEG eldric "Een fakkel. Iemand heeft hem kort geleden aangestoken."

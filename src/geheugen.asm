@@ -6,7 +6,8 @@
 //   $C000-$C3E7  scherm-RAM (rij 2-17: kleuren van de bitmap, de andere rijen: tekst)
 //   $C3F8-$C3FF  sprite-pointers
 //   $C400-$C7FF  16 sprite-vakken (vak 0-1 Eldric, 2-5 twee NPC's, 6 de cursor)
-//   $C800-$CFFF  buffers (segment Hoog: patch_buf, anker_buf, opslag_buf)
+//   $C600-$C7FF  sprite-vakken 8-15, ongebruikt: anker_buf, opslag_buf (segment SpriteVrij)
+//   $C800-$CFFF  buffers (segment Hoog: patch_buf; in de testbuild ook de invoerband)
 //   $D800        kleur-RAM
 //   $E000-$FF3F  bitmap, onder de Kernal-ROM (schrijven altijd, lezen alleen met SEI en $01=$35)
 //   $F800-$FFFF  eigen lettertype, ook onder de Kernal-ROM
@@ -96,6 +97,8 @@
 // Hoog: het vrije stuk $C800-$CFFF (sinds het lettertype op $F800 staat) voor buffers die alleen de processor gebruikt
 // (de patchbuffer, het ankerpunt, de opslagbuffer). Zo blijft er onder $A000 ruimte voor de scripts.
 .segmentdef Hoog [start=$c800, max=$cfff, virtual]
+// sprite-vakken 8-15 ($C600-$C7FF): niemand gebruikt ze (Eldric 0-1, figuren 2-5, cursor 6, voorgrond 7): buffers
+.segmentdef SpriteVrij [start=SPRITE_VAKKEN + 8 * 64, max=$c7ff, virtual]
 
 // Het VIC-gebied: alleen ter controle, er komen geen bytes uit in de prg
 .segmentdef Scherm     [start=SCHERM, max=SCHERM + $3e7, virtual]

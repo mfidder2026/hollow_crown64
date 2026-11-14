@@ -52,6 +52,13 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer sneeuwveld                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer hut
 screenshot hut
 
@@ -83,6 +90,13 @@ wacht 3
 cursor 304,77
 wacht 2
 verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer bergkam                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
 vuur
 wacht_tot_stil
 wacht_op_script

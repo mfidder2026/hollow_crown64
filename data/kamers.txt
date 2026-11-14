@@ -3,6 +3,7 @@
 plein    data/flux/dawnhaven.png      boven=190  kleur=1.5  licht=1.0  sterkte=0.5  voorgrond=data/plein_voorgrond.txt  patch=deur_open:132,56,12,32:data/plaatjes/plein_deur_open.png
 herberg  data/flux/herberg.png    boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=tafel_weg:44,88,72,24:data/flux/herberg_tafel_weg.png  patch=kruik_weg:140,24,8,24:data/flux/herberg_zonder_kruik.png  patch=steen_weg:56,96,12,16:data/flux/herberg_zonder_steen.png
 smit     data/plaatjes/smit.png     boven=0  exact=1  sterkte=0  patch=vuur_aan:64,56,32,16:data/plaatjes/smit_vuur.png
+dorpsweg data/plaatjes/dorpsweg.png   boven=0  exact=1  sterkte=0   # hoofdstuk 1: loopscherm plein - bosrand (tools/teken_tussen.py)
 bosrand  data/flux/bosrand.png    boven=115  kleur=1.8  licht=1.4  sterkte=0  patch=wolven_weg:24,72,88,24:data/flux/bosrand_zonder_wolven.png
 titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen
 kelder   data/flux/kelder.png     boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=honingpot_weg:140,40,16,16:data/flux/kelder_zonder_honingpot.png
@@ -13,25 +14,34 @@ diepwoud data/plaatjes/diepwoud.png   boven=0  exact=1  sterkte=0   # hoofdstuk 
 wolfspad data/plaatjes/wolfspad.png   boven=0  exact=1  sterkte=0   # hoofdstuk 2: het doolhof, scherm 2 en 4 (tools/teken_woud2.py)
 huterf   data/plaatjes/huterf.png     boven=0  exact=1  sterkte=0   # hoofdstuk 2: het erf van Groms jachthut (tools/teken_woud2.py)
 jachthut data/plaatjes/jachthut.png   boven=0  exact=1  sterkte=0  patch=vuur_uit:68,56,28,24:data/plaatjes/jachthut_vuur_uit.png  patch=kooi_open:108,40,36,56:data/plaatjes/jachthut_kooi_open.png   # hoofdstuk 2 (tools/teken_jachthut.py)
+beekdal  data/plaatjes/beekdal.png    boven=0  exact=1  sterkte=0   # hoofdstuk 2: loopscherm jachthut - oever (tools/teken_tussen.py)
 oever    data/plaatjes/oever.png      boven=0  exact=1  sterkte=0  patch=boot:20,48,28,16:data/plaatjes/oever_boot.png   # hoofdstuk 2 (tools/teken_oever.py)
-grot     data/plaatjes/grot.png       boven=0  exact=1  sterkte=0  schijf=beide   # tussenscène na hoofdstuk 1: de grot van Grom (tools/teken_grot.py)
-veerman  data/plaatjes/veerman.png    boven=0  exact=1  sterkte=0   # tussenscène na hoofdstuk 2: de veerman (tools/teken_zee.py)
-steiger  data/plaatjes/steiger.png    boven=0  exact=1  sterkte=0   # hoofdstuk 3 (tools/teken_zee.py)
-boot     data/plaatjes/boot.png       boven=0  exact=1  sterkte=0  patch=straal:24,16,48,16:data/plaatjes/boot_straal.png
-eiland   data/plaatjes/eiland.png     boven=0  exact=1  sterkte=0  patch=toren_open:52,64,20,40:data/plaatjes/eiland_deur_open.png  patch=honing:96,48,44,64:data/plaatjes/eiland_honing.png  patch=geen_sleutel:128,104,12,8:data/plaatjes/eiland_honing_leeg.png
-vuurtoren data/plaatjes/vuurtoren.png boven=0  exact=1  sterkte=0  patch=nul_om:108,40,32,72:data/plaatjes/vuurtoren_nul_om.png  patch=lamp_aan:56,24,40,48:data/plaatjes/vuurtoren_lamp_aan.png
+grot     data/plaatjes/grot.png       boven=0  exact=1  sterkte=0  schijf=alle   # tussenscène na hoofdstuk 1: de grot van Grom (tools/teken_grot.py)
+veerman  data/plaatjes/veerman.png    boven=0  exact=1  sterkte=0  schijf=2   # tussenscène na hoofdstuk 2: de veerman (tools/teken_zee.py)
+steiger  data/plaatjes/steiger.png    boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3 (tools/teken_zee.py)
+boot     data/plaatjes/boot.png       boven=0  exact=1  sterkte=0  patch=straal:24,16,48,16:data/plaatjes/boot_straal.png  schijf=2
+zeerotsen data/plaatjes/zeerotsen.png boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: varen langs de klippen (toneel)
+klippad  data/plaatjes/klippad.png    boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: loopscherm boot - eiland
+eiland   data/plaatjes/eiland.png     boven=0  exact=1  sterkte=0  patch=toren_open:52,64,20,40:data/plaatjes/eiland_deur_open.png  patch=honing:96,48,44,64:data/plaatjes/eiland_honing.png  patch=geen_sleutel:128,104,12,8:data/plaatjes/eiland_honing_leeg.png  schijf=2
+vuurtoren data/plaatjes/vuurtoren.png boven=0  exact=1  sterkte=0  patch=nul_om:108,40,32,72:data/plaatjes/vuurtoren_nul_om.png  patch=lamp_aan:56,24,40,48:data/plaatjes/vuurtoren_lamp_aan.png  schijf=2
 kloof    data/plaatjes/kloof.png      boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4 (tools/teken_kloof.py)
+grotgang data/plaatjes/grotgang.png   boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4: loopscherm kloof - donker
 donker   data/plaatjes/donker.png     boven=0  exact=1  sterkte=0  patch=pad1:0,80,160,16:data/plaatjes/donker_pad.png  patch=pad2:0,96,160,16:data/plaatjes/donker_pad.png  patch=pad3:0,112,160,16:data/plaatjes/donker_pad.png  schijf=2
+rivier   data/plaatjes/rivier.png     boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4: loopscherm donker - zwamgrot
 zwamgrot data/plaatjes/zwamgrot.png   boven=0  exact=1  sterkte=0  schijf=2
 aardstad data/plaatjes/aardstad.png   boven=0  exact=1  sterkte=0  patch=ei:124,48,24,24:data/plaatjes/aardstad_ei.png  schijf=2
 spreukzaal data/plaatjes/spreukzaal.png boven=0 exact=1  sterkte=0  patch=boek_open:16,64,36,32:data/plaatjes/spreukzaal_boek.png  schijf=2
-oma      data/plaatjes/oma.png        boven=0  exact=1  sterkte=0  schijf=2   # tussenscène na hoofdstuk 4 (tools/teken_ijs.py)
-bergpad  data/plaatjes/bergpad.png    boven=0  exact=1  sterkte=0  patch=lawine:100,32,48,64:data/plaatjes/bergpad_lawine.png  schijf=2   # hoofdstuk 5 (tools/teken_ijs.py)
-hut      data/plaatjes/hut.png        boven=0  exact=1  sterkte=0  schijf=2
-ijsbrug  data/plaatjes/ijsbrug.png    boven=0  exact=1  sterkte=0  patch=wurm_weg:40,88,80,32:data/plaatjes/ijsbrug_leeg.png  schijf=2
-baken    data/plaatjes/baken.png      boven=0  exact=1  sterkte=0  patch=baken_aan:56,0,48,64:data/plaatjes/baken_aan.png  schijf=2
-kerker   data/plaatjes/kerker.png     boven=0  exact=1  sterkte=0  patch=tralies_open:112,24,40,80:data/plaatjes/kerker_open.png  schijf=2   # hoofdstuk 6 (tools/teken_kasteel.py)
-poort    data/plaatjes/poort.png      boven=0  exact=1  sterkte=0  patch=ridders_l:28,48,52,56:data/plaatjes/poort_kapot.png  patch=ridders_r:80,48,52,56:data/plaatjes/poort_kapot.png  patch=poort_open:52,8,56,48:data/plaatjes/poort_open.png  schijf=2
-troonzaal data/plaatjes/troonzaal.png boven=0  exact=1  sterkte=0  schijf=2
-maankamer data/plaatjes/maankamer.png boven=0  exact=1  sterkte=0  patch=kroon_weg:68,48,24,24:data/plaatjes/maankamer_zonder_kroon.png  patch=oma_steen_weg:92,56,12,16:data/plaatjes/maankamer_zonder_steen.png  schijf=2
-dak      data/plaatjes/dak.png        boven=0  exact=1  sterkte=0  schijf=2   # de slotscène
+oma      data/plaatjes/oma.png        boven=0  exact=1  sterkte=0  schijf=3   # tussenscène na hoofdstuk 4 (tools/teken_ijs.py)
+bergpad  data/plaatjes/bergpad.png    boven=0  exact=1  sterkte=0  patch=lawine:100,32,48,64:data/plaatjes/bergpad_lawine.png  schijf=3   # hoofdstuk 5 (tools/teken_ijs.py)
+sneeuwveld data/plaatjes/sneeuwveld.png boven=0  exact=1  sterkte=0  schijf=3   # hoofdstuk 5: loopscherm bergpad - hut
+hut      data/plaatjes/hut.png        boven=0  exact=1  sterkte=0  schijf=3
+bergkam  data/plaatjes/bergkam.png    boven=0  exact=1  sterkte=0  schijf=3   # hoofdstuk 5: loopscherm hut - ijsbrug
+ijsbrug  data/plaatjes/ijsbrug.png    boven=0  exact=1  sterkte=0  patch=wurm_weg:40,88,80,32:data/plaatjes/ijsbrug_leeg.png  schijf=3
+baken    data/plaatjes/baken.png      boven=0  exact=1  sterkte=0  patch=baken_aan:56,0,48,64:data/plaatjes/baken_aan.png  schijf=3
+kerker   data/plaatjes/kerker.png     boven=0  exact=1  sterkte=0  patch=tralies_open:112,24,40,80:data/plaatjes/kerker_open.png  schijf=3   # hoofdstuk 6 (tools/teken_kasteel.py)
+kerkergang data/plaatjes/kerkergang.png boven=0  exact=1  sterkte=0  schijf=3   # hoofdstuk 6: loopscherm kerker - poort
+poort    data/plaatjes/poort.png      boven=0  exact=1  sterkte=0  patch=ridders_l:28,48,52,56:data/plaatjes/poort_kapot.png  patch=ridders_r:80,48,52,56:data/plaatjes/poort_kapot.png  patch=poort_open:52,8,56,48:data/plaatjes/poort_open.png  schijf=3
+troonzaal data/plaatjes/troonzaal.png boven=0  exact=1  sterkte=0  schijf=3
+maankamer data/plaatjes/maankamer.png boven=0  exact=1  sterkte=0  patch=kroon_weg:68,48,24,24:data/plaatjes/maankamer_zonder_kroon.png  patch=oma_steen_weg:92,56,12,16:data/plaatjes/maankamer_zonder_steen.png  schijf=3
+wenteltrap data/plaatjes/wenteltrap.png boven=0  exact=1  sterkte=0  schijf=3   # hoofdstuk 6: loopscherm troonzaal - dak
+dak      data/plaatjes/dak.png        boven=0  exact=1  sterkte=0  schijf=3   # de slotscène

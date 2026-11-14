@@ -182,6 +182,13 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer beekdal                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer oever
 
 cursor 100,172

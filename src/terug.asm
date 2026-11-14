@@ -76,6 +76,6 @@ anker_richting: .byte 0
 terug_teller:   .byte 0                 // hoe vaak er teruggedraaid is (voor de tests)
 
 .segment Buffers
-.segment Hoog                           // $C800-$CFFF (geheugen.asm)
+.segment SpriteVrij                     // $C600-$C7FF (geheugen.asm)
 anker_buf:      .fill 256, 0            // de spelstatus bij binnenkomst (past in 1 pagina: status.asm)
 .segment Buffers

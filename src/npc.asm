@@ -282,6 +282,7 @@ naast:  lda npc_px_lo,x
         sbc npc_voeten,x
         sta y1
         sta y2
+        jmp zet                         // (vorm 1 is klaar: niet doorlopen in de reus hieronder)
         // een reus (vorm 2): de sprites dubbel zo breed en hoog. X: voeten - 24 + 24 rand = voeten;
         // Y boven = y + 16 + 50 - 2 * voeten - 1, onder = + 42
 reus:   lda $d017

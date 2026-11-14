@@ -1,0 +1,27 @@
+# beekdal.hcs — hoofdstuk 2: van de achterdeur van Groms jachthut naar de oever.
+# Plaatje: data/plaatjes/beekdal.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER beekdal
+  LOOPKLEUREN bruin oranje donkergrijs zwart groen lichtgroen grijs lichtgrijs blauw lichtblauw geel
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK woud
+
+VOORWERP bd_hut "hut" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER jachthut 150,100 LINKS
+  BEKIJK:
+    ZEG eldric "Terug naar de hut van Grom."
+
+VOORWERP bd_meer "meer" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER oever 20,118 RECHTS
+  BEKIJK:
+    ZEG eldric "Daar beneden ligt het meer. Ik hoor water."
+
+VOORWERP bd_beek "beek" VAK 84,82 22,20 LOOP 100,112 RUG
+  BEKIJK:
+    ZEG eldric "Een beek, koud en helder. Er zwemmen kleine zilveren visjes."
+
+VOORWERP bd_reiger "reiger" VAK 114,92 14,32 LOOP 110,114 RECHTS
+  BEKIJK:
+    ZEG eldric "Een reiger. Hij staat stil als een paal en kijkt naar de visjes."

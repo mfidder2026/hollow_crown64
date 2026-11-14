@@ -1,0 +1,27 @@
+# bergkam.hcs — hoofdstuk 5: de bergkam, van de hut naar de ijsbrug.
+# Plaatje: data/plaatjes/bergkam.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
+KAMER bergkam
+  LOOPKLEUREN wit lichtblauw lichtgrijs grijs zwart donkergrijs
+  LOOPVAK 2,106 157,120                  # het pad
+  BINNENKOMST:
+    MUZIEK woud
+
+VOORWERP bk_terug "hut" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER hut 150,104 LINKS
+  BEKIJK:
+    ZEG eldric "Terug naar de hut, naar het warme vuur."
+
+VOORWERP bk_verder "kam" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER ijsbrug 10,108 RECHTS
+  BEKIJK:
+    ZEG eldric "Verder over de kam. Niet naar beneden kijken."
+
+VOORWERP bk_wolken "wolken" VAK 0,86 160,14 LOOP 80,110 VOOR
+  BEKIJK:
+    ZEG eldric "Een zee van wolken onder mijn voeten."
+
+VOORWERP bk_zon "zon" VAK 116,10 24,24 LOOP 120,110 RUG
+  BEKIJK:
+    ZEG eldric "De zon, achter de twee manen. Zo dichtbij was ik nog nooit."
