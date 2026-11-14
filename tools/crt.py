@@ -4,9 +4,10 @@
     python3 tools/crt.py uit.crt crtboot.bin TAAL=nl:prog.prg:START [TAAL=en:...] bestand.prg:NAAM [...]
 
 TAAL=xx:programma:start (start in hex) mag tot vier keer, in de volgorde nl, en, de, fr van het taalmenu.
+MENU=taalmenu.prg: het taalmenu (src/taalmenu.asm), dat src/crtboot.asm naar zijn eigen adres haalt.
 Indeling (src/crtboot.asm en src/cartridge.asm lezen dit zo):
-  bank 0, ROML $8000   de talentabel: per taal (nl, en, de, fr) 8 bytes: bank, adres (lo, hi), lengte (lo, hi),
-                       start (lo, hi), 1 als die taal er is
+  bank 0, ROML $8000   de talentabel: per taal (nl, en, de, fr) en daarna het taalmenu 8 bytes: bank, adres (lo, hi),
+                       lengte (lo, hi), start (lo, hi), 1 als hij er is
   bank 0, ROML $8100   de inhoudsopgave: per bestand 16 tekens naam ($a0-aangevuld, PETSCII hoofdletters), bank,
                        adres (lo, hi, $8000-$BFFF), lengte (lo, hi); een 0 als eerste teken is het einde
   bank 0, ROMH         aan het eind (vanaf $1E00, in de Ultimax-stand $FE00) het opstarten met de resetvector
@@ -40,11 +41,18 @@ def main():
         data.extend(inhoud_)
         return bank, adres
 
-    tabel = bytearray(8 * len(TALEN))
+    tabel = bytearray(8 * (len(TALEN) + 1))
     inhoud = bytearray()
     talen = []
     for arg in sys.argv[3:]:
-        if arg.startswith("TAAL="):
+        if arg.startswith("MENU="):
+            p = open(arg[5:], "rb").read()
+            laad = p[0] | p[1] << 8
+            bank, adres = erbij(p[2:])
+            i = len(TALEN) * 8
+            tabel[i:i + 8] = bytes([bank, adres & 255, adres >> 8, (len(p) - 2) & 255, (len(p) - 2) >> 8,
+                                    laad & 255, laad >> 8, 1])
+        elif arg.startswith("TAAL="):
             taal, prog, start = arg[5:].split(":")
             p = open(prog, "rb").read()[2:]
             bank, adres = erbij(p)
@@ -78,7 +86,7 @@ def main():
             uitdata += b"CHIP" + struct.pack(">IHHHH", 0x2010, 2, b, laad, HELFT) + stuk
     open(uit, "wb").write(uitdata)
     print("[crt] %s: EasyFlash, %d banken (%d KB), talen %s, %d bestanden, %d KB vrij" % (
-        uit, banken, banken * 16, "/".join(talen), sum(1 for a in sys.argv[3:] if not a.startswith("TAAL=")),
+        uit, banken, banken * 16, "/".join(talen), sum(1 for a in sys.argv[3:] if not a.startswith(("TAAL=", "MENU="))),
         (MAX_BANKEN * BANK - len(rom.rstrip(b"\xff"))) // 1024))
 
 

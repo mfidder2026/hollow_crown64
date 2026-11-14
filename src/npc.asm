@@ -213,8 +213,11 @@ npc_verberg: {
 // zet_kant: figuur X kijkt naar kant A (0 voor, 1 rechts, 2 links); alleen een figuur die ook van opzij getekend is
 // (npc_zij). Verandert hij, en staat hij in een slot, dan komt de nieuwe houding in de sprite-vakken (X blijft).
 zet_kant: {
-        ldy npc_vliegt,x                // een vlieger kiest zijn houding zelf (vlieg_stap)
+        ldy npc_vliegt,x                // een vlieger kiest zijn houding zelf (vlieg_stap), een oog ook (oog_stap)
         bne klaar
+        ldy npc_zij,x
+        cpy #2
+        beq klaar
 zet:    ldy npc_zij,x
         beq klaar
         cmp npc_kant,x
@@ -341,6 +344,14 @@ gewoon:
         sec
         sbc npc_voeten,x
         sta y1
+        lda npc_zij,x                   // een oog (Tik) zweeft op en neer (oog_stap)
+        cmp #2
+        bne !+
+        lda y1
+        clc
+        adc oog_zweef
+        sta y1
+!:      lda y1
         clc
         adc #21
         sta y2
@@ -436,6 +447,42 @@ y2:     .byte 0
 hulp:   .byte 0
 }
 
+// oog_stap: een oog (kostuum met zij 2: Tik), elk beeld. Houding 0/1: vleugels omhoog/omlaag (om de 4 beelden), 2 half
+// dicht, 3 dicht: eens in de 256 beelden (~5 s) knippert hij (half, dicht, half). oog_zweef: een paar pixels op en neer
+// (npc_sprites telt het op bij de hoogte). X blijft.
+oog_stap: {
+        lda beelden
+        and #$fc                        // (knipperen: beeld 0-11 van elke 256)
+        bne !+
+        lda #2                          // 0-3: half
+        jmp zet
+!:      lda beelden
+        cmp #8
+        bcs !+
+        lda #3                          // 4-7: dicht
+        jmp zet
+!:      cmp #12
+        bcs !+
+        lda #2                          // 8-11: half
+        jmp zet
+!:      lsr                             // fladderen
+        lsr
+        and #1
+zet:    pha
+        lda beelden                     // zweven: om de 8 beelden een stap in de golf
+        lsr
+        lsr
+        lsr
+        and #7
+        tay
+        lda zweef_golf,y
+        sta oog_zweef
+        pla
+        jmp zet_kant_vlieger
+zweef_golf: .byte 0, 1, 2, 2, 1, 0, $ff, $ff
+}
+oog_zweef: .byte 0
+
 // vlieg_stap: vlieger X (elk beeld): aangekomen? dan naar het andere punt (OP of VLIEGT); om de 8 beelden een
 // vleugelslag; de houding naar de kant waar hij heen vliegt. X blijft.
 vlieg_stap: {
@@ -494,6 +541,12 @@ lus:    lda npc_vliegt,x                // een vlieger: heen en weer, met slaand
         lda st_npc,x
         beq !+
         jsr vlieg_stap
+!:      lda npc_zij,x                   // een oog (Tik): fladderen, knipperen, zweven
+        cmp #2
+        bne !+
+        lda st_npc,x
+        beq !+
+        jsr oog_stap
 !:      lda npc_volgt,x                 // een volger: elk beeld een doel vlak achter Eldric
         beq geen_volger
         lda st_npc,x

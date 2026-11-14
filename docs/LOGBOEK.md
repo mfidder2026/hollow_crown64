@@ -1142,3 +1142,31 @@ Motor:
   interrupts telkens maar een paar cycli uit. Het plein flakkert niet meer (de fontein en het kaarsje lagen op de
   huizen erachter); op het wolfspad alleen het dwaallichtje. De schermtest slaat de vakjes van een vlieger over (die
   schuift elk beeld op: het moment van de schermafbeelding en van de VIC-registers verschillen daar).
+
+## Het taalmenu met het aardmannetje; Tik als oog; van taal wisselen zonder opnieuw te beginnen
+
+**Taalmenu** (src/taalmenu.asm, tools/teken_taalmenu.py): in plaats van vier regels tekst een plaatje (multicolor
+bitmap, met de hand getekend): een aardmannetje voor zijn stenen hol, de zon met de twee manen, een spreekballon en
+vier vlaggen (NL, UK, DE, FR) met bordjes 1-4. Hij vraagt om de beurt in elke taal welke taal je spreekt ("Hello! What
+do you speak, human?"); zijn ogen volgen de cursor (de pupillen zijn een sprite) en knipperen, zijn mond beweegt als hij
+praat. Een aangewezen vlag krijgt een knipperende rand en hij zegt iets in die taal; na het kiezen "Goed zo! Daar gaan
+we!" met een deuntje. Kiezen met de muis (1351, poort 1), de joystick (poort 2) of 1-4. De cursor is die van het spel.
+- Effecten (ogen, mond, randen) zonder het plaatje te veranderen: tools/teken_taalmenu.py houdt bij in welke nibble
+  (scherm-RAM hoog/laag of kleur-RAM) die kleur per vakje staat; het menu zet daar een andere kleur.
+- De tekst in de ballon: een eigen lettertype van 3 x 5 (dubbel hoog), in het tekstvak geschreven als %00 op wit (%11).
+- Het toetsenbord via de Kernal (SCNKEY en GETIN): eerst las het menu de matrix zelf, en dat werkte bij de gebruiker
+  niet. Testen kan nu ook door een toets in de Kernal-buffer te zetten ($0277, $C6).
+- src/crtboot.asm haalt het menu uit de cartridge naar $4400 (regel 5 van de talentabel, tools/crt.py MENU=) en roept
+  het aan; daarna het programma van de gekozen taal. De testbuild slaat het menu over (zoals vroeger).
+
+**Van taal wisselen** (Bestand, Taal): eerst het beeld zwart en stil (er kwam rommel op het scherm), dan de spelstatus
+naar $C200 (de boot en het menu raken die niet); het spel van de nieuwe taal neemt hem over (opstart.asm taal_terug)
+en gaat zonder intro naar dezelfde kamer en plek. Dus niet meer helemaal opnieuw beginnen.
+
+**Ruimte**: eenmalige startcode (de figuren onder de I/O zetten, scherm_start, taal_terug) staat in een nieuw segment
+Opstart op $B000, in de kamerbuffer: de eerste kamer overschrijft hem. Ook de bestandsnaam van het cartridgeladen
+staat nu op $0400 (segment Laag).
+
+**Tik** is nu een oog met vleugeltjes: wit oogwit, een roze iris, een zwarte pupil met een lichtpuntje. Vier houdingen
+(vleugels op, vleugels neer, half dicht, dicht; tools/costume.py OGEN, zij = 2): hij fladdert, knippert eens in de ~5
+seconden en zweeft een paar pixels op en neer (src/npc.asm oog_stap, oog_zweef).

@@ -223,6 +223,12 @@ if (( CRT )); then
   AUTOTAAL=0
   typeset -A TAALNR=(nl 1 en 2 de 3 fr 4)
   (( AUTOTEST )) && AUTOTAAL=${TAALNR[$TESTTAAL]}
+  if (( ! AUTOTEST )); then                    # het taalmenu: het aardmannetje met de vlaggen (src/taalmenu.asm)
+    "$PYTHON" tools/teken_taalmenu.py build/gen | sed 's/^/[build]   /' || fout "tools/teken_taalmenu.py"
+    "$JAVA" -jar "$KICKASS" src/taalmenu.asm -odir "$UIT/crt" > "$UIT/crt/taalmenu.log" 2>&1 \
+      || { tail -20 "$UIT/crt/taalmenu.log" >&2; fout "assembleren (taalmenu)"; }
+    CRT_ARGS=("MENU=$UIT/crt/taalmenu.prg" "${CRT_ARGS[@]}")
+  fi
   "$JAVA" -jar "$KICKASS" src/crtboot.asm -odir "$UIT/crt" :autotaal=$AUTOTAAL > "$UIT/crt/boot.log" 2>&1 \
     || { cat "$UIT/crt/boot.log" >&2; fout "assembleren (crtboot)"; }
   "$PYTHON" tools/crt.py "$UIT/$NAAM.crt" "$UIT/crt/crtboot.bin" ${CRT_ARGS[@]} | sed 's/^/[build]   /' \

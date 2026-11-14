@@ -16,7 +16,7 @@
 #import "../build/gen/spel.asm"                 // loopvakken en BEGIN_* (tools/scriptc.py)
 #import "../build/gen/costumes.asm"            // poses van Eldric (tools/costume.py)
 
-.file [name="hollowcrown.prg", segments="Basic,Code,Data,OnderIO"]
+.file [name="hollowcrown.prg", segments="Basic,Code,Data,OnderIO,Opstart"]
 
 .segment Basic
 BasicUpstart2(start)
@@ -29,31 +29,11 @@ start:
         cld
         ldx #$ff
         txs
-        // de figuren van $A000 (zo staan ze in het bestand) naar het RAM onder de I/O ($D000): costume.py, npc.asm
-        lda #$34                        // alleen RAM (de interrupts staan uit)
-        sta $01
-        lda #<KAMER_BUF
-        sta zp_ptr
-        lda #>KAMER_BUF
-        sta zp_ptr + 1
-        lda #$00
-        sta zp_ptr2
-        lda #$d0
-        sta zp_ptr2 + 1
-        ldx #ONDER_IO_PAGINAS
-        ldy #0
-!:      lda (zp_ptr),y
-        sta (zp_ptr2),y
-        iny
-        bne !-
-        inc zp_ptr + 1
-        inc zp_ptr2 + 1
-        dex
-        bne !-
-        lda #CPU_NORMAAL
-        sta $01
-
+        jsr figuren_onder_io            // opstart.asm (de code staat in de kamerbuffer: alleen nu)
         jsr status_begin
+#if CRT
+        jsr taal_terug                  // opstart.asm: na Bestand, Taal de spelstatus van daarvoor terug
+#endif
         jsr npc_begin
         jsr tod_start
         jsr scherm_start
@@ -61,6 +41,13 @@ start:
         jsr cursor_start
 #if AUTOTEST
         jsr band_begin                  // vóór het intro: de band kan het intro bedienen
+#endif
+#if CRT
+        lda taal_terug_gedaan           // na een taalwissel: geen intro, meteen terug naar de kamer van daarvoor
+        beq !+
+        jsr taal_verder
+        jmp naar_kamer_a
+!:
 #endif
         jsr intro                       // titel, logo, scrolltekst en muziek tot spatie of vuur (intro.asm)
         jsr balk_tekenen
@@ -90,6 +77,7 @@ begin:  lda #<BEGIN_X                   // de eerste kamer, van de diskette (lad
         lda #BEGIN_RICHTING
         sta kw_richting
         lda #BEGIN_KAMER
+naar_kamer_a:
         jsr kamer_wissel
         cli
         jmp hoofdlus
@@ -194,6 +182,7 @@ kamer_nu: .byte 0
 #import "inventaris.asm"
 #import "schijf.asm"
 #import "turbo.asm"
+#import "opstart.asm"
 #if CRT
 #import "cartridge.asm"
 #endif

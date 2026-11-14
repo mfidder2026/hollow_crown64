@@ -1,6 +1,6 @@
 // scherm.asm — de VIC instellen, scherm en bitmap leegmaken, het lettertype op zijn plek, en tekst schrijven.
 
-.segment Code
+.segment Opstart                        // (alleen bij het starten: opstart.asm)
 // scherm_start: aanroepen met de IRQ's uit. Laat het scherm uit ($d011 bit 4); irq_start zet het aan.
 scherm_start:
         lda #$0b                        // scherm uit tijdens het opbouwen
@@ -73,6 +73,7 @@ scherm_start:
         bpl !-
         rts
 
+.segment Code
 nmi_leeg:
         rti
 

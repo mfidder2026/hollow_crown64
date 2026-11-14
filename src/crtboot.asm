@@ -4,10 +4,11 @@
 // Een EasyFlash start in de Ultimax-stand: ROMH van bank 0 staat op $E000-$FFFF, het RAM alleen op $0000-$0FFF.
 //   A ($FE00, uit de ROM): kopieer B en C naar $0800 en ga daarheen.
 //   B ($0800): de cartridge uit ($DE02 = $04: overal RAM, Kernal en I/O); kopieer C naar $C000 en ga daarheen.
-//   C ($C000): de C64 klaarzetten (zoals de Kernal bij een reset), het taalmenu, en het programma van die taal uit
-//      de cartridge halen (16K-stand: $8000-$BFFF per bank) naar $0801; de cartridge uit; het spel starten.
-// De talen: een tabel op $8000 in bank 0 (tools/crt.py): per taal bank, adres (lo, hi), lengte (lo, hi), start
-// (lo, hi), en 1 als de taal er is.
+//   C ($C000): de C64 klaarzetten (zoals de Kernal bij een reset), het taalmenu (src/taalmenu.asm: het aardmannetje
+//      met de vlaggen) uit de cartridge naar $4400 halen en aanroepen, en dan het programma van de gekozen taal
+//      (16K-stand: $8000-$BFFF per bank) naar $0801; de cartridge uit; het spel starten.
+// De tabel op $8000 in bank 0 (tools/crt.py): per taal (en daarna het menu) bank, adres (lo, hi), lengte (lo, hi),
+// start (lo, hi), en 1 als hij er is.
 
 .const AUTOTAAL  = cmdLineVars.get("autotaal").asNumber()
 .const EF_BANK   = $de00
@@ -18,8 +19,8 @@
 .const REGEL     = 8
 .const BRON      = $fb
 .const DOEL      = $fd
-.const CHROUT    = $ffd2
-.const GETIN     = $ffe4
+.const MENU_ADRES = $4400             // src/taalmenu.asm
+.const MENU_REGEL = 4                   // in de talentabel: de regel na de vier talen (tools/crt.py)
 
 .file [name="crtboot.bin", type="bin", segments="Boot"]
 .segmentdef Boot [start=$fe00, min=$fe00, max=$ffff, fill]
@@ -58,38 +59,36 @@ c_bron:
         jsr $ff5b
 .if (AUTOTAAL > 0) {
         ldx #AUTOTAAL - 1
-        jmp gekozen
 } else {
-        lda #0                          // zwart scherm, witte letters
-        sta $d020
-        sta $d021
-        ldx #0
-!:      lda menu_tekst,x
-        beq wacht
-        jsr CHROUT
-        inx
-        bne !-
-wacht:  jsr GETIN                       // een toets 1-4
-        sec
-        sbc #'1'
-        cmp #4
-        bcs wacht
-        tax
-        jsr er                          // (is die taal er?)
-        beq wacht
+        lda #<MENU_ADRES                // het taalmenu (src/taalmenu.asm) uit de cartridge, en aanroepen: X = de taal
+        sta DOEL
+        lda #>MENU_ADRES
+        sta DOEL + 1
+        ldy #MENU_REGEL * REGEL
+        jsr kopieer
+        jsr MENU_ADRES
 }
 gekozen:
+        txa                             // de regel van die taal in de tabel
+        asl
+        asl
+        asl
+        tay
+        lda #<$0801
+        sta DOEL
+        lda #>$0801
+        sta DOEL + 1
+        jsr kopieer
+        jmp (start)
+
+// kopieer: regel Y van de tabel (bank, adres, lengte, start) naar DOEL; daarna staat de cartridge uit
+kopieer:
         lda #EF_16K
         sta EF_MODUS
         lda #0
         sta EF_BANK
         lda #$37                        // LORAM en HIRAM: de ROM van de cartridge zichtbaar
         sta $01
-        txa                             // de regel van die taal in de tabel
-        asl
-        asl
-        asl
-        tay
         lda TABEL,y
         sta bank
         lda TABEL + 1,y
@@ -104,15 +103,11 @@ gekozen:
         sta start
         lda TABEL + 6,y
         sta start + 1
-        lda #<$0801
-        sta DOEL
-        lda #>$0801
-        sta DOEL + 1
         ldy #0
 lus:    lda bank
         sta EF_BANK
         lda (BRON),y
-        sta (DOEL),y
+        sta (DOEL),y                    // (onder de ROM van de cartridge ligt RAM: daar komt het terecht)
         inc BRON
         bne !+
         inc BRON + 1
@@ -134,45 +129,11 @@ lus:    lda bank
         bne lus
         lda #EF_UIT
         sta EF_MODUS
-        jmp (start)
-
-// er: is taal X er? (Z = 0: ja). X blijft.
-er:     lda #EF_16K
-        sta EF_MODUS
-        lda #0
-        sta EF_BANK
-        lda #$37
-        sta $01
-        txa
-        asl
-        asl
-        asl
-        tay
-        lda TABEL + 7,y
-        pha
-        lda #EF_UIT
-        sta EF_MODUS
-        pla
         rts
 
 bank:   .byte 0
 rest:   .word 0
 start:  .word 0
-.encoding "petscii_mixed"
-menu_tekst:
-        .byte $93, $05, $0e             // scherm wissen, wit, kleine letters
-        .text "             HOLLOW CROWN"
-        .byte $0d, $0d, $0d
-        .text "  Taal / Language / Sprache / Langue"
-        .byte $0d, $0d, $0d
-        .text "      1  Nederlands"
-        .byte $0d, $0d
-        .text "      2  English"
-        .byte $0d, $0d
-        .text "      3  Deutsch"
-        .byte $0d, $0d
-        .text "      4  Francais"
-        .byte $0d, 0
 }
 
 nmi:

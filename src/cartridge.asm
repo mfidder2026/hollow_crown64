@@ -147,13 +147,33 @@ klaar:  lda #CRT_UIT
 lengte: .byte 0
 bank:   .byte 0
 teller: .word 0
+.segment Laag                           // $0400-$07FF (geheugen.asm): onder $8000, elke keer opnieuw gevuld
 naam:   .fill 16, 0
+.segment Code
 }
 
 // taal_kiezen: terug naar het taalmenu van de cartridge (src/crtboot.asm): bank 0, de Ultimax-stand, en dan via de
 // resetvector van de cartridge. In de Ultimax-stand is alleen $0000-$0FFF RAM: het laatste stukje staat daarom op $0340.
 taal_kiezen: {
         sei
+        lda #0                          // eerst het beeld zwart en stil (anders rommel op het scherm tijdens de wissel)
+        sta $d015
+        sta $d01a
+        lda #$0b
+        sta $d011
+        jsr geluid_stil
+        lda act_x                       // de spelstatus bewaren (opstart.asm taal_terug haalt hem terug)
+        sta st_x
+        lda act_x + 1
+        sta st_x + 1
+        lda act_y
+        sta st_y
+        ldx #0
+!:      lda spelstatus,x
+        sta TAAL_BEWAAR,x
+        inx
+        cpx #STATUS_GROOTTE
+        bne !-
         ldx #stukje_eind - stukje - 1
 !:      lda stukje,x
         sta $0340,x

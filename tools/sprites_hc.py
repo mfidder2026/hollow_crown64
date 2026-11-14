@@ -511,21 +511,57 @@ grom = check([
     "kkkkk..kkkkk",  # 30
 ], 12)
 
-# ---------------------------------------------------------------- Tik, de Terugdraaier: een zwevend eitje met één oog
-tik = pad(sym(check([
-    "....kk",
-    "..kkcc",
-    ".kcccc",
-    ".kccck",   # 3 het oog (midden: 2 breed)
-    "kccckk",
-    "kccckk",
-    "kccccc",
-    "kccccc",
-    ".kcccc",
-    ".kcccc",
-    "..kkcc",
-    "....kk",
-], 6)))
+# ---------------------------------------------------------------- Tik, de Terugdraaier: een vliegend oog met vleugeltjes
+# Vier houdingen (tools/costume.py OGEN, src/npc.asm oog_stap): open met de vleugels omhoog, open met de vleugels omlaag
+# (fladderen), half dicht en dicht (knipperen). Wit oogwit (c), een roze iris (s), een zwarte pupil met een lichtpuntje.
+tik = pad(check([
+    "k..........k",
+    "kk..kkkk..kk",
+    ".kkkcccckkk.",
+    "..kccsscck..",
+    "..kcskksck..",
+    "..kcskcsck..",   # het lichtpuntje in de pupil
+    "..kcskksck..",
+    "..kccsscck..",
+    "...kcccck...",
+    "....kkkk....",
+], 12))
+tik_neer = pad(check([
+    "............",
+    "....kkkk....",
+    "...kcccck...",
+    "..kccsscck..",
+    "..kcskksck..",
+    "..kcskcsck..",
+    "..kcskksck..",
+    ".kkccsscckk.",
+    "kk.kcccck.kk",
+    "k...kkkk...k",
+], 12))
+tik_half = pad(check([
+    "k..........k",
+    "kk..kkkk..kk",
+    ".kkkcccckkk.",
+    "..kccccccck.".replace("ccccccck.", "cccccck..") if False else "..kcccccck..",
+    "..kkkkkkkk..",   # het ooglid, half dicht
+    "..kcskcsck..",
+    "..kcskksck..",
+    "..kccsscck..",
+    "...kcccck...",
+    "....kkkk....",
+], 12))
+tik_dicht = pad(check([
+    "............",
+    "....kkkk....",
+    "...kcccck...",
+    "..kcccccck..",
+    "..kcccccck..",
+    "..kcccccck..",
+    "..kkkkkkkk..",   # dicht: alleen de wimperlijn
+    ".kkcckkcckk.",
+    "kk.kcccck.kk",
+    "k...kkkk...k",
+], 12))
 
 # ---------------------------------------------------------------- een maan (verhaalanimatie): een schijf die voor de zon schuift
 maan = pad(sym(check([
@@ -663,6 +699,9 @@ CHARS = [
     ("spook", ghost, 15, 12),
     ("maan",  maan,  11, 11),         # donkergrijs: de manen voor de zon, zoals in de plaatjes (teken_zee.verduisterde_zon)
     ("tik",   tik,   1, 1),           # wit
+    ("tik_neer", tik_neer, 1, 1),
+    ("tik_half", tik_half, 1, 1),
+    ("tik_dicht", tik_dicht, 1, 1),
     ("bram",  bram,  8, 9),
     ("grom",  grom,  12, 12),        # grijs, boven en onder (de steenhuid, zoals in de grot); de ogen: lichtrood
     ("vex_kroon", vex_kroon, 7, 11),      # boven goud (kroon en schouders), onder donkergrijs

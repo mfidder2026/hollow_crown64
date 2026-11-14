@@ -28,6 +28,7 @@ RICHTINGEN = ["voor", "rug", "rechts", "links"]
 ZIJ = {"mira": "mira_zij"}   # figuren die ook van opzij getekend zijn (naar rechts; links = gespiegeld)
 # vliegers (ACTOR ... VLIEGT): vier houdingen: vleugels op naar rechts, neer naar rechts, neer naar links, op naar links
 VLIEGERS = {"kraai": "kraai_neer", "meeuw": "meeuw_neer", "vleermuis": "vleermuis_neer"}
+OGEN = {"tik": ("tik_neer", "tik_half", "tik_dicht")}   # een oog (zij 2): fladderen en knipperen (src/npc.asm oog_stap)
 NPCS = [("mira", 0), ("wolf", 1), ("maan", 0), ("hol", 0), ("bram", 0), ("grom", 2), ("tik", 0), ("spook", 0),
         ("kraai", 0), ("meeuw", 0), ("vleermuis", 0)]          # (naam, vorm) — zie hieronder
 # hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
@@ -186,13 +187,15 @@ def main():
             delen = list(hc.halves(rijen))
         rijen_v = delen[0] + delen[1] if vorm in (0, 2) else delen[0]
         voeten_n = max(i for i, r in enumerate(rijen_v) if r.strip("."))
-        if naam in ZIJ or naam in VLIEGERS:
+        if naam in ZIJ or naam in VLIEGERS or naam in OGEN:
             L.append("        .align $80                 // (src/npc.asm telt 128 en 256 op bij de lage byte)")
         L.append("npc_%s:    // %s, %s" % (naam, {0: "boven elkaar", 1: "naast elkaar", 2: "een reus (dubbel groot)"}[vorm], hc.NAMES[kb]))
         houdingen = [delen]
         if naam in VLIEGERS:
             neer = tekening[VLIEGERS[naam]][0]
             houdingen += [list(hc.halves(neer)), list(hc.halves(hc.mirror(neer))), list(hc.halves(hc.mirror(rijen)))]
+        if naam in OGEN:
+            houdingen += [list(hc.halves(tekening[n][0])) for n in OGEN[naam]]
         if naam in ZIJ:
             zij_rijen = tekening[ZIJ[naam]][0]
             houdingen += [list(hc.halves(zij_rijen)), list(hc.halves(hc.mirror(zij_rijen)))]
@@ -201,7 +204,7 @@ def main():
                 data = hc.sprite_bytes(deel)
                 for i in range(0, 64, 16):
                     L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
-        info[naam] = {"vorm": vorm, "kb": kb, "ko": ko, "voeten": voeten_n, "zij": int(naam in ZIJ or naam in VLIEGERS)}
+        info[naam] = {"vorm": vorm, "kb": kb, "ko": ko, "voeten": voeten_n, "zij": 2 if naam in OGEN else int(naam in ZIJ or naam in VLIEGERS)}
     L.append("onder_io_eind:")
     L.append("}")
     L.append(".const ONDER_IO_PAGINAS = (onder_io_eind - onder_io_begin + 255) / 256")
