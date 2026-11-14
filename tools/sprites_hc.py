@@ -258,6 +258,59 @@ mira_zij = check([
     "...kkk....kk",   # 34 voeten en de punt van de stok
 ], 12)
 
+# ---------------------------------------------------------------- vliegers: kraai, meeuw, vleermuis (naar rechts)
+# Twee houdingen: de vleugels omhoog en omlaag; tools/costume.py maakt er vier van (en gespiegeld naar links). Klein:
+# ze vliegen ver weg, boven in de kamer (ACTOR ... VLIEGT in scripts/*.hcs).
+kraai_op = check([
+    "k.........k.",
+    "kk.......kk.",
+    ".kk.....kk..",
+    "..kk.k.kk...",
+    "...kkkkkk.kk",
+    "....kkkkkkk.",
+    ".....k......",
+], 12)
+kraai_neer = check([
+    "............",
+    "............",
+    "...k.k......",
+    "..kkkkkk..kk",
+    ".kk.kkkkkkk.",
+    "kk.....kk...",
+    "k.......k...",
+], 12)
+meeuw_op = check([
+    "k.........k.",
+    ".c.......c..",
+    "..cc...cc...",
+    "...ccccc..k.",
+    "....cccccck.",
+    "............",
+], 12)
+meeuw_neer = check([
+    "............",
+    "............",
+    "...ccccc..k.",
+    "..cccccccck.",
+    ".cc.....cc..",
+    "k.........k.",
+], 12)
+vleermuis_op = check([
+    "c..........c",
+    "cc.c....c.cc",
+    "ccccc..ccccc",
+    ".cccckkcccc.",
+    "..c..kk..c..",
+], 12)
+vleermuis_neer = check([
+    "............",
+    ".....kk.....",
+    "..cccsscccc.",
+    ".cccccccccc.",
+    "cc.c....c.cc",
+    "c..........c",
+], 12)
+
 # ---------------------------------------------------------------- Baron Vex: zwart harnas, rode mantel, sik
 vex = sym(check([
     "......",
@@ -599,6 +652,12 @@ CHARS = [
     ("eldric_links_2",  mirror(side_c), 14, 6),
     ("mira",  mira,  4, 6),
     ("mira_zij", mira_zij, 4, 6),
+    ("kraai", kraai_op, 0, 0),
+    ("kraai_neer", kraai_neer, 0, 0),
+    ("meeuw", meeuw_op, 1, 1),
+    ("meeuw_neer", meeuw_neer, 1, 1),
+    ("vleermuis", vleermuis_op, 11, 11),
+    ("vleermuis_neer", vleermuis_neer, 11, 11),
     ("vex",   vex,   2, 11),
     ("king",  king,  7, 11),
     ("spook", ghost, 15, 12),

@@ -2,6 +2,8 @@
 # tools/teken_kloof.py). Groms wolven bij de grot. De lantaarn jaagt ze weg, maar lekt leeg (stand 3); met de
 # gloeischub geeft hij zwak licht (stand 4): genoeg. Zonder licht de grot in: Tik.
 KAMER kloof
+  FLAKKER 72,72 8,8 oranje bruin zwart TEMPO 4 RUST 140   # ogen in de grot, elk paar knippert op zijn eigen moment
+  FLAKKER 84,80 8,8 oranje bruin zwart TEMPO 5 RUST 95
   LOOPKLEUREN bruin oranje donkergrijs zwart grijs lichtgrijs
   LOOPVAK 4,106 156,122                  # 0 de bodem
   LOOPVAK 66,100 94,122                  # 1 het pad naar de grot

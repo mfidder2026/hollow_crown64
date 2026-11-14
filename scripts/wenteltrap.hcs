@@ -1,6 +1,7 @@
 # wenteltrap.hcs — hoofdstuk 6: de wenteltrap, van de troonzaal omhoog naar het dak (van rechts naar links).
 # Plaatje: data/plaatjes/wenteltrap.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
 KAMER wenteltrap
+  FLAKKER 76,40 8,16 rood oranje geel TEMPO 5   # een fakkel
   LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit bruin oranje geel blauw lichtblauw paars cyaan
   LOOPVAK 129,101 155,115                  # onderaan
   LOOPVAK 107,92 133,106

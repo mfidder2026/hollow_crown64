@@ -1,6 +1,7 @@
 # jachthut.hcs — Groms jachthut (hoofdstuk 2). Plaatje: data/plaatjes/jachthut.png, met de hand getekend
 # (tools/teken_jachthut.py); patches: vuur_uit (de helm dooft de haard) en kooi_open (het aardmannetje is weg).
 KAMER jachthut
+  FLAKKER 132,64 8,8 geel zwart TEMPO 4 RUST 120   # ogen in de kooi knipperen
   LOOPKLEUREN bruin donkergrijs oranje
   # (geen SCHAAL: binnen blijft Eldric overal even groot, de grootste maat)
   LOOPVAK 2,108 157,124                  # 0 voor

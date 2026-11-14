@@ -40,9 +40,11 @@ npc_kamer_in: {
         sta vrij                        // het volgende vrije slot
         ldx #0
 lus:    cpx #AANTAL_NPC
-        bcs klaar
+        bcs tweede
         lda st_npc,x                    // alleen wie zichtbaar is
         beq volgende
+        lda npc_vliegt,x                // vliegers pas daarna (tweede)
+        bne volgende
         lda npc_kamer,x
         cmp #NPC_OVERAL                 // een figuur die overal mee kan (Tik, Mira die volgt)
         bne !+
@@ -56,7 +58,7 @@ lus:    cpx #AANTAL_NPC
 in_slot:
         ldy vrij
         cpy #NPC_SLOTS
-        bcs klaar
+        bcs tweede
         txa
         sta slot_npc,y
         jsr kostuum_naar_slot           // X = figuur, Y = slot
@@ -64,6 +66,29 @@ in_slot:
 volgende:
         inx
         jmp lus
+tweede: ldx #0                          // de vliegers (versiering): in het hoogste vrije slot, dan blijft slot 0
+lus2:   cpx #AANTAL_NPC                 // voor wie later verschijnt (Tik)
+        bcs klaar
+        lda npc_vliegt,x
+        beq volgende2
+        lda st_npc,x
+        beq volgende2
+        lda npc_kamer,x
+        cmp st_kamer
+        bne volgende2
+        ldy #NPC_SLOTS - 1
+!:      lda slot_npc,y
+        cmp #NPC_GEEN
+        beq !+
+        dey
+        bpl !-
+        bmi klaar
+!:      txa
+        sta slot_npc,y
+        jsr kostuum_naar_slot
+volgende2:
+        inx
+        jmp lus2
 klaar:  jmp npc_sprites
 vrij:   .byte 0
 }
@@ -143,15 +168,26 @@ npc_toon: {
         iny
         cpy #NPC_SLOTS
         bne !-
+        stx bewaar                      // geen slot vrij: een vlieger maakt plaats (hij vliegt onzichtbaar verder)
+        ldy #NPC_SLOTS - 1
+!:      lda slot_npc,y
+        tax
+        lda npc_vliegt,x
+        bne wijkt
+        dey
+        bpl !-
+        ldx bewaar
         lda #VM_FOUT_SLOTS              // geen slot vrij
         sta vm_fout
         rts
+wijkt:  ldx bewaar
 vrij:   txa
         sta slot_npc,y
         jsr kostuum_naar_slot
         jsr volger_bij_eldric           // een volger verschijnt vlak achter Eldric
         jmp npc_sprites
 klaar:  rts
+bewaar: .byte 0
 }
 
 // npc_verberg: figuur X weg; zijn slot komt vrij (npc_sprites zet de sprites uit)
@@ -170,10 +206,16 @@ npc_verberg: {
         jmp npc_sprites
 }
 
+// zet_kant_vlieger: zoals zet_kant, maar ook voor een vlieger (0 vleugels op naar rechts, 1 neer naar rechts, 2 neer
+// naar links, 3 op naar links)
+.label zet_kant_vlieger = zet_kant.zet
+
 // zet_kant: figuur X kijkt naar kant A (0 voor, 1 rechts, 2 links); alleen een figuur die ook van opzij getekend is
 // (npc_zij). Verandert hij, en staat hij in een slot, dan komt de nieuwe houding in de sprite-vakken (X blijft).
 zet_kant: {
-        ldy npc_zij,x
+        ldy npc_vliegt,x                // een vlieger kiest zijn houding zelf (vlieg_stap)
+        bne klaar
+zet:    ldy npc_zij,x
         beq klaar
         cmp npc_kant,x
         beq klaar
@@ -198,17 +240,18 @@ kostuum_naar_slot: {
         sta zp_ptr
         lda npc_data_hi,x
         sta zp_ptr + 1
-        lda npc_kant,x                  // een figuur van opzij: + 128 (rechts) of + 256 (links)
+        lda npc_kant,x                  // een figuur van opzij: + 128 (kant 1), + 256 (2) of + 384 (3)
         beq !++
-        cmp #1
-        bne !+
-        lda zp_ptr
-        eor #$80                        // (de houdingen staan op 128 bytes na elkaar; data begint op een
-        sta zp_ptr                      //  veelvoud van 128: zie costume.py)
-        bmi !++
-        inc zp_ptr + 1
+        cmp #2
+        bcc !+                          // 1: + 128
+        inc zp_ptr + 1                  // 2 en 3: + 256
+        cmp #3
         bne !++
-!:      inc zp_ptr + 1
+!:      lda zp_ptr
+        eor #$80                        // + 128 (de houdingen staan op 128 bytes na elkaar; data begint op een
+        sta zp_ptr                      //  veelvoud van 128: zie costume.py)
+        bmi !+
+        inc zp_ptr + 1
 !:      ldy slot                        // vak 2 + 2 * slot: SPRITE_VAKKEN + 128 + slot * 128
         lda slot_vak_lo,y
         sta zp_ptr2
@@ -393,12 +436,65 @@ y2:     .byte 0
 hulp:   .byte 0
 }
 
+// vlieg_stap: vlieger X (elk beeld): aangekomen? dan naar het andere punt (OP of VLIEGT); om de 8 beelden een
+// vleugelslag; de houding naar de kant waar hij heen vliegt. X blijft.
+vlieg_stap: {
+        lda npc_lopen,x
+        bne vleugels
+        lda npc_dx_lo,x                 // het doel was het beginpunt? dan nu het andere punt
+        cmp npc_x_lo,x
+        bne naar_begin
+        lda npc_dx_hi,x
+        cmp npc_x_hi,x
+        bne naar_begin
+        ldy npc_vliegt,x                // (1 + de plek in de vlieg_heen-rijen)
+        lda vlieg_heen_lo - 1,y
+        sta npc_dx_lo,x
+        lda vlieg_heen_hi - 1,y
+        sta npc_dx_hi,x
+        lda vlieg_heen_y - 1,y
+        sta npc_dy,x
+        jmp gaan
+naar_begin:
+        lda npc_x_lo,x
+        sta npc_dx_lo,x
+        lda npc_x_hi,x
+        sta npc_dx_hi,x
+        lda npc_y,x
+        sta npc_dy,x
+gaan:   lda #1
+        sta npc_lopen,x
+vleugels:
+        lda beelden                     // om de 8 beelden: op (0) of neer (1)
+        lsr
+        lsr
+        lsr
+        and #1
+        sta slag
+        lda npc_px_lo,x                 // naar rechts (doel > plek) of naar links
+        cmp npc_dx_lo,x
+        lda npc_px_hi,x
+        sbc npc_dx_hi,x
+        bcs links
+        lda slag                        // rechts: 0 (op) of 1 (neer)
+        jmp zet_kant_vlieger
+links:  lda slag                        // links: 3 (op) of 2 (neer)
+        eor #3
+        jmp zet_kant_vlieger
+slag:   .byte 0
+}
+
 // npc_beweeg: elk beeld: figuren die lopen een stap dichter bij hun doel
 npc_beweeg: {
         ldx #AANTAL_NPC - 1
         bpl lus
         jmp klaar
-lus:    lda npc_volgt,x                 // een volger: elk beeld een doel vlak achter Eldric
+lus:    lda npc_vliegt,x                // een vlieger: heen en weer, met slaande vleugels
+        beq !+
+        lda st_npc,x
+        beq !+
+        jsr vlieg_stap
+!:      lda npc_volgt,x                 // een volger: elk beeld een doel vlak achter Eldric
         beq geen_volger
         lda st_npc,x
         bne !+
@@ -470,6 +566,7 @@ slot_vak_hi:  .byte >(SPRITE_VAKKEN + 128), >(SPRITE_VAKKEN + 256)
 slot_bits:    .byte %00110000, %11000000
 slot_niet:    .byte %11001111, %00111111
 slot_ptr:     .byte (SPRITE_VAKKEN - SCHERM) / 64 + 2, (SPRITE_VAKKEN - SCHERM) / 64 + 4
+.segment Laag                           // $0400-$07FF (geheugen.asm): npc_begin zet ze bij het begin
 npc_px_lo:    .fill MAX_NPC, 0          // waar de figuur nu staat (voeten, schermpixels)
 npc_px_hi:    .fill MAX_NPC, 0
 npc_py:       .fill MAX_NPC, 0
@@ -477,3 +574,4 @@ npc_dx_lo:    .fill MAX_NPC, 0          // LOOP: het doel
 npc_dx_hi:    .fill MAX_NPC, 0
 npc_dy:       .fill MAX_NPC, 0
 npc_lopen:    .fill MAX_NPC, 0
+.segment Data

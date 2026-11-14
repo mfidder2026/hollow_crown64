@@ -1,5 +1,7 @@
 // geheugen.asm — de geheugenkaart van Hollow Crown (projectprompt §6.1), VIC-bank 3.
 //
+//   $0400-$07FF  het gewone scherm, dat het spel niet gebruikt: figurentabellen die elk spel opnieuw worden gezet
+//                (segment Laag; de cartridge start via $0800 en $0340, maar vóór het spel)
 //   $0801-$9FFF  programma: motor, costumes, scripts, voorwerpen, buffers
 //   $A000-$BFFF  kamerbuffer: het kamerbestand van de diskette (plaatje ingepakt, voorgrond, patches);
 //                RAM onder het BASIC-ROM, dat uit staat ($01 = $36)
@@ -88,6 +90,7 @@
 // ---------------------------------------------------------------------------------------------
 // Segments
 // ---------------------------------------------------------------------------------------------
+.segmentdef Laag    [start=$0400, max=$07ff, virtual]
 .segmentdef Basic   [start=$0801, max=$080f]
 .segmentdef Code    [start=$0810, max=PRG_EIND - 1]
 .segmentdef Data    [startAfter="Code", max=PRG_EIND - 1]

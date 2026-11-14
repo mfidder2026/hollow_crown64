@@ -2,6 +2,8 @@
 # Vier spookridders: de fluisterkever praat met de kevers in hun helmen, de harnassen vallen uiteen (patches
 # ridders_l, ridders_r). De sleutelschub van Moeder Aard opent de poort (patch poort_open). Erlangs zonder kever: Tik.
 KAMER poort
+  FLAKKER 0,40 16,16 rood oranje geel TEMPO 5   # fakkels
+  FLAKKER 144,40 16,16 rood oranje geel TEMPO 6
   LOOPKLEUREN donkergrijs zwart
   LOOPVAK 2,108 157,122
   BINNENKOMST:

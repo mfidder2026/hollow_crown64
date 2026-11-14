@@ -2,6 +2,7 @@
 # tools/teken_ijs.py). Diep beneden de rijmwurm, die licht eet. Met een brandende lantaarn de brug op: Tik. Gooi de
 # laatste lichtzwam in de kloof: de wurm duikt erachteraan (patch wurm_weg) en je steekt over.
 KAMER ijsbrug
+  FLAKKER 52,96 72,24 roze rood TEMPO 16   # de ijsworm ademt
   LOOPKLEUREN wit lichtblauw zwart
   LOOPVAK 2,100 38,122                   # links
   LOOPVAK 122,94 157,122                 # rechts

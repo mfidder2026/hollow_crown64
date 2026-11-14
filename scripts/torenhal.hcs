@@ -1,6 +1,7 @@
 # torenhal.hcs — hoofdstuk 3: binnen in de vuurtoren, de hal onderin. Plaatje: data/plaatjes/torenhal.png
 # (tools/teken_tussen.py). Een loopscherm: links de deur naar het eiland, rechts de trap omhoog.
 KAMER torenhal
+  FLAKKER 56,64 4,8 geel oranje TEMPO 7   # een kaars
   LOOPKLEUREN bruin oranje donkergrijs zwart geel grijs lichtgrijs
   LOOPVAK 2,106 157,120                  # de vloer
   BINNENKOMST:

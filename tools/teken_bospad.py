@@ -180,6 +180,8 @@ def teken():
     bodem(dk, rnd)
     mist(dk, rnd)
     stam(dk, 22, 7, 4, 86, rnd, takken=((30, 16, 1), (44, 14, -1)))
+    dk.px(20, 47, GEEL)                                          # in het knoestgat: twee ogen (ze knipperen)
+    dk.px(22, 47, GEEL)
     stam(dk, 92, 5, 8, 88, rnd, takken=((52, 12, 1),))
     stam(dk, 142, 8, 2, 90, rnd, takken=((38, 18, -1),))
     tak_met_kokers(dk, 96, 30, 132, 20, ((106, 4), (118, 8)))     # de kokers: kamer x ~100-122, y ~25-50

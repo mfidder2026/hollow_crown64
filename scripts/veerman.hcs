@@ -1,6 +1,7 @@
 # veerman.hcs — tussenscène na hoofdstuk 2: de boot van Olm komt door de mist (data/plaatjes/veerman.png, met de hand
 # getekend: tools/teken_zee.py). Een toneel: geen Eldric. Daarna begint hoofdstuk 3 op de steiger.
 KAMER veerman
+  FLAKKER 20,96 8,24 geel oranje TEMPO 8   # het lantaarnlicht in het water
   TONEEL
   LOOPKLEUREN blauw zwart donkergrijs grijs lichtgrijs
   LOOPVAK 134,100 150,110                # (alleen omdat een kamer een loopvak moet hebben)

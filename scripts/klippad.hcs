@@ -1,6 +1,7 @@
 # klippad.hcs — hoofdstuk 3: van de boot het klippad op naar het eiland.
 # Plaatje: data/plaatjes/klippad.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
 KAMER klippad
+  ACTOR meeuw_klip KOSTUUM meeuw OP 20,16 VLIEGT 150,10
   LOOPKLEUREN grijs lichtgrijs donkergrijs zwart groen lichtgroen wit bruin oranje
   LOOPVAK 2,106 157,120                  # het pad
   BINNENKOMST:

@@ -4,6 +4,9 @@
 # houdt de manen vast (de Schemerspreuk); haar twee maanstenen pulseren. Een aardmannetje is een figuur. Daarna begint
 # hoofdstuk 2 op het bospad. Vuur of spatie slaat de scène over.
 KAMER grot
+  FLAKKER 8,88 8,8 geel zwart TEMPO 4 RUST 90   # aardmannetjes kijken uit hun holen
+  FLAKKER 140,96 8,8 geel zwart TEMPO 4 RUST 130
+  FLAKKER 72,48 16,8 rood roze TEMPO 12   # Groms ogen gloeien
   TONEEL
   LOOPKLEUREN blauw zwart lichtblauw donkergrijs
   LOOPVAK 128,112 156,122                # de vloer bij de gang rechts (alleen voor het aardmannetje)

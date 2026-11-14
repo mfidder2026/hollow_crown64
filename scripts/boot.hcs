@@ -3,6 +3,7 @@
 # vuurtoren brandt, is de mist weg en weet hij alles weer.
 # Patch straal: de vuurtoren brandt (scripts/vuurtoren.hcs), en Olm kan de straal volgen: einde hoofdstuk 3.
 KAMER boot
+  FLAKKER 104,64 8,16 geel oranje TEMPO 7   # de lamp schommelt
   MIST TOT vuurtoren_brandt              # de straal van de vuurtoren verdrijft de mist
   LOOPKLEUREN bruin donkergrijs oranje zwart
   LOOPVAK 40,104 120,122                 # de bodem van de boot

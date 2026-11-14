@@ -85,6 +85,10 @@ def donker(pad=False):
         dk.lijn([(x, y), (x + rnd.randint(3, 9), y + rnd.randint(-2, 2))], DGRIJS)
     for x, y in ((40, 30), (120, 22)):                           # druppels die glinsteren
         dk.px(x, y, BLAUW)
+    # ogen in het donker (scripts/donker.hcs laat ze knipperen, elk paar op zijn eigen moment)
+    for x, y, kl in ((29, 44, GEEL), (117, 28, GEEL), (64, 60, ROOD), (140, 68, GEEL)):
+        dk.px(x, y, kl)
+        dk.px(x + 3, y, kl)
     if pad:
         punten = [(4, 112), (24, 108), (40, 100), (60, 98), (80, 104), (100, 110), (120, 104), (140, 96), (156, 92)]
         for (xa, ya), (xb, yb) in zip(punten, punten[1:]):       # een lint van licht, met rafelige randen

@@ -2,6 +2,7 @@
 # tools/teken_zee.py). Kapitein Nul staat met zijn rug naar je toe; met de fluisterkever draait hij zich om: een
 # aardmannetje (patch nul_om). Oma's steentje in de lenshouder: de lamp brandt (patch lamp_aan).
 KAMER vuurtoren
+  FLAKKER 64,40 24,24 lichtblauw cyaan wit TEMPO 6   # de lens draait
   LOOPKLEUREN grijs donkergrijs
   LOOPVAK 36,114 156,122                 # 0 voor
   LOOPVAK 4,96 60,106                    # 1 links, achter het trapgat langs

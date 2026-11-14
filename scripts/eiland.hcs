@@ -1,6 +1,7 @@
 # eiland.hcs — hoofdstuk 3: het vuurtoreneiland (data/plaatjes/eiland.png, met de hand getekend: tools/teken_zee.py).
 # De deur zit op slot; de meeuwen op de rots pikken aan de sleutel. Honing: ze storten zich erop en laten hem vallen.
 KAMER eiland
+  ACTOR meeuw_eiland KOSTUUM meeuw OP 140,14 VLIEGT 20,24   # een meeuw boven de klippen
   LOOPKLEUREN donkergrijs grijs zwart groen
   LOOPVAK 4,106 96,122                   # rotsen en gras voor de toren
   BINNENKOMST:

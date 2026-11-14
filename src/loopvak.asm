@@ -327,7 +327,9 @@ rij_eind:  .byte 0
 bits:         .byte 1, 2, 4, 8, 16, 32, 64, 128
 lv_aantal:    .byte 0
 // 8 velden van 17 bytes (16 vakken + het deurvak), in de volgorde van build/gen/spel.asm
+.segment Laag                           // $0400-$07FF (geheugen.asm): elke kamer laadt ze opnieuw
 lv_velden:    .fill 8 * (MAX_LOOPVAKKEN + 1), 0
+.segment Data
 .label lv_x1_lo    = lv_velden + 0 * (MAX_LOOPVAKKEN + 1)
 .label lv_x1_hi    = lv_velden + 1 * (MAX_LOOPVAKKEN + 1)
 .label lv_x2_lo    = lv_velden + 2 * (MAX_LOOPVAKKEN + 1)
@@ -347,8 +349,10 @@ d_x:          .word 0
 d_y:          .byte 0
 bfs_van:      .byte 0
 bfs_naar:     .byte 0
+.segment Laag                           // $0400-$07FF (geheugen.asm): de zoektocht vult ze elke keer zelf
 ouder:        .fill MAX_LOOPVAKKEN, 0
 rij:          .fill MAX_LOOPVAKKEN, 0
 omgekeerd:    .fill MAX_LOOPVAKKEN, 0
 route:        .fill MAX_LOOPVAKKEN, 0
+.segment Data
 route_lengte: .byte 0

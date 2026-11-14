@@ -1,6 +1,7 @@
 # grotgang.hcs — hoofdstuk 4: van de grotmond in de Rotskloof naar het donker.
 # Plaatje: data/plaatjes/grotgang.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
 KAMER grotgang
+  FLAKKER 136,88 12,16 cyaan lichtblauw wit TEMPO 10   # een kristal glinstert
   LOOPKLEUREN bruin oranje donkergrijs zwart grijs lichtgrijs geel cyaan lichtblauw blauw wit
   LOOPVAK 2,106 157,120                  # het pad
   BINNENKOMST:

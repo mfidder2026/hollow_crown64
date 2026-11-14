@@ -1,6 +1,7 @@
 # steiger.hcs — hoofdstuk 3: het eind van de steiger, de boot van Olm ernaast (data/plaatjes/steiger.png, met de hand
 # getekend: tools/teken_zee.py). Olm vaart niet zonder zijn naam; zijn naam staat op zijn boot.
 KAMER steiger
+  FLAKKER 96,56 8,8 geel oranje wit TEMPO 7   # de lantaarn op de steiger
   LOOPKLEUREN bruin donkergrijs zwart oranje grijs lichtgrijs
   LOOPVAK 2,100 108,122                  # de planken
   FLAKKER 148,48 8,16 geel oranje wit    # de lantaarn op de boot

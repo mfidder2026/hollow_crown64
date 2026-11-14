@@ -1,6 +1,8 @@
 # torentrap.hcs — hoofdstuk 3: de wenteltrap in de vuurtoren, naar de lamp bovenin. Plaatje:
 # data/plaatjes/torentrap.png (tools/teken_tussen.py). Een loopscherm: links omlaag, rechts omhoog.
 KAMER torentrap
+  FLAKKER 68,40 4,8 geel oranje TEMPO 7   # lampjes
+  FLAKKER 108,16 4,8 wit geel TEMPO 9
   LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit bruin oranje geel blauw lichtblauw paars cyaan
   LOOPVAK 4,101 30,115                  # onderaan
   LOOPVAK 26,92 52,106

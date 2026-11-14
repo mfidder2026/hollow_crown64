@@ -2,6 +2,7 @@
 # tools/teken_ijs.py). Boven het pad hangt een sneeuwveld: eronderdoor lopen is een lawine (Tik). Roep er iets tegen
 # (Praat met sneeuwveld) en hij valt vóór je: patch lawine, het pad is vrij.
 KAMER bergpad
+  FLAKKER 148,56 8,16 geel oranje TEMPO 9   # licht in het hutje
   LOOPKLEUREN lichtgrijs wit grijs zwart lichtblauw
   SCHAAL 104 92
   LOOPVAK 2,104 40,120                   # het pad, van linksonder schuin omhoog naar rechts

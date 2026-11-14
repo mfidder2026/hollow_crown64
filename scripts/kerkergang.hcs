@@ -1,6 +1,8 @@
 # kerkergang.hcs — hoofdstuk 6: de kerkergang, van de kerker naar de poort.
 # Plaatje: data/plaatjes/kerkergang.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
 KAMER kerkergang
+  FLAKKER 52,40 8,16 rood oranje geel TEMPO 5   # fakkels
+  FLAKKER 104,40 8,16 rood oranje geel TEMPO 6
   LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit
   LOOPVAK 2,106 157,120                  # het pad
   BINNENKOMST:

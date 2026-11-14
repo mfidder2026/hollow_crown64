@@ -3,6 +3,7 @@
 # Het zeewater uit de kruik beslaat een spiegel: dan zie je weer. Pak oma's steentje; de kroon in de helm (met blote
 # handen: Tik).
 KAMER maankamer
+  FLAKKER 92,64 8,8 geel oranje TEMPO 10   # de maansteen
   LOOPKLEUREN grijs donkergrijs lichtgrijs wit
   LOOPVAK 2,112 157,122
   BINNENKOMST:

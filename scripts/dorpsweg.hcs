@@ -1,6 +1,7 @@
 # dorpsweg.hcs — hoofdstuk 1: de weg van het plein naar de bosrand, langs de akkers. Plaatje: data/plaatjes/dorpsweg.png
 # (tools/teken_tussen.py). Een diep loopscherm: onderaan terug naar het dorp, achteraan het bos in.
 KAMER dorpsweg
+  ACTOR kraai_weg KOSTUUM kraai OP 10,30 VLIEGT 150,20   # een kraai
   LOOPKLEUREN bruin oranje donkergrijs zwart paars roze geel
   SCHAAL 112 100 90
   LOOPVAK 62,112 98,124                  # vooraan

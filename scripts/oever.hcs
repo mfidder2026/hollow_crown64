@@ -1,6 +1,8 @@
 # oever.hcs — de oever aan het eind van het Duisterwoud (hoofdstuk 2). Plaatje: data/plaatjes/oever.png, met de hand
 # getekend (tools/teken_oever.py); de patch boot: na de bel komt er in de verte een bootje aan. Einde hoofdstuk 2.
 KAMER oever
+  FLAKKER 52,64 16,48 wit lichtgrijs TEMPO 10   # maanlicht glinstert op het water
+  ACTOR meeuw_oever KOSTUUM meeuw OP 20,12 VLIEGT 140,20   # een meeuw
   LOOPKLEUREN bruin oranje grijs lichtgrijs donkergrijs groen
   SCHAAL 110 96 84
   LOOPVAK 4,104 56,124                   # 0 de oever

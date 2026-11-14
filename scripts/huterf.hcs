@@ -1,6 +1,9 @@
 # huterf.hcs — het erf van Groms jachthut (hoofdstuk 2), na het doolhof. Plaatje: data/plaatjes/huterf.png
 # (tools/teken_woud2.py). De deur gaat naar binnen (jachthut); links terug, de sporen volgen naar de brug.
 KAMER huterf
+  FLAKKER 68,56 24,24 geel oranje TEMPO 9   # licht achter het raam
+  FLAKKER 64,112 12,8 rood oranje geel TEMPO 5   # gloed onder de ketel
+  ACTOR vleermuis_erf KOSTUUM vleermuis OP 10,20 VLIEGT 60,36
   LOOPKLEUREN bruin oranje geel donkergrijs zwart grijs lichtgrijs groen lichtgroen
   LOOPVAK 2,118 157,124                  # 0 vooraan
   LOOPVAK 88,104 134,124                 # 1 voor de deur

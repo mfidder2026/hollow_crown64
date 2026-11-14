@@ -36,6 +36,10 @@ kamer_tonen:
 kamer_wissel: {
         sta st_kamer
         jsr vm_stop
+        lda #<geen_flakker              // (de FLAKKER-gegevens staan bij de scripts van de kamer: tijdens het laden
+        sta fl_ptr                      //  niet gebruiken; flakker_laden zet ze daarna terug)
+        lda #>geen_flakker
+        sta fl_ptr + 1
         lda kw_x
         sta st_x
         sta act_x

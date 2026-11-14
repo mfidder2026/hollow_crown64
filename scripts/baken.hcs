@@ -2,6 +2,7 @@
 # tools/teken_ijs.py). Het bakenkristal in de houder: met blote handen bijt het (Tik); met oma's want lukt het (patch
 # baken_aan): een witte bundel boven de schemer uit. Einde hoofdstuk 5. Naar beneden: de spookridders komen.
 KAMER baken
+  FLAKKER 112,0 48,40 geel oranje TEMPO 6   # de zon gloeit
   LOOPKLEUREN lichtgrijs grijs wit zwart
   LOOPVAK 2,104 157,122
   BINNENKOMST:

@@ -3,6 +3,7 @@
 # anders kan: zijn kroon terug (in de helm), zijn volk dat het zelf zegt (de kever), en het jong met de gloeischub.
 # Dan de laatste keuze: "Laat één maan gaan." De slotscène (scripts/dak.hcs).
 KAMER troonzaal
+  FLAKKER 68,48 24,8 rood roze TEMPO 12   # Groms ogen gloeien
   LOOPKLEUREN donkergrijs zwart
   LOOPVAK 2,116 157,123
   ACTOR mira_troon KOSTUUM mira OP 138,120   # Mira, naast de zuil

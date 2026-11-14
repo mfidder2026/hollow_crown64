@@ -1,6 +1,7 @@
 # bergkam.hcs — hoofdstuk 5: de bergkam, van de hut naar de ijsbrug.
 # Plaatje: data/plaatjes/bergkam.png (tools/teken_tussen.py). Een loopscherm: links en rechts een uitgang.
 KAMER bergkam
+  ACTOR kraai_kam KOSTUUM kraai OP 140,24 VLIEGT 20,14
   LOOPKLEUREN wit lichtblauw lichtgrijs grijs zwart donkergrijs
   LOOPVAK 2,106 157,120                  # het pad
   BINNENKOMST:

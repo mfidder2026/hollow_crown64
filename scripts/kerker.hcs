@@ -2,6 +2,7 @@
 # tools/teken_kasteel.py). Eldric wordt wakker: zijn steentje en zijn lantaarn zijn weg, Mira ook. De fluisterkever
 # neuriet, en de tralies van oud aard-ijzer rammelen uit hun sponning (patch tralies_open).
 KAMER kerker
+  FLAKKER 136,56 8,16 geel wit TEMPO 4 RUST 100   # het slot glimt
   LOOPKLEUREN bruin geel oranje
   LOOPVAK 4,92 106,122
   BINNENKOMST:

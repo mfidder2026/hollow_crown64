@@ -1104,3 +1104,36 @@ grotmond.
 
 **Meekijken**: `vicetest.py --kijk --crt --taal en --zonder-tekst --stil --snelheid 400 tests/kijken/kijk.band`;
 P in het VICE-venster pauzeert (VICE op 1%: in de monitor blijven werkt niet, dan leest VICE het toetsenbord niet).
+
+## Kleine animaties: knipperende ogen, kaarsjes, fakkels en vogels
+
+Overal in het spel beweegt nu iets kleins, per kamer bedacht wat erbij past:
+- **Ogen die knipperen** (FLAKKER ... geel zwart met RUST: lang open, heel even dicht): in de donkere grot vier paar ogen,
+  elk op zijn eigen moment (nieuw in het plaatje), in een knoestgat langs het bospad (nieuw), de uil in het diepe
+  woud, de kooi in de jachthut, de aardmannetjes in hun holen in Groms grot, de grotmond in de kloof en in het
+  openingsverhaal, en de kikker in de zwamgrot. Groms ogen gloeien rood-roze na (grot en troonzaal).
+- **Licht**: een kaarsje achter een raam op het plein, de lamp in de kelder, lantaarns bij de steiger, de veerman
+  (ook de weerschijn in het water) en op de boot, het hutje op het bergpad, het raam en de ketelgloed bij de heksenhut,
+  fakkels in de poort, de kerkergang en de wenteltrap, kaarsen en lampjes in de vuurtoren, de draaiende lens, de
+  maansteen, het slot van de kerker dat even glimt.
+- **Water en magie**: de fontein op het plein, maanlicht op het water bij de oever, de beek in het beekdal, de
+  ijsworm die ademt, de zon boven het baken, dwaallichtjes op het wolfspad, een kristal in de grotgang.
+- **Vogels**: kraaien (plein, dorpsweg, beekdal, sneeuwveld, bergkam), meeuwen (oever, eiland, klippad, zeerotsen) en
+  vleermuizen (diepwoud, wolfspad, heksenhut) vliegen heen en weer met slaande vleugels.
+
+Motor:
+- FLAKKER kreeg `TEMPO t` (beelden per stap) en `RUST r` (zo lang blijft de eerste kleur staan na een rondje): zo
+  knippert een oog in plaats van te flakkeren. Elke regel heeft zijn eigen teller (src/flakker.asm).
+- `ACTOR ... VLIEGT x2,y2`: een vlieger vliegt heen en weer tussen OP en x2,y2 (vlieg_stap in src/npc.asm); de
+  vleugels slaan om de 8 beelden, en hij kijkt naar de kant waar hij heen vliegt. Kostuums kraai, meeuw en
+  vleermuis (tools/sprites_hc.py) met vier houdingen: op, neer, en gespiegeld.
+- MAX_NPC 24 -> 32 (spelstatus versie 8: oude bewaarde spellen tellen niet meer).
+- Ruimte: de testbuild van de cartridge paste niet meer. De looptabellen van de figuren en de kladrijen van de
+  padzoeker staan nu op $0400-$07FF (segment Laag: het gewone scherm, dat het spel nooit gebruikt).
+- tools/flakker_proef.py: laat per kamer zien wat elke FLAKKER-regel doet en telt de pixels per kleur, zodat je ziet
+  of er niet per ongeluk iets anders meekleurt.
+- Vliegers zijn versiering: bij binnenkomst krijgen ze het hoogste vrije figuurslot (slot 0 blijft voor Tik), en
+  moet Tik of Mira verschijnen terwijl beide slots bezet zijn, dan maakt de vlieger plaats.
+- Oud foutje gevonden: bij Bestand, Exit stond $0288 (waar de Kernal het scherm zoekt) nog op $C0, dus kwam READY.
+  op een scherm dat niemand zag. De test slaagde alleen omdat de oude READY. van het laden nog op $0400 stond; nu
+  dat stuk voor tabellen gebruikt wordt, viel het op. naar_basic zet $0288 weer op $04.

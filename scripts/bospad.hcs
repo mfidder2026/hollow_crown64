@@ -1,6 +1,7 @@
 # bospad.hcs — het bospad in het Duisterwoud (hoofdstuk 2). Plaatje: data/plaatjes/bospad.png, met de hand getekend
 # (tools/teken_bospad.py). Links het moeras: daar gaat Eldric voor het eerst dood, en Tik legt uit hoe terugdraaien werkt.
 KAMER bospad
+  FLAKKER 20,40 4,8 geel zwart TEMPO 4 RUST 130   # ogen in het knoestgat
   LOOPKLEUREN donkergrijs groen lichtgroen oranje bruin rood lichtgrijs zwart   # zwart: de randen van het pad (het moeras valt buiten de loopvakken)
   SCHAAL 104
   LOOPVAK 68,104 157,124                 # 0 voor, rechts van het moeras

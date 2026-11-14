@@ -7,6 +7,8 @@
 #   scherm 3 (hier, doolhof2)        achter rechts -> doolhof3
 #   scherm 4 (wolfspad, doolhof3)    links         -> de hut (hut_gevonden)
 KAMER diepwoud
+  FLAKKER 64,40 12,16 geel zwart TEMPO 4 RUST 150   # een uil knippert
+  ACTOR vleermuis_woud KOSTUUM vleermuis OP 20,30 VLIEGT 140,40   # een vleermuis
   LOOPKLEUREN bruin oranje donkergrijs zwart geel grijs lichtgrijs groen lichtgroen lichtblauw blauw cyaan wit
   SCHAAL 106 96
   LOOPVAK 10,108 150,122                 # 0 de open plek

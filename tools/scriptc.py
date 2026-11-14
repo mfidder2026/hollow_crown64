@@ -26,14 +26,19 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
     ACHTER x1,y1 x2,y2                voeten hier: de voorgrond van de kamer komt vóór Eldric
     SCHAAL y1 y2 ...                  diepte: y >= y1 maat 0 (groot), >= y2 maat 1 ... (hooguit 4 grenzen)
     BINNENKOMST:                      script als Eldric de kamer binnenkomt
-    FLAKKER x,y b,h kleur kleur ...   een kleine animatie (hoofdstuk 8): in die vakjes (x, b veelvoud van 4; y, h van 8)
-                                      schuiven deze kleuren rond (bv. vuur: rood oranje geel). Hooguit 2 per kamer.
+    FLAKKER x,y b,h kleur kleur ... [TEMPO t] [RUST r]
+                                      een kleine animatie (hoofdstuk 8): in die vakjes (x, b veelvoud van 4; y, h van 8)
+                                      schuiven deze kleuren rond (bv. vuur: rood oranje geel), een stap per TEMPO beelden
+                                      (6); na een heel rondje RUST beelden niets (knipperen: geel zwart TEMPO 4 RUST 180).
+                                      Hooguit 4 per kamer.
     MIST [TOT vlag]                   de Zee van Vergetelheid: elke 30 s vergeet Eldric een naam ("???"); Bekijk
                                       geeft hem terug. Met TOT vlag: zodra die vlag staat, is de mist weg en weet
                                       hij alles weer
     TONEEL                            een toneel (de verhaalanimatie): geen Eldric (tot TOON eldric), geen cursor,
                                       geen balk; alleen het plaatje en de tekst van de verteller
-    ACTOR naam KOSTUUM k OP x,y [VERBORGEN] [VOLGT]
+    ACTOR naam KOSTUUM k OP x,y [VERBORGEN] [VOLGT] [VLIEGT x2,y2]
+                                      (VLIEGT: een vogel of vleermuis, heen en weer tussen OP en x2,y2, met slaande
+                                      vleugels; zijn kostuum heeft 4 houdingen: tools/costume.py VLIEGERS)
                                       (buiten een KAMER, in spel.hcs: een figuur die overal mee kan, zoals Tik;
                                       met VOLGT loopt hij achter Eldric aan, zoals Mira vanaf hoofdstuk 2)
                                       een figuur (NPC) in de kamer, met een kostuum uit tools/costume.py
@@ -275,7 +280,14 @@ def lees(bestanden):
                 blok = nieuw_blok(blok, keuze, "script", waar)
                 continue
             if kop == "ACTOR":
-                extra = w[6:]
+                extra = list(w[6:])
+                vliegt = None
+                if "VLIEGT" in extra:                          # VLIEGT x2,y2: heen en weer tussen OP en dit punt
+                    i = extra.index("VLIEGT")
+                    if i + 1 >= len(extra) or kamer is None:
+                        raise Fout("%s: ACTOR ... VLIEGT x2,y2 (in een KAMER)" % waar)
+                    vliegt = punt(extra[i + 1], waar)
+                    del extra[i:i + 2]
                 if len(w) < 6 or w[2] != "KOSTUUM" or w[4] != "OP" \
                         or any(e not in ("VERBORGEN", "VOLGT") for e in extra) \
                         or ("VOLGT" in extra and kamer is not None):
@@ -285,7 +297,8 @@ def lees(bestanden):
                     raise Fout("%s: actor %s bestaat al" % (waar, w[1]))
                 x, y = punt(w[5], waar)
                 spel.actors[w[1]] = {"naam": w[1], "kostuum": w[3], "kamer": kamer, "x": x, "y": y,
-                                     "zichtbaar": "VERBORGEN" not in extra, "volgt": "VOLGT" in extra, "waar": waar}
+                                     "zichtbaar": "VERBORGEN" not in extra, "volgt": "VOLGT" in extra, "waar": waar,
+                                     "vliegt": vliegt}
                 spel.actor_volgorde.append(w[1])
                 if blok is not None:
                     sluit_blok(blok)
@@ -349,13 +362,27 @@ def lees(bestanden):
                 if x % 4 or b % 4 or y % 8 or h % 8 or b < 4 or h < 8 or x + b > KAMER_B or y + h > KAMER_H:
                     raise Fout("%s: FLAKKER: x en b veelvoud van 4, y en h van 8, binnen de kamer" % waar)
                 import c64beeld
-                for kl in w[3:]:
-                    if kl not in c64beeld.NAMEN:
+                kleuren, tempo, rust, rest = [], 6, 0, list(w[3:])
+                while rest:
+                    kl = rest.pop(0)
+                    if kl in ("TEMPO", "RUST") and rest:
+                        n = getal(rest.pop(0), waar)
+                        if not 1 <= n <= 200:
+                            raise Fout("%s: FLAKKER: TEMPO en RUST tussen 1 en 200 (beelden)" % waar)
+                        if kl == "TEMPO":
+                            tempo = n
+                        else:
+                            rust = n
+                    elif kl in c64beeld.NAMEN:
+                        kleuren.append(c64beeld.NAMEN.index(kl))
+                    else:
                         raise Fout("%s: onbekende kleur %s" % (waar, kl))
+                if len(kleuren) < 2 or len(set(kleuren)) != len(kleuren):
+                    raise Fout("%s: FLAKKER: minstens 2 verschillende kleuren" % waar)
                 k = spel.kamers[kamer]
-                k["flakker"].append((x, y, b, h, [c64beeld.NAMEN.index(kl) for kl in w[3:]], waar))
-                if len(k["flakker"]) > 2:
-                    raise Fout("%s: hooguit 2 keer FLAKKER per kamer" % waar)
+                k["flakker"].append((x, y, b, h, kleuren, tempo, rust, waar))
+                if len(k["flakker"]) > 4:
+                    raise Fout("%s: hooguit 4 keer FLAKKER per kamer" % waar)
             elif kop == "MIST":
                 if kamer is None or len(w) not in (1, 3) or (len(w) == 3 and w[1] != "TOT"):
                     raise Fout("%s: MIST  of  MIST TOT vlag (binnen een KAMER)" % waar)
@@ -1099,6 +1126,11 @@ def schrijf(spel, pad, json_pad):
     nrij("npc_vorm", [str(kostuums[a["kostuum"]]["vorm"]) for a in acts])
     nrij("npc_voeten", [str(kostuums[a["kostuum"]]["voeten"]) for a in acts])
     nrij("npc_zij", [str(kostuums[a["kostuum"]].get("zij", 0)) for a in acts])
+    vl = [a for a in acts if a.get("vliegt")]                  # een vlieger: 1 + zijn plek in de vlieg_heen-rijen
+    nrij("npc_vliegt", [str(vl.index(a) + 1) if a.get("vliegt") else "0" for a in acts])
+    L.append("vlieg_heen_lo: .byte %s" % ", ".join([str((a["vliegt"][0] * 2) & 255) for a in vl] or ["0"]))
+    L.append("vlieg_heen_hi: .byte %s" % ", ".join([str((a["vliegt"][0] * 2) >> 8) for a in vl] or ["0"]))
+    L.append("vlieg_heen_y: .byte %s" % ", ".join([str(a["vliegt"][1]) for a in vl] or ["0"]))
     L.append("npc_kant: .fill %d, 0    // 0 voor, 1 rechts, 2 links (src/npc.asm: zet_kant)" % max(1, len(acts)))
     nrij("npc_data_lo", ["<npc_%s" % a["kostuum"] for a in acts])
     nrij("npc_data_hi", [">npc_%s" % a["kostuum"] for a in acts])
@@ -1175,13 +1207,17 @@ def schrijf(spel, pad, json_pad):
             L.append("        .byte 0, 0, 0, 0, 0, 0, 0")
         sch = k["schaal"]
         L.append("schaal_%s: .byte %d%s" % (naam, len(sch), "".join(", %d" % g for g in sch)))
-        L.append("flakker_%s: .byte %d    // aantal; per gebied kolom, rij, breedte, hoogte (vakjes), 16 bytes kleur -> volgende" % (
-            naam, len(k["flakker"])))
-        for x, y, b, h, kleuren, _ in k["flakker"]:
+        # (bij de scripts van de kamer, op KAMER_SCRIPTS: zo kost een FLAKKER geen plek in het hoofdgeheugen)
+        u.zet("Kamer_%s" % naam)
+        u.L.append("flakker_%s: .byte %d    // aantal; per gebied kolom, rij, breedte, hoogte (vakjes), 16 bytes kleur -> "
+                 "volgende, tempo, rust, aantal kleuren" % (naam, len(k["flakker"])))
+        for x, y, b, h, kleuren, tempo, rust, _ in k["flakker"]:
             tabel = list(range(16))
             for i, kl in enumerate(kleuren):
                 tabel[kl] = kleuren[(i + 1) % len(kleuren)]
-            L.append("        .byte %d, %d, %d, %d, %s" % (x // 4, y // 8, b // 4, h // 8, ", ".join(str(t) for t in tabel)))
+            u.L.append("        .byte %d, %d, %d, %d, %s, %d, %d, %d" % (x // 4, y // 8, b // 4, h // 8,
+                                                                ", ".join(str(t) for t in tabel), tempo, rust, len(kleuren)))
+        u.zet("Data")
         if "binnenkomst" in k:
             u.zet("Kamer_%s" % naam)
             u.script("binnen_%s" % naam, k["binnenkomst"])

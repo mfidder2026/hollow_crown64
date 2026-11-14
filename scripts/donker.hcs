@@ -2,6 +2,10 @@
 # zelf is de afgrond. Praat met Mira: zij ziet met haar steen het pad (patches pad1-3) en leidt Eldric erdoor; onderweg ligt
 # het trilkristal.
 KAMER donker
+  FLAKKER 28,40 8,8 geel zwart TEMPO 4 RUST 120   # ogen in het donker, elk paar knippert op zijn eigen moment
+  FLAKKER 116,24 8,8 geel zwart TEMPO 4 RUST 170
+  FLAKKER 64,56 8,8 rood zwart TEMPO 5 RUST 90
+  FLAKKER 140,64 4,8 geel zwart TEMPO 4 RUST 145
   LOOPKLEUREN zwart donkergrijs groen lichtgroen blauw
   LOOPVAK 4,104 20,116                   # 0 waar Eldric binnenkomt
   LOOPVAK 18,100 64,112                  # 1-4: het pad (alleen voor de tussenscène met Mira)

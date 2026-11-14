@@ -1,11 +1,11 @@
 // status.asm — de spelstatus in één blok (§6.4). Opslaan = dit blok naar de diskette schrijven.
 // tools/vicetest.py leest deze labels via build/.../hollowcrown.vs; hernoem ze dus niet zomaar.
 
-.const STATUS_VERSIE   = 7              // 2: score; 3: hoofdstuk; 4: 128 voorwerpen; 5: vergeten namen; 6: decor vast; 7: 24 figuren
+.const STATUS_VERSIE   = 8              // 2: score; 3: hoofdstuk; 4: 128 voorwerpen; 5: vergeten namen; 6: decor vast; 7: 24 figuren; 8: 32 (vliegers)
 .const MAX_VLAGGEN     = 256            // bits
 .const MAX_VOORWERPEN  = 128
 .const MAX_MET_STAND   = 32             // alleen de eerste 32 voorwerpen hebben een stand (scriptc.py zet ze vooraan)
-.const MAX_NPC         = 24
+.const MAX_NPC         = 32
 
 .segment Data
 spelstatus:

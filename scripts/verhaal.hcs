@@ -2,6 +2,7 @@
 # een grot. Eén toneel (data/plaatjes/toneel.png, met de hand getekend: tools/teken_toneel.py), figuren als sprites, de
 # lucht die met KLEUR stap voor stap schemer wordt. Vuur of spatie slaat alles over.
 KAMER verhaal
+  FLAKKER 128,72 16,8 rood zwart TEMPO 4 RUST 100   # ogen in de grot
   TONEEL
   LOOPKLEUREN geel oranje
   SCHAAL 110 102                         # (vóór het dorp: Eldric op zijn grootst, zoals Mira naast hem)

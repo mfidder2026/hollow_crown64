@@ -25,6 +25,8 @@ naar_basic: {
         lda #0
         sta band_markering
 #endif
+        lda #$04                        // het scherm voor de Kernal weer op $0400 (het spel zette $0288 op $C0:
+        sta $0288                       // dan wiste CINT ons scherm en kwam READY. op een scherm dat de VIC niet toont)
         jsr $fda3                       // IOINIT
         jsr $fd15                       // RESTOR
         jsr $ff5b                       // CINT

@@ -2,6 +2,7 @@
 # Pad de zwamhoeder ruilt lichtzwammen voor iets dat naar de zon ruikt: de honingpot. De zwarte zwam: Tik.
 # Verder naar de aardstad alleen met het luikje van de lantaarn dicht (de stad slaapt).
 KAMER zwamgrot
+  FLAKKER 100,56 24,8 geel zwart TEMPO 4 RUST 160   # de kikker knippert
   LOOPKLEUREN donkergrijs blauw zwart lichtgrijs
   LOOPVAK 4,104 156,122
   FLAKKER 0,88 48,16 cyaan lichtgroen roze    # de paddenstoelen gloeien

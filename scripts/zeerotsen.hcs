@@ -2,6 +2,7 @@
 # cursor): Olm roeit, en dan gaat het vanzelf verder naar het klippad. Plaatje: data/plaatjes/zeerotsen.png
 # (tools/teken_tussen.py).
 KAMER zeerotsen
+  ACTOR meeuw_rots KOSTUUM meeuw OP 150,12 VLIEGT 30,22
   TONEEL
   LOOPKLEUREN blauw zwart lichtblauw donkergrijs wit grijs
   LOOPVAK 60,118 90,124                  # (een toneel heeft er toch één nodig; Eldric zit in de boot)
