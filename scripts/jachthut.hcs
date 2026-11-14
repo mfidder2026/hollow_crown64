@@ -20,9 +20,9 @@ KAMER jachthut
 
 VOORWERP deur_brug "deur" VAK 6,30 21,52 LOOP 14,96 LINKS
   GA_NAAR:
-    KAMER spookbrug 40,108 LINKS
+    KAMER huterf 112,106 VOOR
   BEKIJK:
-    ZEG eldric "De deur naar de brug."
+    ZEG eldric "De voordeur, naar het erf."
 
 VOORWERP achterdeur "achterdeur" VAK 146,30 13,52 LOOP 150,96 RECHTS
   GA_NAAR:

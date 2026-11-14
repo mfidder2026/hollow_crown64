@@ -3,7 +3,7 @@
 
     python3 tools/vicetest.py tests/wacht.band            bouwt eerst (./build.sh --autotest), dan de test
     python3 tools/vicetest.py tests/*.band --geen-build   meerdere banden, zonder te bouwen
-    opties: --geen-warp, --echte-drive (1541-emulatie, voor laadtijden), --houd-open
+    opties: --kijk (meekijken: venster, normale snelheid, geluid, echte drive), --geen-warp, --echte-drive (1541-emulatie, voor laadtijden), --houd-open
 
 Een band (tests/<naam>.band) is tekst, één stap per regel ('#' is commentaar):
     wacht 50              50 beelden niets doen
@@ -55,7 +55,7 @@ TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), 
          "f1": (0, 0x10), "f5": (0, 0x40), "f7": (0, 0x08)}
 MUISKNOP = {"links": 0x10, "rechts": 0x01}
 BAND_WACHT, BAND_LOOPT, BAND_KLAAR, BAND_FOUT = 0, 1, 2, 0xFF
-BAND_GROOTTE = 1536          # de ring in src/autotest.asm; een band mag langer zijn: hij wordt bijgevuld
+BAND_GROOTTE = 1024          # de ring in src/autotest.asm; een band mag langer zijn: hij wordt bijgevuld
 BAND_SPIEGEL = 16
 
 
@@ -254,7 +254,7 @@ PROMPT = re.compile(rb"\(C:\$[0-9a-f]{4}\) $")
 
 
 class Vice:
-    def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False):
+    def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False, geluid=False):
         self.houd_open = zichtbaar_houden
         s = socket.socket()
         s.bind(("127.0.0.1", 0))                 # een vrije poort, zodat testen naast elkaar kunnen
@@ -262,10 +262,12 @@ class Vice:
         s.close()
         args = [os.path.join(VICE_BIN, "x64sc"), "-pal", "-default",
                 "-remotemonitor", "-remotemonitoraddress", "ip4://127.0.0.1:%d" % self.poort,
-                "-sounddev", "dummy", "+confirmonexit",
+                "+confirmonexit",
                 "-drive8truedrive" if echte_drive else "+drive8truedrive"]
         if not echte_drive:
             args.append("-busdevice8")           # virtueel apparaat 8: het spel laadt zelf kamers (Kernal LOAD)
+        if not geluid:
+            args += ["-sounddev", "dummy"]
         if warp:
             args.append("-warp")
         if not zichtbaar_houden:
@@ -660,17 +662,23 @@ def draai(bandpad, args):
     # een band met de regel "echte_drive" draait altijd met de 1541-emulatie (voor de snellader: turbo.asm)
     echte_drive = args.echte_drive or any(r.split("#", 1)[0].strip() == "echte_drive" for r in open(bandpad))
     vice = Vice(d64, warp=not args.geen_warp,
-                echte_drive=echte_drive, zichtbaar_houden=args.houd_open)
+                echte_drive=echte_drive, zichtbaar_houden=args.houd_open, geluid=args.kijk)
     try:
         # 1. wachten tot het spel draait: magic "HC" staat er en de band wacht op ons
         eind = time.time() + args.starttijd
+        in_spel = 0
         while True:
-            if vice.lees(sym["st_magic"], 2) == [0x48, 0x43] and vice.lees(sym["band_status"])[0] == BAND_WACHT:
+            if (vice.lees(sym["st_magic"], 2) == [0x48, 0x43] and vice.lees(sym["band_status"])[0] == BAND_WACHT
+                    and vice.lees(sym["band_markering"])[0] == 0):
                 # (met de echte drive laadt het programma langzaam: "HC" staat al in de prg, dus ook halverwege het
-                #  laden. Pas als de processor in het spel zelf staat, niet in de Kernal, is het echt gestart.)
+                #  laden. Pas als de processor een paar keer achter elkaar in het spel zelf staat, niet in de Kernal,
+                #  is het echt gestart: één keer kan toeval zijn, zeker op normale snelheid.)
                 pc = int(re.search(r";([0-9a-f]{4})", vice.cmd("r")).group(1), 16)
-                if pc < 0xa000:
+                in_spel = in_spel + 1 if pc < 0xa000 else 0
+                if in_spel >= (6 if echte_drive else 1):
                     break
+            else:
+                in_spel = 0
             vice.verder()
             if time.time() > eind:
                 raise Fout("het spel startte niet binnen %d s" % args.starttijd)
@@ -713,8 +721,13 @@ def draai(bandpad, args):
         volgende = 0
         eind = time.time() + args.max_tijd
         while True:
-            time.sleep(0.05)
-            status, markering = vice.lees(sym["band_status"])[0], vice.lees(sym["band_markering"])[0]
+            # (elke blik in het geheugen zet de emulatie even stil: op normale snelheid hoor je dat. In de kijkstand
+            #  daarom maar één keer per seconde, en alleen de ring bijvullen als die bijna op is.)
+            time.sleep(1.0 if args.kijk else 0.05)
+            if sym["band_markering"] == sym["band_status"] + 1:
+                status, markering = vice.lees(sym["band_status"], 2)
+            else:
+                status, markering = vice.lees(sym["band_status"])[0], vice.lees(sym["band_markering"])[0]
             if geschreven < len(band):                       # de ring bijvullen achter de leeskop
                 lo, hi = vice.lees(0x06, 2)
                 plek = (lo | hi << 8) - sym["band"]
@@ -807,7 +820,12 @@ def main():
     p.add_argument("--houd-open", action="store_true", help="VICE niet afsluiten na de test")
     p.add_argument("--starttijd", type=int, default=90, help="seconden om te laden en te starten")
     p.add_argument("--max-tijd", type=int, default=600, help="seconden voor de hele band")
+    p.add_argument("--kijk", action="store_true",
+                   help="om mee te kijken: venster, normale snelheid, geluid, echte 1541 (de snellader), ruime tijd")
     args = p.parse_args()
+    if args.kijk:
+        args.geen_warp = args.houd_open = args.echte_drive = True
+        args.starttijd, args.max_tijd = max(args.starttijd, 300), max(args.max_tijd, 4 * 3600)
     if not args.geen_build:
         if subprocess.call([os.path.join(ROOT, "build.sh"), "--autotest"]) != 0:
             print("[test] build mislukt")

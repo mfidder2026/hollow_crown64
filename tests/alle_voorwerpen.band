@@ -353,6 +353,132 @@ wacht_op_script
 verwacht vm_fout = 0
 screenshot bosrand
 
+# ---- diepwoud ----
+start_script proef_kamer_diepwoud
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer diepwoud
+cursor 20,164
+vuur
+cursor 6,127
+wacht 2
+verwacht_tekst 18 "Bekijk pad links"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 310,125
+wacht 2
+verwacht_tekst 18 "Bekijk pad rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 72,89
+wacht 2
+verwacht_tekst 18 "Bekijk tunnel links"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 244,89
+wacht 2
+verwacht_tekst 18 "Bekijk tunnel rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 152,131
+wacht 2
+verwacht_tekst 18 "Bekijk sporen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 152,131
+wacht 2
+verwacht_tekst 18 "Pak sporen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 136,64
+wacht 2
+verwacht_tekst 18 "Bekijk uil"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,164
+vuur
+cursor 136,64
+wacht 2
+verwacht_tekst 18 "Praat met uil"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 138,37
+wacht 2
+verwacht_tekst 18 "Bekijk oude boom"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 58,69
+wacht 2
+verwacht_tekst 18 "Bekijk spinnenweb"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 58,69
+wacht 2
+verwacht_tekst 18 "Pak spinnenweb"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 294,110
+wacht 2
+verwacht_tekst 18 "Bekijk gloeizwammen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 294,110
+wacht 2
+verwacht_tekst 18 "Pak gloeizwammen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot diepwoud
+
 # ---- donker ----
 start_script proef_kamer_donker
 wacht_op_script
@@ -622,6 +748,105 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot hut
+
+# ---- huterf ----
+start_script proef_kamer_huterf
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer huterf
+cursor 20,164
+vuur
+cursor 222,89
+wacht 2
+verwacht_tekst 18 "Bekijk deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 156,83
+wacht 2
+verwacht_tekst 18 "Bekijk raam"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 4,129
+wacht 2
+verwacht_tekst 18 "Bekijk pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 54,82
+wacht 2
+verwacht_tekst 18 "Bekijk huiden"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 54,82
+wacht 2
+verwacht_tekst 18 "Pak huiden"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 80,113
+wacht 2
+verwacht_tekst 18 "Bekijk bijl"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 80,113
+wacht 2
+verwacht_tekst 18 "Pak bijl"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 140,117
+wacht 2
+verwacht_tekst 18 "Bekijk ketel"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 292,100
+wacht 2
+verwacht_tekst 18 "Bekijk brandhout"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 280,35
+wacht 2
+verwacht_tekst 18 "Bekijk schoorsteen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot huterf
 
 # ---- ijsbrug ----
 start_script proef_kamer_ijsbrug
@@ -1621,6 +1846,105 @@ wacht_tot_stil
 wacht_op_script
 verwacht vm_fout = 0
 screenshot vuurtoren
+
+# ---- wolfspad ----
+start_script proef_kamer_wolfspad
+wacht_op_script
+wacht 3
+wacht_op_script
+wacht 3
+verwacht_kamer wolfspad
+cursor 20,164
+vuur
+cursor 6,127
+wacht 2
+verwacht_tekst 18 "Bekijk pad links"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 310,125
+wacht 2
+verwacht_tekst 18 "Bekijk pad rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 72,89
+wacht 2
+verwacht_tekst 18 "Bekijk tunnel links"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 244,89
+wacht 2
+verwacht_tekst 18 "Bekijk tunnel rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 154,129
+wacht 2
+verwacht_tekst 18 "Bekijk sporen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 154,129
+wacht 2
+verwacht_tekst 18 "Pak sporen"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 160,79
+wacht 2
+verwacht_tekst 18 "Bekijk paal"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 160,79
+wacht 2
+verwacht_tekst 18 "Pak paal"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 20,164
+vuur
+cursor 250,133
+wacht 2
+verwacht_tekst 18 "Bekijk klem"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+cursor 100,156
+vuur
+cursor 250,133
+wacht 2
+verwacht_tekst 18 "Pak klem"
+vuur
+wacht_tot_stil
+wacht_op_script
+verwacht vm_fout = 0
+screenshot wolfspad
 
 # ---- zwamgrot ----
 start_script proef_kamer_zwamgrot

@@ -23,7 +23,7 @@
 
 #if AUTOTEST
 
-.const BAND_GROOTTE   = 1536            // een ring: tools/vicetest.py vult achter de leeskop bij
+.const BAND_GROOTTE   = 1024            // een ring: tools/vicetest.py vult achter de leeskop bij
 .const BAND_SPIEGEL   = 16              // de eerste 16 bytes staan ook achter het einde (een opdracht over de rand heen)
 .const BAND_WACHT     = 0               // band_status: wacht tot vicetest de band heeft geladen
 .const BAND_LOOPT     = 1

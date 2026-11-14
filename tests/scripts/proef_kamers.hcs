@@ -18,6 +18,9 @@ SCRIPT proef_kamer_bospad:
 SCRIPT proef_kamer_bosrand:
   KAMER bosrand 79,118 VOOR
 
+SCRIPT proef_kamer_diepwoud:
+  KAMER diepwoud 80,115 VOOR
+
 SCRIPT proef_kamer_donker:
   KAMER donker 12,110 VOOR
 
@@ -29,6 +32,9 @@ SCRIPT proef_kamer_herberg:
 
 SCRIPT proef_kamer_hut:
   KAMER hut 79,116 VOOR
+
+SCRIPT proef_kamer_huterf:
+  KAMER huterf 79,121 VOOR
 
 SCRIPT proef_kamer_ijsbrug:
   KAMER ijsbrug 20,111 VOOR
@@ -74,6 +80,9 @@ SCRIPT proef_kamer_troonzaal:
 
 SCRIPT proef_kamer_vuurtoren:
   KAMER vuurtoren 96,118 VOOR
+
+SCRIPT proef_kamer_wolfspad:
+  KAMER wolfspad 80,115 VOOR
 
 SCRIPT proef_kamer_zwamgrot:
   KAMER zwamgrot 80,113 VOOR

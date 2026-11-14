@@ -34,6 +34,16 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer huterf                  # de hut is al gevonden: meteen naar het erf, niet door het doolhof
+verwacht_slot 0 mira_mee
+screenshot huterf
+cursor 224,90
+wacht 2
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer jachthut
 verwacht_slot 0 mira_mee
 screenshot jachthut_uit_open
@@ -87,6 +97,14 @@ wacht 150
 cursor 32,72
 wacht 2
 verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer huterf
+cursor 8,128
+wacht 2
+verwacht_tekst 18 "Ga naar pad"
 vuur
 wacht_tot_stil
 wacht_op_script

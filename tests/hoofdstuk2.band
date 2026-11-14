@@ -115,6 +115,7 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+voeg_in doolhof_stappen.txt            # door het doolhof (tunnel links, rechts, tunnel rechts, links) en het erf
 verwacht_kamer jachthut
 screenshot jachthut
 cursor 180,172

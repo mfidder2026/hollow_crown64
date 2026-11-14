@@ -18,6 +18,11 @@ KAMER spookbrug
         PATCH pot_kever
       EINDE
     EINDE
+    ALS vlag verdwaald                     # (het doolhof achter de brug: diepwoud.hcs)
+      WIS verdwaald
+      ZEG eldric "Hé... de brug weer? We liepen in een rondje!"
+      ZEG mira "Ik zei het toch: volg de sporen van Grom."
+    EINDE
 
 VOORWERP terug_bospad "bospad" VAK 0,90 6,34 LOOP 4,110 LINKS
   GA_NAAR:
@@ -31,7 +36,13 @@ VOORWERP brug "brug" VAK 62,56 97,44 LOOP 44,104 RECHTS
   GA_NAAR:
     ALS vlag ridder_weg
       ZEG eldric "Niet naar beneden kijken. Niet naar beneden kijken."
-      KAMER jachthut 16,104 RECHTS
+      ALS vlag hut_gevonden
+        KAMER huterf 10,116 RECHTS
+      EINDE
+      WIS doolhof1
+      WIS doolhof2
+      WIS doolhof3
+      KAMER diepwoud 8,114 RECHTS
     ANDERS
       ZEG eldric "De ridder heft zijn zwaard. Hier kom ik niet langs."
     EINDE

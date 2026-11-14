@@ -1,0 +1,13 @@
+# kijk.band — om mee te kijken (python3 tools/vicetest.py --kijk tests/kijken/kijk.band): het intro met het thema, het
+# openingsverhaal helemaal, en dan het hele spel (hele_spel.band) met alle tussenscènes, tot de slotscène.
+intro
+wacht 5
+verwacht intro_actief = 1
+wacht 1500                             # het titelscherm, de kleurenloop en het thema (~30 s)
+toets spatie 2                         # naar het openingsverhaal
+wacht 5
+verwacht_kamer verhaal
+wacht_op_script                        # het hele verhaal, tot Eldric op het plein staat
+wacht 5
+verwacht_kamer plein
+voeg_in ../hele_spel.band

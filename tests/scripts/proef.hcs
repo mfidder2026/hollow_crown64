@@ -113,11 +113,25 @@ SCRIPT proef_hfst2_open:
   ZET kever_gevangen
   ZET vuur_uit
   ZET kooi_open
+  ZET hut_gevonden                       # het doolhof achter de brug is al eens doorlopen
   GEEF gloeischub
   GEEF helm
   TOON mira_mee
   HOOFDSTUK 2
   KAMER bosrand 80,94 RUG
+
+# ---- het doolhof achter de spookbrug (tests/doolhof.band): de ridder is weg, de hut nog niet gevonden ----
+SCRIPT proef_doolhof:
+  ZET wolven_weg
+  ZET hoofdstuk1_klaar
+  ZET hoofdstuk2_begonnen
+  ZET ridder_weg
+  ZET helm_gepakt
+  ZET kever_gevangen
+  GEEF helm
+  TOON mira_mee
+  HOOFDSTUK 2
+  KAMER spookbrug 40,108 RECHTS
 
 # ---- hoofdstuk 3: op de oever, de boot is geroepen, met wat hoofdstuk 1 en 2 opleverden (tests/hoofdstuk3.band) ----
 SCRIPT proef_hfst3:

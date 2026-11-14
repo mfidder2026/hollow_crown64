@@ -1,0 +1,88 @@
+# wolfspad.hcs — een open plek in het Duisterwoud, scherm 2 en 4 van het doolhof (zie diepwoud.hcs).
+# Plaatje: data/plaatjes/wolfspad.png (tools/teken_woud2.py).
+KAMER wolfspad
+  LOOPKLEUREN bruin oranje donkergrijs zwart geel grijs lichtgrijs groen lichtgroen wit
+  SCHAAL 106 96
+  LOOPVAK 10,108 150,122                 # 0 de open plek
+  LOOPVAK 2,108 24,120                   # 1 links
+  LOOPVAK 136,106 157,117                # 2 rechts
+  LOOPVAK 34,86 40,108                   # 3 achter links
+  LOOPVAK 120,86 126,108                 # 4 achter rechts
+  BINNENKOMST:
+    MUZIEK woud
+
+VOORWERP wp_links "pad links" VAK 0,102 8,20 LOOP 4,114 LINKS
+  GA_NAAR:
+    ALS vlag doolhof3
+      ZET hut_gevonden
+      WIS doolhof1
+      WIS doolhof2
+      WIS doolhof3
+      KAMER huterf 10,116 RECHTS
+    EINDE
+    ZEG eldric "Linksaf. Of was het nou..."
+    WIS doolhof1
+    WIS doolhof2
+    ZET verdwaald
+    KAMER spookbrug 40,108 LINKS
+  BEKIJK:
+    ZEG eldric "Een pad naar links."
+
+VOORWERP wp_rechts "pad rechts" VAK 152,100 8,20 LOOP 156,110 RECHTS
+  GA_NAAR:
+    ALS vlag doolhof3
+      ZEG eldric "Rechtsaf..."
+      WIS doolhof1
+      WIS doolhof2
+      WIS doolhof3
+      ZET verdwaald
+      KAMER spookbrug 40,108 LINKS
+    EINDE
+    ZET doolhof2
+    KAMER diepwoud 8,114 RECHTS
+  BEKIJK:
+    ZEG eldric "Een pad naar rechts."
+
+VOORWERP wp_tunnel_l "tunnel links" VAK 26,64 22,20 LOOP 37,88 RUG
+  GA_NAAR:
+    ZEG eldric "Tussen de struiken door..."
+    WIS doolhof1
+    WIS doolhof2
+    WIS doolhof3
+    ZET verdwaald
+    KAMER spookbrug 40,108 LINKS
+  BEKIJK:
+    ZEG eldric "Een donkere tunnel in de struiken."
+
+VOORWERP wp_tunnel_r "tunnel rechts" VAK 112,64 22,20 LOOP 123,88 RUG
+  GA_NAAR:
+    ZEG eldric "Tussen de struiken door..."
+    WIS doolhof1
+    WIS doolhof2
+    WIS doolhof3
+    ZET verdwaald
+    KAMER spookbrug 40,108 LINKS
+  BEKIJK:
+    ZEG eldric "Een donkere tunnel in de struiken."
+
+VOORWERP wp_sporen "sporen" VAK 48,106 60,16 LOOP 80,118 VOOR
+  BEKIJK:
+    ALS vlag doolhof3
+      ZEG eldric "De sporen gaan naar links. En ik ruik rook!"
+    ANDERS
+      ZEG eldric "Reuzensporen in de modder. Ze gaan naar rechts."
+    EINDE
+  PAK:
+    ZEG eldric "Modder heb ik al genoeg aan mijn schoenen."
+
+VOORWERP wp_paal "paal" VAK 72,32 18,64 LOOP 80,110 RUG
+  BEKIJK:
+    ZEG eldric "Een schedel met gewei. Dat betekent vast niet 'welkom'."
+  PAK:
+    ZEG eldric "Die laat ik mooi staan. Hij kijkt me aan."
+
+VOORWERP wp_klem "klem" VAK 110,112 32,12 LOOP 116,120 RECHTS
+  BEKIJK:
+    ZEG eldric "Een klem, groter dan ik. Waar jaagt Grom eigenlijk op?"
+  PAK:
+    ZEG eldric "Die zit vast aan een ketting. Gelukkig maar."

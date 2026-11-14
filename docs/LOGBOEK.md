@@ -988,3 +988,26 @@ Laatste fout voor de commit: `turbo_vergeet` stond in opslaan.asm tussen het kla
 Kernal-SAVE, en maakte A nul. Daardoor las SAVE het beginadres uit $00/$01 en schreef 77 blokken onzin (een goed
 opslagbestand is 1 blok); laden daarvan liet het spel hangen. Nu staat de aanroep vóór SETNAM. Daarna: 29 van 29
 banden geslaagd, compiler 23 van 23.
+
+## 2026-11-14 — Het doolhof achter de spookbrug, en meekijken
+
+Op verzoek van de gebruiker: na de brug stond Eldric meteen binnen in de jachthut. Nu loop je eerst door het
+Duisterwoud: een doolhof van vier schermen (om en om twee getekende plaatjes, `diepwoud` en `wolfspad`, zodat het op
+diskette 1 past), elk met vier uitgangen (pad links, pad rechts, tunnel links, tunnel rechts). Eén route brengt je bij
+de hut: tunnel links, rechts, tunnel rechts, links. Elke andere afslag eindigt weer bij de brug ("We liepen in een
+rondje!"). De aanwijzing: de voetsporen van Grom (Bekijk sporen). Daarna het erf (`huterf`): een blokhut op
+reuzenmaat met een rokende schoorsteen, een raam met oranje licht, huiden, een bijl in het hakblok, een ketel. Pas
+dan door de deur naar binnen. Is de hut eenmaal gevonden, dan gaat de brug meteen naar het erf.
+- Getekend in `tools/teken_woud2.py` (gloeizwammen als lichtbron, een uil in een holle boom, een waarschuwingspaal
+  met gewei, een klem; het kruispad als één masker met een zwarte rand).
+- Tests: `tests/doolhof.band` (twee keer verdwalen, dan de goede route, terug, en weer over de brug), de route als
+  `tests/doolhof_stappen.txt` in hoofdstuk2.band en hele_spel.band; rondje_woud.band via het erf.
+- De testring is nu 1 KB (het autotest-programma paste niet meer onder $A000).
+
+Meekijken: `python3 tools/vicetest.py --kijk tests/kijken/kijk.band` speelt het intro, het openingsverhaal en het
+hele spel op normale snelheid, met geluid en de echte 1541 (de snellader). Twee fouten daarbij opgelost: vicetest
+begon al terwijl het spel nog laadde (nu moet de processor zes keer achter elkaar in het spel staan), en de
+geheugenblikken (20 per seconde, elk zet de emulatie even stil) lieten het geluid haperen: in de kijkstand nu één
+keer per seconde.
+
+Testronde: 30 van 30 banden, compiler 23 van 23.

@@ -1,0 +1,101 @@
+# doolhof.band — het doolhof achter de spookbrug (scripts/diepwoud.hcs): twee keer verkeerd (terug bij de brug, alles
+# vergeten), dan de goede route (de sporen van Grom) naar de hut, en terug: daarna gaat de brug meteen naar het erf.
+wacht 3
+start_script proef_doolhof
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+
+# 1. over de brug: het doolhof; meteen rechts is fout
+cursor 200,90
+wacht 2
+verwacht_tekst 18 "Ga naar brug"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer diepwoud
+verwacht_slot 0 mira_mee
+screenshot diepwoud
+cursor 20,164                          # Bekijk sporen: de aanwijzing
+vuur
+wacht 2
+cursor 154,132
+verwacht_tekst 18 "Bekijk sporen"
+vuur
+wacht_tot_stil
+wacht 3
+verwacht_tekst 0 "Sporen zo groot als een badkuip. Ze gaan"
+wacht_op_script
+cursor 312,126
+wacht 2
+verwacht_tekst 18 "Ga naar pad rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug               # in een rondje gelopen
+verwacht_vlag verdwaald 0
+verwacht_slot 0 mira_mee
+
+# 2. opnieuw: tunnel links is goed, dan in wolfspad de tunnel rechts: fout, alles vergeten
+cursor 200,90
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer diepwoud
+cursor 74,90
+wacht 2
+verwacht_tekst 18 "Ga naar tunnel links"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer wolfspad
+verwacht_vlag doolhof1 1
+screenshot wolfspad
+cursor 246,90
+wacht 2
+verwacht_tekst 18 "Ga naar tunnel rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+verwacht_vlag doolhof1 0
+
+# 3. de goede route, het erf, naar binnen
+cursor 200,90
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+voeg_in doolhof_stappen.txt
+verwacht_kamer jachthut
+verwacht_slot 0 mira_mee
+
+# 4. terug naar buiten, naar de brug, en weer over: nu meteen naar het erf
+cursor 32,72
+wacht 2
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer huterf
+screenshot huterf
+cursor 8,128
+wacht 2
+verwacht_tekst 18 "Ga naar pad"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer spookbrug
+cursor 200,90
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer huterf

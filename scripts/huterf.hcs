@@ -1,0 +1,57 @@
+# huterf.hcs — het erf van Groms jachthut (hoofdstuk 2), na het doolhof. Plaatje: data/plaatjes/huterf.png
+# (tools/teken_woud2.py). De deur gaat naar binnen (jachthut); links terug, de sporen volgen naar de brug.
+KAMER huterf
+  LOOPKLEUREN bruin oranje geel donkergrijs zwart grijs lichtgrijs groen lichtgroen
+  LOOPVAK 2,118 157,124                  # 0 vooraan
+  LOOPVAK 88,104 134,124                 # 1 voor de deur
+  LOOPVAK 2,104 22,124                   # 2 links, bij het rek
+  BINNENKOMST:
+    MUZIEK woud
+    ALS NIET vlag huterf_gezien
+      ZET huterf_gezien
+      ZEG eldric "Een hut! Met rook uit de schoorsteen."
+      ZEG mira "Kijk die deur. Hier woont iemand die heel groot is."
+    EINDE
+
+VOORWERP hutdeur "deur" VAK 98,48 28,52 LOOP 112,106 RUG
+  GA_NAAR:
+    KAMER jachthut 16,104 RECHTS
+  BEKIJK:
+    ZEG eldric "Een deur voor een reus. Hij is niet op slot."
+  OPEN:
+    KAMER jachthut 16,104 RECHTS
+
+VOORWERP hutraam "raam" VAK 66,56 26,24 LOOP 80,118 RUG
+  BEKIJK:
+    ZEG eldric "Binnen brandt een vuur. Ik zie een kooi... met iets erin."
+
+VOORWERP huterf_pad "pad" VAK 0,104 6,20 LOOP 4,120 LINKS
+  GA_NAAR:
+    ZEG eldric "Ik volg de sporen terug naar de brug."
+    KAMER spookbrug 40,108 LINKS
+  BEKIJK:
+    ZEG eldric "Het pad terug, langs de sporen van Grom."
+
+VOORWERP hut_huiden "huiden" VAK 10,50 36,34 LOOP 16,110 RUG
+  BEKIJK:
+    ZEG eldric "Huiden die drogen. Ik hoop dat het wolven waren."
+  PAK:
+    ZEG mira "Bah. Laat hangen."
+
+VOORWERP hut_bijl "bijl" VAK 30,88 22,20 LOOP 20,116 RECHTS
+  BEKIJK:
+    ZEG eldric "Een bijl in een hakblok. Zo groot als mijn hoofd."
+  PAK:
+    ZEG eldric "Die krijg ik niet eens los. Een reuzenbijl."
+
+VOORWERP hut_ketel "ketel" VAK 56,86 30,32 LOOP 88,118 LINKS
+  BEKIJK:
+    ZEG eldric "Een ketel op een vuurtje. Het ruikt naar... laat maar."
+
+VOORWERP hut_hout "brandhout" VAK 134,70 26,30 LOOP 132,110 RECHTS
+  BEKIJK:
+    ZEG eldric "Een stapel gekloofd hout. Grom zit er warmpjes bij."
+
+VOORWERP hut_schoorsteen "schoorsteen" VAK 130,4 22,32 LOOP 130,110 RUG
+  BEKIJK:
+    ZEG eldric "Er komt rook uit de schoorsteen. Er is iemand thuis."

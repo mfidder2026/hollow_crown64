@@ -1,0 +1,46 @@
+# doolhof_stappen.txt — van de spookbrug (net over de brug, in diepwoud) door het doolhof naar binnen in de jachthut:
+# tunnel links, rechts, tunnel rechts, links (de sporen van Grom), dan het erf en de deur. Voor voeg_in.
+verwacht_kamer diepwoud
+cursor 74,90
+wacht 2
+verwacht_tekst 18 "Ga naar tunnel links"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer wolfspad
+verwacht_vlag doolhof1 1
+cursor 312,126
+wacht 2
+verwacht_tekst 18 "Ga naar pad rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer diepwoud
+verwacht_vlag doolhof2 1
+cursor 246,90
+wacht 2
+verwacht_tekst 18 "Ga naar tunnel rechts"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer wolfspad
+verwacht_vlag doolhof3 1
+cursor 8,128
+wacht 2
+verwacht_tekst 18 "Ga naar pad links"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer huterf
+verwacht_vlag hut_gevonden 1
+cursor 224,90
+wacht 2
+verwacht_tekst 18 "Ga naar deur"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
