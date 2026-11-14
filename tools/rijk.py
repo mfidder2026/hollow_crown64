@@ -241,7 +241,7 @@ def verrijk(dk, zaad, lichten=(), randlicht=True, textuur_=True, sluit=()):
                 rx = x // 3 if vorm == "nerf" else x
                 ry = y // 3 if vorm == "staand" else y
                 if ruis(rx, ry, zaad + 3) < kans:
-                    nieuw = kleuren[int(ruis(rx, ry, zaad + 4) * len(kleuren))]
+                    nieuw = kleuren[min(len(kleuren) - 1, int(ruis(rx, ry, zaad + 4) * len(kleuren)))]
             if nieuw != k:
                 im.putpixel((x, y), nieuw)
     for cx, cy, rx, ry, kracht, kaart in lichten:

@@ -31,7 +31,7 @@ wacht 300
 verwacht_tekst 0 "De aardmannetjes kwamen naar boven. Het"
 verwacht_slot 0 hol_1
 verwacht_slot 1 hol_2
-verwacht kleur_teller = 9              # de schemer is er: alle kleurwissels gedaan
+verwacht kleur_teller = 10             # de schemer is er: alle kleurwissels gedaan
 screenshot aardmannetjes
 wacht_op_script                        # tot het einde: Eldric, en dan naar het plein
 wacht 5

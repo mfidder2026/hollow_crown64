@@ -7,7 +7,7 @@ dorpsweg data/plaatjes/dorpsweg.png   boven=0  exact=1  sterkte=0   # hoofdstuk 
 bosrand  data/flux/bosrand.png    boven=115  kleur=1.8  licht=1.4  sterkte=0  patch=wolven_weg:24,72,88,24:data/flux/bosrand_zonder_wolven.png
 titel    data/flux/titel.png          boven=64  kleur=1.5  licht=1.0  sterkte=0.5   # het introscherm (hoofdstuk 10): geen kamer om in te lopen
 kelder   data/flux/kelder.png     boven=115  kleur=1.5  licht=1.0  sterkte=0  patch=honingpot_weg:140,40,16,16:data/flux/kelder_zonder_honingpot.png
-verhaal  data/plaatjes/toneel.png    boven=0  exact=1  sterkte=0   # de verhaalanimatie (met de hand getekend: tools/teken_toneel.py)
+verhaal  data/plaatjes/toneel.png    boven=0  exact=1  sterkte=0  schijf=alle   # de verhaalanimatie (met de hand getekend: tools/teken_toneel.py)
 bospad   data/plaatjes/bospad.png   boven=0  exact=1  sterkte=0   # hoofdstuk 2 (met de hand getekend: tools/teken_bospad.py)
 spookbrug data/plaatjes/spookbrug.png  boven=0  exact=1  sterkte=0  patch=harnas_helm:24,96,24,16:data/plaatjes/spookbrug_harnas_helm.png  patch=harnas:24,96,24,16:data/plaatjes/spookbrug_harnas.png  patch=pot_kever:12,96,12,16:data/plaatjes/spookbrug_pot_kever.png  patch=geen_pot:12,96,12,16:data/plaatjes/spookbrug.png   # hoofdstuk 2 (met de hand getekend: tools/teken_spookbrug.py)
 diepwoud data/plaatjes/diepwoud.png   boven=0  exact=1  sterkte=0   # hoofdstuk 2: het doolhof, scherm 1 en 3 (tools/teken_woud2.py)
@@ -23,13 +23,19 @@ boot     data/plaatjes/boot.png       boven=0  exact=1  sterkte=0  patch=straal:
 zeerotsen data/plaatjes/zeerotsen.png boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: varen langs de klippen (toneel)
 klippad  data/plaatjes/klippad.png    boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: loopscherm boot - eiland
 eiland   data/plaatjes/eiland.png     boven=0  exact=1  sterkte=0  patch=toren_open:52,64,20,40:data/plaatjes/eiland_deur_open.png  patch=honing:96,48,44,64:data/plaatjes/eiland_honing.png  patch=geen_sleutel:128,104,12,8:data/plaatjes/eiland_honing_leeg.png  schijf=2
+torenhal data/plaatjes/torenhal.png   boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: loopscherm eiland - vuurtoren (de hal)
+torentrap data/plaatjes/torentrap.png boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: loopscherm, de trap omhoog
+torentrap2 data/plaatjes/torentrap2.png boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: loopscherm, het bordes
+torentrap3 data/plaatjes/torentrap3.png boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 3: loopscherm, het luik
 vuurtoren data/plaatjes/vuurtoren.png boven=0  exact=1  sterkte=0  patch=nul_om:108,40,32,72:data/plaatjes/vuurtoren_nul_om.png  patch=lamp_aan:56,24,40,48:data/plaatjes/vuurtoren_lamp_aan.png  schijf=2
 kloof    data/plaatjes/kloof.png      boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4 (tools/teken_kloof.py)
 grotgang data/plaatjes/grotgang.png   boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4: loopscherm kloof - donker
 donker   data/plaatjes/donker.png     boven=0  exact=1  sterkte=0  patch=pad1:0,80,160,16:data/plaatjes/donker_pad.png  patch=pad2:0,96,160,16:data/plaatjes/donker_pad.png  patch=pad3:0,112,160,16:data/plaatjes/donker_pad.png  schijf=2
 rivier   data/plaatjes/rivier.png     boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4: loopscherm donker - zwamgrot
 zwamgrot data/plaatjes/zwamgrot.png   boven=0  exact=1  sterkte=0  schijf=2
+muurgang data/plaatjes/muurgang.png   boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4: loopscherm zwamgrot - aardstad (hun verhaal op de muur)
 aardstad data/plaatjes/aardstad.png   boven=0  exact=1  sterkte=0  patch=ei:124,48,24,24:data/plaatjes/aardstad_ei.png  schijf=2
+fluistergang data/plaatjes/fluistergang.png boven=0  exact=1  sterkte=0  schijf=2   # hoofdstuk 4: loopscherm aardstad - spreukzaal
 spreukzaal data/plaatjes/spreukzaal.png boven=0 exact=1  sterkte=0  patch=boek_open:16,64,36,32:data/plaatjes/spreukzaal_boek.png  schijf=2
 oma      data/plaatjes/oma.png        boven=0  exact=1  sterkte=0  schijf=3   # tussenscène na hoofdstuk 4 (tools/teken_ijs.py)
 bergpad  data/plaatjes/bergpad.png    boven=0  exact=1  sterkte=0  patch=lawine:100,32,48,64:data/plaatjes/bergpad_lawine.png  schijf=3   # hoofdstuk 5 (tools/teken_ijs.py)

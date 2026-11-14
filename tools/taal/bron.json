@@ -1,0 +1,6608 @@
+{
+ "zeg": {
+  "Een oud aardmannetje met wit haar en een omslagdoek.": {
+   "waar": [
+    "aardstad.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze is wakker. Ze kijkt naar mij.": {
+   "waar": [
+    "aardstad.hcs:16"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Praat met Grom, jongen. Niet vechten. Praten.": {
+   "waar": [
+    "aardstad.hcs:19",
+    "aardstad.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Goedenavond, mevrouw?": {
+   "waar": [
+    "aardstad.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze antwoordt, maar het klinkt als kiezels. Ik heb de kever nodig.": {
+   "waar": [
+    "aardstad.hcs:22"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Jij bent de jongen met het stukje zon. Nul heeft over je gezongen.": {
+   "waar": [
+    "aardstad.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Mijn volk is niet gelukkig in de schemer.": {
+   "waar": [
+    "aardstad.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Er groeit niets. De kinderen zijn zwak.": {
+   "waar": [
+    "aardstad.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Grom houdt van ons. Maar hij denkt dat het licht ons doodt.": {
+   "waar": [
+    "aardstad.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Het is te veel licht dat ons doodt. Een dal met schaduw zou genoeg zijn.": {
+   "waar": [
+    "aardstad.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Een dal met schaduw... en de rest krijgt de zon terug?": {
+   "waar": [
+    "aardstad.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kijk. Onze eierkamer. Leeg, op één ei na.": {
+   "waar": [
+    "aardstad.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Mijn steen... hij wordt warm. Hij gloeit!": {
+   "waar": [
+    "aardstad.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Dat ei is van ons. Het wil nog niet uit. Het wacht ergens op.": {
+   "waar": [
+    "aardstad.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Neem deze schub mee. Hij opent de poort van het kasteel.": {
+   "waar": [
+    "aardstad.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Praat met Grom. Niet vechten. Praten.": {
+   "waar": [
+    "aardstad.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Eén ei, en het gloeit zoals Mira's steen.": {
+   "waar": [
+    "aardstad.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kamer met kuiltjes. Allemaal leeg, op één na.": {
+   "waar": [
+    "aardstad.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Honderden nissen, in elke nis een slapend aardmannetje. Ze snurken zacht.": {
+   "waar": [
+    "aardstad.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Sst. Laat ze slapen.": {
+   "waar": [
+    "aardstad.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een gang naar rechts. Er staan manen op de muur gekrast.": {
+   "waar": [
+    "aardstad.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Wacht. Die oude vrouw is wakker. Ze wil met je praten, Eldric.": {
+   "waar": [
+    "aardstad.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Terug naar de zwamgrot.": {
+   "waar": [
+    "aardstad.hcs:74"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het kristal brandt in de houder. Wit, zo wit.": {
+   "waar": [
+    "baken.hcs:16"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege houder tussen vier spiegels. Daar past iets in.": {
+   "waar": [
+    "baken.hcs:18"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het brandt al.": {
+   "waar": [
+    "baken.hcs:22",
+    "smit.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Met oma's want zet ik het kristal in de houder.": {
+   "waar": [
+    "baken.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De spiegels draaien! Een witte bundel, boven de schemer uit!": {
+   "waar": [
+    "baken.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oma ziet het, Eldric. Iedereen ziet het.": {
+   "waar": [
+    "baken.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik zet het kristal in de houder...": {
+   "waar": [
+    "baken.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "AU!": {
+   "waar": [
+    "baken.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het baken bijt. Oma zei het nog.": {
+   "waar": [
+    "baken.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Vier ronde spiegels. Oud, maar ze glanzen nog.": {
+   "waar": [
+    "baken.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De zon. Zwart, met twee manen ervoor. Zo dichtbij was ik nog nooit.": {
+   "waar": [
+    "baken.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Onder mij ligt de schemer, als een deken over het land.": {
+   "waar": [
+    "baken.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De weg naar beneden.": {
+   "waar": [
+    "baken.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eldric... ik hoor harnassen. Op de trap. Ze komen ons halen.": {
+   "waar": [
+    "baken.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Terug naar de hut van Grom.": {
+   "waar": [
+    "beekdal.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar beneden ligt het meer. Ik hoor water.": {
+   "waar": [
+    "beekdal.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een beek, koud en helder. Er zwemmen kleine zilveren visjes.": {
+   "waar": [
+    "beekdal.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een reiger. Hij staat stil als een paal en kijkt naar de visjes.": {
+   "waar": [
+    "beekdal.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar de hut, naar het warme vuur.": {
+   "waar": [
+    "bergkam.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Verder over de kam. Niet naar beneden kijken.": {
+   "waar": [
+    "bergkam.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een zee van wolken onder mijn voeten.": {
+   "waar": [
+    "bergkam.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De zon, achter de twee manen. Zo dichtbij was ik nog nooit.": {
+   "waar": [
+    "bergkam.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een berg sneeuw naast het pad. Het pad is vrij.": {
+   "waar": [
+    "bergpad.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een sneeuwveld, over het pad. Het hangt. Als iemand roept, valt het.": {
+   "waar": [
+    "bergpad.hcs:22"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hallo, berg sneeuw.": {
+   "waar": [
+    "bergpad.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "HALLOOO!": {
+   "waar": [
+    "bergpad.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het valt! Vlak voor ons, op het pad.": {
+   "waar": [
+    "bergpad.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Goed geschreeuwd. Nu is het pad vrij.": {
+   "waar": [
+    "bergpad.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Even snel eronderdoor...": {
+   "waar": [
+    "bergpad.hcs:41",
+    "bergpad.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kraak.": {
+   "waar": [
+    "bergpad.hcs:45",
+    "bergpad.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Sneeuw. Veel sneeuw.": {
+   "waar": [
+    "bergpad.hcs:47",
+    "bergpad.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Het pad naar boven, onder het sneeuwveld door.": {
+   "waar": [
+    "bergpad.hcs:54"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De IJstop. Ergens daarboven woont oma.": {
+   "waar": [
+    "bergpad.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Olm roeit, en kijkt naar de straal van de vuurtoren.": {
+   "waar": [
+    "boot.hcs:18"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Olm roeit. Rondjes, denk ik. Hij weet niet waarheen.": {
+   "waar": [
+    "boot.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De vuurtoren brandt! De straal wijst over de zee.": {
+   "waar": [
+    "boot.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een vuurtoren, half in de mist. Hij brandt niet.": {
+   "waar": [
+    "boot.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Grijs water. Als ik er te lang naar kijk, vergeet ik waarom.": {
+   "waar": [
+    "boot.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zwemmen? Hier? In de Zee van Vergetelheid? Nee.": {
+   "waar": [
+    "boot.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Even een slokje. Ik heb zo'n dorst.": {
+   "waar": [
+    "boot.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het water smaakt naar niets. Naar vergeten.": {
+   "waar": [
+    "boot.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Eldric dronk de zee, en vergat hoe ademen werkt.": {
+   "waar": [
+    "boot.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Er zit al zeewater in.": {
+   "waar": [
+    "boot.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik schep de kruik vol zeewater. Waarom ook alweer? Ach.": {
+   "waar": [
+    "boot.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Welke vuurtoren? Ik zie geen licht. Zonder licht roei ik rondjes.": {
+   "waar": [
+    "boot.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Ik zie het pad niet. Het water heeft geen pad.": {
+   "waar": [
+    "boot.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Maar de steen trekt naar links.": {
+   "waar": [
+    "boot.hcs:61"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Links. Links is goed. Links was altijd al goed.": {
+   "waar": [
+    "boot.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "De straal! Nu weet ik weer waar de overkant is.": {
+   "waar": [
+    "boot.hcs:68"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "De Rotskloof. Daar wonen ze, Eldric. Onder de grond.": {
+   "waar": [
+    "boot.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Dan gaan we naar beneden. Licht mee.": {
+   "waar": [
+    "boot.hcs:70"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Aan land. De kloof. Ik wacht hier. Denk ik.": {
+   "waar": [
+    "boot.hcs:75"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Wat zei je? Ach, laat maar.": {
+   "waar": [
+    "boot.hcs:82"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Blijf op het pad, Eldric. Het Duisterwoud houdt van verdwalers.": {
+   "waar": [
+    "bospad.hcs:12"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Terug naar de rand van het bos.": {
+   "waar": [
+    "bospad.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het pad loopt verder het bos in. Ik hoor water. Diep beneden.": {
+   "waar": [
+    "bospad.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een moeras. Het borrelt. Het ruikt naar oude sokken.": {
+   "waar": [
+    "bospad.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dat groene spul ziet er best stevig uit.": {
+   "waar": [
+    "bospad.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Moerassen zijn geen loopvakken. Dat had je kunnen weten.": {
+   "waar": [
+    "bospad.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Ik ben Tik. Ik draai de tijd terug. Een beetje maar.": {
+   "waar": [
+    "bospad.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Een handje moeras? Nee, dank je.": {
+   "waar": [
+    "bospad.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er hangen holle kokers aan de takken. Iets heeft hier gegeten.": {
+   "waar": [
+    "bospad.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eén koker is genoeg.": {
+   "waar": [
+    "bospad.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik spring... en pluk er eentje los.": {
+   "waar": [
+    "bospad.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oude bomen met holle stammen. Aan de takken hangen kokers.": {
+   "waar": [
+    "bospad.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Rode paddenstoelen met witte stippen.": {
+   "waar": [
+    "bospad.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Niet doen. Die zijn voor de kabouters. En voor de begrafenis.": {
+   "waar": [
+    "bospad.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Terug naar Dawnhaven.": {
+   "waar": [
+    "bosrand.hcs:22",
+    "dorpsweg.hcs:17"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'Duisterwoud.' En met krijt eronder: 'Niet doen.'": {
+   "waar": [
+    "bosrand.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een wegwijzer. Er staat iets op.": {
+   "waar": [
+    "bosrand.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het pad het Duisterwoud in. Daar komen de aardmannetjes vandaan.": {
+   "waar": [
+    "bosrand.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar ga ik niet zomaar in. Nog niet.": {
+   "waar": [
+    "bosrand.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Weg zijn ze. Alleen hun pootafdrukken nog.": {
+   "waar": [
+    "bosrand.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Schaduwwolven. Ze laten niemand door. Ogen als kolen.": {
+   "waar": [
+    "bosrand.hcs:49"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er is niemand meer om tegen te praten.": {
+   "waar": [
+    "bosrand.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Brave hondjes?": {
+   "waar": [
+    "bosrand.hcs:56"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Nee. Geen brave hondjes.": {
+   "waar": [
+    "bosrand.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het steentje is warm, maar het zijn er te veel. Ik heb meer licht nodig.": {
+   "waar": [
+    "bosrand.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze zijn al weg.": {
+   "waar": [
+    "bosrand.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ksst! Weg jullie! Kijk, licht!": {
+   "waar": [
+    "bosrand.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een jongen met een stukje zon in zijn hand...": {
+   "waar": [
+    "bosrand.hcs:77"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Interessant. Heel interessant.": {
+   "waar": [
+    "bosrand.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Wie... wat was dat? Die ogen. Zo groot als lantaarns.": {
+   "waar": [
+    "bosrand.hcs:81"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Wacht op mij, jongen.": {
+   "waar": [
+    "bosrand.hcs:84"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Het pad vraagt om mij.": {
+   "waar": [
+    "bosrand.hcs:85"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik ben maar een jongen. Maar ik ga mee. Samen dan.": {
+   "waar": [
+    "bosrand.hcs:89"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De lantaarn brandt nog niet. Ik heb vuur nodig.": {
+   "waar": [
+    "bosrand.hcs:94"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege lantaarn schrikt geen wolf af.": {
+   "waar": [
+    "bosrand.hcs:96"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Grom neemt één maansteen uit de Holle Kroon.": {
+   "waar": [
+    "dak.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De eerste maan schuift opzij. Het licht stort over de bergen.": {
+   "waar": [
+    "dak.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Het baken vangt het, en kaatst het zacht over het land.": {
+   "waar": [
+    "dak.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De tweede maan blijft staan, boven één dal achter de bergen.": {
+   "waar": [
+    "dak.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Daar trekken de aardmannetjes heen. Grom voorop.": {
+   "waar": [
+    "dak.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Mira. De zon komt terug.": {
+   "waar": [
+    "dak.hcs:36"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik weet het. Het ei zegt het.": {
+   "waar": [
+    "dak.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Mira's steen barst. Er komt een eitje uit, met één oog.": {
+   "waar": [
+    "dak.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Hallo, ik.": {
+   "waar": [
+    "dak.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Dus daarom wist hij alles.": {
+   "waar": [
+    "dak.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Op de IJstop staat Oma Rijm, met de zon op haar gezicht.": {
+   "waar": [
+    "dak.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "In Dawnhaven laat Bram zijn hamer vallen.": {
+   "waar": [
+    "dak.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Dawnhaven. De eerste ochtend.": {
+   "waar": [
+    "dak.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Alle paden lijken op elkaar. Volg de sporen van Grom!": {
+   "waar": [
+    "diepwoud.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Hier links af... Ik weet het bijna zeker.": {
+   "waar": [
+    "diepwoud.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een pad naar links, het donker in.": {
+   "waar": [
+    "diepwoud.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar ligt de brug. Terug, als het moet.": {
+   "waar": [
+    "diepwoud.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Rechtsaf. Dat voelt goed.": {
+   "waar": [
+    "diepwoud.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een pad naar rechts, langs de omgevallen stam.": {
+   "waar": [
+    "diepwoud.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Tussen de struiken door...": {
+   "waar": [
+    "diepwoud.hcs:56",
+    "diepwoud.hcs:74",
+    "wolfspad.hcs:48",
+    "wolfspad.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een donkere tunnel in de struiken, links.": {
+   "waar": [
+    "diepwoud.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een donkere tunnel in de struiken, rechts.": {
+   "waar": [
+    "diepwoud.hcs:79"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De sporen van Grom. Ze gaan de tunnel rechts in.": {
+   "waar": [
+    "diepwoud.hcs:84"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Sporen zo groot als een badkuip. Ze gaan de tunnel links in.": {
+   "waar": [
+    "diepwoud.hcs:86"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een voetspoor meenemen? Met de modder erbij?": {
+   "waar": [
+    "diepwoud.hcs:89"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een uil in een holle boom. Hij kijkt alsof hij de weg weet.": {
+   "waar": [
+    "diepwoud.hcs:93"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Weet jij de weg naar de hut?": {
+   "waar": [
+    "diepwoud.hcs:95"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "...": {
+   "waar": [
+    "diepwoud.hcs:96"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Uilen praten niet, Eldric. Kijk naar de grond.": {
+   "waar": [
+    "diepwoud.hcs:97"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Deze boom stond hier al lang voor de manen vastzaten.": {
+   "waar": [
+    "diepwoud.hcs:101"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een spinnenweb met een rode spin.": {
+   "waar": [
+    "diepwoud.hcs:105"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Nee. Zij was hier eerst.": {
+   "waar": [
+    "diepwoud.hcs:107"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Paddenstoelen die blauw licht geven.": {
+   "waar": [
+    "diepwoud.hcs:111"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Laat staan. Anders is het hier pikdonker.": {
+   "waar": [
+    "diepwoud.hcs:113"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Eldric? Het is hier zo donker dat zelfs jij niets ziet.": {
+   "waar": [
+    "donker.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Praat met me. Ik ben vlak naast je.": {
+   "waar": [
+    "donker.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Mira. Ik zie alleen haar steen, een heel klein beetje.": {
+   "waar": [
+    "donker.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zwart. Alleen maar zwart. Ik hoor water, heel diep beneden.": {
+   "waar": [
+    "donker.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eén stap. Nog één stap...": {
+   "waar": [
+    "donker.hcs:29",
+    "donker.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er was geen volgende stap.": {
+   "waar": [
+    "donker.hcs:32",
+    "donker.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Eldric vond de afgrond. De afgrond vond Eldric.": {
+   "waar": [
+    "donker.hcs:34",
+    "donker.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Geef me je hand. De steen ziet wat ik niet zie.": {
+   "waar": [
+    "donker.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Wacht. Hier ligt iets dat niet stil wil liggen.": {
+   "waar": [
+    "donker.hcs:61"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een kristal. Het trilt in mijn hand.": {
+   "waar": [
+    "donker.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het Duisterwoud. De weg verdwijnt erin.": {
+   "waar": [
+    "dorpsweg.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een vogelverschrikker. De kraai op zijn arm is niet erg onder de indruk.": {
+   "waar": [
+    "dorpsweg.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De molen van Dawnhaven. De wieken staan stil: geen wind in de schemer.": {
+   "waar": [
+    "dorpsweg.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Op de wegwijzer staat: Duisterwoud. Eronder heeft iemand gekrast: NIET DOEN.": {
+   "waar": [
+    "dorpsweg.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De deur staat open. Een trap naar boven, in het donker.": {
+   "waar": [
+    "eiland.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een zware deur met ijzeren banden. Op slot.": {
+   "waar": [
+    "eiland.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij is al open.": {
+   "waar": [
+    "eiland.hcs:27",
+    "eiland.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Klik. De sleutel van de meeuwen past. Ik laat hem in het slot.": {
+   "waar": [
+    "eiland.hcs:30",
+    "eiland.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Op slot. Ik heb een sleutel nodig.": {
+   "waar": [
+    "eiland.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De deur zit op slot.": {
+   "waar": [
+    "eiland.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze zitten aan de honing. Ze zijn de sleutel al vergeten.": {
+   "waar": [
+    "eiland.hcs:62"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Meeuwen. Ze pikken aan iets glimmends bovenop de rots.": {
+   "waar": [
+    "eiland.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Meeuwen houden van zoet. Meer nog dan van glimmend.": {
+   "waar": [
+    "eiland.hcs:65"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Au! Ze pikken terug.": {
+   "waar": [
+    "eiland.hcs:68"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een koperen sleutel. Wat moeten meeuwen met een sleutel?": {
+   "waar": [
+    "eiland.hcs:72"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een sleutel! Die is vast van de vuurtoren.": {
+   "waar": [
+    "eiland.hcs:74"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een rots vol meeuwenpoep. Bovenop glimt iets.": {
+   "waar": [
+    "eiland.hcs:82"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze zitten er al aan.": {
+   "waar": [
+    "eiland.hcs:85"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik smeer wat honing op de rots...": {
+   "waar": [
+    "eiland.hcs:88"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar komen ze! En ze laten iets vallen!": {
+   "waar": [
+    "eiland.hcs:92"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het klippad terug naar de boot. Olm wacht daar.": {
+   "waar": [
+    "eiland.hcs:99"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De vuurtoren. Donker, alsof iemand hem uitblies.": {
+   "waar": [
+    "eiland.hcs:105"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Moeder Aard zei: in de spreukzaal sprak Grom zijn spreuk. Daar moeten we heen.": {
+   "waar": [
+    "fluistergang.hcs:11"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik hoor iets fluisteren. Het komt van daar. Uit iets heel diep.": {
+   "waar": [
+    "fluistergang.hcs:12"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Terug naar de stad van de aardmannetjes.": {
+   "waar": [
+    "fluistergang.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar is een zaal. En een gat, zwarter dan de nacht.": {
+   "waar": [
+    "fluistergang.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Tekens die blauw gloeien. Hoe dichter bij de zaal, hoe feller.": {
+   "waar": [
+    "fluistergang.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dat is zijn spreuk. Ze is nog niet uitgewerkt.": {
+   "waar": [
+    "fluistergang.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Er waait een koude wind uit. Het fluistert mijn naam. Brr.": {
+   "waar": [
+    "fluistergang.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een witte bundel licht steekt boven de schemer uit.": {
+   "waar": [
+    "grot.hcs:17"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Het baken! Wie... de jongen. De jongen met het stukje zon.": {
+   "waar": [
+    "grot.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Meester, hij heeft de vrouw met de steen bij zich.": {
+   "waar": [
+    "grot.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "aardmannetje"
+  },
+  "Spookridders! Haal hem hier. En haal die vrouw.": {
+   "waar": [
+    "grot.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Dan zal ik eens zien wat zo'n jongen te zeggen heeft.": {
+   "waar": [
+    "grot.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Diep onder de berg ziet Grom een licht over de zee.": {
+   "waar": [
+    "grot.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De vuurtoren brandt. Wie heeft hem aangestoken?": {
+   "waar": [
+    "grot.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "De jongen, meester. Met het stukje zon. En Nul hielp hem.": {
+   "waar": [
+    "grot.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "aardmannetje"
+  },
+  "NUL!": {
+   "waar": [
+    "grot.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Wolven! Naar de kloof. Laat niemand naar beneden.": {
+   "waar": [
+    "grot.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Ondertussen, diep onder de berg...": {
+   "waar": [
+    "grot.hcs:56"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Twee manen voor de zon. Mijn kroon houdt ze vast.": {
+   "waar": [
+    "grot.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Zolang ik haar draag, staan ze stil. En blijft het schemer.": {
+   "waar": [
+    "grot.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Meester... wij hebben honger. In de schemer groeit niets.": {
+   "waar": [
+    "grot.hcs:62"
+   ],
+   "max": 80,
+   "spreker": "aardmannetje"
+  },
+  "Stil! Liever honger in het donker dan branden in het licht.": {
+   "waar": [
+    "grot.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Er is een jongen, meester. Met een stukje zon in zijn hand.": {
+   "waar": [
+    "grot.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "aardmannetje"
+  },
+  "Ik weet het. Ik heb hem gezien, bij de wolven.": {
+   "waar": [
+    "grot.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Laat de ridder de brug bewaken. En de vuurtoren blijft donker.": {
+   "waar": [
+    "grot.hcs:68"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Niemand neemt mij mijn kroon af. Niemand.": {
+   "waar": [
+    "grot.hcs:72"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Terug naar buiten, naar de kloof.": {
+   "waar": [
+    "grotgang.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De gang gaat verder. Steeds donkerder.": {
+   "waar": [
+    "grotgang.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Gloeiwormen aan het plafond. Net sterren, maar dan dichterbij.": {
+   "waar": [
+    "grotgang.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Druipsteen. Het groeit een vingerbreedte in honderd jaar.": {
+   "waar": [
+    "grotgang.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Naar het plein. Daar is het donker en hier warm.": {
+   "waar": [
+    "herberg.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een gladde steen met een gat erin. Hij glimt een beetje.": {
+   "waar": [
+    "herberg.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Die neem ik mee. Misschien is iemand hem kwijt.": {
+   "waar": [
+    "herberg.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een eikenhouten tafel. Er ligt iets onder, in het donker.": {
+   "waar": [
+    "herberg.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij staat goed zo.": {
+   "waar": [
+    "herberg.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hup.": {
+   "waar": [
+    "herberg.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar ligt een steen. Met een gat erin.": {
+   "waar": [
+    "herberg.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Duwen gaat makkelijker. Denk ik.": {
+   "waar": [
+    "herberg.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kruik vol lampolie. Niet opdrinken.": {
+   "waar": [
+    "herberg.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege aardewerken kruik.": {
+   "waar": [
+    "herberg.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege kruik. Die kan van pas komen.": {
+   "waar": [
+    "herberg.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een luik naar de kelder. Er komt een geur van olie omhoog.": {
+   "waar": [
+    "herberg.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een luik in de vloer. Daaronder is vast de kelder.": {
+   "waar": [
+    "herberg.hcs:75"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een biervat. Leeg, zo te horen. De lampolie staat vast in de kelder.": {
+   "waar": [
+    "herberg.hcs:79"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een leeg biervat. Wat moet ik daarmee?": {
+   "waar": [
+    "herberg.hcs:81"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hier zit geen olie in. Zelfs geen bier.": {
+   "waar": [
+    "herberg.hcs:83"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het enige warme vuur in het dorp. Dit hout komt nog van voor de schemering.": {
+   "waar": [
+    "herberg.hcs:87"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dit vuur brandt al. Het heeft oma's steentje niet nodig.": {
+   "waar": [
+    "herberg.hcs:89"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Mira. Ze is blind, maar ze kijkt dwars door me heen.": {
+   "waar": [
+    "herberg.hcs:93"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Is dit van u?": {
+   "waar": [
+    "herberg.hcs:97"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Mijn ziensteen! Ik voel het aan het gat. Dank je, jongen.": {
+   "waar": [
+    "herberg.hcs:98"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ah, nu zie ik het pad weer. Het loopt langs de wolven.": {
+   "waar": [
+    "herberg.hcs:102"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Schaduwwolven vrezen licht. Bram de smit heeft een lantaarn.": {
+   "waar": [
+    "herberg.hcs:103"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "De steen is warm. Hij is altijd warm. Rare steen.": {
+   "waar": [
+    "herberg.hcs:104"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een munt uit de fontein? Hou hem maar. Wensen zijn niet te koop.": {
+   "waar": [
+    "herberg.hcs:107"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Flessen, bekers en een plank. Geen waard te zien.": {
+   "waar": [
+    "herberg.hcs:111"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Wie bent u?": {
+   "waar": [
+    "herberg.hcs:115"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Mira. Ik zie niets, maar ik zie paden. Meestal.": {
+   "waar": [
+    "herberg.hcs:116"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik moet het Duisterwoud in. Kunt u me de weg wijzen?": {
+   "waar": [
+    "herberg.hcs:118"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zonder mijn ziensteen zie ik geen enkel pad.": {
+   "waar": [
+    "herberg.hcs:119"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Hij rolde weg, daar bij de tafel. Onder de tafel, denk ik.": {
+   "waar": [
+    "herberg.hcs:120"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Hoe kom ik langs de wolven bij de bosrand?": {
+   "waar": [
+    "herberg.hcs:123"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze vrezen licht. Vraag Bram om zijn lantaarn.": {
+   "waar": [
+    "herberg.hcs:124"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Zijn vuur is uit, maar jij draagt genoeg licht bij je.": {
+   "waar": [
+    "herberg.hcs:125"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik ga maar weer.": {
+   "waar": [
+    "herberg.hcs:128"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Pas op in het donker, jongen.": {
+   "waar": [
+    "herberg.hcs:129"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Oma Rijm. Mijn oma. Ze breit, alsof ze op me wachtte.": {
+   "waar": [
+    "hut.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oma's boek. Vol aantekeningen en tekeningen van manen.": {
+   "waar": [
+    "hut.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'De kroon houdt de manen vast. Neem er een maansteen uit...'": {
+   "waar": [
+    "hut.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'...en het licht moet ergens heen kunnen.' Dat zei het spreukenboek ook.": {
+   "waar": [
+    "hut.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een warm vuur. Het eerste echte vuur sinds lang.": {
+   "waar": [
+    "hut.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Sneeuw, en de zwarte zon. Hierboven lijkt hij dichterbij.": {
+   "waar": [
+    "hut.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Waar ga jij heen, jongen? Eerst even praten met je oma.": {
+   "waar": [
+    "hut.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Kijk eens wie er is. Mijn gewone jongen.": {
+   "waar": [
+    "hut.hcs:48"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "En met een vriendin. Ga zitten, kind. Je bent koud.": {
+   "waar": [
+    "hut.hcs:49"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Die nacht schoven de manen voor de zon.": {
+   "waar": [
+    "hut.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "En in mijn tuin viel een gloeiend steentje.": {
+   "waar": [
+    "hut.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Het laatste licht, voordat het donker werd. Ik gaf het aan jou.": {
+   "waar": [
+    "hut.hcs:54"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Daarna ging ik de bergen in. Ik wilde weten wat er gebeurd was.": {
+   "waar": [
+    "hut.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Niet omdat jij een held bent, jongen.": {
+   "waar": [
+    "hut.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Omdat jij lief bent. Dat is meer waard.": {
+   "waar": [
+    "hut.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Het licht moet ergens heen kunnen, jongen. Anders breekt het alles.": {
+   "waar": [
+    "hut.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Het baken vangt het op. Maar het bijt. Hier, een wollen want.": {
+   "waar": [
+    "hut.hcs:61"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Nee. Steek het baken aan. Dan zie ik vanaf hier of je het haalt.": {
+   "waar": [
+    "hut.hcs:65"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Tot straks, lieverd.": {
+   "waar": [
+    "hut.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Een hut! Met rook uit de schoorsteen.": {
+   "waar": [
+    "huterf.hcs:12"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kijk die deur. Hier woont iemand die heel groot is.": {
+   "waar": [
+    "huterf.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een deur voor een reus. Hij is niet op slot.": {
+   "waar": [
+    "huterf.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Binnen brandt een vuur. Ik zie een kooi... met iets erin.": {
+   "waar": [
+    "huterf.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik volg de sporen terug naar de brug.": {
+   "waar": [
+    "huterf.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het pad terug, langs de sporen van Grom.": {
+   "waar": [
+    "huterf.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Huiden die drogen. Ik hoop dat het wolven waren.": {
+   "waar": [
+    "huterf.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Bah. Laat hangen.": {
+   "waar": [
+    "huterf.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een bijl in een hakblok. Zo groot als mijn hoofd.": {
+   "waar": [
+    "huterf.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Die krijg ik niet eens los. Een reuzenbijl.": {
+   "waar": [
+    "huterf.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een ketel op een vuurtje. Het ruikt naar... laat maar.": {
+   "waar": [
+    "huterf.hcs:49"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een stapel gekloofd hout. Grom zit er warmpjes bij.": {
+   "waar": [
+    "huterf.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er komt rook uit de schoorsteen. Er is iemand thuis.": {
+   "waar": [
+    "huterf.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een brug van ijs. Gebarsten. Eronder de kloof.": {
+   "waar": [
+    "ijsbrug.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Snel eroverheen, met licht...": {
+   "waar": [
+    "ijsbrug.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Diep beneden gaan twee rode ogen open.": {
+   "waar": [
+    "ijsbrug.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De wurm hield van licht. En van jongens.": {
+   "waar": [
+    "ijsbrug.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Die wurm slaapt licht. Als ik eroverheen loop, wordt hij wakker.": {
+   "waar": [
+    "ijsbrug.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij eet licht, zei je oma. Geef hem iets anders om achteraan te gaan.": {
+   "waar": [
+    "ijsbrug.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Weg. Hij dook achter de lichtzwam aan, de diepte in.": {
+   "waar": [
+    "ijsbrug.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een reuzenwurm, opgerold in de diepte. Hij eet licht, zei oma.": {
+   "waar": [
+    "ijsbrug.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik gooi de laatste lichtzwam in de kloof...": {
+   "waar": [
+    "ijsbrug.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij duikt erachteraan! Nu, Eldric. Snel!": {
+   "waar": [
+    "ijsbrug.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik heb niets meer dat licht geeft om te gooien.": {
+   "waar": [
+    "ijsbrug.hcs:61"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De voordeur, naar het erf.": {
+   "waar": [
+    "jachthut.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik laat dat kleintje niet in die kooi zitten.": {
+   "waar": [
+    "jachthut.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een achterdeur. Ik ruik zout water.": {
+   "waar": [
+    "jachthut.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kaart van de kust, met de zee en een vuurtoren. Er staat iets bij geschreven.": {
+   "waar": [
+    "jachthut.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De vuurtoren is zwart gemaakt. Eronder: 'Olm vaart alleen bij licht.'": {
+   "waar": [
+    "jachthut.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een gewei. Groot genoeg om je jas aan op te hangen. Als je een trol bent.": {
+   "waar": [
+    "jachthut.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Rook en as. Het is meteen kouder.": {
+   "waar": [
+    "jachthut.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een flink vuur. Het licht valt precies op de kooi.": {
+   "waar": [
+    "jachthut.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het is al uit.": {
+   "waar": [
+    "jachthut.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik schep as met de helm over het vuur. Psssst.": {
+   "waar": [
+    "jachthut.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het aardmannetje kijkt op. Zijn oogjes zijn groter in het donker.": {
+   "waar": [
+    "jachthut.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Meer vuur is wel het laatste wat hier nodig is.": {
+   "waar": [
+    "jachthut.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een aardmannetje. Een jong nog. Het rilt en knippert tegen het licht.": {
+   "waar": [
+    "jachthut.hcs:72"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hallo. Ik ben Eldric. Ik doe je niets.": {
+   "waar": [
+    "jachthut.hcs:74"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het antwoordt. Het klinkt als knerpende kiezels. Geen woord van verstaan.": {
+   "waar": [
+    "jachthut.hcs:75"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hier, kever. Vertaal eens.": {
+   "waar": [
+    "jachthut.hcs:77"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Wij hebben honger. In het donker groeit niets.": {
+   "waar": [
+    "jachthut.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Maar de meester zegt dat het licht ons doodt.": {
+   "waar": [
+    "jachthut.hcs:79"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Buiten kraken takken. Het zegt niets meer.": {
+   "waar": [
+    "jachthut.hcs:84"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege kooi. Zo hoort een kooi eruit te zien.": {
+   "waar": [
+    "jachthut.hcs:89"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kooi van ijzer en takken. Het slot is een houten pin.": {
+   "waar": [
+    "jachthut.hcs:91"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij staat al open.": {
+   "waar": [
+    "jachthut.hcs:95",
+    "plein.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik trek de pin eruit. Rustig maar, kleintje.": {
+   "waar": [
+    "jachthut.hcs:98"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het kijkt me aan. En weg is het, de achterdeur uit, het donker in.": {
+   "waar": [
+    "jachthut.hcs:103"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het liet iets achter: een schub die zacht gloeit.": {
+   "waar": [
+    "jachthut.hcs:104"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een geschenk. Aardmannetjes vergeten niets.": {
+   "waar": [
+    "jachthut.hcs:107"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik trek de pin eruit. Kom maar, kleintje.": {
+   "waar": [
+    "jachthut.hcs:110"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het gilt! Het licht van de haard brandt in zijn ogen.": {
+   "waar": [
+    "jachthut.hcs:111"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "WIE ZIT ER AAN MIJN KOOI?": {
+   "waar": [
+    "jachthut.hcs:115"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Aardmannetjes en haardvuur. Daar had je over na kunnen denken.": {
+   "waar": [
+    "jachthut.hcs:120"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Een brief in grote, hoekige letters.": {
+   "waar": [
+    "jachthut.hcs:128"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'Nog even, kleintjes. Laat de vuurtoren donker.'": {
+   "waar": [
+    "jachthut.hcs:130"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'Dan vindt niemand de weg naar de kloof. G.'": {
+   "waar": [
+    "jachthut.hcs:131"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Die laat ik liggen. Grom mag niet weten dat ik hier was.": {
+   "waar": [
+    "jachthut.hcs:134"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kaarten, papieren, een kaarsstompje. En een brief.": {
+   "waar": [
+    "jachthut.hcs:138"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De trap naar de herberg. Het licht van boven is warm.": {
+   "waar": [
+    "kelder.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een pot honing. Voor de bijen die er niet meer zijn.": {
+   "waar": [
+    "kelder.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Voor de bijen die er niet meer zijn.": {
+   "waar": [
+    "kelder.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een groot vat lampolie, met een koperen kraan.": {
+   "waar": [
+    "kelder.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Veel te zwaar. Ik neem wel wat in een kruik mee.": {
+   "waar": [
+    "kelder.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De kruik is al vol.": {
+   "waar": [
+    "kelder.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Klok, klok, klok. De kruik zit vol lampolie.": {
+   "waar": [
+    "kelder.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Potten jam, flessen en een pot honing.": {
+   "waar": [
+    "kelder.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Lege kisten. Hier stond ooit de voorraad voor de winter.": {
+   "waar": [
+    "kelder.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Leeg. Allemaal leeg.": {
+   "waar": [
+    "kelder.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een raampje op straathoogte. Buiten is het schemer, zoals altijd.": {
+   "waar": [
+    "kelder.hcs:56"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Waar... waar ben ik? Mijn steentje is weg. Mijn lantaarn ook.": {
+   "waar": [
+    "kerker.hcs:18"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "En Mira! Waar is Mira?": {
+   "waar": [
+    "kerker.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dit is het laatste stuk, jongen. Ik ben er nog, als het misgaat.": {
+   "waar": [
+    "kerker.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "De tralies liggen op de vloer. De gang is vrij.": {
+   "waar": [
+    "kerker.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oud ijzer uit de aarde. Het trilt als ik neurie.": {
+   "waar": [
+    "kerker.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Op slot. Maar ze trillen een beetje in hun gaten.": {
+   "waar": [
+    "kerker.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze zitten vast. Maar als ik neurie, rammelen ze.": {
+   "waar": [
+    "kerker.hcs:36"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze liggen er al.": {
+   "waar": [
+    "kerker.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Neurie maar, kevertje. Zo hard als je kunt.": {
+   "waar": [
+    "kerker.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zzzmmmmmmmm...": {
+   "waar": [
+    "kerker.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Ze rammelen los! Aard-ijzer luistert naar een aard-kever.": {
+   "waar": [
+    "kerker.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De tralies zitten dicht.": {
+   "waar": [
+    "kerker.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een raampje, hoog in de muur. De zwarte zon. Ik ben in Groms kasteel.": {
+   "waar": [
+    "kerker.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een roestige ketting. Gelukkig niet om mijn voet.": {
+   "waar": [
+    "kerker.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar de kerker. Liever niet.": {
+   "waar": [
+    "kerkergang.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De gang loopt verder, naar de poort.": {
+   "waar": [
+    "kerkergang.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Lege cellen. Wie zat hier? En waar zijn ze nu?": {
+   "waar": [
+    "kerkergang.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een fakkel. Iemand heeft hem kort geleden aangestoken.": {
+   "waar": [
+    "kerkergang.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar beneden ligt de boot. Olm wacht.": {
+   "waar": [
+    "klippad.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het pad gaat verder, naar de vuurtoren.": {
+   "waar": [
+    "klippad.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De vuurtoren, vlak voor me. Zijn licht is uit. Al heel lang.": {
+   "waar": [
+    "klippad.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een touw als leuning. Iemand heeft hier vaak gelopen.": {
+   "waar": [
+    "klippad.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze houden afstand. Mijn lichtje is klein, maar het is licht.": {
+   "waar": [
+    "kloof.hcs:18"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Schaduwwolven. Grom heeft ze gestuurd. Ze bewaken de grot.": {
+   "waar": [
+    "kloof.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Brave... nee. Geen brave hondjes. Nog steeds niet.": {
+   "waar": [
+    "kloof.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze blijven al weg.": {
+   "waar": [
+    "kloof.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Weg jullie! Licht!": {
+   "waar": [
+    "kloof.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze wijken... maar de lantaarn flakkert. En gaat uit.": {
+   "waar": [
+    "kloof.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "En daar zijn ze weer.": {
+   "waar": [
+    "kloof.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Bekijk je lantaarn eens, Eldric. Er is iets mis mee.": {
+   "waar": [
+    "kloof.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een klein lichtje. Maar het is licht.": {
+   "waar": [
+    "kloof.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze blijven op afstand. Snel, de grot in.": {
+   "waar": [
+    "kloof.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Mijn lantaarn geeft geen licht.": {
+   "waar": [
+    "kloof.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De mond van de grot. Ogen in het donker.": {
+   "waar": [
+    "kloof.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik ren er gewoon langs!": {
+   "waar": [
+    "kloof.hcs:65"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De wolven waren niet bang in het donker. Jij wel.": {
+   "waar": [
+    "kloof.hcs:71"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Steil. Hier klim je niet. Alleen naar beneden, de grot in.": {
+   "waar": [
+    "kloof.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Au! Wit! Alles is wit! Ik zie bijna niets.": {
+   "waar": [
+    "maankamer.hcs:17"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Beslagen. Nu kan ik weer kijken.": {
+   "waar": [
+    "maankamer.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Spiegels. Het licht van de maanstenen kaatst van de een naar de ander.": {
+   "waar": [
+    "maankamer.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ze zijn al beslagen.": {
+   "waar": [
+    "maankamer.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik giet het zeewater uit de kruik over de spiegels... ze beslaan!": {
+   "waar": [
+    "maankamer.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege kruik. Daar beslaat niets van.": {
+   "waar": [
+    "maankamer.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De Holle Kroon. Zwart ijzer, twee maanstenen. Ze zijn ijskoud.": {
+   "waar": [
+    "maankamer.hcs:54"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Te fel. Ik zie alleen wit.": {
+   "waar": [
+    "maankamer.hcs:56",
+    "maankamer.hcs:88"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik zie hem niet eens. Alles is wit.": {
+   "waar": [
+    "maankamer.hcs:60",
+    "maankamer.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Gewoon pakken...": {
+   "waar": [
+    "maankamer.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eldric pakte de maanstenen met blote handen. Kouder dan de nacht.": {
+   "waar": [
+    "maankamer.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Hij deed het maar één keer.": {
+   "waar": [
+    "maankamer.hcs:68"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Ik schep de kroon in de helm van de spookridder. Zo raak ik hem niet aan.": {
+   "waar": [
+    "maankamer.hcs:76"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oma's steentje! Het gloeit nog.": {
+   "waar": [
+    "maankamer.hcs:86"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik zie niets. Ik tast in het wit.": {
+   "waar": [
+    "maankamer.hcs:92"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Mijn steentje. Warm, zoals altijd.": {
+   "waar": [
+    "maankamer.hcs:95"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een open koepel. De zwarte zon, recht boven de kroon.": {
+   "waar": [
+    "maankamer.hcs:104"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Stil nu. Hier begint hun stad. Ik hoor ze ademen: ze slapen.": {
+   "waar": [
+    "muurgang.hcs:11"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Er staan tekeningen op de muur. Een heel verhaal.": {
+   "waar": [
+    "muurgang.hcs:12"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar Pad en zijn zwammen.": {
+   "waar": [
+    "muurgang.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Verderop wordt de gang breder. Daar is hun stad.": {
+   "waar": [
+    "muurgang.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Aardmannetjes onder een grote maan. Ze dansen. Ze zien er gelukkig uit.": {
+   "waar": [
+    "muurgang.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zo leefden ze vroeger. Voordat Grom ze naar boven riep.": {
+   "waar": [
+    "muurgang.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een ei met één oog, en stralen eromheen. Waar heb ik dat oog eerder gezien?": {
+   "waar": [
+    "muurgang.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een ei dat de tijd kan dragen. Ze bewaken het al eeuwen.": {
+   "waar": [
+    "muurgang.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een grote figuur met hoorns en rode ogen. Grom. Zelfs hier.": {
+   "waar": [
+    "muurgang.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het Duisterwoud. Daar ligt de jachthut.": {
+   "waar": [
+    "oever.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een steiger. Een bel. Geen boot.": {
+   "waar": [
+    "oever.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een scheepsbel aan een paal. Er hangt een touw aan.": {
+   "waar": [
+    "oever.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij zit vast. Maar aan het touw kan ik trekken.": {
+   "waar": [
+    "oever.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Klang. Ze komen al.": {
+   "waar": [
+    "oever.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Klang! Klang! Klang!": {
+   "waar": [
+    "oever.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar. Een lampje op het water.": {
+   "waar": [
+    "oever.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een boot! Iemand heeft ons gehoord.": {
+   "waar": [
+    "oever.hcs:48"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Op naar de zee, Eldric. Naar de vuurtoren.": {
+   "waar": [
+    "oever.hcs:49"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een bel luid je met een touw, niet met een steentje.": {
+   "waar": [
+    "oever.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een vuurtoren op een eiland. Donker. Daar hoort licht te branden.": {
+   "waar": [
+    "oever.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De zee. Ik heb de zee nog nooit gezien. Ze is groter dan ik dacht.": {
+   "waar": [
+    "oever.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zwemmen? In de schemer? Liever niet.": {
+   "waar": [
+    "oever.hcs:65"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een bootje met een lampje. Er zit iemand aan de riemen.": {
+   "waar": [
+    "oever.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hoog op de IJstop, in een hut in de sneeuw, woont een oude vrouw.": {
+   "waar": [
+    "oma.hcs:12"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Daar beneden. Een lichtje. Heel klein.": {
+   "waar": [
+    "oma.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Dat is het steentje. Dat is mijn jongen.": {
+   "waar": [
+    "oma.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Hij komt eraan. Ik zet water op, voor thee.": {
+   "waar": [
+    "oma.hcs:16"
+   ],
+   "max": 80,
+   "spreker": "oma"
+  },
+  "Het water is zwart sinds de zon weg is. Er glimt iets.": {
+   "waar": [
+    "plein.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eén is genoeg. De rest is voor andermans wensen.": {
+   "waar": [
+    "plein.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Muntjes! Mensen wensen hier van alles. Ik neem er één, voor het geluk.": {
+   "waar": [
+    "plein.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik heb geen dorst. Niet naar zwart water, in elk geval.": {
+   "waar": [
+    "plein.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hier werkt Bram de smit. Het vuur is uit. Bram ook, zo te zien.": {
+   "waar": [
+    "plein.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De deur is dicht.": {
+   "waar": [
+    "plein.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De herberg 'De Laatste Straal'. Daar brandt tenminste nog licht.": {
+   "waar": [
+    "plein.hcs:72"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het pad naar de bosrand, en daarachter het Duisterwoud.": {
+   "waar": [
+    "plein.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Iedereen zit binnen. Sinds de schemering komt niemand meer buiten.": {
+   "waar": [
+    "plein.hcs:82"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Op slot. Ik zou ook niet opendoen voor mezelf.": {
+   "waar": [
+    "plein.hcs:84"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De poort staat open. Daarachter: een grote zaal.": {
+   "waar": [
+    "poort.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een hoge poort. Het slot heeft de vorm van een schub.": {
+   "waar": [
+    "poort.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Even snel langs de ridders...": {
+   "waar": [
+    "poort.hcs:31",
+    "poort.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Vier harnassen. Eén Eldric. Rekensom.": {
+   "waar": [
+    "poort.hcs:35",
+    "poort.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "De schub van Moeder Aard past. Klik.": {
+   "waar": [
+    "poort.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De poort zit op slot.": {
+   "waar": [
+    "poort.hcs:62"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Vier hopen oud ijzer.": {
+   "waar": [
+    "poort.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Vier spookridders voor de poort. In elke helm zoemt iets.": {
+   "waar": [
+    "poort.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar zit niemand meer in.": {
+   "waar": [
+    "poort.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zzzmm. Zzzmm?": {
+   "waar": [
+    "poort.hcs:76"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "De kevers in de helmen zoemen terug. Dan vliegen ze weg.": {
+   "waar": [
+    "poort.hcs:77"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De harnassen vallen uit elkaar. Er zat nooit iemand in.": {
+   "waar": [
+    "poort.hcs:82"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een fakkel. Ze branden hier gewoon. Grom is dus niet bang voor elk licht.": {
+   "waar": [
+    "poort.hcs:89"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug, het donker in.": {
+   "waar": [
+    "rivier.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Langs de rivier verder.": {
+   "waar": [
+    "rivier.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een rivier onder de grond. Waar zou hij heen stromen?": {
+   "waar": [
+    "rivier.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kristallen in de wand. Ze geven een koud blauw licht.": {
+   "waar": [
+    "rivier.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar het plein.": {
+   "waar": [
+    "smit.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het vuur brandt weer. Voor het eerst sinds de zon weg is.": {
+   "waar": [
+    "smit.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Koude as. Het smidsvuur is uit sinds de zon weg is.": {
+   "waar": [
+    "smit.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik leg oma's steentje in de koude as. Het wordt warm...": {
+   "waar": [
+    "smit.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het vuur! Het brandt weer! Wie ben jij, jongen?": {
+   "waar": [
+    "smit.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Eldric. Gewoon Eldric. Het is oma's steentje, niet ik.": {
+   "waar": [
+    "smit.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Gewoon of niet, je hebt me geholpen. Hier, een lantaarn. Leeg.": {
+   "waar": [
+    "smit.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Olie vind je vast wel. En met dat steentje steek je hem aan.": {
+   "waar": [
+    "smit.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Bram de smit. Groot, rood en chagrijnig.": {
+   "waar": [
+    "smit.hcs:48"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Met dit vuur maak ik weer ijzer. Dank je, jongen.": {
+   "waar": [
+    "smit.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Vuur uit, lantaarn leeg, hoofd vol.": {
+   "waar": [
+    "smit.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Een munt uit de fontein? Voor het geluk, dan.": {
+   "waar": [
+    "smit.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Hier. Een vuursteen. Voor als je lantaarn ooit uitgaat.": {
+   "waar": [
+    "smit.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Wat moet ik met goud zonder vuur? Ga weg.": {
+   "waar": [
+    "smit.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Een aambeeld. Zwaar en koud.": {
+   "waar": [
+    "smit.hcs:68"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ha. Nee.": {
+   "waar": [
+    "smit.hcs:70"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een blaasbalg. Daarmee maakt Bram het vuur heet.": {
+   "waar": [
+    "smit.hcs:74"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Pfff, pfff. Het vuur laait op.": {
+   "waar": [
+    "smit.hcs:77"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Blazen op koude as helpt niet. Er moet eerst vuur zijn.": {
+   "waar": [
+    "smit.hcs:79"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Tangen, hamers en hoefijzers. Alles netjes aan een haak.": {
+   "waar": [
+    "smit.hcs:84"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Afblijven. Mijn gereedschap is mijn gereedschap.": {
+   "waar": [
+    "smit.hcs:86"
+   ],
+   "max": 80,
+   "spreker": "bram"
+  },
+  "Een schild en twee zwaarden. Bram maakt mooi werk.": {
+   "waar": [
+    "smit.hcs:90"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar het bergpad.": {
+   "waar": [
+    "sneeuwveld.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar verderop moet de hut zijn. Ik ruik houtvuur!": {
+   "waar": [
+    "sneeuwveld.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De IJstop. Zo hoog dat de wolken eronder hangen.": {
+   "waar": [
+    "sneeuwveld.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kleine voetstappen in de sneeuw. Van Oma Rijm?": {
+   "waar": [
+    "sneeuwveld.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een warm steentje van oma. Er zit nog een beetje zon in, zei ze.": {
+   "waar": [
+    "spel.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een gouden munt uit de fontein. Er staat een zon op. Hoe toepasselijk.": {
+   "waar": [
+    "spel.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een vuursteen van Bram. Voor als het licht uitgaat.": {
+   "waar": [
+    "spel.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege lantaarn van Bram.": {
+   "waar": [
+    "spel.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De lantaarn zit vol olie. Nu nog vuur.": {
+   "waar": [
+    "spel.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De lantaarn brandt. Het licht van de zon, in het klein.": {
+   "waar": [
+    "spel.hcs:40"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Leeg. Er zit een gaatje in de bodem. Iemand met een mes.": {
+   "waar": [
+    "spel.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een gloeiend ding zou ook licht geven. Al is het weinig.": {
+   "waar": [
+    "spel.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Zwak licht van de gloeischub. Net genoeg.": {
+   "waar": [
+    "spel.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De lichtzwam brandt fel in de lantaarn.": {
+   "waar": [
+    "spel.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het luikje is dicht. Binnenin gloeit de lichtzwam.": {
+   "waar": [
+    "spel.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik houd de gloeischub in de lantaarn. Zwak licht, maar licht.": {
+   "waar": [
+    "spel.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar heeft de lantaarn nu niets aan.": {
+   "waar": [
+    "spel.hcs:61"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij brandt al fel.": {
+   "waar": [
+    "spel.hcs:65"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik stop een lichtzwam in de lantaarn. Wauw. Fel!": {
+   "waar": [
+    "spel.hcs:68"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Die laatste lichtzwam bewaar ik.": {
+   "waar": [
+    "spel.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik schuif het luikje dicht. Nu schijnt hij niet meer naar buiten.": {
+   "waar": [
+    "spel.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar valt niets aan dicht te doen.": {
+   "waar": [
+    "spel.hcs:81"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik schuif het luikje weer open.": {
+   "waar": [
+    "spel.hcs:85"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij heeft alleen een luikje. Dat is open.": {
+   "waar": [
+    "spel.hcs:88"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er zit al olie in.": {
+   "waar": [
+    "spel.hcs:92"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik giet de olie in de lantaarn.": {
+   "waar": [
+    "spel.hcs:95"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De kruik is leeg.": {
+   "waar": [
+    "spel.hcs:100"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik houd oma's steentje bij de olie... en de lantaarn brandt!": {
+   "waar": [
+    "spel.hcs:105"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij brandt al.": {
+   "waar": [
+    "spel.hcs:110",
+    "vuurtoren.hcs:87"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er zit nog geen olie in.": {
+   "waar": [
+    "spel.hcs:112"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een holle koker van schors. Iets heeft hem leeggegeten.": {
+   "waar": [
+    "spel.hcs:119"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kevertje in een koker. Als het zoemt, hoor ik woorden.": {
+   "waar": [
+    "spel.hcs:123"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een fluisterkever. De aardmannetjes praten ermee. Hij vertaalt.": {
+   "waar": [
+    "spel.hcs:124"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een kaart vol sterren en lijnen. Gangen onder de kloof, zegt Nul.": {
+   "waar": [
+    "spel.hcs:128"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Sterren als wegwijzers. Onder de grond. Daar snap ik nog niets van.": {
+   "waar": [
+    "spel.hcs:130"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Twee lichtzwammen van Pad. Eén keer fel licht per stuk.": {
+   "waar": [
+    "spel.hcs:135"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Nog één lichtzwam over. Die bewaar ik.": {
+   "waar": [
+    "spel.hcs:137"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kristal dat trilt in mijn hand. Het wil iets.": {
+   "waar": [
+    "spel.hcs:142"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het bakenkristal, veilig in oma's want.": {
+   "waar": [
+    "spel.hcs:147"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het kristal trilt niet meer. Het zingt. Voor het zonnebaken.": {
+   "waar": [
+    "spel.hcs:149"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik heb het al vast, met de want.": {
+   "waar": [
+    "spel.hcs:153"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik trek oma's want aan en pak het kristal vast. Het voelt warm, niet heet.": {
+   "waar": [
+    "spel.hcs:155"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een schub van Moeder Aard. Hij opent de poort van het kasteel.": {
+   "waar": [
+    "spel.hcs:162"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een wollen want van oma. Voor het baken. Het bijt, zei ze.": {
+   "waar": [
+    "spel.hcs:166"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een schub die zacht gloeit. Een klein beetje licht, van een aardmannetje.": {
+   "waar": [
+    "spel.hcs:170"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar gaan we weer.": {
+   "waar": [
+    "spel.hcs:192"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Niets bijzonders.": {
+   "waar": [
+    "spel.hcs:198"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dat krijg ik niet mee.": {
+   "waar": [
+    "spel.hcs:200"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar weet ik niets mee te doen.": {
+   "waar": [
+    "spel.hcs:202"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dat gaat niet open.": {
+   "waar": [
+    "spel.hcs:204"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dat gaat niet dicht.": {
+   "waar": [
+    "spel.hcs:206"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar valt niet mee te praten.": {
+   "waar": [
+    "spel.hcs:208"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar heb ik niets voor.": {
+   "waar": [
+    "spel.hcs:210"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het geeft niet mee.": {
+   "waar": [
+    "spel.hcs:212"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er zit geen beweging in.": {
+   "waar": [
+    "spel.hcs:214"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Er staat niets op.": {
+   "waar": [
+    "spel.hcs:216"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hé... de brug weer? We liepen in een rondje!": {
+   "waar": [
+    "spookbrug.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik zei het toch: volg de sporen van Grom.": {
+   "waar": [
+    "spookbrug.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Terug over het bospad.": {
+   "waar": [
+    "spookbrug.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een touwbrug over de kloof. Hij kraakt al als je ernaar kijkt.": {
+   "waar": [
+    "spookbrug.hcs:35"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Niet naar beneden kijken. Niet naar beneden kijken.": {
+   "waar": [
+    "spookbrug.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De ridder heft zijn zwaard. Hier kom ik niet langs.": {
+   "waar": [
+    "spookbrug.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Diep. Heel diep. Beneden stroomt een beek tussen scherpe rotsen.": {
+   "waar": [
+    "spookbrug.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een hoop oud ijzer. Zonder kever is het maar een harnas.": {
+   "waar": [
+    "spookbrug.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het harnas is leeg. Er zoemt iets in de helm.": {
+   "waar": [
+    "spookbrug.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Spoken hebben geen honger. Kevers wel.": {
+   "waar": [
+    "spookbrug.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Er zit niemand meer in. Er zat nooit iemand in.": {
+   "waar": [
+    "spookbrug.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Goedenavond, meneer de ridder. Mag ik erlangs?": {
+   "waar": [
+    "spookbrug.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zoemmm. Dat is geen ja.": {
+   "waar": [
+    "spookbrug.hcs:67"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Wijk, spook! Ik heb het licht van de zon!": {
+   "waar": [
+    "spookbrug.hcs:72"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een harnas zonder man. Een jongen zonder harnas. Kort gevecht.": {
+   "waar": [
+    "spookbrug.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Het is al voorbij.": {
+   "waar": [
+    "spookbrug.hcs:82"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik zet de honingpot voor de ridder neer.": {
+   "waar": [
+    "spookbrug.hcs:87"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het zoemen houdt op. Een kevertje kruipt uit de helm, naar de honing...": {
+   "waar": [
+    "spookbrug.hcs:88"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "...en het harnas valt in stukken. Er zat echt niemand in.": {
+   "waar": [
+    "spookbrug.hcs:98"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De helm van de spookridder, met de Holle Kroon erin.": {
+   "waar": [
+    "spookbrug.hcs:105"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege helm. Hij is zwaar, en hij past op niets.": {
+   "waar": [
+    "spookbrug.hcs:107"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een lege helm. Wie weet waar hij goed voor is.": {
+   "waar": [
+    "spookbrug.hcs:110"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kevertje op de honingpot. Het smakt. Kevers kunnen smakken, blijkt.": {
+   "waar": [
+    "spookbrug.hcs:118"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij zoemt boos en vliegt een rondje. Ik heb iets nodig om hem in te doen.": {
+   "waar": [
+    "spookbrug.hcs:120"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hallo, kever. Zzz, zegt hij. Ik versta het bijna.": {
+   "waar": [
+    "spookbrug.hcs:122"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik houd de koker bij de honing... hup, erin.": {
+   "waar": [
+    "spookbrug.hcs:124"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij zoemt. En in dat zoemen... hoor ik woorden?": {
+   "waar": [
+    "spookbrug.hcs:132"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De honingpot neem ik ook weer mee. Er zit nog wat in.": {
+   "waar": [
+    "spookbrug.hcs:133"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een dik boek op een lessenaar, met een rode band.": {
+   "waar": [
+    "spreukzaal.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Sterren en strepen... met Nuls kaart kan ik het lezen!": {
+   "waar": [
+    "spreukzaal.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'De Schemerspreuk. Twee manen vast voor de zon, gebonden aan een kroon.'": {
+   "waar": [
+    "spreukzaal.hcs:22"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'Neem een maansteen uit de kroon, en die maan schuift door.'": {
+   "waar": [
+    "spreukzaal.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'Maar het licht dat wachtte, komt in één golf. Het moet ergens heen.'": {
+   "waar": [
+    "spreukzaal.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "'Naar het oude zonnebaken op de IJstop.'": {
+   "waar": [
+    "spreukzaal.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De IJstop. Daar woont je oma, Eldric.": {
+   "waar": [
+    "spreukzaal.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een schrift van sterren en strepen. Ik kan er niets van maken.": {
+   "waar": [
+    "spreukzaal.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het staat open op een bladzijde vol sterren. Lezen dan maar.": {
+   "waar": [
+    "spreukzaal.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hier stond Grom. De vloer is nog zwart.": {
+   "waar": [
+    "spreukzaal.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik leg het kristal in het midden en zeg de woorden uit het boek.": {
+   "waar": [
+    "spreukzaal.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het trilt niet meer. Het zingt. Een bakenkristal.": {
+   "waar": [
+    "spreukzaal.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Naar de IJstop, Eldric. Naar je oma.": {
+   "waar": [
+    "spreukzaal.hcs:48"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een spreuk? Iets met... abracadabra?": {
+   "waar": [
+    "spreukzaal.hcs:54"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eldric sprak een spreuk die hij niet kende. De spreuk kende hem wel.": {
+   "waar": [
+    "spreukzaal.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Hier stond de kroon. Er staan manen omheen gekrast.": {
+   "waar": [
+    "spreukzaal.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De gang gaat omhoog. Naar boven. Naar de IJstop.": {
+   "waar": [
+    "spreukzaal.hcs:71"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar de aardstad.": {
+   "waar": [
+    "spreukzaal.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug over de steiger naar de oever.": {
+   "waar": [
+    "steiger.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een oude veerman met een baard tot op zijn buik. Hij staart naar het water.": {
+   "waar": [
+    "steiger.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een roeiboot. Er staat iets op de zijkant geschreven.": {
+   "waar": [
+    "steiger.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Op de zijkant staat, in witte letters: OLM.": {
+   "waar": [
+    "steiger.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Instappen zonder iets te vragen? Dat doe je niet bij een veerman.": {
+   "waar": [
+    "steiger.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De bel waarmee ik Olm riep.": {
+   "waar": [
+    "steiger.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ja ja. Ik ben er al. Denk ik.": {
+   "waar": [
+    "steiger.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Mist op het water. Ik weet ineens niet meer wat ik als ontbijt had.": {
+   "waar": [
+    "steiger.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een vuurtoren op een eiland, ver weg. Donker.": {
+   "waar": [
+    "steiger.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik hoor meeuwen. Daar woont iemand.": {
+   "waar": [
+    "steiger.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Wie ik ben? Goeie vraag. Wie ben ik eigenlijk?": {
+   "waar": [
+    "steiger.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Ik vaar niet zonder mijn naam. Dan weet ik niet waar ik thuishoor.": {
+   "waar": [
+    "steiger.hcs:51"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Olm... OLM! Ja! Zo heet ik! Zo heet ik al jaren!": {
+   "waar": [
+    "steiger.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Stap in, jongen. En u ook, mevrouw.": {
+   "waar": [
+    "steiger.hcs:54"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Bram? Bram! Natuurlijk. Bram vaart altijd recht op de rots af.": {
+   "waar": [
+    "steiger.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Olm roeit, zeker van zijn zaak. Recht op een rots af.": {
+   "waar": [
+    "steiger.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Olm vond de Rots van de Zekere Dood. Jij ook.": {
+   "waar": [
+    "steiger.hcs:65"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Tot... wat zei je?": {
+   "waar": [
+    "steiger.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "De deur naar buiten, naar het eiland.": {
+   "waar": [
+    "torenhal.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De trap omhoog, naar de lamp.": {
+   "waar": [
+    "torenhal.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het logboek. De laatste regel: Licht uit. Ik vergeet. Ik vergeet.": {
+   "waar": [
+    "torenhal.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Vaten met lampolie. Leeg. Allemaal leeg.": {
+   "waar": [
+    "torenhal.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Door het ronde raam zie ik de zee. En de mist die erop ligt.": {
+   "waar": [
+    "torenhal.hcs:31"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Naar beneden, naar de hal.": {
+   "waar": [
+    "torentrap.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Nog meer treden. Omhoog, omhoog, omhoog.": {
+   "waar": [
+    "torentrap.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De zee is ver beneden. Heel ver. Ik kijk maar niet.": {
+   "waar": [
+    "torentrap.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een olielampje. Het brandt nog: iemand is hier niet zo lang geleden geweest.": {
+   "waar": [
+    "torentrap.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Pff. Hoeveel treden heeft deze toren?": {
+   "waar": [
+    "torentrap2.hcs:16"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Tweehonderdzeventien. Ik heb ze geteld.": {
+   "waar": [
+    "torentrap2.hcs:17"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Naar beneden.": {
+   "waar": [
+    "torentrap2.hcs:24"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De trap wordt steiler. Natuurlijk.": {
+   "waar": [
+    "torentrap2.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Buiten regent het. De mist kruipt over de zee, als een kat.": {
+   "waar": [
+    "torentrap2.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een glazen bol voor de lamp. Een reserve. Hij is heel.": {
+   "waar": [
+    "torentrap2.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Helemaal naar beneden? Nee, dank je.": {
+   "waar": [
+    "torentrap3.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een luik met een ladder. Daarboven is de lamp.": {
+   "waar": [
+    "torentrap3.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Jongen. Je hebt mijn baken aangestoken.": {
+   "waar": [
+    "troonzaal.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Wil je mijn volk terug onder de grond jagen?": {
+   "waar": [
+    "troonzaal.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Grom. Van dichtbij nog groter. En hij kijkt moe.": {
+   "waar": [
+    "troonzaal.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hier. Je kroon. In de helm van een spookridder: zo bijt hij niet.": {
+   "waar": [
+    "troonzaal.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Mijn kroon... Je had hem kunnen breken. Je bracht hem terug.": {
+   "waar": [
+    "troonzaal.hcs:28"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Nu, Eldric. Zeg het hem.": {
+   "waar": [
+    "troonzaal.hcs:33",
+    "troonzaal.hcs:52",
+    "troonzaal.hcs:71"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een lege helm? Wat moet ik daarmee, jongen?": {
+   "waar": [
+    "troonzaal.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Dit gaf een van jouw kleintjes me. In je jachthut, in een kooi.": {
+   "waar": [
+    "troonzaal.hcs:42"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Achter de troon piept iets. Het jong uit de kooi.": {
+   "waar": [
+    "troonzaal.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Een beetje licht doet geen pijn, meester. Echt niet.": {
+   "waar": [
+    "troonzaal.hcs:45"
+   ],
+   "max": 80,
+   "spreker": "aardmannetje"
+  },
+  "...Kleintje.": {
+   "waar": [
+    "troonzaal.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Aardmannetjes, in de nissen. Ze kijken naar Grom. En naar mij.": {
+   "waar": [
+    "troonzaal.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "We hebben honger, meester. In de schemer groeit niets.": {
+   "waar": [
+    "troonzaal.hcs:62"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "We willen niet terug onder de grond. Maar ook niet branden.": {
+   "waar": [
+    "troonzaal.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Een dal met schaduw, meester. Dat is genoeg.": {
+   "waar": [
+    "troonzaal.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "kever"
+  },
+  "Waarom zeggen jullie dat nu pas?": {
+   "waar": [
+    "troonzaal.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Mira. Ze is ongedeerd. Ze knikt naar me.": {
+   "waar": [
+    "troonzaal.hcs:78"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Praat met hem, Eldric. Niet vechten. Hij is moe, niet slecht.": {
+   "waar": [
+    "troonzaal.hcs:80"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een gang achter de zuil, naar boven.": {
+   "waar": [
+    "troonzaal.hcs:84"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Grom kijkt me na. Ik kan nu niet zomaar weglopen.": {
+   "waar": [
+    "troonzaal.hcs:89"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dan ben je mijn vijand, jongen.": {
+   "waar": [
+    "troonzaal.hcs:95"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Schaduwen slaan als kettingen om Eldric heen.": {
+   "waar": [
+    "troonzaal.hcs:98"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Nee. Dat draai ik terug. Zo praat je niet met een trol.": {
+   "waar": [
+    "troonzaal.hcs:100"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Iedereen? Ook mijn volk?": {
+   "waar": [
+    "troonzaal.hcs:104"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Ook jouw volk. Moeder Aard zei: een dal met schaduw is genoeg.": {
+   "waar": [
+    "troonzaal.hcs:105"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Woorden. Laat me iets zien.": {
+   "waar": [
+    "troonzaal.hcs:106"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Bij de kroon. In de maankamer, achter de zuil.": {
+   "waar": [
+    "troonzaal.hcs:109"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Haal het maar. Als je kunt kijken.": {
+   "waar": [
+    "troonzaal.hcs:110"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Laat één maan gaan. Het baken vangt het licht.": {
+   "waar": [
+    "troonzaal.hcs:114"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "En laat de andere staan, boven één dal: jullie dal.": {
+   "waar": [
+    "troonzaal.hcs:115"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eén dal. Met schaduw. Voor mijn volk.": {
+   "waar": [
+    "troonzaal.hcs:117"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Goed, jongen met het stukje zon. Goed.": {
+   "waar": [
+    "troonzaal.hcs:118"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Breken? Mijn kroon?": {
+   "waar": [
+    "troonzaal.hcs:124"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Een jongen tegen een trol. Kort verhaal.": {
+   "waar": [
+    "troonzaal.hcs:128"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Hm.": {
+   "waar": [
+    "troonzaal.hcs:132"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "De Zee van Vergetelheid. Wie erop vaart, vergeet.": {
+   "waar": [
+    "veerman.hcs:12"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Zelfs de veerman weet niet meer wie hij is.": {
+   "waar": [
+    "veerman.hcs:13"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Iemand belde. Ik hoorde een bel. Of was dat gisteren?": {
+   "waar": [
+    "veerman.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Ik roei naar de bel. Dat weet ik nog. Verder... niets.": {
+   "waar": [
+    "veerman.hcs:16"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Een jaar later.": {
+   "waar": [
+    "verhaal.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De zon schijnt weer over Aethermoor. Elke dag.": {
+   "waar": [
+    "verhaal.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Achter de bergen wonen de aardmannetjes, onder hun eigen maan.": {
+   "waar": [
+    "verhaal.hcs:22"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Soms komen ze op bezoek. 's Nachts, natuurlijk.": {
+   "waar": [
+    "verhaal.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Grom plant bomen voor zijn grot. Zo zegt hij sorry.": {
+   "waar": [
+    "verhaal.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Mooi licht. Voor een mens.": {
+   "waar": [
+    "verhaal.hcs:27"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "Oma Rijm schrijft een nieuw boek: over een jongen en een blind meisje.": {
+   "waar": [
+    "verhaal.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "En Bram de smid heeft een nieuwe hamer. De oude ligt nog op het plein.": {
+   "waar": [
+    "verhaal.hcs:30"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Mira? Wat zie jij?": {
+   "waar": [
+    "verhaal.hcs:36"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Licht, Eldric. Ik zie licht.": {
+   "waar": [
+    "verhaal.hcs:37"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Ik ga nog even terug. Naar het begin. Tot ziens, ik!": {
+   "waar": [
+    "verhaal.hcs:39"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "EINDE. Hollow Crown. Dank je wel voor het spelen!": {
+   "waar": [
+    "verhaal.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Lang geleden scheen de zon over Aethermoor.": {
+   "waar": [
+    "verhaal.hcs:50"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Diep onder de bergen woonden de aardmannetjes.": {
+   "waar": [
+    "verhaal.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Zij verdroegen geen licht.": {
+   "waar": [
+    "verhaal.hcs:53"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Hun meester was Grom, de tovertrol.": {
+   "waar": [
+    "verhaal.hcs:56"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Hij wilde een thuis voor zijn volk. Boven de grond.": {
+   "waar": [
+    "verhaal.hcs:57"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Kom naar boven, mijn kleintjes. Het licht gaat uit.": {
+   "waar": [
+    "verhaal.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "grom"
+  },
+  "In de nacht van de dubbele maansverduistering": {
+   "waar": [
+    "verhaal.hcs:63"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "sprak hij zijn spreuk.": {
+   "waar": [
+    "verhaal.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Sindsdien is het schemer.": {
+   "waar": [
+    "verhaal.hcs:81"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "De aardmannetjes kwamen naar boven. Het land werd grauw en koud.": {
+   "waar": [
+    "verhaal.hcs:86"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "In Dawnhaven woont Eldric. Een gewone jongen met een goed hart.": {
+   "waar": [
+    "verhaal.hcs:92"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Hij weet nog niet dat alles van hem afhangt.": {
+   "waar": [
+    "verhaal.hcs:93"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Hm. Weer geen zon vandaag.": {
+   "waar": [
+    "verhaal.hcs:94"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De trap naar beneden.": {
+   "waar": [
+    "vuurtoren.hcs:21"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oma's steentje laat ik hier niet achter.": {
+   "waar": [
+    "vuurtoren.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kapitein Nul. Een aardmannetje in een kapiteinsjas.": {
+   "waar": [
+    "vuurtoren.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een kapitein met zijn rug naar me toe. Zijn jas sleept over de vloer.": {
+   "waar": [
+    "vuurtoren.hcs:36"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De kloof wacht, jongen. Volg de straal.": {
+   "waar": [
+    "vuurtoren.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Breng licht in mijn lamp. Dan wijs ik je de weg.": {
+   "waar": [
+    "vuurtoren.hcs:43"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Goedenavond, kapitein?": {
+   "waar": [
+    "vuurtoren.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hmmrrm. Grrmmh.": {
+   "waar": [
+    "vuurtoren.hcs:47"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Dat is geen taal die ik spreek.": {
+   "waar": [
+    "vuurtoren.hcs:48"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Hij praat al met me.": {
+   "waar": [
+    "vuurtoren.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Kever, vertaal jij eens.": {
+   "waar": [
+    "vuurtoren.hcs:55"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een jongen met een kever. En met een stukje zon, zie ik.": {
+   "waar": [
+    "vuurtoren.hcs:58"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Grom zegt dat jullie licht ons doodt. Maar ik woon al jaren naast deze lamp.": {
+   "waar": [
+    "vuurtoren.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Een beetje licht doet geen pijn. Alleen te veel.": {
+   "waar": [
+    "vuurtoren.hcs:60"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Dus jullie kunnen wel in het licht leven?": {
+   "waar": [
+    "vuurtoren.hcs:61"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Breng licht in mijn lamp, en ik wijs je de weg naar de kloof.": {
+   "waar": [
+    "vuurtoren.hcs:62"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "De lamp brandt. Het licht gaat over de hele zee.": {
+   "waar": [
+    "vuurtoren.hcs:70"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een grote lamp. In het midden een lege koperen ring: de lenshouder.": {
+   "waar": [
+    "vuurtoren.hcs:72"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Het steentje heb ik al terug.": {
+   "waar": [
+    "vuurtoren.hcs:77"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ik pak oma's steentje terug. De lamp blijft branden op wat het achterliet.": {
+   "waar": [
+    "vuurtoren.hcs:79"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Veel te groot.": {
+   "waar": [
+    "vuurtoren.hcs:83"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Oma's steentje past precies in de ring...": {
+   "waar": [
+    "vuurtoren.hcs:91"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De lamp vangt het op! Het licht schiet over de zee!": {
+   "waar": [
+    "vuurtoren.hcs:96"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Daar! Zie je waar de straal heen wijst? De Rotskloof.": {
+   "waar": [
+    "vuurtoren.hcs:97"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Neem dit mee. Mijn sterrenkaart. Voor de gangen onder de kloof.": {
+   "waar": [
+    "vuurtoren.hcs:98"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "HMMRRM!": {
+   "waar": [
+    "vuurtoren.hcs:103"
+   ],
+   "max": 80,
+   "spreker": "nul"
+  },
+  "Hij wil niet dat ik aan zijn lamp kom.": {
+   "waar": [
+    "vuurtoren.hcs:104"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Mijn lantaarn in de lamp. Dat moet ook kunnen.": {
+   "waar": [
+    "vuurtoren.hcs:109"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Je lantaarn in een vuurtoren. Wie verlicht straks jouw weg in de kloof?": {
+   "waar": [
+    "vuurtoren.hcs:114"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Rondom ramen. Zee, mist, en de zwarte zon.": {
+   "waar": [
+    "vuurtoren.hcs:120"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De trap omhoog. Naar het dak, naar de manen.": {
+   "waar": [
+    "wenteltrap.hcs:19"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug naar de troonzaal.": {
+   "waar": [
+    "wenteltrap.hcs:25"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Door het smalle raam zie ik de twee manen. Ze staan stil.": {
+   "waar": [
+    "wenteltrap.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Honderden treden. Mijn benen weten het al.": {
+   "waar": [
+    "wenteltrap.hcs:33"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Linksaf. Of was het nou...": {
+   "waar": [
+    "wolfspad.hcs:23"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een pad naar links.": {
+   "waar": [
+    "wolfspad.hcs:29"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Rechtsaf...": {
+   "waar": [
+    "wolfspad.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een pad naar rechts.": {
+   "waar": [
+    "wolfspad.hcs:44"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een donkere tunnel in de struiken.": {
+   "waar": [
+    "wolfspad.hcs:55",
+    "wolfspad.hcs:66"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "De sporen gaan naar links. En ik ruik rook!": {
+   "waar": [
+    "wolfspad.hcs:71"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Reuzensporen in de modder. Ze gaan naar rechts.": {
+   "waar": [
+    "wolfspad.hcs:73"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Modder heb ik al genoeg aan mijn schoenen.": {
+   "waar": [
+    "wolfspad.hcs:76"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een schedel met gewei. Dat betekent vast niet 'welkom'.": {
+   "waar": [
+    "wolfspad.hcs:80"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Die laat ik mooi staan. Hij kijkt me aan.": {
+   "waar": [
+    "wolfspad.hcs:82"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een klem, groter dan ik. Waar jaagt Grom eigenlijk op?": {
+   "waar": [
+    "wolfspad.hcs:86"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Die zit vast aan een ketting. Gelukkig maar.": {
+   "waar": [
+    "wolfspad.hcs:88"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Terug, dan. Langs de klippen. Die staan er nog, zag ik.": {
+   "waar": [
+    "zeerotsen.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Links. En dan tussen de klippen door. Zo ging het. Zo ging het altijd.": {
+   "waar": [
+    "zeerotsen.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "olm"
+  },
+  "Kijk, Eldric! De vuurtoren!": {
+   "waar": [
+    "zeerotsen.hcs:22"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Een padde zo groot als een koe, op een stronk.": {
+   "waar": [
+    "zwamgrot.hcs:14"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een handelaar, zo te zien.": {
+   "waar": [
+    "zwamgrot.hcs:15"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "We hebben al gehandeld, kleine.": {
+   "waar": [
+    "zwamgrot.hcs:20"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Wat ruik ik daar? Zon! Zon in een pot!": {
+   "waar": [
+    "zwamgrot.hcs:22"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Twee lichtzwammen. Eén keer fel licht per stuk. Geen ruil, geen spijt.": {
+   "waar": [
+    "zwamgrot.hcs:26"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Een mand vol lichtzwammen. Ze gloeien geel.": {
+   "waar": [
+    "zwamgrot.hcs:32"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Ho ho! Eerst betalen, kleine.": {
+   "waar": [
+    "zwamgrot.hcs:34"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Een zwarte zwam met een rood stipje. Hij ziet er heerlijk uit. Verdacht heerlijk.": {
+   "waar": [
+    "zwamgrot.hcs:38"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Eén hapje kan geen kwaad.": {
+   "waar": [
+    "zwamgrot.hcs:41"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Dit was de verkeerde zwam. Het was ook de laatste.": {
+   "waar": [
+    "zwamgrot.hcs:46"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Ze geven licht. Blauw, groen en roze. Niet genoeg voor een lantaarn.": {
+   "waar": [
+    "zwamgrot.hcs:52"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Een gang, dieper de aarde in. Ik hoor gesnurk.": {
+   "waar": [
+    "zwamgrot.hcs:56"
+   ],
+   "max": 80,
+   "spreker": "eldric"
+  },
+  "Zonder licht verder? Ik zou eerst met die padde praten.": {
+   "waar": [
+    "zwamgrot.hcs:59"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Wacht. Daar slapen ze. Maak je klein. Maak je donker.": {
+   "waar": [
+    "zwamgrot.hcs:64"
+   ],
+   "max": 80,
+   "spreker": "mira"
+  },
+  "Eldric loopt de stad in, met de lantaarn wijd open.": {
+   "waar": [
+    "zwamgrot.hcs:69"
+   ],
+   "max": 80,
+   "spreker": "verteller"
+  },
+  "Je hebt een stad gewekt. Niet beleefd.": {
+   "waar": [
+    "zwamgrot.hcs:74"
+   ],
+   "max": 80,
+   "spreker": "tik"
+  },
+  "Pad. Zwamhoeder. Handelaar in licht. Zwammen voor elke gelegenheid.": {
+   "waar": [
+    "zwamgrot.hcs:83"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Licht? Ik verkoop licht. Lichtzwammen. Wat geef je ervoor?": {
+   "waar": [
+    "zwamgrot.hcs:85"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Iets dat naar de zon ruikt. Dat zou mooi zijn.": {
+   "waar": [
+    "zwamgrot.hcs:86"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  },
+  "Kwaak. Ik bedoel: tot ziens.": {
+   "waar": [
+    "zwamgrot.hcs:88"
+   ],
+   "max": 80,
+   "spreker": "pad"
+  }
+ },
+ "keuze": {
+  "Naar de vuurtoren, Olm!": {
+   "waar": [
+    "boot.hcs:57"
+   ],
+   "max": 40
+  },
+  "Mira, zie jij iets?": {
+   "waar": [
+    "boot.hcs:59"
+   ],
+   "max": 40
+  },
+  "Links, Olm.": {
+   "waar": [
+    "boot.hcs:63"
+   ],
+   "max": 40
+  },
+  "Volg de straal!": {
+   "waar": [
+    "boot.hcs:66"
+   ],
+   "max": 40
+  },
+  "Aan land, Olm.": {
+   "waar": [
+    "boot.hcs:74"
+   ],
+   "max": 40
+  },
+  "Laat maar.": {
+   "waar": [
+    "boot.hcs:81"
+   ],
+   "max": 40
+  },
+  "Ik zie niks, maar ik loop gewoon.": {
+   "waar": [
+    "donker.hcs:39"
+   ],
+   "max": 40
+  },
+  "Mira, wil jij mij leiden?": {
+   "waar": [
+    "donker.hcs:49"
+   ],
+   "max": 40
+  },
+  "Wie bent u?": {
+   "waar": [
+    "herberg.hcs:114",
+    "zwamgrot.hcs:82"
+   ],
+   "max": 40
+  },
+  "Ik moet het Duisterwoud in.": {
+   "waar": [
+    "herberg.hcs:117"
+   ],
+   "max": 40
+  },
+  "Hoe kom ik langs de wolven?": {
+   "waar": [
+    "herberg.hcs:122"
+   ],
+   "max": 40
+  },
+  "Ik ga maar weer.": {
+   "waar": [
+    "herberg.hcs:127"
+   ],
+   "max": 40
+  },
+  "Oma!": {
+   "waar": [
+    "hut.hcs:47"
+   ],
+   "max": 40
+  },
+  "Wat gebeurde er, die nacht?": {
+   "waar": [
+    "hut.hcs:51"
+   ],
+   "max": 40
+  },
+  "Waarom gaf je het steentje aan mij?": {
+   "waar": [
+    "hut.hcs:56"
+   ],
+   "max": 40
+  },
+  "Ik moet naar het zonnebaken.": {
+   "waar": [
+    "hut.hcs:59"
+   ],
+   "max": 40
+  },
+  "Ga je mee, oma?": {
+   "waar": [
+    "hut.hcs:64"
+   ],
+   "max": 40
+  },
+  "Tot straks, oma.": {
+   "waar": [
+    "hut.hcs:66"
+   ],
+   "max": 40
+  },
+  "Ja, terugdraaien.": {
+   "waar": [
+    "spel.hcs:191"
+   ],
+   "max": 40
+  },
+  "Wie ben jij?": {
+   "waar": [
+    "steiger.hcs:49"
+   ],
+   "max": 40
+  },
+  "Je heet Olm.": {
+   "waar": [
+    "steiger.hcs:52"
+   ],
+   "max": 40
+  },
+  "Je heet Bram.": {
+   "waar": [
+    "steiger.hcs:58"
+   ],
+   "max": 40
+  },
+  "Tot ziens.": {
+   "waar": [
+    "steiger.hcs:68",
+    "zwamgrot.hcs:87"
+   ],
+   "max": 40
+  },
+  "Ja. Het licht moet terug.": {
+   "waar": [
+    "troonzaal.hcs:93"
+   ],
+   "max": 40
+  },
+  "Ik wil dat iedereen kan leven.": {
+   "waar": [
+    "troonzaal.hcs:103"
+   ],
+   "max": 40
+  },
+  "Waar is mijn steentje?": {
+   "waar": [
+    "troonzaal.hcs:108"
+   ],
+   "max": 40
+  },
+  "Laat één maan gaan.": {
+   "waar": [
+    "troonzaal.hcs:112"
+   ],
+   "max": 40
+  },
+  "Geef de kroon, of ik breek hem!": {
+   "waar": [
+    "troonzaal.hcs:122"
+   ],
+   "max": 40
+  },
+  "Tot straks.": {
+   "waar": [
+    "troonzaal.hcs:131"
+   ],
+   "max": 40
+  },
+  "Ik wil licht kopen.": {
+   "waar": [
+    "zwamgrot.hcs:84"
+   ],
+   "max": 40
+  }
+ },
+ "naam": {
+  "Moeder Aard": {
+   "waar": [
+    "aardstad.hcs:13"
+   ],
+   "max": 13
+  },
+  "eierkamer": {
+   "waar": [
+    "aardstad.hcs:48"
+   ],
+   "max": 13
+  },
+  "slapers": {
+   "waar": [
+    "aardstad.hcs:56"
+   ],
+   "max": 13
+  },
+  "gang": {
+   "waar": [
+    "aardstad.hcs:62",
+    "aardstad.hcs:72",
+    "grotgang.hcs:15",
+    "kerkergang.hcs:15",
+    "poort.hcs:17",
+    "rivier.hcs:9",
+    "spreukzaal.hcs:68",
+    "troonzaal.hcs:82",
+    "zwamgrot.hcs:54"
+   ],
+   "max": 13
+  },
+  "houder": {
+   "waar": [
+    "baken.hcs:13"
+   ],
+   "max": 13
+  },
+  "spiegels": {
+   "waar": [
+    "baken.hcs:49",
+    "maankamer.hcs:30"
+   ],
+   "max": 13
+  },
+  "zon": {
+   "waar": [
+    "baken.hcs:53",
+    "bergkam.hcs:25"
+   ],
+   "max": 13
+  },
+  "wolken": {
+   "waar": [
+    "baken.hcs:57",
+    "bergkam.hcs:21"
+   ],
+   "max": 13
+  },
+  "trap": {
+   "waar": [
+    "baken.hcs:61",
+    "kelder.hcs:15",
+    "torenhal.hcs:15",
+    "vuurtoren.hcs:19",
+    "wenteltrap.hcs:15"
+   ],
+   "max": 13
+  },
+  "hut": {
+   "waar": [
+    "beekdal.hcs:9",
+    "bergkam.hcs:9",
+    "ijsbrug.hcs:64"
+   ],
+   "max": 13
+  },
+  "meer": {
+   "waar": [
+    "beekdal.hcs:15"
+   ],
+   "max": 13
+  },
+  "beek": {
+   "waar": [
+    "beekdal.hcs:21"
+   ],
+   "max": 13
+  },
+  "reiger": {
+   "waar": [
+    "beekdal.hcs:25"
+   ],
+   "max": 13
+  },
+  "kam": {
+   "waar": [
+    "bergkam.hcs:15"
+   ],
+   "max": 13
+  },
+  "sneeuwveld": {
+   "waar": [
+    "bergpad.hcs:17"
+   ],
+   "max": 13
+  },
+  "pad": {
+   "waar": [
+    "bergpad.hcs:52",
+    "bospad.hcs:21",
+    "bosrand.hcs:30",
+    "huterf.hcs:28",
+    "plein.hcs:74",
+    "sneeuwveld.hcs:15"
+   ],
+   "max": 13
+  },
+  "bergen": {
+   "waar": [
+    "bergpad.hcs:71",
+    "sneeuwveld.hcs:21"
+   ],
+   "max": 13
+  },
+  "Olm": {
+   "waar": [
+    "boot.hcs:15",
+    "steiger.hcs:17"
+   ],
+   "max": 13
+  },
+  "vuurtoren": {
+   "waar": [
+    "boot.hcs:25",
+    "eiland.hcs:103",
+    "klippad.hcs:22",
+    "oever.hcs:57",
+    "steiger.hcs:43"
+   ],
+   "max": 13
+  },
+  "zee": {
+   "waar": [
+    "boot.hcs:33",
+    "oever.hcs:61",
+    "steiger.hcs:39"
+   ],
+   "max": 13
+  },
+  "bosrand": {
+   "waar": [
+    "bospad.hcs:15"
+   ],
+   "max": 13
+  },
+  "moeras": {
+   "waar": [
+    "bospad.hcs:27"
+   ],
+   "max": 13
+  },
+  "kokers": {
+   "waar": [
+    "bospad.hcs:45"
+   ],
+   "max": 13
+  },
+  "bomen": {
+   "waar": [
+    "bospad.hcs:58"
+   ],
+   "max": 13
+  },
+  "paddenstoelen": {
+   "waar": [
+    "bospad.hcs:62",
+    "zwamgrot.hcs:50"
+   ],
+   "max": 13
+  },
+  "dorp": {
+   "waar": [
+    "bosrand.hcs:18",
+    "dorpsweg.hcs:13"
+   ],
+   "max": 13
+  },
+  "wegwijzer": {
+   "waar": [
+    "bosrand.hcs:24",
+    "dorpsweg.hcs:33"
+   ],
+   "max": 13
+  },
+  "wolven": {
+   "waar": [
+    "bosrand.hcs:44",
+    "kloof.hcs:15"
+   ],
+   "max": 13
+  },
+  "pad links": {
+   "waar": [
+    "diepwoud.hcs:24",
+    "wolfspad.hcs:14"
+   ],
+   "max": 13
+  },
+  "pad rechts": {
+   "waar": [
+    "diepwoud.hcs:42",
+    "wolfspad.hcs:31"
+   ],
+   "max": 13
+  },
+  "tunnel links": {
+   "waar": [
+    "diepwoud.hcs:53",
+    "wolfspad.hcs:46"
+   ],
+   "max": 13
+  },
+  "tunnel rechts": {
+   "waar": [
+    "diepwoud.hcs:68",
+    "wolfspad.hcs:57"
+   ],
+   "max": 13
+  },
+  "sporen": {
+   "waar": [
+    "diepwoud.hcs:81",
+    "wolfspad.hcs:68"
+   ],
+   "max": 13
+  },
+  "uil": {
+   "waar": [
+    "diepwoud.hcs:91"
+   ],
+   "max": 13
+  },
+  "oude boom": {
+   "waar": [
+    "diepwoud.hcs:99"
+   ],
+   "max": 13
+  },
+  "spinnenweb": {
+   "waar": [
+    "diepwoud.hcs:103"
+   ],
+   "max": 13
+  },
+  "gloeizwammen": {
+   "waar": [
+    "diepwoud.hcs:109"
+   ],
+   "max": 13
+  },
+  "Mira": {
+   "waar": [
+    "donker.hcs:18",
+    "herberg.hcs:91",
+    "troonzaal.hcs:76"
+   ],
+   "max": 13
+  },
+  "duisternis": {
+   "waar": [
+    "donker.hcs:24"
+   ],
+   "max": 13
+  },
+  "bos": {
+   "waar": [
+    "dorpsweg.hcs:19",
+    "oever.hcs:20"
+   ],
+   "max": 13
+  },
+  "verschrikker": {
+   "waar": [
+    "dorpsweg.hcs:25"
+   ],
+   "max": 13
+  },
+  "molen": {
+   "waar": [
+    "dorpsweg.hcs:29"
+   ],
+   "max": 13
+  },
+  "deur": {
+   "waar": [
+    "eiland.hcs:18",
+    "herberg.hcs:23",
+    "hut.hcs:34",
+    "hut.hcs:38",
+    "huterf.hcs:16",
+    "jachthut.hcs:21",
+    "maankamer.hcs:26",
+    "smit.hcs:17",
+    "torenhal.hcs:9"
+   ],
+   "max": 13
+  },
+  "meeuwen": {
+   "waar": [
+    "eiland.hcs:59"
+   ],
+   "max": 13
+  },
+  "sleutel": {
+   "waar": [
+    "eiland.hcs:70"
+   ],
+   "max": 13
+  },
+  "rots": {
+   "waar": [
+    "eiland.hcs:80"
+   ],
+   "max": 13
+  },
+  "klippen": {
+   "waar": [
+    "eiland.hcs:97"
+   ],
+   "max": 13
+  },
+  "stad": {
+   "waar": [
+    "fluistergang.hcs:15",
+    "muurgang.hcs:21"
+   ],
+   "max": 13
+  },
+  "spreukzaal": {
+   "waar": [
+    "fluistergang.hcs:21"
+   ],
+   "max": 13
+  },
+  "tekens": {
+   "waar": [
+    "fluistergang.hcs:27"
+   ],
+   "max": 13
+  },
+  "gat": {
+   "waar": [
+    "fluistergang.hcs:32"
+   ],
+   "max": 13
+  },
+  "kloof": {
+   "waar": [
+    "grotgang.hcs:9",
+    "spookbrug.hcs:50"
+   ],
+   "max": 13
+  },
+  "gloeiwormen": {
+   "waar": [
+    "grotgang.hcs:21"
+   ],
+   "max": 13
+  },
+  "druipsteen": {
+   "waar": [
+    "grotgang.hcs:25"
+   ],
+   "max": 13
+  },
+  "ziensteen": {
+   "waar": [
+    "herberg.hcs:29"
+   ],
+   "max": 13
+  },
+  "tafel": {
+   "waar": [
+    "herberg.hcs:38",
+    "jachthut.hcs:136"
+   ],
+   "max": 13
+  },
+  "kruik": {
+   "waar": [
+    "herberg.hcs:55"
+   ],
+   "max": 13
+  },
+  "luik": {
+   "waar": [
+    "herberg.hcs:69",
+    "torentrap3.hcs:21"
+   ],
+   "max": 13
+  },
+  "vat": {
+   "waar": [
+    "herberg.hcs:77",
+    "kelder.hcs:31"
+   ],
+   "max": 13
+  },
+  "haard": {
+   "waar": [
+    "herberg.hcs:85",
+    "hut.hcs:26",
+    "jachthut.hcs:48"
+   ],
+   "max": 13
+  },
+  "toog": {
+   "waar": [
+    "herberg.hcs:109"
+   ],
+   "max": 13
+  },
+  "Oma Rijm": {
+   "waar": [
+    "hut.hcs:13"
+   ],
+   "max": 13
+  },
+  "boek": {
+   "waar": [
+    "hut.hcs:19"
+   ],
+   "max": 13
+  },
+  "raam": {
+   "waar": [
+    "hut.hcs:30",
+    "huterf.hcs:24",
+    "torenhal.hcs:29",
+    "torentrap.hcs:27",
+    "torentrap2.hcs:32",
+    "wenteltrap.hcs:27"
+   ],
+   "max": 13
+  },
+  "huiden": {
+   "waar": [
+    "huterf.hcs:35"
+   ],
+   "max": 13
+  },
+  "bijl": {
+   "waar": [
+    "huterf.hcs:41"
+   ],
+   "max": 13
+  },
+  "ketel": {
+   "waar": [
+    "huterf.hcs:47"
+   ],
+   "max": 13
+  },
+  "brandhout": {
+   "waar": [
+    "huterf.hcs:51"
+   ],
+   "max": 13
+  },
+  "schoorsteen": {
+   "waar": [
+    "huterf.hcs:55"
+   ],
+   "max": 13
+  },
+  "brug": {
+   "waar": [
+    "ijsbrug.hcs:18",
+    "spookbrug.hcs:33"
+   ],
+   "max": 13
+  },
+  "rijmwurm": {
+   "waar": [
+    "ijsbrug.hcs:41"
+   ],
+   "max": 13
+  },
+  "achterdeur": {
+   "waar": [
+    "jachthut.hcs:27"
+   ],
+   "max": 13
+  },
+  "kaart": {
+   "waar": [
+    "jachthut.hcs:37"
+   ],
+   "max": 13
+  },
+  "gewei": {
+   "waar": [
+    "jachthut.hcs:44"
+   ],
+   "max": 13
+  },
+  "aardmannetje": {
+   "waar": [
+    "jachthut.hcs:70"
+   ],
+   "max": 13
+  },
+  "kooi": {
+   "waar": [
+    "jachthut.hcs:86"
+   ],
+   "max": 13
+  },
+  "brief": {
+   "waar": [
+    "jachthut.hcs:126"
+   ],
+   "max": 13
+  },
+  "honingpot": {
+   "waar": [
+    "kelder.hcs:21"
+   ],
+   "max": 13
+  },
+  "planken": {
+   "waar": [
+    "kelder.hcs:44"
+   ],
+   "max": 13
+  },
+  "kisten": {
+   "waar": [
+    "kelder.hcs:48"
+   ],
+   "max": 13
+  },
+  "raampje": {
+   "waar": [
+    "kelder.hcs:54",
+    "kerker.hcs:58"
+   ],
+   "max": 13
+  },
+  "tralies": {
+   "waar": [
+    "kerker.hcs:26"
+   ],
+   "max": 13
+  },
+  "ketting": {
+   "waar": [
+    "kerker.hcs:62"
+   ],
+   "max": 13
+  },
+  "kerker": {
+   "waar": [
+    "kerkergang.hcs:9"
+   ],
+   "max": 13
+  },
+  "cellen": {
+   "waar": [
+    "kerkergang.hcs:21"
+   ],
+   "max": 13
+  },
+  "fakkel": {
+   "waar": [
+    "kerkergang.hcs:25",
+    "poort.hcs:87"
+   ],
+   "max": 13
+  },
+  "boot": {
+   "waar": [
+    "klippad.hcs:9",
+    "oever.hcs:67",
+    "steiger.hcs:23"
+   ],
+   "max": 13
+  },
+  "eiland": {
+   "waar": [
+    "klippad.hcs:16"
+   ],
+   "max": 13
+  },
+  "touw": {
+   "waar": [
+    "klippad.hcs:26"
+   ],
+   "max": 13
+  },
+  "grot": {
+   "waar": [
+    "kloof.hcs:57"
+   ],
+   "max": 13
+  },
+  "rotswand": {
+   "waar": [
+    "kloof.hcs:76"
+   ],
+   "max": 13
+  },
+  "Holle Kroon": {
+   "waar": [
+    "maankamer.hcs:51"
+   ],
+   "max": 13
+  },
+  "steentje": {
+   "waar": [
+    "maankamer.hcs:83"
+   ],
+   "max": 13
+  },
+  "koepel": {
+   "waar": [
+    "maankamer.hcs:102"
+   ],
+   "max": 13
+  },
+  "zwamgrot": {
+   "waar": [
+    "muurgang.hcs:15"
+   ],
+   "max": 13
+  },
+  "tekening": {
+   "waar": [
+    "muurgang.hcs:27",
+    "muurgang.hcs:37"
+   ],
+   "max": 13
+  },
+  "ei": {
+   "waar": [
+    "muurgang.hcs:32"
+   ],
+   "max": 13
+  },
+  "steiger": {
+   "waar": [
+    "oever.hcs:26"
+   ],
+   "max": 13
+  },
+  "bel": {
+   "waar": [
+    "oever.hcs:30",
+    "steiger.hcs:32"
+   ],
+   "max": 13
+  },
+  "fontein": {
+   "waar": [
+    "plein.hcs:32"
+   ],
+   "max": 13
+  },
+  "smit": {
+   "waar": [
+    "plein.hcs:48"
+   ],
+   "max": 13
+  },
+  "herberg": {
+   "waar": [
+    "plein.hcs:56"
+   ],
+   "max": 13
+  },
+  "huizen": {
+   "waar": [
+    "plein.hcs:80"
+   ],
+   "max": 13
+  },
+  "poort": {
+   "waar": [
+    "poort.hcs:21"
+   ],
+   "max": 13
+  },
+  "spookridders": {
+   "waar": [
+    "poort.hcs:64"
+   ],
+   "max": 13
+  },
+  "oever": {
+   "waar": [
+    "rivier.hcs:15",
+    "steiger.hcs:10"
+   ],
+   "max": 13
+  },
+  "rivier": {
+   "waar": [
+    "rivier.hcs:21"
+   ],
+   "max": 13
+  },
+  "kristallen": {
+   "waar": [
+    "rivier.hcs:25"
+   ],
+   "max": 13
+  },
+  "smidsvuur": {
+   "waar": [
+    "smit.hcs:23"
+   ],
+   "max": 13
+  },
+  "Bram": {
+   "waar": [
+    "smit.hcs:46"
+   ],
+   "max": 13
+  },
+  "aambeeld": {
+   "waar": [
+    "smit.hcs:66"
+   ],
+   "max": 13
+  },
+  "blaasbalg": {
+   "waar": [
+    "smit.hcs:72"
+   ],
+   "max": 13
+  },
+  "gereedschap": {
+   "waar": [
+    "smit.hcs:82"
+   ],
+   "max": 13
+  },
+  "schild": {
+   "waar": [
+    "smit.hcs:88"
+   ],
+   "max": 13
+  },
+  "bergpad": {
+   "waar": [
+    "sneeuwveld.hcs:9"
+   ],
+   "max": 13
+  },
+  "voetstappen": {
+   "waar": [
+    "sneeuwveld.hcs:25"
+   ],
+   "max": 13
+  },
+  "zonnesteen": {
+   "waar": [
+    "spel.hcs:17"
+   ],
+   "max": 13
+  },
+  "gouden munt": {
+   "waar": [
+    "spel.hcs:21"
+   ],
+   "max": 13
+  },
+  "vuursteen": {
+   "waar": [
+    "spel.hcs:25"
+   ],
+   "max": 13
+  },
+  "lantaarn": {
+   "waar": [
+    "spel.hcs:29"
+   ],
+   "max": 13
+  },
+  "koker": {
+   "waar": [
+    "spel.hcs:117"
+   ],
+   "max": 13
+  },
+  "fluisterkever": {
+   "waar": [
+    "spel.hcs:121"
+   ],
+   "max": 13
+  },
+  "sterrenkaart": {
+   "waar": [
+    "spel.hcs:126"
+   ],
+   "max": 13
+  },
+  "lichtzwammen": {
+   "waar": [
+    "spel.hcs:132"
+   ],
+   "max": 13
+  },
+  "trilkristal": {
+   "waar": [
+    "spel.hcs:140"
+   ],
+   "max": 13
+  },
+  "bakenkristal": {
+   "waar": [
+    "spel.hcs:144"
+   ],
+   "max": 13
+  },
+  "sleutelschub": {
+   "waar": [
+    "spel.hcs:160"
+   ],
+   "max": 13
+  },
+  "wollen want": {
+   "waar": [
+    "spel.hcs:164"
+   ],
+   "max": 13
+  },
+  "gloeischub": {
+   "waar": [
+    "spel.hcs:168"
+   ],
+   "max": 13
+  },
+  "bospad": {
+   "waar": [
+    "spookbrug.hcs:27"
+   ],
+   "max": 13
+  },
+  "spookridder": {
+   "waar": [
+    "spookbrug.hcs:54"
+   ],
+   "max": 13
+  },
+  "helm": {
+   "waar": [
+    "spookbrug.hcs:102"
+   ],
+   "max": 13
+  },
+  "kever": {
+   "waar": [
+    "spookbrug.hcs:116"
+   ],
+   "max": 13
+  },
+  "spreukenboek": {
+   "waar": [
+    "spreukzaal.hcs:13"
+   ],
+   "max": 13
+  },
+  "kring": {
+   "waar": [
+    "spreukzaal.hcs:35"
+   ],
+   "max": 13
+  },
+  "nis": {
+   "waar": [
+    "spreukzaal.hcs:64"
+   ],
+   "max": 13
+  },
+  "logboek": {
+   "waar": [
+    "torenhal.hcs:21"
+   ],
+   "max": 13
+  },
+  "olievaten": {
+   "waar": [
+    "torenhal.hcs:25"
+   ],
+   "max": 13
+  },
+  "trap omlaag": {
+   "waar": [
+    "torentrap.hcs:15",
+    "torentrap2.hcs:20",
+    "torentrap3.hcs:15"
+   ],
+   "max": 13
+  },
+  "trap omhoog": {
+   "waar": [
+    "torentrap.hcs:21",
+    "torentrap2.hcs:26"
+   ],
+   "max": 13
+  },
+  "olielampje": {
+   "waar": [
+    "torentrap.hcs:31"
+   ],
+   "max": 13
+  },
+  "glazen bol": {
+   "waar": [
+    "torentrap2.hcs:36"
+   ],
+   "max": 13
+  },
+  "Grom": {
+   "waar": [
+    "troonzaal.hcs:17"
+   ],
+   "max": 13
+  },
+  "aardmannetjes": {
+   "waar": [
+    "troonzaal.hcs:57"
+   ],
+   "max": 13
+  },
+  "Nul": {
+   "waar": [
+    "vuurtoren.hcs:31"
+   ],
+   "max": 13
+  },
+  "lamp": {
+   "waar": [
+    "vuurtoren.hcs:67"
+   ],
+   "max": 13
+  },
+  "ramen": {
+   "waar": [
+    "vuurtoren.hcs:118"
+   ],
+   "max": 13
+  },
+  "troonzaal": {
+   "waar": [
+    "wenteltrap.hcs:21"
+   ],
+   "max": 13
+  },
+  "treden": {
+   "waar": [
+    "wenteltrap.hcs:31"
+   ],
+   "max": 13
+  },
+  "paal": {
+   "waar": [
+    "wolfspad.hcs:78"
+   ],
+   "max": 13
+  },
+  "klem": {
+   "waar": [
+    "wolfspad.hcs:84"
+   ],
+   "max": 13
+  },
+  "Pad": {
+   "waar": [
+    "zwamgrot.hcs:12"
+   ],
+   "max": 13
+  },
+  "mand": {
+   "waar": [
+    "zwamgrot.hcs:30"
+   ],
+   "max": 13
+  },
+  "zwarte zwam": {
+   "waar": [
+    "zwamgrot.hcs:36"
+   ],
+   "max": 13
+  }
+ },
+ "hoofdstuk": {
+  "Dawnhaven": {
+   "waar": [
+    "spel.hcs:7"
+   ],
+   "max": 28
+  },
+  "Duisterwoud": {
+   "waar": [
+    "spel.hcs:8"
+   ],
+   "max": 28
+  },
+  "Zee van Vergetelheid": {
+   "waar": [
+    "spel.hcs:9"
+   ],
+   "max": 28
+  },
+  "Rotskloof": {
+   "waar": [
+    "spel.hcs:10"
+   ],
+   "max": 28
+  },
+  "IJstop": {
+   "waar": [
+    "spel.hcs:11"
+   ],
+   "max": 28
+  },
+  "Het Vergeten Kasteel": {
+   "waar": [
+    "spel.hcs:12"
+   ],
+   "max": 28
+  }
+ },
+ "ui": {
+  "Ga naar": {
+   "waar": [
+    "teksten_nl.asm:10"
+   ],
+   "max": 9
+  },
+  "Pak": {
+   "waar": [
+    "teksten_nl.asm:11"
+   ],
+   "max": 9
+  },
+  "Gebruik": {
+   "waar": [
+    "teksten_nl.asm:12"
+   ],
+   "max": 9
+  },
+  "Open": {
+   "waar": [
+    "teksten_nl.asm:13"
+   ],
+   "max": 9
+  },
+  "Bekijk": {
+   "waar": [
+    "teksten_nl.asm:14"
+   ],
+   "max": 9
+  },
+  "Praat met": {
+   "waar": [
+    "teksten_nl.asm:15"
+   ],
+   "max": 9
+  },
+  "Geef": {
+   "waar": [
+    "teksten_nl.asm:16"
+   ],
+   "max": 9
+  },
+  "Sluit": {
+   "waar": [
+    "teksten_nl.asm:17"
+   ],
+   "max": 9
+  },
+  "Duw": {
+   "waar": [
+    "teksten_nl.asm:18"
+   ],
+   "max": 9
+  },
+  "Trek": {
+   "waar": [
+    "teksten_nl.asm:19"
+   ],
+   "max": 9
+  },
+  "Lees": {
+   "waar": [
+    "teksten_nl.asm:20"
+   ],
+   "max": 9
+  },
+  "Wat is": {
+   "waar": [
+    "teksten_nl.asm:21"
+   ],
+   "max": 9
+  },
+  "met": {
+   "waar": [
+    "teksten_nl.asm:30"
+   ],
+   "max": 5
+  },
+  "aan": {
+   "waar": [
+    "teksten_nl.asm:31"
+   ],
+   "max": 5
+  },
+  "Laden...": {
+   "waar": [
+    "teksten_nl.asm:38"
+   ],
+   "max": 40
+  },
+  "Opslaan...": {
+   "waar": [
+    "teksten_nl.asm:41"
+   ],
+   "max": 40
+  },
+  "Spel laden...": {
+   "waar": [
+    "teksten_nl.asm:44"
+   ],
+   "max": 40
+  },
+  "Het spel is opgeslagen.": {
+   "waar": [
+    "teksten_nl.asm:48"
+   ],
+   "max": 40
+  },
+  "Opslaan lukte niet. Zit de diskette erin?": {
+   "waar": [
+    "teksten_nl.asm:49"
+   ],
+   "max": 0
+  },
+  "Daar ben ik weer.": {
+   "waar": [
+    "teksten_nl.asm:50"
+   ],
+   "max": 40
+  },
+  "Er is geen opgeslagen spel.": {
+   "waar": [
+    "teksten_nl.asm:51"
+   ],
+   "max": 40
+  },
+  "Bestand": {
+   "waar": [
+    "teksten_nl.asm:53"
+   ],
+   "max": 40
+  },
+  "Score": {
+   "waar": [
+    "teksten_nl.asm:54"
+   ],
+   "max": 40
+  },
+  "Opslaan": {
+   "waar": [
+    "teksten_nl.asm:56"
+   ],
+   "max": 40
+  },
+  "Laden": {
+   "waar": [
+    "teksten_nl.asm:57"
+   ],
+   "max": 40
+  },
+  "Taal": {
+   "waar": [
+    "teksten_nl.asm:59"
+   ],
+   "max": 40
+  },
+  "Lichtpunten:": {
+   "waar": [
+    "teksten_nl.asm:60"
+   ],
+   "max": 40
+  },
+  "van 250": {
+   "waar": [
+    "teksten_nl.asm:61"
+   ],
+   "max": 40
+  },
+  "Druk op spatie of vuur": {
+   "waar": [
+    "teksten_nl.asm:63"
+   ],
+   "max": 40
+  },
+  "Hollow Crown ... Lang geleden scheen de zon over Aethermoor. Diep onder de bergen woonden de ": {
+   "waar": [
+    "teksten_nl.asm:67"
+   ],
+   "max": 0
+  },
+  "aardmannetjes, die geen licht verdragen. Hun meester, Grom de tovertrol, wilde een thuis voor zijn ": {
+   "waar": [
+    "teksten_nl.asm:68"
+   ],
+   "max": 0
+  },
+  "volk boven de grond. In de nacht van de dubbele maansverduistering sprak hij zijn spreuk, en sindsdien ": {
+   "waar": [
+    "teksten_nl.asm:69"
+   ],
+   "max": 0
+  },
+  "is het schemer. In Dawnhaven woont Eldric, een gewone jongen met een goed hart en een warm steentje ": {
+   "waar": [
+    "teksten_nl.asm:70"
+   ],
+   "max": 0
+  },
+  "van zijn oma. Hij weet nog niet dat alles van hem afhangt ... ": {
+   "waar": [
+    "teksten_nl.asm:71"
+   ],
+   "max": 0
+  },
+  "Bediening: joystick in poort 2, 1351-muis in poort 1, of de cursortoetsen met spatie als vuur. ": {
+   "waar": [
+    "teksten_nl.asm:72"
+   ],
+   "max": 0
+  },
+  "F1 muziek aan/uit, F5 opslaan, F7 laden ... ": {
+   "waar": [
+    "teksten_nl.asm:73"
+   ],
+   "max": 0
+  },
+  "Een point-and-click-avontuur voor de Commodore 64, gemaakt met Kick Assembler, Python en VICE. ": {
+   "waar": [
+    "teksten_nl.asm:74"
+   ],
+   "max": 0
+  },
+  "Muziek: een eigen thema in D-mineur. Plaatjes: FLUX. ... ": {
+   "waar": [
+    "teksten_nl.asm:75"
+   ],
+   "max": 0
+  },
+  "Groeten aan iedereen die nog een C64 aanzet!          ": {
+   "waar": [
+    "teksten_nl.asm:76"
+   ],
+   "max": 0
+  }
+ }
+}

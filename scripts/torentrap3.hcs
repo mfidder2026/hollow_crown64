@@ -1,0 +1,25 @@
+# torentrap3.hcs — hoofdstuk 3: bovenin de vuurtoren, de laatste treden en het luik naar de lamp. Plaatje:
+# data/plaatjes/torentrap3.png (tools/teken_tussen.py). Een loopscherm: links omlaag, rechts door het luik.
+KAMER torentrap3
+  LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit bruin oranje geel blauw lichtblauw paars cyaan
+  LOOPVAK 4,101 30,115                  # onderaan
+  LOOPVAK 26,92 52,106
+  LOOPVAK 48,84 74,97
+  LOOPVAK 70,75 96,89
+  LOOPVAK 92,66 118,80
+  LOOPVAK 114,57 140,71
+  LOOPVAK 136,53 157,62                  # bovenaan
+  BINNENKOMST:
+    MUZIEK zee
+
+VOORWERP tt3_omlaag "trap omlaag" VAK 0,100 8,20 LOOP 6,112 LINKS
+  GA_NAAR:
+    KAMER torentrap2 150,56 LINKS
+  BEKIJK:
+    ZEG eldric "Helemaal naar beneden? Nee, dank je."
+
+VOORWERP tt3_luik "luik" VAK 104,0 56,60 LOOP 154,56 RECHTS
+  GA_NAAR:
+    KAMER vuurtoren 44,100 RECHTS
+  BEKIJK:
+    ZEG eldric "Een luik met een ladder. Daarboven is de lamp."

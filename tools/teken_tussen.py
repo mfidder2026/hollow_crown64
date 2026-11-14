@@ -305,7 +305,21 @@ def klippad():
     dk = Doek()
     rijk.lucht_met_wolken(dk, rnd, 70, kleuren=(ZWART, BLAUW, PAARS), sterren=14, wolken=2)
     zee(dk, rnd, 70, 100)
-    vuurtoren_ver(dk, 140, 70)
+    # rechts, dichtbij: de vuurtoren waar het pad naartoe loopt (wit met rode banden, het licht uit), half uit beeld
+    toren = [(122, 100), (128, 18), (159, 18), (159, 100)]
+    dk.poly(toren, LGRIJS, ZWART)
+    for y in (34, 62):                                           # rode banden
+        dk.poly([(126, y), (159, y), (159, y + 10), (125, y + 10)], ROOD, ZWART)
+    for y in range(20, 100, 2):                                  # de schaduwkant links
+        x = 122 + (100 - y) * 6 / 82
+        dk.lijn([(x + 1, y), (x + 4, y)], GRIJS)
+    dk.rect(126, 10, 159, 18, DGRIJS)                            # de omloop
+    dk.lijn([(124, 10), (159, 10)], ZWART)
+    for x in range(128, 159, 4):
+        dk.lijn([(x, 4), (x, 10)], ZWART)
+    dk.lijn([(124, 4), (159, 4)], ZWART)
+    dk.rect(134, 72, 142, 84, ZWART)                             # een raampje, donker
+    dk.rect(135, 73, 141, 83, BLAUW)
     # het klif: het pad loopt over de rand, links rotsen omhoog, rechts naar beneden de zee
     rotswand(dk, rnd, [(0, 40), (14, 30), (30, 44), (48, 60), (64, 100), (0, 100)])
     dk.poly([(0, 100), (B - 1, 96), (B - 1, 126), (0, 126)], DGRIJS, ZWART)
@@ -317,9 +331,8 @@ def klippad():
     for x, y in ((40, 124), (90, 125), (120, 123)):              # pollen gras en zeekraal
         for a in (-0.7, 0, 0.7):
             dk.lijn([(x, y), (x + 4 * math.sin(a), y - 4)], LGROEN)
-    meeuw(dk, 110, 84)
-    rijk.verrijk(dk, 831, lichten=[(140, 66, 30, 20, 0.6, {BLAUW: LBLAUW, DGRIJS: GRIJS, PAARS: ROZE})],
-                 sluit=(ZWART,))
+    meeuw(dk, 96, 80)
+    rijk.verrijk(dk, 831, lichten=[], sluit=(ZWART,))
     return afmaken(dk)
 
 
@@ -455,30 +468,314 @@ def wenteltrap():
     rnd = random.Random(1121)
     dk = Doek()
     rijk.stenen_muur(dk, 0, 0, B - 1, 126, rnd, basis=GRIJS, donker=DGRIJS, licht_=LGRIJS, mos=None, hoog=8, breed=14)
-    dk.rect(0, 104, B - 1, 125, DGRIJS)
-    pad_zij(dk, rnd, basis=GRIJS, midden=LGRIJS, steen=DGRIJS, y1=104, y2=121)
-    # de trap: achter het pad klimmen de treden van links naar rechts omhoog, de toren in
-    for i in range(12):
-        x = 4 + i * 13
-        y = 94 - i * 5
-        dk.poly([(x, y), (x + 14, y), (x + 14, y + 5), (x, y + 5)], LGRIJS, ZWART)
-        dk.lijn([(x + 1, y + 1), (x + 13, y + 1)], WIT)
-        dk.rect(x, y + 5, x + 14, 103, DGRIJS)
-        dk.lijn([(x, y + 5), (x, 103)], ZWART)
+    for x in (40, 120):                                          # smalle ramen: maanlicht valt naar binnen
+        pass
     for x in (40, 120):                                          # smalle ramen: maanlicht valt naar binnen
         dk.poly([(x - 4, 60), (x - 4, 30), (x, 24), (x + 4, 30), (x + 4, 60)], BLAUW, ZWART)
         dk.lijn([(x, 26), (x, 60)], ZWART)
         dk.px(x - 2, 34, WIT)
-
+    trap_band(dk, rnd, gespiegeld=True)                          # van rechtsonder (de troonzaal) naar linksboven (het dak)
     fakkel(dk, 80, 46)
-    dk.lijn([(4, 90), (160, 30)], BRUIN, 2)                      # een leuning van touw langs de trap
-    dk.lijn([(4, 89), (160, 29)], ORANJE)
     rijk.verrijk(dk, 1131, lichten=[(80, 42, 26, 24, 0.7, None)])
     return afmaken(dk)
 
 
-KAMERS = {"dorpsweg": dorpsweg, "beekdal": beekdal, "zeerotsen": zeerotsen, "klippad": klippad,
-          "grotgang": grotgang, "rivier": rivier, "sneeuwveld": sneeuwveld, "bergkam": bergkam,
+# ---- hoofdstuk 3: binnen in de vuurtoren: de hal onderin en de trap omhoog naar de lamp ------------------------
+def ronde_muur(dk, rnd, basis=GRIJS, donker=DGRIJS, licht_=LGRIJS):
+    """een ronde torenmuur van binnen: stenen die naar de zijkanten smaller worden (de kromming)"""
+    for y in range(0, 104, 7):
+        x = 0
+        rij = (y // 7) % 2
+        while x < B:
+            midden = abs(x - 80) / 80                            # aan de zijkanten smaller: de muur buigt weg
+            breed = max(4, int(14 * (1 - 0.6 * midden)) + rnd.randint(-1, 1))
+            xs = x + (breed // 2 if rij and x == 0 else 0)
+            dk.rect(xs, y, min(B - 1, xs + breed - 1), y + 6, basis)
+            dk.lijn([(xs, y), (min(B - 1, xs + breed - 1), y)], licht_)
+            dk.lijn([(xs, y + 6), (min(B - 1, xs + breed - 1), y + 6)], ZWART)
+            dk.lijn([(xs + breed - 1, y), (xs + breed - 1, y + 6)], ZWART)
+            if rnd.random() < 0.3:
+                dk.px(xs + rnd.randint(1, max(1, breed - 2)), y + rnd.randint(2, 4), donker)
+            x = xs + breed
+    for x in range(B):                                           # de kromming: links en rechts donkerder
+        d = abs(x - 80) / 80
+        for y in range(0, 104):
+            if d > 0.6 and (x + y) % 2 == 0 and rijk.ruis(x, y, 9) < (d - 0.6) * 2.2:
+                k = dk.im.getpixel((x, y))
+                if k in rijk.DONKERDER:
+                    dk.px(x, y, rijk.DONKERDER[k])
+
+
+def torenhal():
+    rnd = random.Random(851)
+    dk = Doek()
+    ronde_muur(dk, rnd)
+    # een klein rond raam met de schemer en de zee
+    dk.ovaal(66, 18, 94, 40, ZWART, ZWART)
+    dk.ovaal(68, 20, 92, 38, PAARS, ZWART)
+    dk.rect(69, 31, 91, 37, BLAUW)
+    dk.lijn([(80, 20), (80, 38)], ZWART)
+    dk.lijn([(68, 29), (92, 29)], ZWART)
+    # de trap begint rechts en draait omhoog, uit beeld
+    for i in range(6):
+        x, y = 120 + i * 6, 94 - i * 9
+        dk.poly([(x, y), (x + 18, y - 2), (x + 18, y + 4), (x, y + 6)], LGRIJS, ZWART)
+        dk.rect(x, y + 6, x + 18, 103, DGRIJS)
+    dk.lijn([(118, 92), (159, 40)], BRUIN, 2)                    # leuning
+    dk.lijn([(118, 91), (159, 39)], ORANJE)
+    # de vloer: planken, een tafel met het logboek en een kaars, olievaten, een rol touw
+    dk.poly([(0, 104), (B - 1, 104), (B - 1, 126), (0, 126)], BRUIN, ZWART)
+    pad_zij(dk, rnd, basis=BRUIN, midden=ORANJE, steen=DGRIJS, y1=106, y2=121)
+    dk.rect(30, 74, 62, 78, BRUIN)                               # tafel
+    dk.lijn([(30, 74), (62, 74)], ORANJE)
+    for x in (32, 60):
+        dk.rect(x, 78, x + 1, 104, BRUIN)
+    dk.poly([(38, 70), (52, 69), (54, 73), (36, 74)], WIT, ZWART)   # het logboek, open
+    dk.lijn([(45, 70), (45, 73)], GRIJS)
+    for y in (71, 72):
+        dk.lijn([(39, y), (43, y)], GRIJS)
+        dk.lijn([(47, y), (51, y)], GRIJS)
+    dk.rect(57, 66, 58, 73, WIT)                                 # kaars
+    dk.px(57, 64, GEEL)
+    dk.px(57, 65, ORANJE)
+    for x, y in ((8, 104), (20, 104), (14, 92)):                 # olievaten
+        dk.ovaal(x - 6, y - 14, x + 6, y, BRUIN, ZWART)
+        dk.lijn([(x - 6, y - 10), (x + 6, y - 10)], DGRIJS)
+        dk.lijn([(x - 6, y - 4), (x + 6, y - 4)], DGRIJS)
+        dk.lijn([(x - 3, y - 13), (x - 3, y - 1)], ORANJE)
+    for r in (5, 3):                                             # een rol touw
+        dk.ovaal(96 - r, 100 - r, 96 + r, 100 + r // 2, BRUIN, ZWART)
+        dk.ovaal(96 - r + 1, 100 - r + 1, 96 + r - 1, 100 + r // 2 - 1, ORANJE, BRUIN)
+    rijk.verrijk(dk, 861, lichten=[(57, 66, 18, 12, 0.6, {GRIJS: BRUIN, LGRIJS: ORANJE, DGRIJS: BRUIN, BRUIN: ORANJE,
+                                                         WIT: GEEL}),
+                                   (80, 29, 20, 14, 0.4, {GRIJS: LGRIJS, DGRIJS: GRIJS})],
+                 sluit=(PAARS, BLAUW), textuur_=0)
+    return afmaken(dk)
+
+
+def torentrap():
+    rnd = random.Random(871)
+    dk = Doek()
+    ronde_muur(dk, rnd, basis=DGRIJS, donker=ZWART, licht_=GRIJS)
+    # de trap slingert van links onder naar rechts boven, steeds verder de toren in
+    # twee smalle ramen: de zee ver beneden, en de mist
+    for x, y in ((30, 20), (124, 50)):
+        dk.poly([(x - 5, y + 24), (x - 5, y + 6), (x, y), (x + 5, y + 6), (x + 5, y + 24)], BLAUW, ZWART)
+        for yy in range(y + 14, y + 24, 3):
+            dk.lijn([(x - 4, yy), (x + 4, yy)], LBLAUW if yy % 2 else ZWART)
+        dk.rect(x - 4, y + 6, x + 4, y + 12, PAARS)
+    trap_band(dk, rnd)
+    for x, y in ((70, 46), (110, 22)):                           # olielampjes aan de muur
+        dk.rect(x - 1, y, x + 1, y + 4, GRIJS)
+        dk.ovaal(x - 2, y - 4, x + 2, y, GEEL, ORANJE)
+    rijk.verrijk(dk, 881, lichten=[(70, 44, 24, 20, 0.7, None), (110, 20, 24, 20, 0.7, None)], sluit=(BLAUW, PAARS), textuur_=0.3)
+    return afmaken(dk)
+
+
+# ---- de trap waar Eldric echt op loopt: 14 treden van linksonder naar rechtsboven (gespiegeld: rechtsonder naar
+# linksboven). Dezelfde maten staan in de scripts als looppaden (trap_loopvakken hieronder schrijft ze uit).
+TREDEN = 14
+
+
+def trede(i):
+    """voorrand van trede i: x links, y (de voeten staan net daarachter)"""
+    return 4 + i * 11, round(116 - i * 4.4)
+
+
+def trap_loopvakken(gespiegeld=False):
+    """de looppaden over de trap: telkens twee treden, overlappend, en bovenaan het bordes"""
+    vakken = []
+    for k in range(0, TREDEN, 2):
+        x1, y1 = trede(k)
+        x2, y2 = trede(min(TREDEN - 1, k + 2))
+        vak = (x1, y2 - 6, 157 if k + 2 >= TREDEN else min(157, x2 + 4), y1 - 1)
+        vakken.append(vak)
+    if gespiegeld:
+        vakken = [(159 - b, y1, 159 - a, y2) for a, y1, b, y2 in vakken]
+    return vakken
+
+
+def trap_band(dk, rnd, gespiegeld=False):
+    """de trap zelf: treden (licht, met een witte neus), stootborden, en de zijkant eronder donker"""
+    def X(x):
+        return B - 1 - x if gespiegeld else x
+
+    def rect(x1, y1, x2, y2, k):
+        if y2 >= y1:
+            dk.rect(min(X(x1), X(x2)), y1, max(X(x1), X(x2)), y2, k)
+
+    for i in range(TREDEN):
+        x, y = trede(i)
+        x2 = min(B - 1, x + 12)
+        rect(x, y + 6, x2, 125, DGRIJS)                                      # de zijkant van de trap
+        for yy in range(y + 9, 124, 6):
+            if rnd.random() < 0.5:
+                dk.lijn([(X(x + 2), yy), (X(x + 6), yy)], ZWART)
+        rect(x, y - 9, x2, y, LGRIJS)                                        # de trede
+        dk.lijn([(X(x), y - 9), (X(x2), y - 9)], WIT)                        # de neus vangt licht
+        rect(x, y + 1, x2, y + 5, GRIJS)                                     # het stootbord
+        dk.lijn([(X(x), y), (X(x2), y)], ZWART)
+        dk.lijn([(X(x), y - 9), (X(x), y + 5)], ZWART)
+        dk.lijn([(X(x), y + 6), (X(x2), y + 6)], ZWART)
+    rect(0, 125, B - 1, 126, DGRIJS)
+    # de leuning, een handbreed boven de treden, met spijlen
+    pts = [(trede(i)[0] + 6, trede(i)[1] - 30) for i in range(0, TREDEN, 3)] + [(B - 1, trede(TREDEN - 1)[1] - 30)]
+    pts = [(X(x), y) for x, y in pts]
+    for x, y in pts[:-1]:
+        dk.lijn([(x, y), (x, y + 20)], BRUIN)
+    dk.lijn(pts, BRUIN, 2)
+    dk.lijn([(x, y - 1) for x, y in pts], ORANJE)
+
+
+def trap_omhoog(dk, rnd, n, x0, y0, dx, dy, k=LGRIJS):
+    """treden die van (x0, y0) per stap dx naar rechts en dy omhoog gaan, met een donkere voorkant"""
+    for i in range(n):
+        x, y = x0 + i * dx, y0 - i * dy
+        dk.poly([(x, y), (x + dx + 2, y - 1), (x + dx + 2, y + 3), (x, y + 4)], k, ZWART)
+        dk.lijn([(x + 1, y), (x + dx + 1, y - 1)], WIT)
+        if y + 4 <= 103:
+            dk.rect(x, y + 4, x + dx + 2, min(103, y + 10), GRIJS)
+
+
+def torentrap2():
+    """halverwege: een bordes met een raam (de storm buiten), touw en reserveglas; de trap gaat steil verder"""
+    rnd = random.Random(891)
+    dk = Doek()
+    ronde_muur(dk, rnd, basis=GRIJS, donker=DGRIJS, licht_=LGRIJS)
+    # een groot raam op het bordes: buiten de storm, de zee, de mist
+    dk.poly([(70, 60), (70, 24), (80, 14), (90, 24), (90, 60)], BLAUW, ZWART)
+    for yy in range(36, 60, 3):
+        dk.lijn([(71, yy), (89, yy)], LBLAUW if yy % 2 else ZWART)
+    dk.rect(71, 24, 89, 34, PAARS)
+    for x in range(72, 89, 4):                                   # regen tegen het glas
+        dk.lijn([(x, 26), (x - 2, 32)], LGRIJS)
+    dk.lijn([(80, 16), (80, 60)], ZWART)
+    for r in (4, 2):                                             # een rol touw en een glazen bol voor de lamp
+        dk.ovaal(66 - r, 62 - r, 66 + r, 62, BRUIN, ZWART)
+    dk.ovaal(92, 54, 98, 62, CYAAN, ZWART)
+    dk.px(94, 56, WIT)
+    trap_band(dk, rnd)
+    rijk.verrijk(dk, 893, lichten=[(80, 40, 30, 30, 0.4, {GRIJS: LGRIJS, DGRIJS: GRIJS})], sluit=(BLAUW, PAARS), textuur_=0.3)
+    return afmaken(dk)
+
+
+def torentrap3():
+    """bovenaan: de laatste treden en een ijzeren ladder naar het luik; door het luik valt het licht van de lamp"""
+    rnd = random.Random(901)
+    dk = Doek()
+    ronde_muur(dk, rnd, basis=DGRIJS, donker=ZWART, licht_=GRIJS)
+    # het plafond met het luik: een vierkant gat met warm licht
+    dk.rect(0, 0, B - 1, 10, BRUIN)
+    for x in range(0, B, 10):
+        dk.lijn([(x, 0), (x, 10)], ZWART)
+    dk.rect(110, 0, 140, 10, GEEL)
+    dk.rect(114, 0, 136, 6, WIT)
+    dk.lijn([(110, 10), (140, 10)], ZWART)
+    # de ladder van de laatste trede naar het luik
+    for x in (114, 134):
+        dk.lijn([(x, 10), (x, 60)], GRIJS, 2)
+    for y in range(14, 60, 6):
+        dk.lijn([(114, y), (134, y)], LGRIJS)
+    # het licht valt in een bundel naar beneden
+    for y in range(11, 104):
+        for x in range(100, 152):
+            breed = 15 + (y - 10) * 0.25
+            if abs(x - 125) < breed and (x + y) % 2 == 0 and rijk.ruis(x, y, 4) < 0.5:
+                k = dk.im.getpixel((x, y))
+                if k in rijk.LICHTER and k not in (GEEL, WIT):
+                    dk.px(x, y, rijk.LICHTER[k])
+    trap_band(dk, rnd)
+    rijk.verrijk(dk, 903, lichten=[(125, 10, 40, 40, 0.8, None)], sluit=(GEEL, WIT), textuur_=0.3)
+    return afmaken(dk)
+
+
+# ---- hoofdstuk 4: de muurgang (naar de stad van de aardmannetjes) en de fluistergang (naar de spreukzaal) ------
+def tunnel(dk, rnd, basis=BRUIN, donker=DGRIJS, licht_=ORANJE):
+    """een uitgehakte gang: een gewelf van aarde en steen, met balken die het plafond stutten"""
+    dk.rect(0, 0, B - 1, 127, ZWART)
+    rotswand(dk, rnd, [(0, 0), (B - 1, 0), (B - 1, 104), (0, 104)], kleur=basis, licht=licht_, schaduw=donker)
+    for x in (18, 76, 134):                                      # stutbalken
+        dk.rect(x, 8, x + 5, 104, BRUIN)
+        dk.lijn([(x, 8), (x, 104)], ZWART)
+        dk.lijn([(x + 5, 8), (x + 5, 104)], ZWART)
+        dk.lijn([(x + 1, 8), (x + 1, 104)], ORANJE)
+    dk.rect(0, 4, B - 1, 9, BRUIN)
+    dk.lijn([(0, 10), (B - 1, 10)], ZWART)
+    dk.lijn([(0, 4), (B - 1, 4)], ORANJE)
+    dk.poly([(0, 104), (B - 1, 104), (B - 1, 126), (0, 126)], DGRIJS, ZWART)
+    pad_zij(dk, rnd, basis=BRUIN, midden=ORANJE, steen=DGRIJS, y1=106, y2=121)
+
+
+def muurgang():
+    rnd = random.Random(951)
+    dk = Doek()
+    tunnel(dk, rnd)
+    # de schilderingen tussen de balken: in wit en oker op de wand, als met een vinger getekend
+    def figuurtje(x, y, k=WIT):
+        dk.ovaal(x - 2, y - 10, x + 2, y - 6, k, k)
+        dk.lijn([(x, y - 6), (x, y - 2)], k)
+        dk.lijn([(x - 3, y - 5), (x + 3, y - 5)], k)
+        dk.lijn([(x, y - 2), (x - 2, y + 2)], k)
+        dk.lijn([(x, y - 2), (x + 2, y + 2)], k)
+    dk.ovaal(36, 18, 56, 38, ZWART, ZWART)                       # links: een grote maan, de aardmannetjes eronder
+    dk.ovaal(38, 20, 54, 36, GEEL, ORANJE)
+    for x in (30, 40, 50, 60):
+        figuurtje(x, 66)
+    dk.lijn([(26, 70), (66, 70)], ORANJE)
+    dk.ovaal(92, 40, 112, 66, WIT, ORANJE)                       # midden: het ei, met één oog
+    dk.ovaal(99, 48, 105, 54, ZWART, ZWART)
+    dk.px(101, 50, WIT)
+    for a in range(0, 360, 45):                                  # stralen eromheen
+        r = math.radians(a)
+        dk.lijn([(102 + 14 * math.cos(r), 53 + 16 * math.sin(r)), (102 + 18 * math.cos(r), 53 + 20 * math.sin(r))], GEEL)
+    dk.ovaal(140, 30, 156, 62, DGRIJS, ZWART)                    # rechts: een grote figuur met hoorns: Grom
+    dk.lijn([(142, 30), (138, 22)], WIT)
+    dk.lijn([(154, 30), (158, 22)], WIT)
+    dk.px(145, 40, ROOD)
+    dk.px(151, 40, ROOD)
+    for x, y in ((60, 92), (120, 90)):                           # lampjes in nissen: gedoofd, de stad slaapt
+        dk.ovaal(x - 4, y - 8, x + 4, y + 2, ZWART, ZWART)
+        dk.ovaal(x - 2, y - 4, x + 2, y, DGRIJS, GRIJS)
+    rijk.verrijk(dk, 961, lichten=[(46, 28, 26, 22, 0.5, {BRUIN: ORANJE, DGRIJS: BRUIN})], sluit=(WIT, GEEL), textuur_=0.5)
+    return afmaken(dk)
+
+
+def fluistergang():
+    rnd = random.Random(971)
+    dk = Doek()
+    tunnel(dk, rnd, basis=DGRIJS, donker=ZWART, licht_=GRIJS)
+    # tekens van de spreuk: cyaan gloeiende runen op de wanden, steeds meer naar rechts (naar de spreukzaal)
+    for i, x in enumerate(range(28, 150, 9)):
+        y = 30 + (i * 13) % 50
+        k = CYAAN if i % 3 else LBLAUW
+        vorm = i % 4
+        if vorm == 0:
+            dk.lijn([(x, y), (x + 4, y + 8), (x, y + 8)], k)
+        elif vorm == 1:
+            dk.lijn([(x, y + 8), (x + 2, y), (x + 4, y + 8)], k)
+            dk.lijn([(x + 1, y + 5), (x + 3, y + 5)], k)
+        elif vorm == 2:
+            dk.ovaal(x, y, x + 4, y + 6, k, k)
+            dk.px(x + 2, y + 3, ZWART)
+        else:
+            dk.lijn([(x, y), (x + 4, y + 4), (x, y + 8)], k)
+        if x > 100:                                              # dichtbij de zaal gloeien ze feller
+            dk.px(x - 1, y + 4, BLAUW)
+            dk.px(x + 5, y + 4, BLAUW)
+    # rechts: een zwarte opening waar een koude wind uit komt (het gat in de spreukzaal)
+    dk.ovaal(138, 30, 162, 104, ZWART, ZWART)
+    for r in (6, 10, 14):
+        for a in range(0, 360, 30):
+            rad = math.radians(a + r * 7)
+            dk.px(150 + r * math.cos(rad) * 0.8, 66 + r * 1.6 * math.sin(rad), PAARS if r < 14 else BLAUW)
+    rijk.verrijk(dk, 981, lichten=[(150, 66, 22, 34, 0.5, {DGRIJS: BLAUW, GRIJS: DGRIJS})], sluit=(CYAAN, PAARS),
+                 textuur_=0.5)
+    return afmaken(dk)
+
+
+KAMERS = {"dorpsweg": dorpsweg, "beekdal": beekdal, "zeerotsen": zeerotsen, "klippad": klippad, "torenhal": torenhal, "torentrap": torentrap,
+          "torentrap2": torentrap2, "torentrap3": torentrap3,
+          "grotgang": grotgang, "rivier": rivier, "muurgang": muurgang, "fluistergang": fluistergang, "sneeuwveld": sneeuwveld, "bergkam": bergkam,
           "kerkergang": kerkergang, "wenteltrap": wenteltrap}
 
 

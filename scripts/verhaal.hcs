@@ -4,7 +4,7 @@
 KAMER verhaal
   TONEEL
   LOOPKLEUREN geel oranje
-  SCHAAL 118 110
+  SCHAAL 110 102                         # (vóór het dorp: Eldric op zijn grootst, zoals Mira naast hem)
   LOOPVAK 74,108 81,124                  # het pad: hier loopt Eldric aan het eind het beeld in
   ACTOR maan_l KOSTUUM maan OP 34,26 VERBORGEN
   ACTOR maan_r KOSTUUM maan OP 126,26 VERBORGEN
@@ -12,6 +12,38 @@ KAMER verhaal
   ACTOR hol_2 KOSTUUM hol OP 136,84 VERBORGEN
   ACTOR grom_toneel KOSTUUM grom OP 133,86 VERBORGEN   # Grom de tovertrol, in de mond van zijn grot
   BINNENKOMST:
+    ALS vlag spel_klaar                    # de epiloog: hetzelfde dal, maar nu met de zon (scripts/dak.hcs komt hierheen)
+      TUSSENSCENE
+      MUZIEK thema
+      WACHT 60
+      ZEG verteller "Een jaar later."
+      ZEG verteller "De zon schijnt weer over Aethermoor. Elke dag."
+      TOON hol_1
+      ZEG verteller "Achter de bergen wonen de aardmannetjes, onder hun eigen maan."
+      ZEG verteller "Soms komen ze op bezoek. 's Nachts, natuurlijk."
+      VERBERG hol_1
+      TOON grom_toneel
+      ZEG verteller "Grom plant bomen voor zijn grot. Zo zegt hij sorry."
+      ZEG grom "Mooi licht. Voor een mens."
+      VERBERG grom_toneel
+      ZEG verteller "Oma Rijm schrijft een nieuw boek: over een jongen en een blind meisje."
+      ZEG verteller "En Bram de smid heeft een nieuwe hamer. De oude ligt nog op het plein."
+      TOON eldric
+      LOOP eldric 79,110
+      TOON mira_mee
+      WACHT 30
+      KIJK eldric VOOR
+      ZEG eldric "Mira? Wat zie jij?"
+      ZEG mira "Licht, Eldric. Ik zie licht."
+      TOON tik
+      ZEG tik "Ik ga nog even terug. Naar het begin. Tot ziens, ik!"
+      VERBERG tik
+      WACHT 50
+      ZET epiloog_gezien
+      EINDE_TUSSENSCENE
+      ZEG verteller "EINDE. Hollow Crown. Dank je wel voor het spelen!" BLIJFT
+      STOP
+    EINDE
     TUSSENSCENE
     MUZIEK thema
     WACHT 50
@@ -32,12 +64,13 @@ KAMER verhaal
     ZEG verteller "sprak hij zijn spreuk."
     TOON maan_l
     TOON maan_r
-    LOOP maan_l 76,26
-    LOOP maan_r 84,26
-    KLEUR 60,0 40,40 geel oranje         # de zon dooft (met de stralen tot aan hun punt)
+    LOOP maan_l 77,26
+    LOOP maan_r 83,26
+    KLEUR 72,16 16,8 geel donkergrijs    # de twee manen voor de zon (zoals overal in het spel): het midden donker,
+    KLEUR 76,8 8,8 geel donkergrijs      #  de rand en de stralen blijven geel. (Als plaatje, niet als figuren: er
+    KLEUR 76,24 8,8 geel donkergrijs     #  komen straks nog aardmannetjes en Grom, en er passen er maar twee.)
     KLEUR 0,0 160,72 cyaan lichtblauw    # de lucht wordt donkerder
     WACHT 30
-    KLEUR 60,0 40,40 oranje bruin
     KLEUR 0,0 160,72 lichtblauw blauw
     KLEUR 0,0 160,72 wit lichtgrijs      # de wolken worden grauw
     WACHT 30

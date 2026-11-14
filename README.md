@@ -21,15 +21,30 @@ It plays the way the classic late-80s C64 adventures did: the room on top, a bar
 you use to build sentences like **"Use jug with barrel"**. The story, world, characters, art, music and code are
 all our own. We borrow only the genre and the way you control it.
 
-![The title screen: the hollow crown above the castle, the logo with its colour cycle, and the scroll text](docs/images/hoofdstuk10_intro.png)
+**Play it:** download `hollowcrown.crt` from the [latest release](https://github.com/mfidder2026/hollow_crown64/releases/latest)
+and attach it as a cartridge (VICE: `x64sc -cartcrt hollowcrown.crt`, or drag it onto the window; real hardware: an
+EasyFlash). It starts with a language menu: **English, Deutsch, Français** or **Nederlands**. Everything comes from the
+cartridge, so rooms appear instantly. Saving (F5/F7) needs a disk drive.
 
-![Eldric walking across the village square of Dawnhaven, in VICE](docs/images/hoofdstuk2_lopen.png)
+<p align="center"><img src="docs/images/en/title.png" width="640" alt="The title screen: the hollow crown above the castle, the logo with its colour cycle, and the scroll text"></p>
 
-![Eldric at three depths: front, by the smithy, between the houses at the back](docs/images/hoofdstuk2_diepte.png)
+### 🖼️ Gallery
 
-*Eldric mid-stride on his way round the fountain (top), and at three depths (above), running in VICE. Messages on top, Dawnhaven as a 160×128
-multicolour room, the verb bar below (in Dutch for now). The test suite checks this screen pixel by pixel against
-what memory says it should be.*
+| | |
+|:---:|:---:|
+| ![Bram's smithy in Dawnhaven, the forge burning](docs/images/en/smit_vuur.png) | ![Grom the giant troll wizard appears at the edge of Darkwood](docs/images/en/grom.png) |
+| *Chapter 1: Bram's smithy in Dawnhaven* | *Grom, the troll wizard, at the edge of Darkwood* |
+| ![Olm the ferryman on the jetty](docs/images/en/veerman.png) | ![Rowing through the fog on the Sea of Oblivion](docs/images/en/mist.png) |
+| *Chapter 3: Olm the ferryman* | *The fog of forgetting: every half minute Eldric loses a name* |
+| ![Lighting the lamp at the top of the lighthouse](docs/images/en/lamp.png) | ![Grom in his cave with the Hollow Crown and its two moonstones](docs/images/en/grot2.png) |
+| *The lighthouse lamp burns again* | *A cutscene: Grom in his cave, with the Hollow Crown* |
+| ![Pad the toad in the mushroom cave](docs/images/en/zwamgrot.png) | ![Granny Rime's hut on the Ice Peak](docs/images/en/hut.png) |
+| *Chapter 4: Pad the toad trades glowing mushrooms* | *Chapter 5: Granny Rime's hut on the Ice Peak* |
+| ![The sun beacon on the summit, lit](docs/images/en/baken_aan.png) | ![The moon chamber, blinding white light](docs/images/en/verblind.png) |
+| *The sun beacon catches the light* | *Chapter 6: the moon chamber of the Forgotten Castle* |
+
+<p align="center"><img src="docs/images/en/einde.png" width="640" alt="The epilogue: the valley in sunlight, Eldric and Mira, THE END"></p>
+<p align="center"><i>The epilogue: a year later, the sun shines over Aethermoor again.</i></p>
 
 ---
 
@@ -77,7 +92,7 @@ Look at     Talk to     Give        Close
 Push        Pull        Read        What is
 ```
 
-*(In game the verbs are in Dutch for now; English comes later.)*
+*(The verbs, like every text, follow the language you pick at the start: English, German, French or Dutch.)*
 
 Three raster interrupts per frame switch between text, bitmap and text. Joystick, mouse and keyboard all work,
 at the same time:
@@ -88,8 +103,9 @@ at the same time:
 | 1351 mouse (port 1) | mouse | left button |
 | Keyboard | **CRSR** keys, with **SHIFT** for up/left (arrow keys in VICE) | **SPACE** or **CTRL** (left Control in VICE), also RETURN |
 **F1** toggles music, **F5** saves, **F7** loads, and **space** skips text you've already read.
-Move the cursor to the top line for the menu: **Bestand** (save, load, exit to BASIC), **Score** (light points)
-and **Bosskey**, which instantly turns the screen into a very boring spreadsheet. Any key brings the game back.
+Move the cursor to the top line for the menu: **File** (save, load, and on the cartridge: back to the language
+menu), **Score** (light points) and **Bosskey**, which instantly turns the screen into a very boring spreadsheet.
+Any key brings the game back.
 
 ---
 
@@ -97,9 +113,14 @@ and **Bosskey**, which instantly turns the screen into a very boring spreadsheet
 
 The game is a small **SCUMM-style engine**. The engine is generic; the game itself is data and scripts.
 
-- **Rooms:** one compressed file per room on the disk (picture, foreground sprite, patches such as an opened
-  door), loaded with the Kernal into a fixed buffer at `$A000`. Only the village square has real FLUX art so far;
-  the tavern, smithy and forest edge use temporary drawn pictures (`tools/maak_kamers.py`) until FLUX art exists.
+- **Rooms:** 50 rooms, one compressed file per room (picture, foreground sprite, patches such as an opened door),
+  copied into a fixed buffer at `$A000`, plus a file with the room's scripts at `$B600`. Most rooms are drawn by
+  hand in Python as C64 pixel art (`tools/teken_*.py`, with texture, light and shadow from `tools/rijk.py`); between
+  the places you travel through walking screens: fields, a brook, a maze in the forest, sailing past sea stacks,
+  lighthouse stairs, cave tunnels, snow fields and castle corridors.
+- **Cartridge:** an EasyFlash image of 1 MB (`tools/crt.py`). The boot code in bank 0 shows the language menu and
+  copies that language's program into RAM; rooms are copied straight from the cartridge banks (`src/cartridge.asm`).
+  The disk versions (three 1541 disks, two 1571 disks) are still built and tested, with our own 2-bit fast loader.
 - **Foreground:** Eldric can walk *behind* things. The fountain's stone column is also a sprite with a lower
   number than Eldric's, switched on only while his feet stand behind it. The column in the bitmap gets exactly the
   sprite's colours, so you never see the switch, and the rest of the picture keeps all its colours.
@@ -108,16 +129,18 @@ The game is a small **SCUMM-style engine**. The engine is generic; the game itse
   Actors **shrink with depth**: five sizes per pose, picked from the depth of their feet, so Eldric fits through
   the doors at the back of a room and walks a little slower there. The C64 cannot scale sprites, so the sizes are
   pre-made by the costume tool (the two smallest are hand-drawn).
-- **Languages:** Dutch first. English and French follow later as their own disks from the same engine: every
-  line the player reads lives in the scripts and a small text file, never in the engine code.
+- **Languages:** every line the player reads lives in the scripts and a small text file, never in the engine code.
+  `tools/taal.py` extracts all 959 texts; each language is a JSON file of translations (English, German, French),
+  checked against the screen's limits (two lines of 40 characters, names of 13). The font has the accented letters.
 - **Scripts:** plain-text `.hcs` files, compiled by a Python compiler into bytecode for a tiny VM. The compiler
   also checks that chapter 1 can actually be finished.
 - **Testing without hands:** an `AUTOTEST` build replays *input tapes* (cursor moves, fire, waits). VICE runs them
   and the test reads the game state straight from memory. A test only passes when the state is correct;
   a pretty screenshot alone doesn't count.
 
-**Memory map (VIC bank 3):** program `$0801-$BFFF`, screen `$C000`, sprites `$C400`, bitmap `$E000` and font
-`$F800`, both under the Kernal ROM. With the font there, one `$d018` value serves text and bitmap alike, so the
+**Memory map (VIC bank 3):** program `$0801-$9FFF`, room buffer `$A000-$BFFF`, screen `$C000`, sprites `$C400`,
+buffers `$C600-$CFFF`, costumes of the other characters in the RAM under the I/O at `$D000`, bitmap `$E000` and
+font `$F800`, both under the Kernal ROM. With the font there, one `$d018` value serves text and bitmap alike, so the
 raster splits only touch `$d011` and `$d016`.
 
 ---
@@ -135,7 +158,7 @@ On macOS, `/usr/bin/java` is only a stub. Use a real JDK, for example `brew inst
 Tool paths live in one place, at the top of `build.sh` and `tools/vicetest.py` (or set `JAVA` / `VICE_BIN`).
 
 ```bash
-./build.sh                              # build/hollowcrown.d64 + _2 + _3 (1541, three disks) and build/hollowcrown.d71 (1571, one disk)
+./build.sh                              # build/hollowcrown.crt (EasyFlash, all languages), D64s (1541) and D71s (1571)
 ./build.sh --vice                       # ...and start it in VICE
 ./tests/alles.sh                        # every test: compiler errors + every input tape in VICE
 ```
@@ -147,8 +170,8 @@ Tool paths live in one place, at the top of `build.sh` and `tools/vicetest.py` (
 ```text
 src/        the engine (*.asm)
 scripts/    the game itself (*.hcs)
-data/       FLUX art, rooms, music
-tools/      Kick Assembler, converters, script compiler, test runner
+data/       room pictures (data/plaatjes), room list, music
+tools/      Kick Assembler, drawing scripts, converters, script compiler, translations (tools/taal), test runner
 tests/      input tapes and expected outcomes
 docs/       development log and reference material
 build/      everything the build produces (generated, not in git)
@@ -159,7 +182,9 @@ oud/        old experiments ("oud" is Dutch for "old")
 
 ## 🚧 Status
 
-The whole game is playable, from the title screen through all six chapters to the final scene on the castle roof. It comes on three 1541 disks (D64; the game asks for the next disk when it needs it) or on one double-sided 1571 disk (D71, no disk swap). The fast loader works on both drives. Automated tests boot it in VICE,
+The whole game is playable in four languages, from the title screen through all six chapters to the epilogue. It
+comes as one cartridge (EasyFlash, with a language menu), and for the Dutch version also on three 1541 disks or two
+1571 disks (with our own fast loader). Automated tests boot it in VICE,
 play input tapes (one of them plays the whole chapter, another saves, loads and carries on), check the game state and
 compare every screenshot pixel by pixel with the screen as memory says it should be, sprites included. The engine is being built
 in this order:
@@ -179,7 +204,9 @@ in this order:
 - [x] 12. Chapters 3-6 and a cutscene between every two chapters; two disks; the fog of forgetting
 - [x] 13. Turbo loader: our own 2-bit fast loader for the 1541 (about twice as fast as the Kernal; falls back to the Kernal when there is no real drive)
 - [x] 14. One-disk version for the 1571 (D71)
-- [x] 15. Walking screens between the rooms: fields, a brook, sailing past sea stacks, cave tunnels, snow fields, castle corridors
+- [x] 15. Walking screens between the rooms: fields, a brook, a forest maze, sailing past sea stacks, lighthouse stairs, cave tunnels, snow fields, castle corridors
+- [x] 16. Cartridge (EasyFlash, 1 MB): everything in one file, instant loading
+- [x] 17. English, German and French, chosen from a menu at start-up; an epilogue and THE END
 
 Progress notes are in [`docs/LOGBOEK.md`](docs/LOGBOEK.md) (in Dutch).
 

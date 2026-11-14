@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """maak_testbanden.py — maakt testbanden uit de scripts zelf, zodat nieuwe kamers en voorwerpen vanzelf getest worden.
 
-    python3 tools/maak_testbanden.py      schrijft tests/scripts/proef_kamers.hcs en tests/alle_voorwerpen.band
+    python3 tools/maak_testbanden.py      schrijft tests/alle_voorwerpen.band (Eldric per kamer erin met naar_kamer: geen proefscripts)
 
 alle_voorwerpen.band gaat elke kamer langs (een proefscript zet Eldric erin) en wijst elk voorwerp aan dat daar ligt.
 Per voorwerp: elk werkwoord met een "veilig" script (alleen praten, kijken, wachten, een vlag zetten: niets wat de
@@ -46,14 +46,13 @@ def main():
     volgorde = {n: i for i, n in enumerate(spel.vw_volgorde)}
     kamers = [k for k in spel.kamer_volgorde if not spel.kamers[k]["toneel"] and spel.kamers[k]["vakken"]]
 
-    hcs = ["# proef_kamers.hcs — gemaakt door tools/maak_testbanden.py: per kamer een script dat Eldric erin zet.", ""]
     band = ["# alle_voorwerpen.band — gemaakt door tools/maak_testbanden.py (niet met de hand bewerken).",
             "# Elke kamer, elk voorwerp: de zinregel klopt en de veilige scripts lopen zonder fout.", "wacht 3"]
     overgeslagen = []
     for k in kamers:
         x1, y1, x2, y2, _ = spel.kamers[k]["vakken"][0]
-        hcs += ["SCRIPT proef_kamer_%s:" % k, "  KAMER %s %d,%d VOOR" % (k, (x1 + x2) // 2, (y1 + y2) // 2), ""]
-        band += ["", "# ---- %s ----" % k, "start_script proef_kamer_%s" % k, "wacht_op_script", "wacht 3",
+        band += ["", "# ---- %s ----" % k, "naar_kamer %s %d,%d VOOR" % (k, (x1 + x2) // 2, (y1 + y2) // 2),
+                 "wacht_op_script", "wacht 3",
                  "wacht_op_script", "wacht 3", "verwacht_kamer %s" % k]
         hier = sorted((v for v in spel.voorwerpen.values() if v["eigenaar"] == k and v["vak"]),
                       key=lambda v: volgorde[v["naam"]])
@@ -71,8 +70,6 @@ def main():
                          'verwacht_tekst 18 "%s %s"' % (WW_TEKST[ww], v["tekst"]), "vuur", "wacht_tot_stil",
                          "wacht_op_script", "verwacht vm_fout = 0"]
         band.append("screenshot %s" % k)
-    with open(os.path.join(WORTEL, "tests", "scripts", "proef_kamers.hcs"), "w") as f:
-        f.write("\n".join(hcs) + "\n")
     with open(os.path.join(WORTEL, "tests", "alle_voorwerpen.band"), "w") as f:
         f.write("\n".join(band) + "\n")
     with open(os.path.join(WORTEL, "tests", "alle_voorwerpen.verwacht"), "w") as f:

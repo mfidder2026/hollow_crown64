@@ -8,7 +8,8 @@ KAMER klippad
 
 VOORWERP kp_boot "boot" VAK 0,96 6,28 LOOP 4,112 LINKS
   GA_NAAR:
-    KAMER boot 80,110 RUG
+    ZET terug_varen
+    KAMER zeerotsen 80,120 RUG             # terug: de vaarscène, dan de boot
   BEKIJK:
     ZEG eldric "Daar beneden ligt de boot. Olm wacht."
 
@@ -18,9 +19,9 @@ VOORWERP kp_eiland "eiland" VAK 154,96 6,28 LOOP 156,112 RECHTS
   BEKIJK:
     ZEG eldric "Het pad gaat verder, naar de vuurtoren."
 
-VOORWERP kp_toren "vuurtoren" VAK 132,40 18,32 LOOP 140,112 RUG
+VOORWERP kp_toren "vuurtoren" VAK 124,18 34,80 LOOP 140,112 RUG
   BEKIJK:
-    ZEG eldric "De vuurtoren. Zijn licht is uit. Al heel lang."
+    ZEG eldric "De vuurtoren, vlak voor me. Zijn licht is uit. Al heel lang."
 
 VOORWERP kp_touw "touw" VAK 10,94 140,10 LOOP 80,110 RUG
   BEKIJK:

@@ -208,6 +208,7 @@ nieuw:  .byte 0
 // voltooid_beeld: staat de doelvlag van dit hoofdstuk, dan één keer "Hoofdstuk n voltooid" onderaan en het klaar-geluid
 voltooid_beeld: {
         lda voltooid
+        ora toneel_aan                  // (in een toneel niet: de epiloog is het einde, geen "voltooid")
         bne klaar
         ldy st_hoofdstuk
         lda hoofdstuk_doel,y            // de vlag: byte vlag / 8, bit vlag & 7

@@ -76,7 +76,7 @@ VOORWERP gang_aard "gang" VAK 150,104 10,20 LOOP 154,114 RECHTS
       PRAAT tik_vraag
       STOP
     EINDE
-    KAMER aardstad 10,108 RECHTS
+    KAMER muurgang 10,112 RECHTS
 
 GESPREK pad_praat
   KEUZE "Wie bent u?"

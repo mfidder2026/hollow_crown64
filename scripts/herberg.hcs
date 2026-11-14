@@ -3,8 +3,8 @@ KAMER herberg
   LOOPKLEUREN oranje bruin geel          # de houten vloer (geel: het licht van het vuur op de vloer)
   # (geen SCHAAL: binnen blijft Eldric overal even groot, de grootste maat)
   LOOPVAK 36,86 50,124                   # 0 links, bij de haard en de deur (links daarvan de oven)
-  LOOPVAK 97,88 143,124                  # 1 rechts, langs het vat en de toog (rechts staat een emmer)
-  LOOPVAK 36,108 157,124                 # 2 voor de tafel langs (achter de tafel is geen plek)
+  LOOPVAK 97,88 122,124                  # 1 rechts, langs het vat, tot aan Mira (door haar heen lopen kan niet)
+  LOOPVAK 36,112 157,124                 # 2 voor de tafel langs, en vóór Mira langs (achter de tafel is geen plek)
   FLAKKER 12,64 16,16 rood oranje geel  # het haardvuur
   ACTOR mira KOSTUUM mira OP 132,104     # Mira, bij de toog
 
@@ -35,7 +35,7 @@ VOORWERP ziensteen "ziensteen" VAK 58,103 8,7 LOOP 62,112 RUG NERGENS
     PATCH steen_weg                      # weg van de vloer (tafel_weg tekende hem)
     ZET ziensteen_gepakt
 
-VOORWERP tafel "tafel" VAK 54,86 36,16 LOOP 70,110 RUG
+VOORWERP tafel "tafel" VAK 54,86 36,16 LOOP 70,113 RUG
   BEKIJK:
     ZEG eldric "Een eikenhouten tafel. Er ligt iets onder, in het donker."
   DUW:
@@ -52,7 +52,7 @@ VOORWERP tafel "tafel" VAK 54,86 36,16 LOOP 70,110 RUG
   TREK:
     ZEG eldric "Duwen gaat makkelijker. Denk ik."
 
-VOORWERP kruik "kruik" VAK 139,28 8,20 LOOP 140,90 RUG
+VOORWERP kruik "kruik" VAK 139,28 8,20 LOOP 121,90 RUG
   BEKIJK:
     ALS STAND kruik 1
       ZEG eldric "Een kruik vol lampolie. Niet opdrinken."

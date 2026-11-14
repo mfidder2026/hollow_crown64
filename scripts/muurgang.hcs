@@ -1,0 +1,39 @@
+# muurgang.hcs — hoofdstuk 4: de gang van de zwamgrot naar de stad van de aardmannetjes. Op de wanden hun verhaal,
+# met een vinger getekend: de maan, hun volk, het ei met één oog (Tik!), Grom. Plaatje: data/plaatjes/muurgang.png
+# (tools/teken_tussen.py). Een loopscherm: links de zwamgrot, rechts de stad.
+KAMER muurgang
+  LOOPKLEUREN bruin oranje donkergrijs zwart geel grijs
+  LOOPVAK 2,106 157,120                  # de gang
+  BINNENKOMST:
+    MUZIEK kelder
+    ALS NIET vlag muurgang_gezien
+      ZET muurgang_gezien
+      ZEG mira "Stil nu. Hier begint hun stad. Ik hoor ze ademen: ze slapen."
+      ZEG eldric "Er staan tekeningen op de muur. Een heel verhaal."
+    EINDE
+
+VOORWERP mg_terug "zwamgrot" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER zwamgrot 148,112 LINKS
+  BEKIJK:
+    ZEG eldric "Terug naar Pad en zijn zwammen."
+
+VOORWERP mg_verder "stad" VAK 154,96 6,28 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER aardstad 10,108 RECHTS
+  BEKIJK:
+    ZEG eldric "Verderop wordt de gang breder. Daar is hun stad."
+
+VOORWERP mg_maan "tekening" VAK 24,14 46,62 LOOP 46,112 RUG
+  BEKIJK:
+    ZEG eldric "Aardmannetjes onder een grote maan. Ze dansen. Ze zien er gelukkig uit."
+    ZEG mira "Zo leefden ze vroeger. Voordat Grom ze naar boven riep."
+
+VOORWERP mg_ei "ei" VAK 88,36 28,34 LOOP 100,112 RUG
+  BEKIJK:
+    ZEG eldric "Een ei met één oog, en stralen eromheen. Waar heb ik dat oog eerder gezien?"
+    ZEG mira "Een ei dat de tijd kan dragen. Ze bewaken het al eeuwen."
+
+VOORWERP mg_grom "tekening" VAK 136,18 22,48 LOOP 140,112 RUG
+  BEKIJK:
+    ZEG eldric "Een grote figuur met hoorns en rode ogen. Grom. Zelfs hier."

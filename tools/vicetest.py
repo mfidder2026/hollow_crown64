@@ -19,8 +19,9 @@ Een band (tests/<naam>.band) is tekst, één stap per regel ('#' is commentaar):
     wacht_tot_stil             wacht tot Eldric stilstaat
     verwacht act_x.w = 120     controle op dit moment (zelfde vorm als in .verwacht); de C64 wacht zolang
     verwacht_tekst 18 "Bekijk fontein"   wat er op tekenrij 18 staat (schermgeheugen, zonder spaties achteraan)
-  Scripts (namen uit build/gen/spel.json):
+  Scripts (namen uit build/autotest/spel.json):
     start_script proef_vlaggen      start SCRIPT proef_vlaggen (tests/scripts/*.hcs)
+    naar_kamer plein 80,100 VOOR    Eldric in een kamer zetten (een VM-script in de band; geen proefscript nodig)
     wacht_op_script                 wacht tot er geen script meer loopt
     verwacht_vlag munt_gepakt 1     een vlag (1 = gezet)
     verwacht_eigenaar munt eldric   eldric (inventaris), nergens, of een kamer
@@ -43,11 +44,21 @@ VICE_BIN = os.environ.get("VICE_BIN", "/Applications/vice-arm64-gtk3-3.10/bin")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD = os.path.join(ROOT, "build", "autotest")
+CRT_TEST = ""                                    # --crt: de taal van de cartridge-testbuild (main() zet hem)
+ZONDER_TEKST = False                             # --zonder-tekst
+PAUZE = os.path.join(ROOT, "build", "PAUZE")     # --kijk: zolang dit bestand bestaat, staat het spel stil
+
+
+def p_ingedrukt(vice):
+    """--kijk: is de P ingedrukt (in het VICE-venster)? De toetsenbordmatrix: kolom PA5 ($DC00 = $DF), rij PB1."""
+    vice.schrijf(0xDC00, [0xDF])
+    return not (vice.lees(0xDC01)[0] & 0x02)
 TESTUIT = os.path.join(ROOT, "build", "test")
 
 # opcodes van de invoerband: gelijk houden met src/autotest.asm
 OP_EINDE, OP_WACHT, OP_MARKEER, OP_CURSOR, OP_VUUR, OP_RUW, OP_MUIS, OP_WACHT_STIL, OP_START, OP_WACHT_VM, \
-    OP_INTRO = range(11)
+    OP_INTRO, OP_OVERSLA = range(12)
+VM_KAMER, VM_STOP = 0x15, 0x00                   # tools/scriptc.py OP["KAMER"], OP["STOP"]
 JOY = {"op": 1, "neer": 2, "links": 4, "rechts": 8, "vuur": 16}
 # toets -> (rij, bit) in de matrix; rijen 0, 1, 6 (zie src/invoer.asm)
 TOETS = {"crsr_neer": (0, 0x80), "crsr_rechts": (0, 0x04), "return": (0, 0x02), "shift": (1, 0x80), "rshift": (6, 0x10),
@@ -68,7 +79,7 @@ class Fout(Exception):
 # ---------------------------------------------------------------------------------------------------
 def lees_band(pad):
     """Geeft (bytes, markeringen): markering k hoort bij namen[k-1], een screenshotnaam of een controle."""
-    data, namen, starts = bytearray(), [], []
+    data, namen, starts, kamers = bytearray(), [], [], []
     pot = [0x24, 0x52]                           # potmeters van de muis: een willekeurige beginstand
 
     def ruw(arg, tabel):
@@ -128,6 +139,16 @@ def lees_band(pad):
             elif cmd == "muisknop":
                 knoppen, n = ruw(arg, MUISKNOP)
                 data += bytes([OP_RUW, 0, 0, 0, 0, 0, sum(knoppen), n])
+            elif cmd == "naar_kamer":                    # naar_kamer naam x,y RICHTING: een VM-script in de band zelf
+                m = re.fullmatch(r"(\w+) (\d+),(\d+) (VOOR|RUG|RECHTS|LINKS)", arg)
+                if not m:
+                    raise ValueError
+                x, y = int(m.group(2)) * 2, int(m.group(3))
+                r = {"VOOR": 0, "RUG": 1, "RECHTS": 2, "LINKS": 3}[m.group(4)]
+                data += bytes([OP_OVERSLA, 7, VM_KAMER, 0, x & 255, x >> 8, y, r, VM_STOP])
+                kamers.append((len(data) - 6, m.group(1)))   # het nummer van de kamer vult draai() in
+                data += bytes([OP_START, 0, 0])
+                starts.append((len(data) - 2, ("band", len(data) - 3 - 7)))   # adres: het script in de ring
             elif cmd == "start_script" and re.fullmatch(r"\w+", arg):
                 data += bytes([OP_START, 0, 0])          # het adres vult draai() in (scr_<naam> uit hollowcrown.vs)
                 starts.append((len(data) - 2, arg))
@@ -191,7 +212,7 @@ def lees_band(pad):
         except (ValueError, KeyError):
             raise Fout("%s:%d: onbekende of foute stap: %s" % (pad, nr, regel))
     data.append(OP_EINDE)
-    return data, namen, starts
+    return data, namen, starts, kamers
 
 
 VERWACHT_RE = r"([A-Za-z_]\w*)(?:\+(\d+))?(\.w)?\s*(=|!=|<=|>=|<|>)\s*(\$[0-9A-Fa-f]+|\d+)"
@@ -201,7 +222,7 @@ def figuur_nummers(regel):
     """'npc_py+@mira_mee' -> 'npc_py+9': het nummer van een figuur bij naam (build/gen/spel.json), zodat een test niet
     breekt als er figuren bijkomen"""
     def nummer(m):
-        figuren = json.load(open(os.path.join(ROOT, "build", "gen", "spel.json")))["figuren"]
+        figuren = json.load(open(os.path.join(BUILD, "spel.json")))["figuren"]
         if m.group(1) not in figuren:
             raise Fout("onbekende figuur @%s" % m.group(1))
         return str(figuren.index(m.group(1)))
@@ -255,8 +276,9 @@ PROMPT = re.compile(rb"\((?:C|8):\$[0-9a-f]{4}\) $")
 
 class Vice:
     def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False, geluid=False, snelheid=100,
-                 drive=1541):
+                 drive=1541, crt=None):
         self.houd_open = zichtbaar_houden
+        self.crt, self.bank_io = bool(crt), None
         s = socket.socket()
         s.bind(("127.0.0.1", 0))                 # een vrije poort, zodat testen naast elkaar kunnen
         self.poort = s.getsockname()[1]
@@ -275,7 +297,10 @@ class Vice:
             args += ["-speed", str(snelheid)]    # procent van de echte C64 (--snelheid)
         if not zichtbaar_houden:
             args.append("-console")              # geen venster: de test pakt de focus niet af (macOS)
-        args += ["-autostart", d64]
+        if crt:                                  # de cartridge: start vanzelf; GEEN diskette, zodat het spel niet
+            args += ["-cartcrt", crt]            # stilletjes van diskette laadt als de cartridge faalt
+        else:
+            args += ["-autostart", d64]
         # Eigen procesgroep: bin/x64sc start op macOS een kindproces. Bij het stoppen sluiten we alleen
         # deze groep af, nooit andere VICE's.
         self.proc = subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
@@ -296,6 +321,25 @@ class Vice:
         self.sock.settimeout(10)
 
     def cmd(self, tekst):
+        if tekst.startswith("bank "):            # (een ander deel kiest zelf de bank: lees() weet dan niet meer welke)
+            self.bank_io = None
+        uit = self._cmd(tekst)
+        while os.environ.get("VT_WATCH") and re.search(r"#\d+ \(Stop on", uit):
+            regs = self._cmd("r").strip().splitlines()[-1]
+            pc = int(regs.split(";")[1][:4], 16)
+            if hex(pc)[2:] in os.environ.get("VT_NEGEER", "").split(","):   # de eigen kopieerlus: doorgaan
+                self.sock.sendall(b"x\n")
+                time.sleep(0.01)
+                self.loopt = True
+                uit = self._cmd(tekst)
+                continue
+            print("[test]   WATCH:", uit.strip()[:300])
+            print("[test]   regs:", self._cmd("r").strip().splitlines()[-1])
+            print("[test]   stack:", self._cmd("m 01e0 01ff").strip()[-400:])
+            raise Fout("watch geraakt")
+        return uit
+
+    def _cmd(self, tekst):
         """Stuurt een monitoropdracht en geeft de uitvoer terug. Komt de opdracht binnen terwijl de C64
         loopt, dan stopt VICE eerst (een prompt extra) en blijft daarna in de monitor tot 'x'."""
         self.sock.sendall(tekst.encode() + b"\n")
@@ -320,6 +364,11 @@ class Vice:
             self.loopt = True
 
     def lees(self, adres, n=1):
+        if self.crt:                             # de cartridge: soms ziet de processor op $8000-$9FFF de ROM (tijdens
+            io = 0xD000 <= adres < 0xE000        # het kopiëren); de test wil het RAM (of de I/O-registers) zien
+            if io != self.bank_io:
+                self.cmd("bank io" if io else "bank ram")
+                self.bank_io = io
         uit = self.cmd("m %04x %04x" % (adres, adres + n - 1))
         data = []
         for regel in uit.splitlines():
@@ -334,6 +383,11 @@ class Vice:
         return data
 
     def schrijf(self, adres, data):
+        if self.crt:                             # (zoals lees: RAM, of de I/O-registers)
+            io = 0xD000 <= adres < 0xE000
+            if io != self.bank_io:
+                self.cmd("bank io" if io else "bank ram")
+                self.bank_io = io
         for i in range(0, len(data), 32):
             stuk = data[i:i + 32]
             self.cmd("> %04x %s" % (adres + i, " ".join("%02x" % b for b in stuk)))
@@ -474,7 +528,20 @@ def kamerbuffer_klopt(vice, sym, spel):
     if bytes(echt) != data:
         eerste = next(i for i in range(len(data)) if echt[i] != data[i])
         return False, "kamerbuffer is niet %s (eerste verschil op +%d)" % (os.path.basename(pad), eerste)
-    return True, "kamerbuffer = %s (%d bytes)" % (os.path.basename(pad), len(data))
+    # en de scripts van de kamer op $B600 (KAMER_SCRIPTS): de cartridge heeft eigen scripts (andere adressen)
+    spad = os.path.join(BUILD, "crt", CRT_TEST, "scr_%s.prg" % naam) if CRT_TEST else \
+        os.path.join(BUILD, "scr_%s.prg" % naam)
+    if os.path.exists(spad):
+        sdata = open(spad, "rb").read()[2:]
+        vice.cmd("bank ram")
+        try:
+            secht = vice.lees(0xB600, len(sdata))
+        finally:
+            vice.cmd("bank cpu")
+        if bytes(secht) != sdata:
+            eerste = next(i for i in range(len(sdata)) if secht[i] != sdata[i])
+            return False, "scripts op $B600 zijn niet %s (eerste verschil op +%d)" % (os.path.basename(spad), eerste)
+    return True, "kamerbuffer = %s (%d bytes) en de scripts" % (os.path.basename(pad), len(data))
 
 
 def scherm_vergelijken(vice, png_pad):
@@ -628,6 +695,8 @@ def controleer(vice, sym, regel, spel=None):
         echt = vice.lees(sym["st_eigenaar"] + spel["voorwerpen"][naam])[0]
         echt_n = terug.get(echt, str(echt))
         return echt_n == waar, "%s is bij/in %s%s" % (naam, waar, "" if echt_n == waar else "  (is %s)" % echt_n)
+    if regel[0] == "TEKST" and ZONDER_TEKST:
+        return True, "(tekst niet gecontroleerd: andere taal)"
     if regel[0] == "TEKST":
         _, rij, verwacht = regel
         echt = scherm_tekst(vice, rij)
@@ -640,25 +709,35 @@ def controleer(vice, sym, regel, spel=None):
 
 def draai(bandpad, args):
     naam = os.path.splitext(os.path.basename(bandpad))[0]
-    band, shots, starts = lees_band(bandpad)
+    band, shots, starts, kamers_in_band = lees_band(bandpad)
     verwachtpad = os.path.splitext(bandpad)[0] + ".verwacht"
     if not os.path.exists(verwachtpad):
         raise Fout("%s ontbreekt: zonder verwachte status is er geen test" % verwachtpad)
     verwacht = lees_verwacht(verwachtpad)
-    sym = lees_symbolen(os.path.join(BUILD, "hollowcrown.vs"))
+    sym = lees_symbolen(os.path.join(BUILD, "crt", args.taal, "hollowcrown.vs") if args.crt else
+                        os.path.join(BUILD, "hollowcrown.vs"))                  # (de cartridge: eigen build per taal)
     for nodig in ("band", "band_status", "band_markering", "band_fout", "st_magic"):
         if nodig not in sym:
             raise Fout("label %s niet in hollowcrown.vs: is dit een AUTOTEST-build?" % nodig)
     scherm_ideaal = any(r[1] == "scherm" for r in verwacht)
     basic_klaar = any(r[1] == "basic" for r in verwacht)
     verwacht = [r for r in verwacht if r[1] not in ("scherm", "basic")]
+    spel_k = json.load(open(os.path.join(BUILD, "spel.json")))["kamers"]
+    for pos, k in kamers_in_band:                    # naar_kamer: het nummer van de kamer
+        if k not in spel_k:
+            raise Fout("%s: onbekende kamer %s" % (bandpad, k))
+        band[pos] = spel_k[k]
     for pos, naam_s in starts:                       # START: het adres van het script
+        if isinstance(naam_s, tuple):                # naar_kamer: het script staat in de band (een ring!)
+            adres = sym["band"] + naam_s[1] % BAND_GROOTTE
+            band[pos], band[pos + 1] = adres & 255, adres >> 8
+            continue
         if "scr_" + naam_s not in sym:
             raise Fout("%s: onbekend script %s (SCRIPT %s: in tests/scripts/*.hcs?)" % (bandpad, naam_s, naam_s))
         adres = sym["scr_" + naam_s]
         band[pos], band[pos + 1] = adres & 255, adres >> 8
     band = bytes(band)
-    spel = json.load(open(os.path.join(ROOT, "build", "gen", "spel.json")))
+    spel = json.load(open(os.path.join(BUILD, "spel.json")))
     for m in shots:
         if isinstance(m, tuple) and m[0] in ("VERWACHT_VLAG", "VERWACHT_EIGENAAR", "VERWACHT_STAND"):
             soort = {"VERWACHT_VLAG": "vlaggen"}.get(m[0], "voorwerpen")
@@ -675,10 +754,16 @@ def draai(bandpad, args):
 
     print("[test] %s: %d stappen-bytes, %d screenshots, %d tussencontroles" % (naam, len(band), shots_n, len(controles)))
     t0 = time.time()
-    if args.d71:                                       # alles op één D71, in een 1571: nooit een wissel
-        d64 = os.path.join(TESTUIT, naam + ".d71")
-        shutil.copyfile(os.path.join(BUILD, "hollowcrown.d71"), d64)
-        diskettes = {1: d64}
+    crt = None
+    if args.crt:                                       # de cartridge (build.sh: build/autotest/hollowcrown.crt)
+        crt = os.path.join(TESTUIT, naam + ".crt")
+        shutil.copyfile(os.path.join(BUILD, "hollowcrown.crt"), crt)
+    if args.d71:                                       # twee D71's in een 1571: diskette 1-2 en diskette 3
+        d64 = os.path.join(TESTUIT, naam + "_1-2.d71")
+        shutil.copyfile(os.path.join(BUILD, "hollowcrown_1-2.d71"), d64)
+        tweede = os.path.join(TESTUIT, naam + "_3.d71")
+        shutil.copyfile(os.path.join(BUILD, "hollowcrown_3.d71"), tweede)
+        diskettes = {1: d64, 2: d64, 3: tweede}
     else:
         d64 = os.path.join(TESTUIT, naam + ".d64")     # een eigen kopie: opslaan (F5) schrijft op de diskette
         shutil.copyfile(os.path.join(BUILD, "hollowcrown.d64"), d64)
@@ -692,7 +777,7 @@ def draai(bandpad, args):
     vice = Vice(d64, warp=not args.geen_warp,
                 echte_drive=echte_drive, zichtbaar_houden=args.houd_open,
                 geluid=args.kijk and not args.stil, snelheid=args.snelheid,
-                drive=1571 if args.d71 else 1541)
+                drive=1571 if args.d71 else 1541, crt=crt)
     try:
         # 1. wachten tot het spel draait: magic "HC" staat er en de band wacht op ons
         eind = time.time() + args.starttijd
@@ -705,7 +790,7 @@ def draai(bandpad, args):
                 #  is het echt gestart: één keer kan toeval zijn, zeker op normale snelheid.)
                 pc = int(re.search(r";([0-9a-f]{4})", vice.cmd("r")).group(1), 16)
                 in_spel = in_spel + 1 if pc < 0xa000 else 0
-                if in_spel >= (6 if echte_drive else 1):
+                if in_spel >= (6 if echte_drive or args.crt else 1):
                     break
             else:
                 in_spel = 0
@@ -743,7 +828,9 @@ def draai(bandpad, args):
         if bytes(vice.lees(sym["band"], min(geschreven, 256))) != band[:min(geschreven, 256)]:
             raise Fout("de band staat niet goed in het geheugen")
         rondes, vorige_plek = 0, 0
-        in_drive = 1                                         # welke diskette er nu in zit
+        in_drive = diskettes[1]                              # welke diskette er nu in zit
+        if os.environ.get("VT_WATCH"):                        # (zoeken: wie schrijft hier? VT_WATCH=b600)
+            print("[test]   watch:", vice.cmd("watch store %s" % os.environ["VT_WATCH"]).strip())
         vice.schrijf(sym["band_status"], [BAND_LOOPT])
         vice.verder()
 
@@ -755,6 +842,30 @@ def draai(bandpad, args):
             # (elke blik in het geheugen zet de emulatie even stil: op normale snelheid hoor je dat. In de kijkstand
             #  daarom maar één keer per seconde, en alleen de ring bijvullen als die bijna op is.)
             time.sleep((0.25 if args.stil else 1.0) if args.kijk else 0.05)
+            if args.kijk and (os.path.exists(PAUZE) or p_ingedrukt(vice)):
+                # pauze: VICE op 1% (in de monitor blijven werkt niet: dan leest VICE het toetsenbord niet)
+                print("[test]   pauze (P: verder)", flush=True)
+                vice.cmd("resourceset Speed 1")
+                vice.verder()
+                los = False
+                while True:
+                    time.sleep(0.3)
+                    p = p_ingedrukt(vice)
+                    vice.verder()
+                    if not p:
+                        los = True                       # eerst de P loslaten, dan nog een keer
+                    elif los:
+                        break
+                    if os.path.exists(PAUZE + "_VERDER"):
+                        os.remove(PAUZE + "_VERDER")
+                        break
+                while p_ingedrukt(vice):
+                    vice.verder()
+                    time.sleep(0.1)
+                if os.path.exists(PAUZE):
+                    os.remove(PAUZE)
+                vice.cmd("resourceset Speed %d" % args.snelheid)
+                print("[test]   verder", flush=True)
             if sym["band_markering"] == sym["band_status"] + 1:
                 status, markering = vice.lees(sym["band_status"], 2)
             else:
@@ -773,10 +884,15 @@ def draai(bandpad, args):
             nodig = vice.lees(sym["schijf_nodig"])[0] if "schijf_nodig" in sym else 0
             if nodig:                                 # het spel vraagt om een andere diskette: erin stoppen
                 if nodig not in diskettes or not os.path.exists(diskettes[nodig]):
-                    raise Fout("het spel vraagt diskette %d, en die is er niet" % nodig)
-                if nodig != in_drive:                # (zit hij er al in, dan niet opnieuw: een nieuwe wissel laat
+                    extra = ""
+                    if args.crt:                         # wat zocht de cartridge? (src/cartridge.asm)
+                        extra = " (laad_teller %d, st_kamer %d, vm_pc %s, B600: %s)" % (
+                            vice.lees(sym["laad_teller"])[0], vice.lees(sym["st_kamer"])[0],
+                            bytes(vice.lees(sym["vm_pc"], 2)).hex(), bytes(vice.lees(0xb600, 12)).hex())
+                    raise Fout("het spel vraagt diskette %d, en die is er niet%s" % (nodig, extra))
+                if diskettes[nodig] != in_drive:     # (zit hij er al in, dan niet opnieuw: een nieuwe wissel laat
                     vice.cmd('attach "%s" 8' % diskettes[nodig])   # de echte 1541 weer van voren af beginnen)
-                    in_drive = nodig
+                    in_drive = diskettes[nodig]
                     print("[test]   diskette %d erin" % nodig, flush=True)
                 else:
                     print("[test]   diskette %d zit er al in" % nodig, flush=True)
@@ -817,7 +933,11 @@ def draai(bandpad, args):
                 labels = sorted((a, n) for n, a in sym.items() if a <= pc)
                 waar = "%s+%d" % (labels[-1][1], pc - labels[-1][0]) if labels else "?"
                 extra = ", ".join("%s=%d" % (n, vice.lees(sym[n])[0]) for n in
-                                  ("turbo_uit", "turbo_teller", "laad_teller", "laad_fout", "schijf_nodig") if n in sym)
+                                  ("turbo_uit", "turbo_teller", "laad_teller", "laad_fout", "schijf_nodig", "act_y",
+                                   "act_lopen", "zin_ww") if n in sym)
+                if "act_x" in sym:
+                    b = vice.lees(sym["act_x"], 2)
+                    extra += ", act_x=%d" % (b[0] | b[1] << 8)
                 if echte_drive:                          # en waar de drive staat (de snellader draait op $0500)
                     try:
                         vice.cmd("device 8:")
@@ -871,8 +991,14 @@ def main():
                    help="om mee te kijken: venster, normale snelheid, geluid, echte 1541 (de snellader), ruime tijd")
     p.add_argument("--snelheid", type=int, default=100, help="zonder warp: zoveel procent van de echte C64 (200 = dubbel)")
     p.add_argument("--stil", action="store_true", help="in de kijkstand zonder geluid")
-    p.add_argument("--d71", action="store_true", help="build/hollowcrown.d71 (alles op één diskette) in een 1571")
+    p.add_argument("--zonder-tekst", action="store_true", help="de tekstcontroles overslaan (een andere taal)")
+    p.add_argument("--taal", default="nl", help="met --crt: de taal van de testbuild (build.sh --autotest --taal=xx)")
+    p.add_argument("--crt", action="store_true", help="de cartridge (build/autotest/hollowcrown.crt), een diskette erbij om op te slaan")
+    p.add_argument("--d71", action="store_true", help="de twee D71's (build/hollowcrown_1-2.d71, _3.d71) in een 1571")
     args = p.parse_args()
+    global CRT_TEST, ZONDER_TEKST
+    CRT_TEST = args.taal if args.crt else ""
+    ZONDER_TEKST = args.zonder_tekst
     if args.kijk:
         args.geen_warp = args.houd_open = args.echte_drive = True
         args.starttijd, args.max_tijd = max(args.starttijd, 300), max(args.max_tijd, 4 * 3600)

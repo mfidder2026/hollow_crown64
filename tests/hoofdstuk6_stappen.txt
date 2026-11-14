@@ -337,19 +337,21 @@ cursor 20,164
 vuur
 wacht 900
 verwacht_kamer wenteltrap                # loopscherm (tools/loopschermen_in_banden.py)
-cursor 6,126
+cursor 10,64
 wacht 2
 vuur
 wacht_tot_stil
-wacht_op_script
-wacht 3
-verwacht_kamer dak
+wacht 60                               # (geen wacht_op_script: de dakscène gaat door in de epiloog, en die eindigt
+verwacht_kamer dak                     #  met een tekst die blijft staan: dat script is nooit klaar)
 screenshot dak_maan
 wacht 900
 screenshot dak_ochtend
-wacht_op_script
-wacht 3
+wacht 1800                             # (de rest van de dakscène, dan de epiloog)
 verwacht_vlag spel_klaar 1
-verwacht voltooid = 1
-verwacht_tekst 24 "          Hoofdstuk 6 voltooid"
+verwacht_kamer verhaal                 # de epiloog: het dal in de zon (scripts/verhaal.hcs)
+screenshot epiloog_begin
+wacht 3500                             # (het script wacht aan het eind op de tekst die blijft: geen wacht_op_script)
+verwacht_vlag epiloog_gezien 1
+verwacht voltooid = 0                  # geen "Hoofdstuk 6 voltooid": de epiloog is het einde
+verwacht_tekst 0 "EINDE. Hollow Crown. Dank je wel voor"
 screenshot einde

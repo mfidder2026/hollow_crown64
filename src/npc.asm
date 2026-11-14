@@ -170,6 +170,26 @@ npc_verberg: {
         jmp npc_sprites
 }
 
+// zet_kant: figuur X kijkt naar kant A (0 voor, 1 rechts, 2 links); alleen een figuur die ook van opzij getekend is
+// (npc_zij). Verandert hij, en staat hij in een slot, dan komt de nieuwe houding in de sprite-vakken (X blijft).
+zet_kant: {
+        ldy npc_zij,x
+        beq klaar
+        cmp npc_kant,x
+        beq klaar
+        sta npc_kant,x
+        ldy #0
+!:      txa
+        cmp slot_npc,y
+        beq gevonden
+        iny
+        cpy #NPC_SLOTS
+        bne !-
+klaar:  rts
+gevonden:
+        jmp kostuum_naar_slot
+}
+
 // kostuum_naar_slot: het kostuum van figuur X naar de vakken van slot Y; kleuren en multicolor (X, Y blijven)
 kostuum_naar_slot: {
         stx fig
@@ -178,16 +198,34 @@ kostuum_naar_slot: {
         sta zp_ptr
         lda npc_data_hi,x
         sta zp_ptr + 1
-        ldy slot                        // vak 2 + 2 * slot: SPRITE_VAKKEN + 128 + slot * 128
+        lda npc_kant,x                  // een figuur van opzij: + 128 (rechts) of + 256 (links)
+        beq !++
+        cmp #1
+        bne !+
+        lda zp_ptr
+        eor #$80                        // (de houdingen staan op 128 bytes na elkaar; data begint op een
+        sta zp_ptr                      //  veelvoud van 128: zie costume.py)
+        bmi !++
+        inc zp_ptr + 1
+        bne !++
+!:      inc zp_ptr + 1
+!:      ldy slot                        // vak 2 + 2 * slot: SPRITE_VAKKEN + 128 + slot * 128
         lda slot_vak_lo,y
         sta zp_ptr2
         lda slot_vak_hi,y
         sta zp_ptr2 + 1
+        php                             // de figuren staan onder de I/O ($D000): even alleen RAM
+        sei
+        lda #$34
+        sta $01
         ldy #127
 !:      lda (zp_ptr),y
         sta (zp_ptr2),y
         dey
         bpl !-
+        lda #CPU_NORMAAL
+        sta $01
+        plp
         ldy slot
         lda slot_ptr,y                  // sprite-pointers
         ldx slot_sprite,y
@@ -358,32 +396,43 @@ hulp:   .byte 0
 // npc_beweeg: elk beeld: figuren die lopen een stap dichter bij hun doel
 npc_beweeg: {
         ldx #AANTAL_NPC - 1
-        bmi klaar
+        bpl lus
+        jmp klaar
 lus:    lda npc_volgt,x                 // een volger: elk beeld een doel vlak achter Eldric
-        beq !+
+        beq geen_volger
         lda st_npc,x
-        beq volgende
-        jsr volg_doel
+        bne !+
+        jmp volgende
+!:      jsr volg_doel
         lda #1
         sta npc_lopen,x
-!:      lda npc_lopen,x
-        beq volgende
-        lda npc_px_lo,x                 // x naar het doel (16 bits, 1 per beeld)
+geen_volger:
+        lda npc_lopen,x
+        bne !+
+        jmp volgende
+!:      lda npc_px_lo,x                 // x naar het doel (16 bits, 1 per beeld)
         cmp npc_dx_lo,x
         bne !+
         lda npc_px_hi,x
         cmp npc_dx_hi,x
-        beq y
+        bne !+
+        lda #0                          // niet opzij: naar voren kijken
+        jsr zet_kant
+        jmp y
 !:      lda npc_px_lo,x
         cmp npc_dx_lo,x
         lda npc_px_hi,x
         sbc npc_dx_hi,x
         bcs links
+        lda #1                          // naar rechts
+        jsr zet_kant
         inc npc_px_lo,x
         bne y
         inc npc_px_hi,x
         jmp y
-links:  lda npc_px_lo,x
+links:  lda #2                          // naar links
+        jsr zet_kant
+        lda npc_px_lo,x
         bne !+
         dec npc_px_hi,x
 !:      dec npc_px_lo,x
@@ -408,7 +457,8 @@ klaar_y:
         sta npc_lopen,x
 volgende:
         dex
-        bpl lus
+        bmi klaar
+        jmp lus
 klaar:  rts
 }
 

@@ -1,0 +1,31 @@
+# torenhal.hcs — hoofdstuk 3: binnen in de vuurtoren, de hal onderin. Plaatje: data/plaatjes/torenhal.png
+# (tools/teken_tussen.py). Een loopscherm: links de deur naar het eiland, rechts de trap omhoog.
+KAMER torenhal
+  LOOPKLEUREN bruin oranje donkergrijs zwart geel grijs lichtgrijs
+  LOOPVAK 2,106 157,120                  # de vloer
+  BINNENKOMST:
+    MUZIEK zee
+
+VOORWERP th_deur "deur" VAK 0,96 6,28 LOOP 4,112 LINKS
+  GA_NAAR:
+    KAMER eiland 62,110 VOOR
+  BEKIJK:
+    ZEG eldric "De deur naar buiten, naar het eiland."
+
+VOORWERP th_trap "trap" VAK 120,40 40,84 LOOP 156,112 RECHTS
+  GA_NAAR:
+    KAMER torentrap 8,112 RECHTS
+  BEKIJK:
+    ZEG eldric "De trap omhoog, naar de lamp."
+
+VOORWERP th_logboek "logboek" VAK 34,64 22,12 LOOP 46,110 RUG
+  BEKIJK:
+    ZEG eldric "Het logboek. De laatste regel: Licht uit. Ik vergeet. Ik vergeet."
+
+VOORWERP th_vaten "olievaten" VAK 2,82 26,24 LOOP 20,110 LINKS
+  BEKIJK:
+    ZEG eldric "Vaten met lampolie. Leeg. Allemaal leeg."
+
+VOORWERP th_raam "raam" VAK 66,18 28,22 LOOP 80,110 RUG
+  BEKIJK:
+    ZEG eldric "Door het ronde raam zie ik de zee. En de mist die erop ligt."

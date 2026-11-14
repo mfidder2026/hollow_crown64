@@ -6,7 +6,6 @@ KAMER boot
   MIST TOT vuurtoren_brandt              # de straal van de vuurtoren verdrijft de mist
   LOOPKLEUREN bruin donkergrijs oranje zwart
   LOOPVAK 40,104 120,122                 # de bodem van de boot
-  FLAKKER 0,40 160,8 lichtgrijs grijs    # de mist schuift
   BINNENKOMST:
     MUZIEK zee
     ALS vlag vuurtoren_brandt

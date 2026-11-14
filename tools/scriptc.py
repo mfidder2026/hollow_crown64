@@ -55,7 +55,8 @@ DE TAAL (een regel per opdracht; '#' begint een opmerking; tekst staat tussen aa
   Werkwoorden: GA_NAAR PAK GEBRUIK OPEN BEKIJK PRAAT GEEF SLUIT DUW TREK LEES WAT_IS (de volgorde van de balk).
 
   Opdrachten in een script:
-    ZEG spreker "tekst"               rij 0-1; de compiler breekt hem over 2 regels van 40; wacht tot hij weg is
+    ZEG spreker "tekst" [BLIJFT]      rij 0-1; de compiler breekt hem over 2 regels van 40; wacht tot hij weg is
+                                      (BLIJFT: hij gaat nooit meer weg; voor het einde van het spel)
     ALS [NIET] vlag naam              ... [ANDERS ...] EINDE
     ALS [NIET] HEEFT voorwerp         (in de inventaris)
     ALS [NIET] STAND voorwerp n
@@ -108,6 +109,17 @@ TWEE = {"GEBRUIK": "met", "GEEF": "aan"}         # werkwoorden met een tweede vo
 EIGENAAR_ELDRIC, EIGENAAR_NERGENS = 0xFF, 0xFE
 REGEL = 40
 NIEUWE_REGEL = 0xFE
+# "Hoofdstuk 3: ..." en "Hoofdstuk 3 voltooid": in een andere taal (HC_TAAL, tools/taal/<taal>.json, ui)
+def _hoofdstuk_woorden():
+    taal = os.environ.get("HC_TAAL", "nl")
+    if taal == "nl":
+        return "Hoofdstuk", "voltooid"
+    ui = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tools", "taal",
+                                     taal + ".json"), encoding="utf-8"))["ui"]
+    return ui["Hoofdstuk"], ui["voltooid"]
+
+
+HOOFDSTUK_WOORD, VOLTOOID_WOORD = _hoofdstuk_woorden()
 
 # bytecode: gelijk houden met src/vm.asm
 OP = {"STOP": 0x00, "ZEG": 0x01, "SPRING": 0x02, "ALS_VLAG": 0x03, "ALS_NIET_VLAG": 0x04, "ALS_HEEFT": 0x05,
@@ -460,9 +472,10 @@ def opdracht(blok, kop, w, waar):
     L = blok["lijst"]
     n = len(w)
     if kop == "ZEG":
-        if n != 3 or not isinstance(w[1], str) or not is_tekst(w[2]):
-            raise Fout('%s: ZEG spreker "tekst"' % waar)
-        L.append(("ZEG", w[1], w[2][1], waar))
+        blijft = n == 4 and w[3] == "BLIJFT"                    # ZEG ... BLIJFT: de tekst gaat niet meer weg (het einde)
+        if n not in (3, 4) or (n == 4 and not blijft) or not isinstance(w[1], str) or not is_tekst(w[2]):
+            raise Fout('%s: ZEG spreker "tekst" [BLIJFT]' % waar)
+        L.append(("ZEG", w[1], w[2][1], waar, blijft))
         return
     if any(is_tekst(x) for x in w):
         raise Fout("%s: %s kent geen tekst tussen aanhalingstekens" % (waar, kop))
@@ -914,7 +927,9 @@ class Uitvoer:
                 codes, n = tekst_codes(o[2], o[3])
                 t = self.tekstlabel()
                 self.teksten.append((t, codes, o[2]))
-                duur = min(65535, 50 + (n * 5 + 1) // 2)        # 1 s + 1 s per 20 tekens
+                duur = min(65534, 50 + (n * 5 + 1) // 2)        # 1 s + 1 s per 20 tekens
+                if len(o) > 4 and o[4]:
+                    duur = 65535                                 # BLIJFT (src/bericht.asm: $FFFF telt niet af)
                 L.append("        .byte $%02x, %d, <%s, >%s, %d, %d    // ZEG %s" % (
                     OP["ZEG"], sp.index(o[1]), t, t, duur & 255, duur >> 8, o[1]))
             elif k == "ALS":
@@ -1083,6 +1098,8 @@ def schrijf(spel, pad, json_pad):
     nrij("npc_ko", [str(kostuums[a["kostuum"]]["ko"]) for a in acts])
     nrij("npc_vorm", [str(kostuums[a["kostuum"]]["vorm"]) for a in acts])
     nrij("npc_voeten", [str(kostuums[a["kostuum"]]["voeten"]) for a in acts])
+    nrij("npc_zij", [str(kostuums[a["kostuum"]].get("zij", 0)) for a in acts])
+    L.append("npc_kant: .fill %d, 0    // 0 voor, 1 rechts, 2 links (src/npc.asm: zet_kant)" % max(1, len(acts)))
     nrij("npc_data_lo", ["<npc_%s" % a["kostuum"] for a in acts])
     nrij("npc_data_hi", [">npc_%s" % a["kostuum"] for a in acts])
     # per voorwerp: 12 scripts (werkwoorden), dan paren (werkwoord, ander voorwerp, script), $ff
@@ -1179,7 +1196,9 @@ def schrijf(spel, pad, json_pad):
     L.append("kamer_bestand_hi: .byte %s" % ", ".join(">bestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_bestand_len: .byte %s" % ", ".join(str(len(n)) for n in spel.kamer_volgorde))
     for n in spel.kamer_volgorde:            # de scripts van de kamer: <KAMER>.S
-        L.append("sbestand_%s: .byte %s    // %s.s" % (n, ", ".join("$%02x" % ord(c) for c in n.upper() + ".S"), n))
+        achter = os.environ.get("HC_SUFFIX", "S")     # per taal eigen scripts op de cartridge: .S (nl), .E, .D, .F
+        L.append("sbestand_%s: .byte %s    // %s.%s" % (n, ", ".join("$%02x" % ord(c) for c in n.upper() + "." + achter),
+                                                    n, achter.lower()))
     L.append("kamer_sbestand_lo: .byte %s" % ", ".join("<sbestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_sbestand_hi: .byte %s" % ", ".join(">sbestand_%s" % n for n in spel.kamer_volgorde))
     L.append("kamer_sbestand_len: .byte %s" % ", ".join(str(len(n) + 2) for n in spel.kamer_volgorde))
@@ -1216,15 +1235,17 @@ def schrijf(spel, pad, json_pad):
     L.append(".const AANTAL_HOOFDSTUKKEN = %d" % len(nrs))
     for n in nrs:
         naam, vlag, waar = hs[n]
-        for soort, tekst in (("titel", "Hoofdstuk %d: %s" % (n, naam)), ("klaar", "Hoofdstuk %d voltooid" % n)):
+        for soort, tekst in (("titel", "%s %d: %s" % (HOOFDSTUK_WOORD, n, naam)), ("klaar", "%s %d %s" % (
+                HOOFDSTUK_WOORD, n, VOLTOOID_WOORD))):
             codes, _ = tekst_codes(tekst, waar, 1)
             L.append("hs_%s_%d: .byte %s, 0    // %s" % (soort, n, ", ".join("$%02x" % c for c in codes), tekst))
     for soort in ("titel", "klaar"):
         L.append("hoofdstuk_%s_lo: .byte %s" % (soort, ", ".join("<hs_%s_%d" % (soort, n) for n in nrs)))
         L.append("hoofdstuk_%s_hi: .byte %s" % (soort, ", ".join(">hs_%s_%d" % (soort, n) for n in nrs)))
     L.append("hoofdstuk_titel_lengte: .byte %s" % ", ".join(
-        str(len("Hoofdstuk %d: %s" % (n, hs[n][0]))) for n in nrs))
-    L.append("hoofdstuk_klaar_lengte: .byte %s" % ", ".join(str(len("Hoofdstuk %d voltooid" % n)) for n in nrs))
+        str(len("%s %d: %s" % (HOOFDSTUK_WOORD, n, hs[n][0]))) for n in nrs))
+    L.append("hoofdstuk_klaar_lengte: .byte %s" % ", ".join(str(len("%s %d %s" % (HOOFDSTUK_WOORD, n, VOLTOOID_WOORD)))
+                                                              for n in nrs))
     L.append("hoofdstuk_doel: .byte %s    // de vlag die het hoofdstuk afsluit" % ", ".join(
         str(u.vlag(hs[n][1])) for n in nrs))
     L.append(".const DOEL_VLAG = %d    // %s" % ((u.vlag(spel.doel[0]), spel.doel[0]) if spel.doel else (255, "geen")))

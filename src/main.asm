@@ -11,11 +11,12 @@
 
 #import "geheugen.asm"
 #import "../build/gen/lettertype_info.asm"     // cursor-midden en pijltekens (tools/lettertype.py)
-#import "teksten_nl.asm"                       // eerst: de constanten erin gebruikt de balk
+#import "../build/gen/teksten.asm"             // eerst: de constanten erin gebruikt de balk (tools/taal.py maakt hem
+                                               // uit src/teksten_nl.asm, in de taal van deze build)
 #import "../build/gen/spel.asm"                 // loopvakken en BEGIN_* (tools/scriptc.py)
 #import "../build/gen/costumes.asm"            // poses van Eldric (tools/costume.py)
 
-.file [name="hollowcrown.prg", segments="Basic,Code,Data"]
+.file [name="hollowcrown.prg", segments="Basic,Code,Data,OnderIO"]
 
 .segment Basic
 BasicUpstart2(start)
@@ -28,6 +29,29 @@ start:
         cld
         ldx #$ff
         txs
+        // de figuren van $A000 (zo staan ze in het bestand) naar het RAM onder de I/O ($D000): costume.py, npc.asm
+        lda #$34                        // alleen RAM (de interrupts staan uit)
+        sta $01
+        lda #<KAMER_BUF
+        sta zp_ptr
+        lda #>KAMER_BUF
+        sta zp_ptr + 1
+        lda #$00
+        sta zp_ptr2
+        lda #$d0
+        sta zp_ptr2 + 1
+        ldx #ONDER_IO_PAGINAS
+        ldy #0
+!:      lda (zp_ptr),y
+        sta (zp_ptr2),y
+        iny
+        bne !-
+        inc zp_ptr + 1
+        inc zp_ptr2 + 1
+        dex
+        bne !-
+        lda #CPU_NORMAAL
+        sta $01
 
         jsr status_begin
         jsr npc_begin
@@ -170,6 +194,9 @@ kamer_nu: .byte 0
 #import "inventaris.asm"
 #import "schijf.asm"
 #import "turbo.asm"
+#if CRT
+#import "cartridge.asm"
+#endif
 #import "geluid.asm"
 #import "opslaan.asm"
 #import "muziek.asm"

@@ -1,0 +1,38 @@
+# torentrap2.hcs — hoofdstuk 3: halverwege de vuurtoren, een bordes met een raam. Plaatje: data/plaatjes/torentrap2.png
+# (tools/teken_tussen.py). Een loopscherm: links omlaag, rechts omhoog.
+KAMER torentrap2
+  LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit bruin oranje geel blauw lichtblauw paars cyaan
+  LOOPVAK 4,101 30,115                  # onderaan
+  LOOPVAK 26,92 52,106
+  LOOPVAK 48,84 74,97
+  LOOPVAK 70,75 96,89
+  LOOPVAK 92,66 118,80
+  LOOPVAK 114,57 140,71
+  LOOPVAK 136,53 157,62                  # bovenaan
+  BINNENKOMST:
+    MUZIEK zee
+    ALS NIET vlag torentrap_gezien
+      ZET torentrap_gezien
+      ZEG eldric "Pff. Hoeveel treden heeft deze toren?"
+      ZEG mira "Tweehonderdzeventien. Ik heb ze geteld."
+    EINDE
+
+VOORWERP tt2_omlaag "trap omlaag" VAK 0,100 8,20 LOOP 6,112 LINKS
+  GA_NAAR:
+    KAMER torentrap 150,56 LINKS
+  BEKIJK:
+    ZEG eldric "Naar beneden."
+
+VOORWERP tt2_omhoog "trap omhoog" VAK 148,36 12,24 LOOP 154,56 RECHTS
+  GA_NAAR:
+    KAMER torentrap3 8,112 RECHTS
+  BEKIJK:
+    ZEG eldric "De trap wordt steiler. Natuurlijk."
+
+VOORWERP tt2_raam "raam" VAK 68,14 24,48 LOOP 80,87 RUG
+  BEKIJK:
+    ZEG eldric "Buiten regent het. De mist kruipt over de zee, als een kat."
+
+VOORWERP tt2_bol "glazen bol" VAK 90,52 10,12 LOOP 94,87 RUG
+  BEKIJK:
+    ZEG eldric "Een glazen bol voor de lamp. Een reserve. Hij is heel."

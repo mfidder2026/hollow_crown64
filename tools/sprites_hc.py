@@ -218,6 +218,46 @@ mira = sym(check([
 ], 6))
 mira = put(mira, [(y, 11, "k") for y in range(5, 34)] + [(2, 10, "k"), (2, 11, "k"), (3, 10, "k"), (4, 10, "k")])
 
+# Mira van opzij (naar rechts): de punthoed, de blinddoek die naar voren uitsteekt, haar stok vooruit. Voor als ze
+# naast Eldric naar rechts loopt; naar links is dit gespiegeld (tools/costume.py, src/npc.asm: npc_kant).
+mira_zij = check([
+    "......k.....",   # 0 de punt van de hoed
+    ".....kk.....",
+    ".....kck....",
+    "....kcck....",
+    "....kccck...",
+    "...kcccck...",
+    "...kccccck..",
+    ".kkkkkkkkkkk",   # 7 de rand van de hoed
+    "..kkkkkkk...",
+    "..kkkksssk..",   # 9 het gezicht
+    "..kkkccccck.",   # 10 de blinddoek
+    "..kkkssssk..",
+    "..kkksssk...",
+    "..kkkksk....",   # 13 mond
+    "...kkkkk....",
+    "...kkkcck...",   # 15 omslagdoek
+    "..kcccccck..",
+    "..kcccckck..",
+    "..kcccckck..",
+    "..kccccckk..",
+    "..kcccckssk.",   # 20 de hand naar voren
+    "..kkkkkksskk",   # 21 de stok in haar hand (onderste sprite: de jurk)
+    "..kcccccck.k",
+    "..kcccccck.k",
+    "..kcccccck.k",
+    ".kccccccck.k",
+    ".kccccccck.k",
+    ".kcccccccckk",
+    ".kcccccccc.k",
+    "kcccccccck.k",
+    "kcccccccck.k",
+    "kcccccccck.k",
+    "kcccccccck.k",
+    "kkkkkkkkkk.k",
+    "...kkk....kk",   # 34 voeten en de punt van de stok
+], 12)
+
 # ---------------------------------------------------------------- Baron Vex: zwart harnas, rode mantel, sik
 vex = sym(check([
     "......",
@@ -558,10 +598,11 @@ CHARS = [
     ("eldric_links_1",  mirror(side_b), 14, 6),
     ("eldric_links_2",  mirror(side_c), 14, 6),
     ("mira",  mira,  4, 6),
+    ("mira_zij", mira_zij, 4, 6),
     ("vex",   vex,   2, 11),
     ("king",  king,  7, 11),
     ("spook", ghost, 15, 12),
-    ("maan",  maan,  12, 12),
+    ("maan",  maan,  11, 11),         # donkergrijs: de manen voor de zon, zoals in de plaatjes (teken_zee.verduisterde_zon)
     ("tik",   tik,   1, 1),           # wit
     ("bram",  bram,  8, 9),
     ("grom",  grom,  12, 12),        # grijs, boven en onder (de steenhuid, zoals in de grot); de ogen: lichtrood
@@ -628,7 +669,7 @@ def write_asm(path):
 def png(path, scale=4, bg=(70, 140, 60)):
     # elk karakter in een vak van 14 x 44 multicolor-pixels (een multicolor-pixel is 2 schermpixels breed)
     cells = [(n, pad(r), t, b) for n, r, t, b in CHARS] + [("wolf", wolf, 11, 11)]
-    cw, ch = 30, 46
+    cw, ch = 52, 46                                              # (de wolf is 24 breed)
     cols = 8
     W, H = cols * cw, ((len(cells) + cols - 1) // cols) * ch
     img = [[bg] * W for _ in range(H)]

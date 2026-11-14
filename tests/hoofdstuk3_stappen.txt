@@ -199,6 +199,34 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer torenhal                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer torentrap                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 308,64
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer torentrap2                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 308,64
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer torentrap3                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 308,64
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer vuurtoren
 screenshot vuurtoren
 
@@ -310,10 +338,38 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
-verwacht_kamer eiland
-cursor 270,133
+verwacht_kamer torentrap3                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 6,126
 wacht 2
-verwacht_tekst 18 "Ga naar boot"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer torentrap2                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 6,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer torentrap                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 6,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer torenhal                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 6,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer eiland
+cursor 6,126
+wacht 2
+verwacht_tekst 18 "Ga naar klippen"
 vuur
 wacht_tot_stil
 wacht_op_script
@@ -324,6 +380,8 @@ wacht 2
 vuur
 wacht_tot_stil
 wacht_op_script
+wacht 3
+wacht_op_script                        # (de vaarscène terug: zeerotsen)
 wacht 3
 verwacht_kamer boot
 

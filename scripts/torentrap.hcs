@@ -1,0 +1,33 @@
+# torentrap.hcs — hoofdstuk 3: de wenteltrap in de vuurtoren, naar de lamp bovenin. Plaatje:
+# data/plaatjes/torentrap.png (tools/teken_tussen.py). Een loopscherm: links omlaag, rechts omhoog.
+KAMER torentrap
+  LOOPKLEUREN grijs lichtgrijs donkergrijs zwart wit bruin oranje geel blauw lichtblauw paars cyaan
+  LOOPVAK 4,101 30,115                  # onderaan
+  LOOPVAK 26,92 52,106
+  LOOPVAK 48,84 74,97
+  LOOPVAK 70,75 96,89
+  LOOPVAK 92,66 118,80
+  LOOPVAK 114,57 140,71
+  LOOPVAK 136,53 157,62                  # bovenaan
+  BINNENKOMST:
+    MUZIEK zee
+
+VOORWERP tt_omlaag "trap omlaag" VAK 0,100 8,20 LOOP 6,112 LINKS
+  GA_NAAR:
+    KAMER torenhal 150,112 LINKS
+  BEKIJK:
+    ZEG eldric "Naar beneden, naar de hal."
+
+VOORWERP tt_omhoog "trap omhoog" VAK 148,36 12,24 LOOP 154,56 RECHTS
+  GA_NAAR:
+    KAMER torentrap2 8,112 RECHTS
+  BEKIJK:
+    ZEG eldric "Nog meer treden. Omhoog, omhoog, omhoog."
+
+VOORWERP tt_raam "raam" VAK 24,20 12,26 LOOP 30,110 RUG
+  BEKIJK:
+    ZEG eldric "De zee is ver beneden. Heel ver. Ik kijk maar niet."
+
+VOORWERP tt_lampje "olielampje" VAK 66,40 8,12 LOOP 70,95 RUG
+  BEKIJK:
+    ZEG eldric "Een olielampje. Het brandt nog: iemand is hier niet zo lang geleden geweest."

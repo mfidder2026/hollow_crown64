@@ -45,6 +45,6 @@ KAMER dak
     ZEG verteller "Dawnhaven. De eerste ochtend."
     PUNTEN 25
     ZET spel_klaar
-    WACHT 100
-    ZEG verteller "EINDE. Dank je wel voor het spelen!"
+    WACHT 60
     EINDE_TUSSENSCENE
+    KAMER verhaal 80,120 RUG               # de epiloog: het dal in de zon (scripts/verhaal.hcs)

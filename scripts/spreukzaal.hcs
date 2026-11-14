@@ -80,4 +80,4 @@ VOORWERP gang_zaal "gang" VAK 0,56 12,28 LOOP 8,114 LINKS
       EINDE
       KAMER bergpad 10,114 RECHTS
     EINDE
-    KAMER aardstad 146,104 LINKS
+    KAMER fluistergang 150,112 LINKS

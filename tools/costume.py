@@ -25,6 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sprites_hc as hc   # noqa: E402
 
 RICHTINGEN = ["voor", "rug", "rechts", "links"]
+ZIJ = {"mira": "mira_zij"}   # figuren die ook van opzij getekend zijn (naar rechts; links = gespiegeld)
 NPCS = [("mira", 0), ("wolf", 1), ("maan", 0), ("hol", 0), ("bram", 0), ("grom", 2), ("tik", 0), ("spook", 0)]          # (naam, vorm) — zie hieronder
 # hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
 # het plein: achteraan ~14-16 hoog, de smidse ~20, de herberg ~26 (zie docs/LOGBOEK.md).
@@ -167,6 +168,12 @@ def main():
     # de sprites dubbel zo breed en hoog ($d017/$d01d; src/npc.asm). voeten = de onderste rij met pixels.
     import json
     info = {}
+    # De figuren staan in het RAM onder de I/O ($D000-$DFFF): in het programmabestand op $A000 (de kamerbuffer, nog
+    # leeg bij het starten), en main.asm kopieert ze bij het starten naar $D000. src/npc.asm leest ze met de I/O even
+    # uit. Een figuur met ZIJ heeft drie houdingen na elkaar: voor, naar rechts, naar links (gespiegeld).
+    L.append(".segment OnderIO")
+    L.append(".pseudopc $d000 {")
+    L.append("onder_io_begin:")
     for naam, vorm in NPCS:
         if naam == "wolf":
             rijen, kb, ko = hc.wolf, 11, 11
@@ -176,12 +183,23 @@ def main():
             delen = list(hc.halves(rijen))
         rijen_v = delen[0] + delen[1] if vorm in (0, 2) else delen[0]
         voeten_n = max(i for i, r in enumerate(rijen_v) if r.strip("."))
+        if naam in ZIJ:
+            L.append("        .align $80                 // (src/npc.asm telt 128 en 256 op bij de lage byte)")
         L.append("npc_%s:    // %s, %s" % (naam, {0: "boven elkaar", 1: "naast elkaar", 2: "een reus (dubbel groot)"}[vorm], hc.NAMES[kb]))
-        for deel in delen:
-            data = hc.sprite_bytes(deel)
-            for i in range(0, 64, 16):
-                L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
-        info[naam] = {"vorm": vorm, "kb": kb, "ko": ko, "voeten": voeten_n}
+        houdingen = [delen]
+        if naam in ZIJ:
+            zij_rijen = tekening[ZIJ[naam]][0]
+            houdingen += [list(hc.halves(zij_rijen)), list(hc.halves(hc.mirror(zij_rijen)))]
+        for h in houdingen:
+            for deel in h:
+                data = hc.sprite_bytes(deel)
+                for i in range(0, 64, 16):
+                    L.append("        .byte " + ", ".join("$%02x" % x for x in data[i:i + 16]))
+        info[naam] = {"vorm": vorm, "kb": kb, "ko": ko, "voeten": voeten_n, "zij": int(naam in ZIJ)}
+    L.append("onder_io_eind:")
+    L.append("}")
+    L.append(".const ONDER_IO_PAGINAS = (onder_io_eind - onder_io_begin + 255) / 256")
+    L.append(".assert \"de figuren passen onder de I/O\", onder_io_eind <= $e000, true")
     json.dump(info, open(os.path.join(sys.argv[1], "kostuums.json"), "w"), indent=1)
     voorbeeld_png(voorbeeld, kb, ko, os.path.join(sys.argv[1], "costume_maten.png"))
     os.makedirs(sys.argv[1], exist_ok=True)

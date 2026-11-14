@@ -5,6 +5,8 @@
 //   $00             EINDE      band_status := 2
 //   $01 lo hi       WACHT n    n beelden niets doen
 //   $02 k           MARKEER k  band_markering := k; wacht tot vicetest hem weer op 0 zet
+//   $0B n ...       OVERSLA    n bytes overslaan (tools/vicetest.py naar_kamer: daar staat een VM-script, en
+//                              START wijst ernaar: Eldric in een kamer zetten zonder proefscript per kamer)
 //                               (vicetest maakt dan een screenshot of leest het geheugen)
 //   $03 xl xh y     CURSOR     beweeg de cursor naar x,y, met de gewone joystickcode (dus met versnellen);
 //                               de band wacht tot hij er is
@@ -237,6 +239,13 @@ lees:   ldy #0
         bne !+
         lda #1
         sta band_wacht_vm
+        jmp verder
+!:      cmp #$0b                        // OVERSLA n: n bytes overslaan (daar staat een klein VM-script: naar_kamer)
+        bne !+
+        iny
+        lda (zp_band),y
+        clc
+        adc #2
         jmp verder
 !:      cmp #BAND_OP_INTRO              // (intro.asm leest hem al; verderop doet hij niets)
         bne !+

@@ -64,7 +64,7 @@ VOORWERP gang_spreuk "gang" VAK 150,78 10,18 LOOP 154,104 RECHTS
     ZEG eldric "Een gang naar rechts. Er staan manen op de muur gekrast."
   GA_NAAR:
     ALS vlag moeder_gesproken
-      KAMER spreukzaal 16,114 RECHTS
+      KAMER fluistergang 10,112 RECHTS
     ANDERS
       ZEG mira "Wacht. Die oude vrouw is wakker. Ze wil met je praten, Eldric."
     EINDE
@@ -73,4 +73,4 @@ VOORWERP gang_zwam "gang" VAK 0,78 10,18 LOOP 6,104 LINKS
   BEKIJK:
     ZEG eldric "Terug naar de zwamgrot."
   GA_NAAR:
-    KAMER zwamgrot 148,112 LINKS
+    KAMER muurgang 150,112 LINKS

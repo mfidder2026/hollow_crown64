@@ -56,6 +56,10 @@ doel:   .byte 0
 bericht_beeld:
         lda bericht_actief
         beq !++
+        lda bericht_tijd + 1            // $FFFF: ZEG ... BLIJFT, telt niet af
+        and bericht_tijd
+        cmp #$ff
+        beq !++
         lda bericht_tijd
         bne !+
         dec bericht_tijd + 1

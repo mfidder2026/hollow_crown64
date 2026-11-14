@@ -238,6 +238,13 @@ vuur
 wacht_tot_stil
 wacht_op_script
 wacht 3
+verwacht_kamer muurgang                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
 verwacht_kamer aardstad
 screenshot aardstad
 
@@ -266,6 +273,13 @@ verwacht_eigenaar sleutelschub eldric
 cursor 310,103
 wacht 2
 verwacht_tekst 18 "Ga naar gang"
+vuur
+wacht_tot_stil
+wacht_op_script
+wacht 3
+verwacht_kamer fluistergang                # loopscherm (tools/loopschermen_in_banden.py)
+cursor 314,126
+wacht 2
 vuur
 wacht_tot_stil
 wacht_op_script

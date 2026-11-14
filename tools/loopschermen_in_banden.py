@@ -12,16 +12,21 @@ import sys
 
 # (van, naar): de loopschermen ertussen, met de schermplek van de uitgang die je aanklikt (None: een toneel, vanzelf)
 LINKS, RECHTS, ACHTER, VOOR = "6,126", "314,126", "160,86", "160,138"
+TRAP_OP, TRAP_OP_LINKS, TRAP_ONDER_RECHTS = "308,64", "10,64", "312,126"   # de trappen (tools/teken_tussen.py: TREDEN)
 OVERGANGEN = {
     ("plein", "bosrand"): [("dorpsweg", ACHTER)], ("bosrand", "plein"): [("dorpsweg", VOOR)],
     ("jachthut", "oever"): [("beekdal", RECHTS)], ("oever", "jachthut"): [("beekdal", LINKS)],
-    ("boot", "eiland"): [("zeerotsen", None), ("klippad", RECHTS)], ("eiland", "boot"): [("klippad", LINKS)],
+    ("boot", "eiland"): [("zeerotsen", None), ("klippad", RECHTS)], ("eiland", "boot"): [("klippad", LINKS), ("zeerotsen", None)],
+    ("eiland", "vuurtoren"): [("torenhal", RECHTS), ("torentrap", TRAP_OP), ("torentrap2", TRAP_OP), ("torentrap3", TRAP_OP)],
+    ("vuurtoren", "eiland"): [("torentrap3", LINKS), ("torentrap2", LINKS), ("torentrap", LINKS), ("torenhal", LINKS)],
     ("kloof", "donker"): [("grotgang", RECHTS)],
     ("donker", "zwamgrot"): [("rivier", RECHTS)],
+    ("zwamgrot", "aardstad"): [("muurgang", RECHTS)], ("aardstad", "zwamgrot"): [("muurgang", LINKS)],
+    ("aardstad", "spreukzaal"): [("fluistergang", RECHTS)], ("spreukzaal", "aardstad"): [("fluistergang", LINKS)],
     ("bergpad", "hut"): [("sneeuwveld", RECHTS)], ("hut", "bergpad"): [("sneeuwveld", LINKS)],
     ("hut", "ijsbrug"): [("bergkam", RECHTS)], ("ijsbrug", "hut"): [("bergkam", LINKS)],
     ("kerker", "poort"): [("kerkergang", RECHTS)], ("poort", "kerker"): [("kerkergang", LINKS)],
-    ("troonzaal", "dak"): [("wenteltrap", LINKS)],
+    ("troonzaal", "dak"): [("wenteltrap", TRAP_OP_LINKS)],
 }
 
 

@@ -41,6 +41,16 @@ intro: {
         sta sprites_spel
         // het titelplaatje laden (zoals een kamer: "Laden...", de IRQ's daarna aan)
         jsr laden_begin
+#if CRT
+        lda #<titel_naam                // van de cartridge (cartridge.asm)
+        sta zp_ptr3
+        lda #>titel_naam
+        sta zp_ptr3 + 1
+        lda #titel_naam_lengte
+        ldx #<KAMER_BUF
+        ldy #>KAMER_BUF
+        jsr cart_laden
+#else
         lda #titel_naam_lengte
         ldx #<titel_naam
         ldy #>titel_naam
@@ -54,6 +64,7 @@ intro: {
         ldy #>KAMER_BUF
         jsr turbo_vergeet               // (turbo.asm: de drive gebruikt nu zijn buffers)
         jsr LOAD
+#endif
         lda #0
         bcc !+
         lda #1

@@ -242,7 +242,11 @@ rij1:   lda menu_stand
 !:      cmp #1
         bne !+
         jmp laden_spel
+#if CRT
+!:      jmp taal_kiezen                 // cartridge.asm: terug naar het taalmenu
+#else
 !:      jmp naar_basic                  // basic.asm
+#endif
 klaar:  rts
 woord:  .byte 0
 }
@@ -263,5 +267,10 @@ menu_stand:  .byte 0                    // MENU_GEEN, MENU_BALK, MENU_BESTAND, M
 menu_kolom:  .byte MENU_KOL1, MENU_KOL2, MENU_KOL3
 menu_rij0_lo: .byte <tekst_bestand, <tekst_score, <tekst_bosskey
 menu_rij0_hi: .byte >tekst_bestand, >tekst_score, >tekst_bosskey
+#if CRT
+menu_rij1_lo: .byte <tekst_opslaan_menu, <tekst_laden_menu, <tekst_taal   // (de cartridge: Taal in plaats van Exit)
+menu_rij1_hi: .byte >tekst_opslaan_menu, >tekst_laden_menu, >tekst_taal
+#else
 menu_rij1_lo: .byte <tekst_opslaan_menu, <tekst_laden_menu, <tekst_exit
 menu_rij1_hi: .byte >tekst_opslaan_menu, >tekst_laden_menu, >tekst_exit
+#endif

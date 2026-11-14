@@ -56,6 +56,7 @@ tekst_bosskey:      .text "Bosskey"; .byte 0
 tekst_opslaan_menu: .text "Opslaan"; .byte 0
 tekst_laden_menu:   .text "Laden"; .byte 0
 tekst_exit:         .text "Exit"; .byte 0
+tekst_taal:         .text "Taal"; .byte 0         // (de cartridge: in plaats van Exit, terug naar het taalmenu)
 tekst_lichtpunten:  .text "Lichtpunten:"; .byte 0
 tekst_van_max:      .text "van 250"; .byte 0
 // het intro (intro.asm)

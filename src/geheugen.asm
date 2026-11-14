@@ -97,6 +97,8 @@
 // Hoog: het vrije stuk $C800-$CFFF (sinds het lettertype op $F800 staat) voor buffers die alleen de processor gebruikt
 // (de patchbuffer, het ankerpunt, de opslagbuffer). Zo blijft er onder $A000 ruimte voor de scripts.
 .segmentdef Hoog [start=$c800, max=$cfff, virtual]
+// de figuren (tools/costume.py): in het bestand op $A000, bij het starten gekopieerd naar het RAM onder de I/O
+.segmentdef OnderIO [start=KAMER_BUF, max=KAMER_BUF + $0fff]
 // sprite-vakken 8-15 ($C600-$C7FF): niemand gebruikt ze (Eldric 0-1, figuren 2-5, cursor 6, voorgrond 7): buffers
 .segmentdef SpriteVrij [start=SPRITE_VAKKEN + 8 * 64, max=$c7ff, virtual]
 

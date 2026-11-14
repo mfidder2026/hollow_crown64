@@ -50,7 +50,7 @@ VOORWERP torendeur "deur" VAK 54,68 16,36 LOOP 62,110 RUG
     EINDE
   GA_NAAR:
     ALS vlag deur_open
-      KAMER vuurtoren 44,100 RECHTS
+      KAMER torenhal 10,112 RECHTS
     ANDERS
       ZEG eldric "De deur zit op slot."
     EINDE
@@ -94,9 +94,9 @@ VOORWERP rots "rots" VAK 98,58 54,46 LOOP 92,110 RECHTS
       EINDE_TUSSENSCENE
     EINDE
 
-VOORWERP eiland_boot "boot" VAK 112,110 46,14 LOOP 96,118 RECHTS
+VOORWERP eiland_boot "klippen" VAK 0,96 8,28 LOOP 6,112 LINKS
   BEKIJK:
-    ZEG eldric "Olm wacht in de boot. Hij weet nog hoe hij heet, hoop ik."
+    ZEG eldric "Het klippad terug naar de boot. Olm wacht daar."
   GA_NAAR:
     KAMER klippad 150,112 LINKS
 

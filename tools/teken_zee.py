@@ -271,7 +271,7 @@ def meeuw(dk, x, y, kijk=1, pikt=False):
 
 def eiland(stand="dicht"):
     """het vuurtoreneiland: de voet van de toren met de deur, een rots met meeuwen die aan iets glimmends pikken,
-    rotsen en de boot van Olm aan de kant (rechtsonder)"""
+    rotsen in de branding (de boot ligt aan de andere kant, onder aan het klippad: tools/teken_tussen.py)"""
     rnd = random.Random(61)
     dk = Doek()
     nachtlucht(dk, rnd, 70)
@@ -329,12 +329,16 @@ def eiland(stand="dicht"):
             dk.lijn([(132, 108), (137, 108)], GEEL)              # de sleutel, gevallen aan de voet van de rots
             dk.ovaal(129, 106, 132, 110, None, GEEL)
             dk.px(136, 109, GEEL)
-    # de boot van Olm, aan de kant rechtsonder, met een lantaarn
-    roeiboot(dk, 112, 112, 46, 10)
-    lantaarn_paal(dk, 150, 112, 16)
+    # rechtsonder: geen boot (die ligt aan de andere kant van het eiland, onder aan het klippad), maar rotsblokken in
+    # de branding
+    for x, y, b in ((118, 116, 9), (134, 120, 7), (148, 114, 8), (126, 124, 5)):
+        dk.ovaal(x - b, y - b // 2 - 2, x + b, y + b // 2, GRIJS, ZWART)
+        dk.lijn([(x - b + 2, y - b // 2 - 1), (x, y - b // 2 - 2)], LGRIJS)
+        for i in range(-b, b, 3):                                # schuim eromheen
+            dk.px(x + i, y + b // 2 + 1, WIT)
     for x in range(0, 44, 4):                                    # aangespoeld wier langs de waterlijn
         dk.px(x + 2, 99 - (x % 8 == 0), GROEN)
-    rijk.verrijk(dk, 61, lichten=[(154, 98, 40, 26, 0.85, None)], sluit=(PAARS,), textuur_=0.0)
+    rijk.verrijk(dk, 61, lichten=[], sluit=(PAARS,), textuur_=0.0)
     rand(dk)
     kleuren_per_vakje(dk.im)
     return dk.im

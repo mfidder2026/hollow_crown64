@@ -8,6 +8,14 @@ KAMER zeerotsen
   BINNENKOMST:
     MUZIEK zee
     VERBERG mira_mee
+    ALS vlag terug_varen                   # van het eiland terug naar de zee (scripts/klippad.hcs)
+      WIS terug_varen
+      WACHT 40
+      ZEG olm "Terug, dan. Langs de klippen. Die staan er nog, zag ik."
+      WACHT 60
+      TOON mira_mee
+      KAMER boot 80,110 RUG
+    EINDE
     WACHT 40
     ZEG olm "Links. En dan tussen de klippen door. Zo ging het. Zo ging het altijd."
     WACHT 30

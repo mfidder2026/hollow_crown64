@@ -27,6 +27,9 @@ turbo_vergeet:
 // turbo_laden: laad bestand (naam op zp_ptr3, lengte A) naar adres X/Y (lo/hi), de laadadresbytes van het bestand
 // overgeslagen. C = 0 goed, C = 1 lukt niet (laad dan via de Kernal).
 turbo_laden: {
+#if CRT
+        jmp cart_laden                  // van de cartridge (cartridge.asm): geen diskette, geen snellader
+#endif
         sta lengte
         stx doel
         sty doel + 1

@@ -5,7 +5,7 @@ KAMER kloof
   LOOPKLEUREN bruin oranje donkergrijs zwart grijs lichtgrijs
   LOOPVAK 4,106 156,122                  # 0 de bodem
   LOOPVAK 66,100 94,122                  # 1 het pad naar de grot
-  ACTOR wolf_kloof KOSTUUM wolf OP 70,102   # een schaduwwolf voor de grot
+  ACTOR wolf_kloof KOSTUUM wolf OP 80,92    # een schaduwwolf in de grotmond, achter het pad (niet door Eldric heen)
   BINNENKOMST:
     MUZIEK bosrand
     ALS vlag wolven_kloof_weg
@@ -30,12 +30,12 @@ VOORWERP wolven_kloof "wolven" VAK 58,82 44,20 LOOP 80,114 RUG
       TUSSENSCENE
       ZEG eldric "Weg jullie! Licht!"
       GELUID wolf
-      LOOP wolf_kloof 76,92
+      LOOP wolf_kloof 80,84
       VERBERG wolf_kloof
       ZEG eldric "Ze wijken... maar de lantaarn flakkert. En gaat uit."
       STAND lantaarn 3
       TOON wolf_kloof
-      LOOP wolf_kloof 70,102
+      LOOP wolf_kloof 80,92
       ZEG eldric "En daar zijn ze weer."
       ZEG mira "Bekijk je lantaarn eens, Eldric. Er is iets mis mee."
       EINDE_TUSSENSCENE

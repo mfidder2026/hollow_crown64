@@ -1073,3 +1073,34 @@ liep door in de reus-code en vergrootte de wolf. Opgelost (één jmp), en vicete
 dat alleen een reus vergrote sprites heeft.
 
 Testronde: 30 van 30, compiler 23 van 23.
+
+## 2026-11-14 — De cartridge in vier talen; vuurtoren, hoofdstuk 4, epiloog; meekijken met pauze
+
+**Cartridge (EasyFlash, 1 MB, build/hollowcrown.crt)**: alles in één bestand, laden in een fractie van een seconde.
+- src/crtboot.asm: de EasyFlash start in de Ultimax-stand; het opstarten kopieert zichzelf naar $0800 en $C000, zet
+  de C64 klaar (IOINIT, RAMTAS, RESTOR, CINT), toont het taalmenu (1 Nederlands, 2 English, 3 Deutsch, 4 Français) en
+  haalt het programma van die taal uit de cartridge (16K-stand, $8000-$BFFF per bank).
+- src/cartridge.asm: cart_laden (dezelfde ingang als turbo_laden): de inhoudsopgave in bank 0, kopiëren met de
+  interrupts uit en om de 256 bytes even aan (de muziek). Valkuilen: de ROM is alleen zichtbaar met $01 = $37 (het
+  spel draait met $36: eerst laadde hij stilletjes van de diskette die de test koppelde); eigen zeropage-wijzers
+  ($FB-$FE), want de IRQ gebruikt zp_ptr; en vicetest las tijdens het kopiëren de ROM in plaats van het RAM (nu
+  `bank ram`/`bank io` in de cartridge-stand). Het menu Bestand heeft op de cartridge "Taal" in plaats van Exit.
+- Een Magic Desk (de eerste versie) kan in VICE hooguit 512 KB; vier talen zijn 608 KB, vandaar de EasyFlash.
+- tools/crt.py: het CRT-bestand (hardwaretype 32), de talentabel, de inhoudsopgave, het opstarten in ROMH.
+
+**Vertalingen**: tools/taal.py haalt alle teksten eruit (tools/taal/bron.json: 731 zinnen, 30 keuzes, 153 namen,
+6 hoofdstukken, 39 vaste teksten) en maakt per taal vertaalde kopieën van de scripts en van src/teksten_nl.asm (die
+wordt build/gen/teksten.asm, als .byte met de codes van ons lettertype). De vertalingen (tools/taal/en.json, de.json,
+fr.json) zijn gemaakt door drie helpers tegelijk, met de regels van het spel (2 regels van 40, namen 13 tekens). Het
+lettertype kreeg ä ß è ê à â ç î ô û ù Ä Ö Ü É. Elke taal heeft eigen kamerscripts op de cartridge (.S .E .D .F).
+
+**Spel**: de vuurtoren heeft een hal en drie trappen waar Eldric echt over omhoog loopt (de treden zijn de
+looppaden); het klippad op het eiland met de vuurtoren dichtbij, en een vaarscène terug; het eiland zonder boot.
+Hoofdstuk 4: de muurgang (hun verhaal op de muur) en de fluistergang, met zinnen die de kamers verbinden. Het einde:
+een epiloog in het dal van het openingsverhaal, nu met de zon, en EINDE (ZEG ... BLIJFT). In het openingsverhaal
+schuiven de twee manen voor de zon (geen bruine zon meer). Mira kijkt mee naar links en rechts (een zijaanzicht,
+gespiegeld); de figuren staan onder de I/O ($D000). Mira staat in de herberg niet meer in een looppad; de wolf in de
+grotmond.
+
+**Meekijken**: `vicetest.py --kijk --crt --taal en --zonder-tekst --stil --snelheid 400 tests/kijken/kijk.band`;
+P in het VICE-venster pauzeert (VICE op 1%: in de monitor blijven werkt niet, dan leest VICE het toetsenbord niet).
