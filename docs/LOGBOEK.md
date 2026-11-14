@@ -1170,3 +1170,5 @@ staat nu op $0400 (segment Laag).
 **Tik** is nu een oog met vleugeltjes: wit oogwit, een roze iris, een zwarte pupil met een lichtpuntje. Vier houdingen
 (vleugels op, vleugels neer, half dicht, dicht; tools/costume.py OGEN, zij = 2): hij fladdert, knippert eens in de ~5
 seconden en zweeft een paar pixels op en neer (src/npc.asm oog_stap, oog_zweef).
+- vicetest `--crt --taal xx` bouwde de testcartridge altijd in het Nederlands, maar las de adressen van build/autotest/
+  crt/xx (een oude build): dan kwam de band nooit aan en bleef het spel zwart in het intro. Nu bouwt hij in die taal.

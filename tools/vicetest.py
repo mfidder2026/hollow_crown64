@@ -1022,7 +1022,10 @@ def main():
         args.geen_warp = args.houd_open = args.echte_drive = True
         args.starttijd, args.max_tijd = max(args.starttijd, 300), max(args.max_tijd, 4 * 3600)
     if not args.geen_build:
-        if subprocess.call([os.path.join(ROOT, "build.sh"), "--autotest"]) != 0:
+        bouw = [os.path.join(ROOT, "build.sh"), "--autotest"]
+        if args.crt:                                   # de cartridge in de gevraagde taal (anders leest de test de
+            bouw.append("--taal=%s" % args.taal)       #  adressen van een oude build in die taal: dan hangt hij)
+        if subprocess.call(bouw) != 0:
             print("[test] build mislukt")
             return 1
     fouten = 0
