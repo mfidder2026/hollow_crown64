@@ -4,8 +4,6 @@
 # Het plaatje staat (nog) in data/kamers.txt.
 
 KAMER plein
-  FLAKKER 72,40 16,16 cyaan lichtblauw wit TEMPO 8   # de fontein spuit
-  FLAKKER 132,40 8,16 geel oranje TEMPO 9   # een kaarsje achter het raam
   ACTOR kraai_plein KOSTUUM kraai OP 10,14 VLIEGT 150,22   # een kraai over de daken
   SCHAAL 104 88 76 69        # diepte: vooraan groot; achteraan zo klein dat hij door de deuren past
                              # (deuren: achteraan ~14-16 hoog met de voet op y~66, smit ~20 op y~78,

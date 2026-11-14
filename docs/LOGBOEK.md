@@ -1137,3 +1137,8 @@ Motor:
 - Oud foutje gevonden: bij Bestand, Exit stond $0288 (waar de Kernal het scherm zoekt) nog op $C0, dus kwam READY.
   op een scherm dat niemand zag. De test slaagde alleen omdat de oude READY. van het laden nog op $0400 stond; nu
   dat stuk voor tabellen gebruikt wordt, viel het op. naar_basic zet $0288 weer op $04.
+- Na meekijken: met een vogel in beeld flikkerde het hele scherm en haperde de muziek. Bij elke vleugelslag kopieerde
+  kostuum_naar_slot 128 bytes onder de I/O vandaan met de interrupts ~27 rasterregels uit; nu byte voor byte, met de
+  interrupts telkens maar een paar cycli uit. Het plein flakkert niet meer (de fontein en het kaarsje lagen op de
+  huizen erachter); op het wolfspad alleen het dwaallichtje. De schermtest slaat de vakjes van een vlieger over (die
+  schuift elk beeld op: het moment van de schermafbeelding en van de VIC-registers verschillen daar).

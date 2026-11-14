@@ -1,8 +1,7 @@
 # wolfspad.hcs — een open plek in het Duisterwoud, scherm 2 en 4 van het doolhof (zie diepwoud.hcs).
 # Plaatje: data/plaatjes/wolfspad.png (tools/teken_woud2.py).
 KAMER wolfspad
-  FLAKKER 24,64 16,16 lichtgroen wit TEMPO 9   # dwaallichtjes
-  FLAKKER 120,56 28,24 lichtgroen wit TEMPO 11
+  FLAKKER 140,72 4,8 wit lichtgroen geel TEMPO 9   # een dwaallichtje
   ACTOR vleermuis_pad KOSTUUM vleermuis OP 140,20 VLIEGT 30,34
   LOOPKLEUREN bruin oranje donkergrijs zwart geel grijs lichtgrijs groen lichtgroen wit
   SCHAAL 106 96

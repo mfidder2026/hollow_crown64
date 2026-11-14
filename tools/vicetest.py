@@ -544,9 +544,27 @@ def kamerbuffer_klopt(vice, sym, spel):
     return True, "kamerbuffer = %s (%d bytes) en de scripts" % (os.path.basename(pad), len(data))
 
 
-def scherm_vergelijken(vice, png_pad):
+def vlieger_vakken(vice, sym):
+    """De plek van de sprites van een vlieger (ACTOR ... VLIEGT): die schuift elk beeld een pixel op, dus het moment
+    van de schermafbeelding en dat van de VIC-registers verschillen daar; die vakjes tellen niet mee."""
+    if not sym or "slot_npc" not in sym or "npc_vliegt" not in sym:
+        return []
+    vic = vice.lees(0xD000, 0x11)
+    vakken = []
+    for slot, fig in enumerate(vice.lees(sym["slot_npc"], 2)):
+        if fig == 0xFF or not vice.lees(sym["npc_vliegt"] + fig)[0]:
+            continue
+        for n in (4 + 2 * slot, 5 + 2 * slot):
+            sx = vic[2 * n] + (256 if vic[0x10] & (1 << n) else 0) - 24
+            sy = vic[2 * n + 1] - 50
+            vakken.append((sx - 4, sy - 4, sx + 28, sy + 25))
+    return vakken
+
+
+def scherm_vergelijken(vice, png_pad, sym=None):
     from PIL import Image
     pix = ideaal_scherm(vice)
+    vakken = vlieger_vakken(vice, sym)
     img = Image.open(png_pad).convert("RGB")
     W, H = img.size
     data = img.load()
@@ -559,7 +577,8 @@ def scherm_vergelijken(vice, png_pad):
     fout_rijen = {}
     for y in range(200):
         for x in range(320):
-            if nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x]:
+            if nummer(data[RAND_X + x, RAND_Y + y]) != pix[y][x] and \
+                    not any(a <= x < c and b <= y < d for a, b, c, d in vakken):
                 fout_rijen[y] = fout_rijen.get(y, 0) + 1
     if not fout_rijen:
         return True, "klopt pixel voor pixel (met sprites)"
@@ -912,7 +931,7 @@ def draai(bandpad, args):
                     vice.screenshot(pad)
                     print("[test]   screenshot %s" % os.path.relpath(pad, ROOT))
                     if scherm_ideaal:
-                        ok, uitleg = scherm_vergelijken(vice, pad)
+                        ok, uitleg = scherm_vergelijken(vice, pad, sym)
                         schermfouten += 0 if ok else 1
                         print("[test]   %-4s scherm: %s" % ("ok" if ok else "FOUT", uitleg))
                         ok, uitleg = vergroot_klopt(vice, sym)

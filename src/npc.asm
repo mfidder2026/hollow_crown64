@@ -257,18 +257,18 @@ kostuum_naar_slot: {
         sta zp_ptr2
         lda slot_vak_hi,y
         sta zp_ptr2 + 1
-        php                             // de figuren staan onder de I/O ($D000): even alleen RAM
-        sei
-        lda #$34
-        sta $01
-        ldy #127
-!:      lda (zp_ptr),y
+        ldy #127                        // de figuren staan onder de I/O ($D000): per byte even alleen RAM, met
+!:      php                             // de interrupts maar een paar cycli uit (128 bytes in één keer: ~27
+        sei                             // rasterregels zonder IRQ, dan komen de naden te laat en flikkert alles;
+        ldx #$34                        // een vlieger wisselt om de 8 beelden van houding)
+        stx $01
+        lda (zp_ptr),y
+        ldx #CPU_NORMAAL
+        stx $01
+        plp
         sta (zp_ptr2),y
         dey
         bpl !-
-        lda #CPU_NORMAAL
-        sta $01
-        plp
         ldy slot
         lda slot_ptr,y                  // sprite-pointers
         ldx slot_sprite,y
