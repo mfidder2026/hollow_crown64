@@ -179,6 +179,11 @@ begin:  .word 0
 // diskette_vragen: "Plaats diskette N en druk op vuur." (N = de diskette van kamer X) en wachten. In de testbuild
 // wacht hij tot tools/vicetest.py de goede diskette in VICE heeft gestopt (die zet schijf_nodig weer op 0).
 diskette_vragen: {
+#if AUTOTEST
+        jmp begin
+wacht_teller: .byte 0
+begin:
+#endif
         lda kamer_schijf,x
         sta schijf_nodig
         clc
@@ -198,6 +203,19 @@ diskette_vragen: {
         jsr tekst_schrijf
 #if AUTOTEST
 !:      lda schijf_nodig                // vicetest stopt de diskette erin
+        bne !-
+        // en dan, zoals een speler die op vuur drukt, even wachten (~2 s): de echte 1541 moet de wissel zien (anders
+        // leest hij nog de oude diskette en vraagt het spel opnieuw: met de echte drive bleef hij zo eindeloos
+        // vragen). Een tijdlus, geen beeldteller: tijdens het laden staan de interrupts uit.
+        lda #6
+        sta wacht_teller
+        ldy #0
+        ldx #0
+!:      dex                             // 256 x 5 cycli
+        bne !-
+        dey                             // x 256 = ~0,33 s
+        bne !-
+        dec wacht_teller
         bne !-
 #else
 !:      jsr vuur_nu                     // eerst loslaten, dan indrukken

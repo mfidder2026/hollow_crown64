@@ -254,7 +254,7 @@ PROMPT = re.compile(rb"\(C:\$[0-9a-f]{4}\) $")
 
 
 class Vice:
-    def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False, geluid=False):
+    def __init__(self, d64, warp=True, echte_drive=False, zichtbaar_houden=False, geluid=False, snelheid=100):
         self.houd_open = zichtbaar_houden
         s = socket.socket()
         s.bind(("127.0.0.1", 0))                 # een vrije poort, zodat testen naast elkaar kunnen
@@ -270,6 +270,8 @@ class Vice:
             args += ["-sounddev", "dummy"]
         if warp:
             args.append("-warp")
+        elif snelheid != 100:
+            args += ["-speed", str(snelheid)]    # procent van de echte C64 (--snelheid)
         if not zichtbaar_houden:
             args.append("-console")              # geen venster: de test pakt de focus niet af (macOS)
         args += ["-autostart", d64]
@@ -664,7 +666,8 @@ def draai(bandpad, args):
     # een band met de regel "echte_drive" draait altijd met de 1541-emulatie (voor de snellader: turbo.asm)
     echte_drive = args.echte_drive or any(r.split("#", 1)[0].strip() == "echte_drive" for r in open(bandpad))
     vice = Vice(d64, warp=not args.geen_warp,
-                echte_drive=echte_drive, zichtbaar_houden=args.houd_open, geluid=args.kijk)
+                echte_drive=echte_drive, zichtbaar_houden=args.houd_open,
+                geluid=args.kijk and not args.stil, snelheid=args.snelheid)
     try:
         # 1. wachten tot het spel draait: magic "HC" staat er en de band wacht op ons
         eind = time.time() + args.starttijd
@@ -715,6 +718,7 @@ def draai(bandpad, args):
         if bytes(vice.lees(sym["band"], min(geschreven, 256))) != band[:min(geschreven, 256)]:
             raise Fout("de band staat niet goed in het geheugen")
         rondes, vorige_plek = 0, 0
+        in_drive = 1                                         # welke diskette er nu in zit
         vice.schrijf(sym["band_status"], [BAND_LOOPT])
         vice.verder()
 
@@ -745,8 +749,12 @@ def draai(bandpad, args):
             if nodig:                                 # het spel vraagt om een andere diskette: erin stoppen
                 if nodig not in diskettes or not os.path.exists(diskettes[nodig]):
                     raise Fout("het spel vraagt diskette %d, en die is er niet" % nodig)
-                vice.cmd('attach "%s" 8' % diskettes[nodig])
-                print("[test]   diskette %d erin" % nodig)
+                if nodig != in_drive:                # (zit hij er al in, dan niet opnieuw: een nieuwe wissel laat
+                    vice.cmd('attach "%s" 8' % diskettes[nodig])   # de echte 1541 weer van voren af beginnen)
+                    in_drive = nodig
+                    print("[test]   diskette %d erin" % nodig, flush=True)
+                else:
+                    print("[test]   diskette %d zit er al in" % nodig, flush=True)
                 vice.schrijf(sym["schijf_nodig"], [0])
             if markering:
                 # de markeringen tellen rond (1..255): de volgende in de rij is aan de beurt
@@ -824,6 +832,8 @@ def main():
     p.add_argument("--max-tijd", type=int, default=600, help="seconden voor de hele band")
     p.add_argument("--kijk", action="store_true",
                    help="om mee te kijken: venster, normale snelheid, geluid, echte 1541 (de snellader), ruime tijd")
+    p.add_argument("--snelheid", type=int, default=100, help="zonder warp: zoveel procent van de echte C64 (200 = dubbel)")
+    p.add_argument("--stil", action="store_true", help="in de kijkstand zonder geluid")
     args = p.parse_args()
     if args.kijk:
         args.geen_warp = args.houd_open = args.echte_drive = True

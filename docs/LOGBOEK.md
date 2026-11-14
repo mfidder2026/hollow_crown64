@@ -1021,3 +1021,13 @@ in de grot. En hij is een reus: een nieuwe NPC-vorm 2 (tools/costume.py) laat de
 breed en hoog tekenen ($d017/$d01d, src/npc.asm; kost geen geheugen). vicetest tekent vergrote sprites nu ook na.
 Grom staat in de bosrand iets lager en loopt zijwaarts weg (in de diepte zou hij boven de kamer uitsteken); in de
 jachthut iets meer naar links (anders valt hij half buiten beeld). Testronde: 30 van 30, compiler 23 van 23.
+
+## 2026-11-14 — Meekijken op dubbele snelheid; de diskettewissel met de echte 1541
+
+`vicetest.py --kijk --stil --snelheid 200 tests/kijken/kijk.band`: het hele spel in een venster, dubbel zo snel,
+zonder geluid (21 minuten, geslaagd). Onderweg bleef het spel hangen bij "Plaats diskette 2": met de echte 1541 las
+het spel direct na de wissel nog de oude diskette, vroeg opnieuw, en vicetest stopte diskette 2 er telkens opnieuw in
+(waarmee de drive weer van voren af begon). Nu: in de testbuild wacht diskette_vragen na de wissel ~2 s (een
+tijdlus: tijdens het laden staan de interrupts uit, dus een beeldteller loopt niet), zoals een speler die op vuur
+drukt; en vicetest stopt een diskette die er al in zit niet opnieuw in. Getest: hoofdstuk4.band en het hele spel met
+de echte drive. Testronde: 30 van 30.
