@@ -379,43 +379,44 @@ bram = sym(check([
 bram = put(bram, [(20, 9, "k"), (20, 10, "k"), (20, 11, "k"), (21, 9, "k"), (21, 10, "k"), (21, 11, "k"),
                   (22, 10, "k"), (22, 11, "k")])   # de hamerkop onder zijn rechtervuist
 
-# ---------------------------------------------------------------- Grom de tovertrol: groot, gebogen, steenhuid, staf
-grom = sym(check([
-    "......",
-    "..kkkk",   # 1 de kop
-    ".kcccc",
-    "kccccc",
-    "kcsscc",   # 4 gloeiende ogen
-    "kccccc",
-    "kcckcc",   # 6 een grote neus
-    "kcckcc",
-    ".kcccc",
-    ".kcskk",   # 9 een slagtand
-    "..kccc",
-    ".kkccc",   # 11 gebogen schouders
-    "kccccc",
-    "kccccc",
-    "kcckcc",
-    "kcckcc",
-    "kcckcc",
-    "kc.kcc",   # 17 lange armen
-    "kk.kcc",
-    "...kcc",
-    "...kcc",
-    "..kccc",   # 21 een vacht (onderste sprite: bruin)
-    ".kcccc",
-    ".kcccc",
-    ".kcccc",
-    "kccccc",
-    "kccccc",
-    "kccccc",
-    "kkkkkk",
-    "..kck.",   # 29 korte dikke benen
-    "..kck.",
-    "..kck.",
-    ".kkkk.",
-], 6))
-grom = put(grom, [(y, 0, "k") for y in range(3, 33)] + [(0, 0, "s"), (0, 1, "s"), (1, 0, "s"), (1, 1, "s"), (2, 0, "k")])
+# ---------------------------------------------------------------- Grom de tovertrol: een reus van steen, zoals in de
+# tussenscène in de grot (tools/teken_grot.py): grijze steenhuid, hoorns, rood gloeiende ogen onder een zware
+# wenkbrauw, slagtanden, brede schouders, lange armen met klauwen, een lendendoek, kromme benen. Helemaal grijs,
+# boven en onder (zoals in de grot); de ogen in het lichtrood van $d026. In het spel een reus: dubbel groot
+# (vorm 2 in tools/costume.py, src/npc.asm).
+grom = check([
+    "..k......k..",  # 0 hoorns
+    "..kk....kk..",  # 1
+    "...kkkkkk...",  # 2
+    "..kcccccck..",  # 3 de kop
+    "..kkcccckk..",  # 4 wenkbrauwen, buiten hoog
+    "..kcskkskc..",  # 5 ogen, de wenkbrauw zakt in het midden: boos
+    "..kcsccsck..",  # 6
+    "..kcckkcck..",  # 7 neusgaten
+    ".kkkkkkkkkk.",  # 8 de bek
+    "kckcckkcckck",  # 9 slagtanden; de schouders beginnen
+    "kcckkkkkkcck",  # 10
+    "kcccccccccck",  # 11 brede schouders
+    "kcckcccckcck",  # 12
+    "kckcccccckck",  # 13 armen links en rechts van het lijf
+    "kckcckkcckck",  # 14
+    "kck.kcck.kck",  # 15 een smal middel
+    "kck.kcck.kck",  # 16
+    "kck.kkkk.kck",  # 17 de riem
+    "kcckkcckkcck",  # 18 handen
+    "kccckcckccck",  # 19
+    "kccckcckccck",  # 20
+    "k.k.kcck.k.k",  # 21 klauwen; de lendendoek
+    "...kccccck..",  # 22
+    "...kckckck..",  # 23 rafelig
+    "..kck..kck..",  # 24 kromme benen
+    "..kck..kck..",  # 25
+    ".kck....kck.",  # 26
+    ".kck....kck.",  # 27
+    ".kcck..kcck.",  # 28
+    "kccck..kccck",  # 29 brede voeten
+    "kkkkk..kkkkk",  # 30
+], 12)
 
 # ---------------------------------------------------------------- Tik, de Terugdraaier: een zwevend eitje met één oog
 tik = pad(sym(check([
@@ -563,7 +564,7 @@ CHARS = [
     ("maan",  maan,  12, 12),
     ("tik",   tik,   1, 1),           # wit
     ("bram",  bram,  8, 9),
-    ("grom",  grom,  5, 9),          # boven groen (zijn steenhuid), onder bruin (de vacht)          # boven oranje (baard, haar, hemd), onder bruin (schort)
+    ("grom",  grom,  12, 12),        # grijs, boven en onder (de steenhuid, zoals in de grot); de ogen: lichtrood
     ("vex_kroon", vex_kroon, 7, 11),      # boven goud (kroon en schouders), onder donkergrijs
     ("hol",   hol,   11, 11),
 ]

@@ -405,8 +405,6 @@ def ideaal_scherm(vice):
                         code = (b >> (6 - 2 * x)) & 3
                         rij[c * 8 + 2 * x] = rij[c * 8 + 2 * x + 1] = kl[code]
                         vr[c * 8 + 2 * x] = vr[c * 8 + 2 * x + 1] = code >= 2
-    if vic[0x17] or vic[0x1D]:
-        raise Fout("vergrote sprites ($d017/$d01d) tekent de test nog niet")
     for n in range(7, -1, -1):                  # hoog nummer eerst: een lager nummer komt erbovenop
         if not vic[0x15] & (1 << n):
             continue
@@ -416,18 +414,22 @@ def ideaal_scherm(vice):
         mc = vic[0x1C] & (1 << n)
         prio = vic[0x1B] & (1 << n)
         eigen = vic[0x27 + n] & 15
-        for r in range(21):
-            bits = data[r * 3] << 16 | data[r * 3 + 1] << 8 | data[r * 3 + 2]
+        hoog = 2 if vic[0x17] & (1 << n) else 1  # vergroot ($d017 hoogte, $d01d breedte): een reus (src/npc.asm)
+        breed = 2 if vic[0x1D] & (1 << n) else 1
+        for r in range(21 * hoog):
+            rr = r // hoog
+            bits = data[rr * 3] << 16 | data[rr * 3 + 1] << 8 | data[rr * 3 + 2]
             y = sy + r
             if not 0 <= y < 200:
                 continue
-            for x in range(24):
+            for xx in range(24 * breed):
+                x = xx // breed
                 if mc:
                     code = bits >> (22 - (x & ~1)) & 3
                     k = (None, vic[0x25] & 15, eigen, vic[0x26] & 15)[code]
                 else:
                     k = eigen if bits >> (23 - x) & 1 else None
-                px = sx + x
+                px = sx + xx
                 if k is None or not 0 <= px < 320 or (prio and voor[y][px]):
                     continue
                 pix[y][px] = k

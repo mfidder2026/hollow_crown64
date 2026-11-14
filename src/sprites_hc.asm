@@ -919,44 +919,44 @@ bram_onder:
         .byte $00, $00, $00      // ............
         .byte $00, $00, $00      // ............
         .byte 0
-.label grom_kb = 5      // groen
-.label grom_ko = 9      // bruin
+.label grom_kb = 12      // grijs
+.label grom_ko = 12      // grijs
 grom_boven:
-        .byte $f0, $00, $00      // ss..........
-        .byte $f5, $55, $50      // sskkkkkkkk..
-        .byte $5a, $aa, $a4      // kkcccccccck.
-        .byte $6a, $aa, $a9      // kcccccccccck
-        .byte $6f, $aa, $f9      // kcssccccssck
-        .byte $6a, $aa, $a9      // kcccccccccck
-        .byte $69, $aa, $69      // kcckcccckcck
-        .byte $69, $aa, $69      // kcckcccckcck
-        .byte $5a, $aa, $a4      // kkcccccccck.
-        .byte $5b, $55, $e4      // kkcskkkksck.
-        .byte $46, $aa, $90      // k.kcccccck..
-        .byte $56, $aa, $94      // kkkcccccckk.
-        .byte $6a, $aa, $a9      // kcccccccccck
+        .byte $04, $00, $10      // ..k......k..
+        .byte $05, $00, $50      // ..kk....kk..
+        .byte $01, $55, $40      // ...kkkkkk...
+        .byte $06, $aa, $90      // ..kcccccck..
+        .byte $05, $aa, $50      // ..kkcccckk..
+        .byte $06, $d7, $60      // ..kcskkskc..
+        .byte $06, $eb, $90      // ..kcsccsck..
+        .byte $06, $96, $90      // ..kcckkcck..
+        .byte $15, $55, $54      // .kkkkkkkkkk.
+        .byte $66, $96, $99      // kckcckkcckck
+        .byte $69, $55, $69      // kcckkkkkkcck
         .byte $6a, $aa, $a9      // kcccccccccck
         .byte $69, $aa, $69      // kcckcccckcck
-        .byte $69, $aa, $69      // kcckcccckcck
-        .byte $69, $aa, $69      // kcckcccckcck
-        .byte $61, $aa, $49      // kc.kcccck.ck
-        .byte $51, $aa, $45      // kk.kcccck.kk
-        .byte $41, $aa, $40      // k..kcccck...
-        .byte $41, $aa, $40      // k..kcccck...
+        .byte $66, $aa, $99      // kckcccccckck
+        .byte $66, $96, $99      // kckcckkcckck
+        .byte $64, $69, $19      // kck.kcck.kck
+        .byte $64, $69, $19      // kck.kcck.kck
+        .byte $64, $55, $19      // kck.kkkk.kck
+        .byte $69, $69, $69      // kcckkcckkcck
+        .byte $6a, $69, $a9      // kccckcckccck
+        .byte $6a, $69, $a9      // kccckcckccck
         .byte 0
 grom_onder:
-        .byte $46, $aa, $90      // k.kcccccck..
-        .byte $5a, $aa, $a4      // kkcccccccck.
-        .byte $5a, $aa, $a4      // kkcccccccck.
-        .byte $5a, $aa, $a4      // kkcccccccck.
-        .byte $6a, $aa, $a9      // kcccccccccck
-        .byte $6a, $aa, $a9      // kcccccccccck
-        .byte $6a, $aa, $a9      // kcccccccccck
-        .byte $55, $55, $55      // kkkkkkkkkkkk
-        .byte $46, $41, $90      // k.kck..kck..
-        .byte $46, $41, $90      // k.kck..kck..
-        .byte $46, $41, $90      // k.kck..kck..
-        .byte $55, $41, $54      // kkkkk..kkkk.
+        .byte $44, $69, $11      // k.k.kcck.k.k
+        .byte $01, $aa, $90      // ...kccccck..
+        .byte $01, $99, $90      // ...kckckck..
+        .byte $06, $41, $90      // ..kck..kck..
+        .byte $06, $41, $90      // ..kck..kck..
+        .byte $19, $00, $64      // .kck....kck.
+        .byte $19, $00, $64      // .kck....kck.
+        .byte $1a, $41, $a4      // .kcck..kcck.
+        .byte $6a, $41, $a9      // kccck..kccck
+        .byte $55, $41, $55      // kkkkk..kkkkk
+        .byte $00, $00, $00      // ............
+        .byte $00, $00, $00      // ............
         .byte $00, $00, $00      // ............
         .byte $00, $00, $00      // ............
         .byte $00, $00, $00      // ............

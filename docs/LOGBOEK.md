@@ -1011,3 +1011,13 @@ geheugenblikken (20 per seconde, elk zet de emulatie even stil) lieten het gelui
 keer per seconde.
 
 Testronde: 30 van 30 banden, compiler 23 van 23.
+
+## 2026-11-14 — Grom als eng poppetje, en een reus
+
+De gebruiker: in de tussenscène is Grom eng, maar als poppetje leek hij een lief groen beertje, in andere kleuren.
+Nu: een nieuwe tekening (tools/sprites_hc.py) met hoorns, boze rode ogen onder een V-wenkbrauw, een bek met
+slagtanden, brede schouders, armen met klauwen, een lendendoek en kromme benen; helemaal grijs zoals de stenen reus
+in de grot. En hij is een reus: een nieuwe NPC-vorm 2 (tools/costume.py) laat de VIC zijn twee sprites dubbel zo
+breed en hoog tekenen ($d017/$d01d, src/npc.asm; kost geen geheugen). vicetest tekent vergrote sprites nu ook na.
+Grom staat in de bosrand iets lager en loopt zijwaarts weg (in de diepte zou hij boven de kamer uitsteken); in de
+jachthut iets meer naar links (anders valt hij half buiten beeld). Testronde: 30 van 30, compiler 23 van 23.

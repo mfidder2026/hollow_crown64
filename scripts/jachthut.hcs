@@ -8,7 +8,7 @@ KAMER jachthut
   LOOPVAK 68,84 108,124                  # 2 voor de haard
   LOOPVAK 140,86 157,124                 # 3 bij de achterdeur
   FLAKKER 68,56 28,24 rood oranje geel   # het haardvuur
-  ACTOR grom_hut KOSTUUM grom OP 150,104 VERBORGEN   # Grom komt binnen als het misgaat
+  ACTOR grom_hut KOSTUUM grom OP 140,104 VERBORGEN   # Grom komt binnen als het misgaat
   BINNENKOMST:
     MUZIEK kelder
     ALS vlag vuur_uit

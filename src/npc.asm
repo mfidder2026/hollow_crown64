@@ -230,9 +230,19 @@ lus:    lda slot_npc,y
 !:      lda $d015
         ora slot_bits,y
         sta $d015
-        // X: voeten - 12 (vorm 0) of - 24 (vorm 1), + 24 rand
+        // X: voeten - 12 (vorm 0) of - 24 (vorm 1), + 24 rand; vorm 2 (een reus): dubbel groot
+        lda $d017                       // eerst: niet vergroot (alleen een reus wel)
+        and slot_niet,y
+        sta $d017
+        lda $d01d
+        and slot_niet,y
+        sta $d01d
         lda npc_vorm,x
+        beq gewoon
+        cmp #2
         bne naast
+        jmp reus
+gewoon:
         lda npc_px_lo,x
         clc
         adc #12
@@ -271,6 +281,32 @@ naast:  lda npc_px_lo,x
         sec
         sbc npc_voeten,x
         sta y1
+        sta y2
+        // een reus (vorm 2): de sprites dubbel zo breed en hoog. X: voeten - 24 + 24 rand = voeten;
+        // Y boven = y + 16 + 50 - 2 * voeten - 1, onder = + 42
+reus:   lda $d017
+        ora slot_bits,y
+        sta $d017
+        lda $d01d
+        ora slot_bits,y
+        sta $d01d
+        lda npc_px_lo,x
+        sta x1
+        sta x2
+        lda npc_px_hi,x
+        sta x1 + 1
+        sta x2 + 1
+        lda npc_voeten,x
+        asl
+        sta hulp
+        lda npc_py,x
+        clc
+        adc #RIJ_KAMER * 8 + 50 - 1
+        sec
+        sbc hulp
+        sta y1
+        clc
+        adc #42
         sta y2
 zet:    ldx slot_sprite,y               // sprite n: $d000 + 2n
         txa

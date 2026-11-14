@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import sprites_hc as hc   # noqa: E402
 
 RICHTINGEN = ["voor", "rug", "rechts", "links"]
-NPCS = [("mira", 0), ("wolf", 1), ("maan", 0), ("hol", 0), ("bram", 0), ("grom", 0), ("tik", 0), ("spook", 0)]          # (naam, vorm) — zie hieronder
+NPCS = [("mira", 0), ("wolf", 1), ("maan", 0), ("hol", 0), ("bram", 0), ("grom", 2), ("tik", 0), ("spook", 0)]          # (naam, vorm) — zie hieronder
 # hoogte van de figuur per maat, in pixelrijen (de grootste = de tekening zelf). Afgemeten aan de deuren van
 # het plein: achteraan ~14-16 hoog, de smidse ~20, de herberg ~26 (zie docs/LOGBOEK.md).
 MATEN = [None, 26, 20, 14, 10]   # 10: helemaal bovenaan het dorp
@@ -163,7 +163,8 @@ def main():
     L.append(".assert \"een pose per maat, richting en fase\", %d, MATEN * 12" % len(poses))
     print("[costume] eldric ingepakt: %d bytes (was %d)" % (sum(len(d) for _, d in poses), 128 * len(poses)))
     # NPC's (hoofdstuk 7): één pose, 2 sprites (128 bytes). vorm 0 = boven elkaar (de onderste 21 lager),
-    # vorm 1 = naast elkaar (de rechter 24 schermpixels verder). voeten = de onderste rij met pixels.
+    # vorm 1 = naast elkaar (de rechter 24 schermpixels verder), vorm 2 = een reus: boven elkaar, maar de VIC tekent
+    # de sprites dubbel zo breed en hoog ($d017/$d01d; src/npc.asm). voeten = de onderste rij met pixels.
     import json
     info = {}
     for naam, vorm in NPCS:
@@ -173,9 +174,9 @@ def main():
         else:
             rijen, kb, ko = tekening[naam]
             delen = list(hc.halves(rijen))
-        rijen_v = delen[0] + delen[1] if vorm == 0 else delen[0]
+        rijen_v = delen[0] + delen[1] if vorm in (0, 2) else delen[0]
         voeten_n = max(i for i, r in enumerate(rijen_v) if r.strip("."))
-        L.append("npc_%s:    // %s, %s" % (naam, "boven elkaar" if vorm == 0 else "naast elkaar", hc.NAMES[kb]))
+        L.append("npc_%s:    // %s, %s" % (naam, {0: "boven elkaar", 1: "naast elkaar", 2: "een reus (dubbel groot)"}[vorm], hc.NAMES[kb]))
         for deel in delen:
             data = hc.sprite_bytes(deel)
             for i in range(0, 64, 16):
